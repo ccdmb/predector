@@ -9,18 +9,18 @@ Predict effectors in your proteomes using the Predector!
 
  We plan to include.
  
- - [] Signalp 3, 4, and 5.
- - [] TMHMM.
- - [] Phobius.
- - [] Deepsig.
- - [] Deeploc and possibly targetp.
- - [] EffectorP 1, and 2.
- - [] ApoplastP
- - [] LOCALIZER
- - [] Protein similarity searches against effector databases using MMSeqs2 and/or HHblits.
- - [] Protein structural prediction tools from the RaptorX toolkit, and comparison with
+ - [ ] Signalp 3, 4, and 5.
+ - [ ] TMHMM.
+ - [ ] Phobius.
+ - [ ] Deepsig.
+ - [ ] Deeploc and possibly targetp.
+ - [ ] EffectorP 1, and 2.
+ - [ ] ApoplastP
+ - [ ] LOCALIZER
+ - [ ] Protein similarity searches against effector databases using MMSeqs2 and/or HHblits.
+ - [ ] Protein structural prediction tools from the RaptorX toolkit, and comparison with
       structural features of known effectors.
- - [] Integration of existing experimental custom scores (e.g. RNAseq, Proteomics) to inform candidate weighting.
+ - [ ] Integration of existing experimental custom scores (e.g. RNAseq, Proteomics) to inform candidate weighting.
 
 Ultimately, the pipeline should output a series of effector candidate clusters and scores to prioritise experimental functional characterisation efforts.
 
