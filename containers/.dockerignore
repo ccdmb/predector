@@ -1,0 +1,6 @@
+docker/*
+singularity/*
+rmlib/*
+tmp/*
+Makefile
+sources.tar.xz

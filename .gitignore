@@ -1,0 +1,13 @@
+*.sif
+.nextflow*
+*.log*
+
+
+work
+containers/singularity
+containers/docker
+containers/sources
+containers/downloads
+.nextflow
+run
+results
