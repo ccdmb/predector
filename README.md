@@ -27,4 +27,7 @@ Ultimately, the pipeline should output a series of effector candidate clusters a
 Also we intend to inject as many [Predator](https://en.wikipedia.org/wiki/Predator_(film)) references as possible because predector kind of sounds like predator.
 
 
-Stay tuned!
+~~Stay tuned!~~
+Stick around!  
+![](https://images.amcnetworks.com/ifc.com/wp-content/uploads/2016/03/stickaround.gif)
+
