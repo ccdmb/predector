@@ -156,3 +156,70 @@ If your changes are ready to be shared and for other people to use, you can open
 
 To continue working you can just stay in the same branch and continue to create pull requests into master when you're ready to share.
 More fancy people will create a new branch for every new "feature" that is going to be implemented, and those branches get removed when the new feature is finished and merged.
+
+
+## Docker
+
+Docker is a type of container virtualisation system.
+It is useful because it gives us a consistent environment on different computers, which means fewer installations and weird headache bugs.
+
+Nextflow handles most of what we need to run the pipeline with nextflow, but if you just want to try out some commands that aren't installed on your computer you can run it in the docker container.
+
+The downside to docker is that it required root permission to use, and to relieve that requirement is a security issue.
+
+
+As an example I'll use the existing [bedtools container](https://hub.docker.com/r/biocontainers/bedtools/).
+
+```bash
+sudo docker pull biocontainers/bedtools
+sudo docker run --rm -v "${PWD}:/data:rw" -w /data biocontainers/bedtools bedtools intersect -a left.bed -b right.bed
+```
+
+Breaking this apart. We first `pull` the container from dockerhub and `run` a command inside the container.
+`--rm` tells docker that we'd like it to remove the container (not the image) after it has finished running.
+`-v "${PWD}:/data:rw` tells docker that we'd like to mount our current working directory to `/data` inside the container, and that we'd like it to be read-writable (`rw`).
+We also set the working directory (`-w`) inside the container to be `/data` (where we mounted the files in our current working directory), so we've replicated our current state.
+If you don't tell docker to mount your data like this, you won't be able to access your local files.
+
+
+To view which images you have pulled you can use `sudo docker images`.
+
+To run commands inside a container interactively, you need to add the `-i -t` flags.
+
+```bash
+sudo docker run --rm -it -v "${PWD}:/data:rw" biocontainers/bedtools bash
+```
+
+You can now interact with the container as if it was your own terminal.
+
+
+## Singularity
+
+Singularity is similar to docker, it's a bit simpler for bioinformatics but isn't as well documented or popular.
+
+It also doesn't require root permission to use, which makes it much easier to stay safe while developing.
+
+Singularity can run existing docker images, so anything that's available on dockerhub is fine.
+I'll use the same bedtools image.
+
+```bash
+# Pull the most recent version of the image and save it locally in singularitys format to bedtools.sif
+singularity pull bedtools.sif docker://biocontainers/bedtools:latest
+
+singularity exec ./bedtools.sif bedtools intersect -a left.bed -b right.bed
+```
+
+This does the same thing as the docker example, but singularity mounts common paths and your current working directory for you so you don't need to worry as much.
+
+
+You can also interactively work with singularity containers.
+
+```bash
+singularity shell ./bedtools.sif
+```
+
+There is a bit of a catch with singularity.
+Because the containers are essentially immutable, you can't normally read or write to system directories, which includes some temporary file directories (Technically there is a way, but I haven't really been able to get it working).
+In practice this means that you can't install software inside a singularity container after it's been built, and for commands that use temporary files you should explicitly set the temporary directory using a flag or the `TMPDIR` environment variable.
+`sort` always catches me out with this.
+If you get an error about 'read-only' filesystems, this is what that's about.
