@@ -55,10 +55,13 @@ git checkout master
 
 If you have made changes to a file that you haven't `commit`ted or `add`ed yet,
 you can revert the file back to the last `commit`ed version by checking out the `HEAD` (the most recent commit in this branch).
+For example say you had edited `README.md` and wanted to discard those changes.
 
 ```bash
+git checkout -- README.md
 ```
 
+Would reset the file to the last commit state.
 
 To "stage" files that you have modified and want to keep track of:
 
@@ -67,14 +70,89 @@ To "stage" files that you have modified and want to keep track of:
 git add -A
 
 # Add a specific file with changes to be tracked.
-git add bin/my_new_script.sh
+git add README.md
 
 # Add a whole directory
 git add bin/
 ```
 
-If you decide that you 
+To see what files you have `add`ed, and that you have modified but not yet added you can check its "status".
 
 ```bash
+git status
+```
+
+
+If you decide that you want to unstage something that you've staged and haven't yet `commit`ed you can use.
+E.G. say you decided that you didn't want to stage the changes to files in `bin/` yet.
+
+```bash
+git reset HEAD bin/
+```
+
+Your modifications will still be there but the file is no-longer engaged to be `commit`ed.
+
+
+When you're finished making changes you can `commit` the staged changes.
+
+```bash
+git commit -m "This is a message describing briefly what changes you've made."
+```
+
+If you don't include the `-m` flag it will open up your default text-editor (usually nano) and you'll have to write a message in there.
+Make sure that any text after `-m` either doesn't have spaces or is quoted.
+
+To integrate any changes that other people have made on the github repository `master` branch into your current branch.
+
+```bash
+git pull origin master
+```
+
+`origin` is the name of the remote repository that you want to pull from.
+When you called `git clone` earlier, it automatically puts the github uri in the remotes names `origin`.
+You can have multiple remote's, but we'll just be using `origin`.
+So this command merges the content of the master branch into your currently checked out branch.
+To merge master into your master branch, you first need to `checkout` master.
+To merge a different branch, change `master` to the branch that you want.
+
+When you call pull, git will attempt to merge the changes into a single coherent set.
+**If** you and another person have both modified the same lines, you might receive a "merge conflict".
+Don't worry! It's not as complicated as you might think.
+
+Git will tell you which files have the conflicts and will mark the offending regions like so.
+
 
 ```
+<<<<<<< HEAD
+This might be some text in your current branch that you have modified.
+=======
+This might be some text on the remote master branch that someone else has modified
+that is in the same position in the file.
+>>>>>>> remote:master
+```
+
+To resolve a merge conflict you need to manually merge the two chunks (separated by `=======`).
+Usually this involves deleting one option and keeping the other.
+
+Once you've fixed the mege conflict blocks, you `add` the changes and `commit` them to your branch as you did before.
+If any blocks with that `<<< HEAD` etc structure are still in your code, git will raise an error and tell you to fix it.
+
+
+To "push" your changes to the remote repository you can do:
+
+```bash
+git push origin my_new_branch
+```
+
+Note that the first time you push a new branch to the remote you should use the `-u` flag, to tell git that we want to track changes to this branch.
+
+```bash
+git push -u origin my_new_branch
+```
+
+
+If your changes are ready to be shared and for other people to use, you can open a pull-request on github to merge your branch into master.
+
+
+To continue working you can just stay in the same branch and continue to create pull requests into master when you're ready to share.
+More fancy people will create a new branch for every new "feature" that is going to be implemented, and those branches get removed when the new feature is finished and merged.
