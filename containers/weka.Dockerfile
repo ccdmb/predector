@@ -1,13 +1,13 @@
 ARG IMAGE
 
-FROM "${IMAGE}" as builder
+FROM "${IMAGE}" as weka_builder
 
 # https://sourceforge.net/projects/weka/files/weka-3-6/3.6.12/weka-3-6-12.zip/download
 # https://sourceforge.net/projects/weka/files/weka-3-8/3.8.1/weka-3-8-1.zip/download
 
 ARG WEKA_VERSION
 ARG WEKA_URL
-ARG WEKA_PREFIX_ARG="/opt/weka/${WEKA_VERSION}"
+ARG WEKA_PREFIX_ARG
 ENV WEKA_PREFIX="${WEKA_PREFIX_ARG}"
 ENV WEKA_JAR="${WEKA_PREFIX}/weka.jar"
 
@@ -43,15 +43,15 @@ RUN  set -eu \
 FROM "${IMAGE}"
 
 ARG WEKA_VERSION
-ARG WEKA_PREFIX_ARG="/opt/weka/${WEKA_VERSION}"
+ARG WEKA_PREFIX_ARG
 ENV WEKA_PREFIX="${WEKA_PREFIX_ARG}"
 ENV WEKA_JAR="${WEKA_PREFIX}/weka.jar"
 LABEL weka.version="${WEKA_VERSION}"
 
 ENV PATH="${WEKA_PREFIX}:${PATH}"
 
-COPY --from=builder "${WEKA_PREFIX}" "${WEKA_PREFIX}"
-COPY --from=builder "${APT_REQUIREMENTS_FILE}" /build/apt/weka.txt
+COPY --from=weka_builder "${WEKA_PREFIX}" "${WEKA_PREFIX}"
+COPY --from=weka_builder "${APT_REQUIREMENTS_FILE}" /build/apt/weka.txt
 
 RUN  set -eu \
   && DEBIAN_FRONTEND=noninteractive \

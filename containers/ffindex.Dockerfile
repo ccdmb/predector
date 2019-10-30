@@ -56,9 +56,9 @@ ENV FFDB_PREFIX="${FFDB_PREFIX_ARG}"
 LABEL ffdb.version="${FFDB_TAG}"
 
 ENV PATH "${FFDB_PREFIX}/bin:${PATH}"
-ENV PYTHONPATH "${FFDB_PREFIX}/lib/python3.7/site-packages:${PYTHONPATH}"
 
 COPY --from=ffdb_builder "${FFDB_PREFIX}" "${FFDB_PREFIX}"
+COPY --from=ffdb_builder "${PYTHON3_SITE_PTH_FILE}" "${PYTHON3_SITE_DIR}/ffdb.pth"
 COPY --from=ffdb_builder "${APT_REQUIREMENTS_FILE}" /build/apt/ffdb.txt
 
 

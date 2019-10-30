@@ -1,25 +1,27 @@
-ARG IMAGE="darcyabjones/base"
+ARG IMAGE
 ARG FFINDEX_IMAGE
 
 FROM "${FFINDEX_IMAGE}" as ffindex_builder
 
 FROM "${IMAGE}" as deeploc_builder
 
-ARG DEEPLOC_VERSION="1.0"
-ARG DEEPLOC_PREFIX_ARG="/opt/deeploc/${DEEPLOC_VERSION}"
-ARG DEEPLOC_TAR="sources/deeploc-1.0.All.tar.gz"
+ARG DEEPLOC_VERSION
+ARG DEEPLOC_PREFIX_ARG
+ARG DEEPLOC_TAR
 ENV DEEPLOC_PREFIX="${DEEPLOC_PREFIX_ARG}"
 LABEL deeploc.version="${DEEPLOC_VERSION}"
 
 ENV PATH="${DEEPLOC_PREFIX}/bin:${PATH}"
 ENV LIBRARY_PATH="${DEEPLOC_PREFIX}/lib:${LIBRARY_PATH}"
 ENV LD_LIBRARY_PATH="${DEEPLOC_PREFIX}/lib:${LD_LIBRARY_PATH}"
-ENV PYTHONPATH="${DEEPLOC_PREFIX}/lib/python3.7/site-packages:${PYTHONPATH:-}"
 COPY "${DEEPLOC_TAR}" /tmp/deeploc.tar.gz
 
+# Make sure you copy site path
+# COPY --from=deeploc_builder "${PYTHON3_SITE_PTH_FILE}" "${PYTHON3_SITE_DIR/deeploc.pth"
 
-ARG FFINDEX_TAG="0.9.9.9"
-ARG FFINDEX_PREFIX_ARG="/opt/ffindex/${FFINDEX_VERSION}"
+
+ARG FFINDEX_TAG
+ARG FFINDEX_PREFIX_ARG
 ENV FFINDEX_PREFIX="${FFINDEX_PREFIX_ARG}"
 LABEL ffindex.version="${FFINDEX_VERSION}"
 
@@ -49,4 +51,5 @@ RUN  set -eu \
   && sed -i '/install_requires=install_requires/d' setup.py \
   && python3 -m pip install --prefix="${DEEPLOC_PREFIX}" . \
   && rm -rf -- /tmp/deeploc* \
+  && add_python3_site "${DEEPLOC_PREFIX}/lib/python3.7/site-packages" \
   && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"

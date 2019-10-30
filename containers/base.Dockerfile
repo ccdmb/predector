@@ -22,6 +22,12 @@ ENV LC_ALL "C.UTF-8"
 ENV BUILD_DIR "/build"
 ENV APT_REQUIREMENTS_FILE "${BUILD_DIR}/apt-requirements.txt"
 
+ENV PYTHON2_SITE_DIR "/usr/lib/python2.7/dist-packages"
+ENV PYTHON2_SITE_PTH_FILE "${PYTHON2_SITE_DIR}/custom.pth"
+
+ENV PYTHON3_SITE_DIR "/usr/lib/python3/dist-packages"
+ENV PYTHON3_SITE_PTH_FILE "${PYTHON3_SITE_DIR}/custom.pth"
+
 COPY base.sh /build/base.sh
 
 RUN  set -eu \
@@ -32,10 +38,19 @@ RUN  set -eu \
        bash \
        curl \
        gawk \
-       sed \
+       perl \
        procps \
+       python \
+       python3 \
+       sed \
        wget \
   && rm -rf /var/lib/apt/lists/* \
+  && mkdir -p "${PYTHON2_SITE_DIR}" \
+  && touch "${PYTHON2_SITE_PTH_FILE}" \
+  && mkdir -p "${PYTHON3_SITE_DIR}" \
+  && touch "${PYTHON3_SITE_PTH_FILE}" \
   && touch "${APT_REQUIREMENTS_FILE}"
 
 # Adding man folder prevents java install from panicking
+
+WORKDIR /

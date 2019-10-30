@@ -3,8 +3,8 @@ ARG IMAGE
 FROM "${IMAGE}" as ffdb_builder
 
 ARG FFDB_TAG
-ARG FFDB_REPO="https://github.com/darcyabjones/ffdb.git"
-ARG FFDB_PREFIX_ARG="/opt/ffdb/${FFDB_TAG}"
+ARG FFDB_REPO
+ARG FFDB_PREFIX_ARG
 ENV FFDB_PREFIX="${FFDB_PREFIX_ARG}"
 
 
@@ -27,20 +27,21 @@ RUN  set -eu \
   && git fetch --tags \
   && git checkout "${FFDB_TAG}" \
   && pip3 install --prefix="${FFDB_PREFIX}" . \
+  && add_python3_site "${FFDB_PREFIX}/lib/python3.7/site-packages" \
   && add_runtime_dep python3
 
 
 FROM "${IMAGE}"
 
 ARG FFDB_TAG
-ARG FFDB_PREFIX_ARG="/opt/ffdb/${FFDB_TAG}"
+ARG FFDB_PREFIX_ARG
 ENV FFDB_PREFIX="${FFDB_PREFIX_ARG}"
 LABEL ffdb.version="${FFDB_TAG}"
 
 ENV PATH "${FFDB_PREFIX}/bin:${PATH}"
-ENV PYTHONPATH "${FFDB_PREFIX}/lib/python3.7/site-packages:${PYTHONPATH}"
 
 COPY --from=ffdb_builder "${FFDB_PREFIX}" "${FFDB_PREFIX}"
+COPY --from=ffdb_builder "${PYTHON3_SITE_PTH_FILE}" "${PYTHON3_SITE_DIR}/ffdb.pth"
 COPY --from=ffdb_builder "${APT_REQUIREMENTS_FILE}" /build/apt/ffdb.txt
 
 RUN  set -eu \
@@ -50,3 +51,5 @@ RUN  set -eu \
   && apt_install_from_file /build/apt/*.txt \
   && rm -rf /var/lib/apt/lists/* \
   && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"
+
+WORKDIR /
