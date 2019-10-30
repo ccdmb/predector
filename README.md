@@ -5,7 +5,7 @@ Predict effectors in your proteomes using the Predector!
  
  # What's the plan?
  
- The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protien properties.
+ The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protein properties.
 
  We plan to include.
  
