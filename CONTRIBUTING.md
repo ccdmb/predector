@@ -11,7 +11,7 @@ It tracks differences of *lines* between changes of text documents.
 The basic workflow using git with other people goes a bit like this:
 
 1. Clone (or fork and then clone) the repository to your computer with `git clone`.
-2. Create a new branch just for yourself with `git checkout -b mybranchname`.
+2. Create a new branch just for yourself with `git checkout -b my_branch_name`.
 3. Create changes to the code, or add or delete files.
 4. Add the files that you've created or modified to be tracked by git using `git add`.
    This is called staging. It's like a declaration that these are changes that I want to keep.
