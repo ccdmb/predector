@@ -2,13 +2,13 @@
 
 Predict effectors in your proteomes using the Predector!
 
- 
- # What's the plan?
- 
- The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protien properties.
 
- We plan to include.
- 
+# What's the plan?
+
+The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protein properties.
+
+We plan to include.
+
  - [ ] Signalp 3, 4, and 5.
  - [ ] TMHMM.
  - [ ] Phobius.
@@ -28,6 +28,6 @@ Also we intend to inject as many [Predator](https://en.wikipedia.org/wiki/Predat
 
 
 ~~Stay tuned!~~
-Stick around!  
+Stick around!
 ![](https://images.amcnetworks.com/ifc.com/wp-content/uploads/2016/03/stickaround.gif)
 
