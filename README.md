@@ -2,12 +2,8 @@
 
 Predict effectors in your proteomes using the Predector!
 
-<<<<<<< HEAD
-Blah blah blah
 One two three
-=======
 Hey ho lets go
->>>>>>> 2cfdfea861471b5dd24141719c55b3cad0ffd332
 
  
  # What's the plan?
