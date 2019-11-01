@@ -110,12 +110,12 @@ git pull origin master
 
 `origin` is the name of the remote repository that you want to pull from.
 When you called `git clone` earlier, it automatically puts the github uri in the remotes names `origin`.
-You can have multiple remote's, but we'll just be using `origin`.
+You can have multiple remotes, but we'll just be using `origin`.
 So this command merges the content of the master branch into your currently checked out branch.
 To merge master into your master branch, you first need to `checkout` master.
 To merge a different branch, change `master` to the branch that you want.
 
-When you call pull, git will attempt to merge the changes into a single coherent set.
+When you call `pull`, git will attempt to merge the changes into a single coherent set.
 **If** you and another person have both modified the same lines, you might receive a "merge conflict".
 Don't worry! It's not as complicated as you might think.
 
@@ -134,7 +134,7 @@ that is in the same position in the file.
 To resolve a merge conflict you need to manually merge the two chunks (separated by `=======`).
 Usually this involves deleting one option and keeping the other.
 
-Once you've fixed the mege conflict blocks, you `add` the changes and `commit` them to your branch as you did before.
+Once you've fixed the merge conflict blocks, you `add` the changes and `commit` them to your branch as you did before.
 If any blocks with that `<<< HEAD` etc structure are still in your code, git will raise an error and tell you to fix it.
 
 
@@ -165,7 +165,7 @@ It is useful because it gives us a consistent environment on different computers
 
 Nextflow handles most of what we need to run the pipeline with nextflow, but if you just want to try out some commands that aren't installed on your computer you can run it in the docker container.
 
-The downside to docker is that it required root permission to use, and to relieve that requirement is a security issue.
+The downside to docker is that it requires root permission to use, and to relieve that requirement is a security issue.
 
 
 As an example I'll use the existing [bedtools container](https://hub.docker.com/r/biocontainers/bedtools/).
