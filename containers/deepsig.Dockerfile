@@ -87,7 +87,7 @@ ENV PATH="${TENSORFLOW_PREFIX}:${PATH}"
 COPY --from=deepsig_builder "${DEEPSIG_PREFIX}" "${DEEPSIG_PREFIX}"
 COPY --from=deepsig_builder "${TENSORFLOW_PREFIX}" "${TENSORFLOW_PREFIX}"
 COPY --from=deepsig_builder "${KERAS_PREFIX}" "${KERAS_PREFIX}"
-COPY --from=deepsig_builder "${PYTHON2_SITE_PTH_FILE}" "${PYTHON2_SITE_DIR}/deepsig.pth"
+COPY --from=deepsig_builder "${PYTHON2_SITE_PTH_FILE}" /build/python2/deepsig.pth
 COPY --from=deepsig_builder "${APT_REQUIREMENTS_FILE}" /build/apt/deepsig.txt
 
 
@@ -111,6 +111,7 @@ RUN  set -eu \
   && apt-get update \
   && apt_install_from_file /build/apt/*.txt \
   && rm -rf /var/lib/apt/lists/* \
-  && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"
+  && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}" \
+  && cat /build/python2/*.pth >> "${PYTHON2_SITE_PTH_FILE}"
 
 WORKDIR /

@@ -17,7 +17,7 @@ ENV LD_LIBRARY_PATH="${DEEPLOC_PREFIX}/lib:${LD_LIBRARY_PATH}"
 COPY "${DEEPLOC_TAR}" /tmp/deeploc.tar.gz
 
 # Make sure you copy site path
-# COPY --from=deeploc_builder "${PYTHON3_SITE_PTH_FILE}" "${PYTHON3_SITE_DIR/deeploc.pth"
+# COPY --from=deeploc_builder "${PYTHON3_SITE_PTH_FILE}" /build/python3/deeploc.pth
 
 
 ARG FFINDEX_TAG
