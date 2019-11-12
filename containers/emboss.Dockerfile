@@ -2,9 +2,9 @@ ARG IMAGE
 
 FROM "${IMAGE}" as emboss_builder
 
-ARG EMBOSS_VERSION="6.5.7"
-ARG EMBOSS_URL="ftp://emboss.open-bio.org/pub/EMBOSS/old/6.5.0/EMBOSS-6.5.7.tar.gz"
-ARG EMBOSS_PREFIX_ARG="/opt/emboss/${EMBOSS_VERSION}"
+ARG EMBOSS_VERSION
+ARG EMBOSS_URL
+ARG EMBOSS_PREFIX_ARG
 ENV EMBOSS_PREFIX="${EMBOSS_PREFIX_ARG}"
 
 WORKDIR /tmp
@@ -27,8 +27,8 @@ RUN  set -eu \
 
 FROM "${IMAGE}"
 
-ARG EMBOSS_VERSION="6.5.7"
-ARG EMBOSS_PREFIX_ARG="/opt/emboss/${EMBOSS_VERSION}"
+ARG EMBOSS_VERSION
+ARG EMBOSS_PREFIX_ARG
 ENV EMBOSS_PREFIX="${EMBOSS_PREFIX_ARG}"
 LABEL emboss.version="${EMBOSS_VERSION}"
 
@@ -47,3 +47,5 @@ RUN  set -eu \
   && apt_install_from_file /build/apt/*.txt \
   && rm -rf /var/lib/apt/lists/* \
   && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"
+
+WORKDIR /

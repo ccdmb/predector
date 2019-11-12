@@ -1,13 +1,13 @@
-ARG IMAGE="darcyabjones/base"
+ARG IMAGE
 ARG FFINDEX_IMAGE
 
 FROM "${FFINDEX_IMAGE}" as ffindex_builder
 
 FROM "${IMAGE}" as deepsig_builder
 
-ARG DEEPSIG_COMMIT="69e01cb"
-ARG DEEPSIG_PREFIX_ARG="/opt/deepsig/${DEEPSIG_COMMIT}"
-ARG DEEPSIG_REPO="https://github.com/BolognaBiocomp/deepsig.git"
+ARG DEEPSIG_COMMIT
+ARG DEEPSIG_PREFIX_ARG
+ARG DEEPSIG_REPO
 ENV DEEPSIG_PREFIX="${DEEPSIG_PREFIX_ARG}"
 LABEL deepsig.version="${DEEPSIG_COMMIT}"
 
@@ -48,8 +48,9 @@ RUN  set -eu \
   && git checkout "${DEEPSIG_COMMIT}" \
   && rm -rf -- .git \
   && python -m pip install --prefix="${TENSORFLOW_PREFIX}" tensorflow=="${TENSORFLOW_VERSION}" \
-  && PYTHONPATH="${TENSORFLOW_PREFIX}/lib/python2.7/site-packages:${PYTHONPATH:-}" \
-     python -m pip install --prefix="${KERAS_PREFIX}" keras=="${KERAS_VERSION}" \
+  && add_python2_site "${TENSORFLOW_PREFIX}/lib/python2.7/site-packages" \
+  && python -m pip install --prefix="${KERAS_PREFIX}" keras=="${KERAS_VERSION}" \
+  && add_python2_site "${KERAS_PREFIX}/lib/python2.7/site-packages" \
   && add_runtime_dep \
        python \
        python-biopython \
@@ -82,12 +83,11 @@ LABEL keras.version="KERAS_VERSION"
 
 ENV PATH="${DEEPSIG_PREFIX}:${PATH}"
 ENV PATH="${TENSORFLOW_PREFIX}:${PATH}"
-ENV PYTHONPATH="${TENSORFLOW_PREFIX}/lib/python2.7/site-packages:${PYTHONPATH:-}"
-ENV PYTHONPATH="${KERAS_PREFIX}/lib/python2.7/site-packages:${PYTHONPATH:-}"
 
 COPY --from=deepsig_builder "${DEEPSIG_PREFIX}" "${DEEPSIG_PREFIX}"
 COPY --from=deepsig_builder "${TENSORFLOW_PREFIX}" "${TENSORFLOW_PREFIX}"
 COPY --from=deepsig_builder "${KERAS_PREFIX}" "${KERAS_PREFIX}"
+COPY --from=deepsig_builder "${PYTHON2_SITE_PTH_FILE}" /build/python2/deepsig.pth
 COPY --from=deepsig_builder "${APT_REQUIREMENTS_FILE}" /build/apt/deepsig.txt
 
 
@@ -111,4 +111,7 @@ RUN  set -eu \
   && apt-get update \
   && apt_install_from_file /build/apt/*.txt \
   && rm -rf /var/lib/apt/lists/* \
-  && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"
+  && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}" \
+  && cat /build/python2/*.pth >> "${PYTHON2_SITE_PTH_FILE}"
+
+WORKDIR /

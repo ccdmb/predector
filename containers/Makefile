@@ -1,5 +1,5 @@
 PWD=$(shell pwd)
-DEBIAN_VERSION=buster-20190812-slim
+DEBIAN_VERSION=buster-20191014-slim
 TAG=pannot-v0.0.1
 MAINTAINER=Darcy Jones <darcy.ab.jones@gmail.com>
 DOCKER_USER=darcyabjones
@@ -13,13 +13,56 @@ endef
 
 # SOFTWARE_VERSIONs
 
+APOPLASTP_VERSION=1.0.1
+APOPLASTP_URL=http://apoplastp.csiro.au/ApoplastP_1.0.1.tar.gz
+APOPLASTP_PREFIX_ARG=$(INSTALL_BASE)/apoplastp/$(APOPLASTP_VERSION)
+
+CHLOROP_VERSION=1.1
+CHLOROP_PREFIX_ARG=$(INSTALL_BASE)/chlorop/$(CHLOROP_VERSION)
+CHLOROP_TAR=sources/chlorop-1.1.Linux.tar.Z
+
+DEEPLOC_VERSION=1.0
+DEEPLOC_PREFIX_ARG=$(INSTALL_BASE)/deeploc/$(DEEPLOC_VERSION)
+DEEPLOC_TAR=sources/deeploc-1.0.All.tar.gz
+
+DEEPSIG_COMMIT=69e01cb
+DEEPSIG_PREFIX_ARG=$(INSTALL_BASE)/deepsig/$(DEEPSIG_COMMIT)
+DEEPSIG_REPO=https://github.com/BolognaBiocomp/deepsig.git
+
+EFFECTORP1_VERSION=1.0
+EFFECTORP1_URL=http://effectorp.csiro.au/EffectorP_1.0.tar.gz
+EFFECTORP1_PREFIX_ARG=$(INSTALL_BASE)/effectorp/$(EFFECTORP1_VERSION)
+
+EFFECTORP2_VERSION=2.0
+EFFECTORP2_URL=http://effectorp.csiro.au/EffectorP_2.0.tar.gz
+EFFECTORP2_PREFIX_ARG=$(INSTALL_BASE)/effectorp/$(EFFECTORP2_VERSION)
+
+EMBOSS_VERSION=6.5.7
+EMBOSS_URL=ftp://emboss.open-bio.org/pub/EMBOSS/old/6.5.0/EMBOSS-6.5.7.tar.gz
+EMBOSS_PREFIX_ARG=$(INSTALL_BASE)/emboss/$(EMBOSS_VERSION)
+
+FFDB_TAG=ddbe321
+FFDB_REPO=https://github.com/darcyabjones/ffdb.git
+FFDB_PREFIX_ARG=$(INSTALL_BASE)/ffdb/$(FFDB_TAG)
+
 FFINDEX_TAG=0.9.9.9
 FFINDEX_REPO=https://github.com/ahcm/ffindex.git
 FFINDEX_PREFIX_ARG=$(INSTALL_BASE)/ffindex/$(FFINDEX_TAG)
 
+KERAS_VERSION=2.2.4
+KERAS_PREFIX_ARG=$(INSTALL_BASE)/keras/$(KERAS_VERSION)
+
+LOCALIZER_VERSION=1.0.4
+LOCALIZER_URL=http://localizer.csiro.au/LOCALIZER_1.0.4.tar.gz
+LOCALIZER_PREFIX_ARG=$(INSTALL_BASE)/localizer/$(LOCALIZER_VERSION)
+
 MMSEQS_TAG=10-6d92c
 MMSEQS_REPO=https://github.com/soedinglab/MMseqs2.git
 MMSEQS_PREFIX_ARG=$(INSTALL_BASE)/mmseqs/$(MMSEQS_TAG)
+
+PHOBIUS_VERSION=101
+PHOBIUS_PREFIX_ARG=$(INSTALL_BASE)/phobius/$(PHOBIUS_VERSION)
+PHOBIUS_TAR=sources/phobius101_linux.tar.gz
 
 SIGNALP3_VERSION=3.0
 SIGNALP3_PREFIX_ARG=$(INSTALL_BASE)/signalp/$(SIGNALP3_VERSION)
@@ -33,70 +76,26 @@ SIGNALP5_VERSION=5.0
 SIGNALP5_PREFIX_ARG=$(INSTALL_BASE)/signalp/$(SIGNALP5_VERSION)
 SIGNALP5_TAR=sources/signalp-5.0.Linux.tar.gz
 
-TMHMM_VERSION=2.0c
-TMHMM_PREFIX_ARG=$(INSTALL_BASE)/tmhmm/$(TMHMM_VERSION)
-TMHMM_TAR=sources/tmhmm-2.0c.Linux.tar.gz
-
-PHOBIUS_VERSION=101
-PHOBIUS_PREFIX_ARG=$(INSTALL_BASE)/phobius/$(PHOBIUS_VERSION)
-PHOBIUS_TAR=sources/phobius101_linux.tar.gz
-
-CHLOROP_VERSION=1.1
-CHLOROP_PREFIX_ARG=$(INSTALL_BASE)/chlorop/$(CHLOROP_VERSION)
-CHLOROP_TAR=sources/chlorop-1.1.Linux.tar.Z
-
 TARGETP_VERSION=1.1b
 TARGETP_PREFIX_ARG=$(INSTALL_BASE)/targetp/$(TARGETP_VERSION)
 TARGETP_TAR=sources/targetp-1.1b.Linux.tar.Z
 
-DEEPLOC_VERSION=1.0
-DEEPLOC_PREFIX_ARG=$(INSTALL_BASE)/deeploc/$(DEEPLOC_VERSION)
-DEEPLOC_TAR=sources/deeploc-1.0.All.tar.gz
-
-DEEPSIG_COMMIT=69e01cb
-DEEPSIG_PREFIX_ARG=$(INSTALL_BASE)/deepsig/$(DEEPSIG_COMMIT)
-DEEPSIG_REPO=https://github.com/BolognaBiocomp/deepsig.git
+TMHMM_VERSION=2.0c
+TMHMM_PREFIX_ARG=$(INSTALL_BASE)/tmhmm/$(TMHMM_VERSION)
+TMHMM_TAR=sources/tmhmm-2.0c.Linux.tar.gz
 
 TENSORFLOW_VERSION=1.5.0
 TENSORFLOW_PREFIX_ARG=$(INSTALL_BASE)/tensorflow/$(TENSORFLOW_VERSION)
-
-KERAS_VERSION=2.2.4
-KERAS_PREFIX_ARG=$(INSTALL_BASE)/keras/$(KERAS_VERSION)
-
-
-WEKA_38_VERSION=3.8.1
-WEKA_38_URL=https://sourceforge.net/projects/weka/files/weka-3-8/3.8.1/weka-3-8-1.zip/download
-WEKA_38_PREFIX_ARG=$(INSTALL_BASE)/weka/$(WEKA_38_VERSION)
 
 WEKA_36_VERSION=3.6.12
 WEKA_36_URL=https://sourceforge.net/projects/weka/files/weka-3-6/3.6.12/weka-3-6-12.zip/download
 WEKA_36_PREFIX_ARG=$(INSTALL_BASE)/weka/$(WEKA_36_VERSION)
 
-EMBOSS_VERSION=6.5.7
-EMBOSS_URL=ftp://emboss.open-bio.org/pub/EMBOSS/old/6.5.0/EMBOSS-6.5.7.tar.gz
-EMBOSS_PREFIX_ARG=$(INSTALL_BASE)/emboss/$(EMBOSS_VERSION)
+WEKA_38_VERSION=3.8.1
+WEKA_38_URL=https://sourceforge.net/projects/weka/files/weka-3-8/3.8.1/weka-3-8-1.zip/download
+WEKA_38_PREFIX_ARG=$(INSTALL_BASE)/weka/$(WEKA_38_VERSION)
 
-EFFECTORP1_VERSION=1.0
-EFFECTORP1_URL=http://effectorp.csiro.au/EffectorP_1.0.tar.gz
-EFFECTORP1_PREFIX_ARG=$(INSTALL_BASE)/effectorp/$(EFFECTORP1_VERSION)
-
-EFFECTORP2_VERSION=2.0
-EFFECTORP2_URL=http://effectorp.csiro.au/EffectorP_2.0.tar.gz
-EFFECTORP2_PREFIX_ARG=$(INSTALL_BASE)/effectorp/$(EFFECTORP2_VERSION)
-
-LOCALIZER_VERSION=1.0.4
-LOCALIZER_URL=http://localizer.csiro.au/LOCALIZER_1.0.4.tar.gz
-LOCALIZER_PREFIX_ARG=$(INSTALL_BASE)/localizer/$(LOCALIZER_VERSION)
-
-APOPLASTP_VERSION=1.0.1
-APOPLASTP_URL=http://apoplastp.csiro.au/ApoplastP_1.0.1.tar.gz
-APOPLASTP_PREFIX_ARG=$(INSTALL_BASE)/apoplastp/$(APOPLASTP_VERSION)
-
-FFDB_TAG=ddbe321
-FFDB_REPO=https://github.com/darcyabjones/ffdb.git
-FFDB_PREFIX_ARG=$(INSTALL_BASE)/ffdb/$(FFDB_TAG)
-
-GENERAL=base python3 deepsig ffdb emboss
+GENERAL=base python3 deepsig ffdb emboss mmseqs
 PROPRIETARY=phobius signalp3 signalp4 signalp5 tmhmm targetp deeploc
 SPERSCHNEIDER=effectorp1 effectorp2 localizer apoplastp
 
@@ -210,6 +209,121 @@ docker/python3: python3.Dockerfile docker/base
 	@touch $@
 
 
+docker/apoplastp: apoplastp.Dockerfile docker/base docker/weka38 docker/emboss docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg APOPLASTP_VERSION="$(APOPLASTP_VERSION)" \
+	  --build-arg APOPLASTP_URL="$(APOPLASTP_URL)" \
+	  --build-arg APOPLASTP_PREFIX_ARG="$(APOPLASTP_PREFIX_ARG)" \
+	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
+	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
+	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
+	  --build-arg WEKA_38_IMAGE="$(call make_image_name,weka38)" \
+	  --build-arg WEKA_38_VERSION="$(WEKA_38_VERSION)" \
+	  --build-arg WEKA_38_PREFIX_ARG="$(WEKA_38_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/deeploc: deeploc.Dockerfile docker/base docker/ffindex $(DEEPLOC_TAR)
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg DEEPLOC_VERSION="$(DEEPLOC_VERSION)" \
+	  --build-arg DEEPLOC_TAR="$(DEEPLOC_TAR)" \
+	  --build-arg DEEPLOC_PREFIX_ARG="$(DEEPLOC_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/deepsig: deepsig.Dockerfile docker/base docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg DEEPSIG_COMMIT="$(DEEPSIG_COMMIT)" \
+	  --build-arg DEEPSIG_REPO="$(DEEPSIG_REPO)" \
+	  --build-arg DEEPSIG_PREFIX_ARG="$(DEEPSIG_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --build-arg TENSORFLOW_VERSION="$(TENSORFLOW_VERSION)" \
+	  --build-arg TENSORFLOW_PREFIX_ARG="$(TENSORFLOW_PREFIX_ARG)" \
+	  --build-arg KERAS_VERSION="$(KERAS_VERSION)" \
+	  --build-arg KERAS_PREFIX_ARG="$(KERAS_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/effectorp1: effectorp1.Dockerfile docker/base docker/weka36 docker/emboss docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg EFFECTORP1_VERSION="$(EFFECTORP1_VERSION)" \
+	  --build-arg EFFECTORP1_URL="$(EFFECTORP1_URL)" \
+	  --build-arg EFFECTORP1_PREFIX_ARG="$(EFFECTORP1_PREFIX_ARG)" \
+	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
+	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
+	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
+	  --build-arg WEKA_36_IMAGE="$(call make_image_name,weka36)" \
+	  --build-arg WEKA_36_VERSION="$(WEKA_36_VERSION)" \
+	  --build-arg WEKA_36_PREFIX_ARG="$(WEKA_36_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/effectorp2: effectorp2.Dockerfile docker/base docker/weka38 docker/emboss docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg EFFECTORP2_VERSION="$(EFFECTORP2_VERSION)" \
+	  --build-arg EFFECTORP2_URL="$(EFFECTORP2_URL)" \
+	  --build-arg EFFECTORP2_PREFIX_ARG="$(EFFECTORP2_PREFIX_ARG)" \
+	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
+	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
+	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
+	  --build-arg WEKA_38_IMAGE="$(call make_image_name,weka38)" \
+	  --build-arg WEKA_38_VERSION="$(WEKA_38_VERSION)" \
+	  --build-arg WEKA_38_PREFIX_ARG="$(WEKA_38_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/emboss: emboss.Dockerfile docker/base
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
+	  --build-arg EMBOSS_URL="$(EMBOSS_URL)" \
+	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
 docker/ffdb: ffdb.Dockerfile docker/base
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
@@ -239,12 +353,50 @@ docker/ffindex: ffindex.Dockerfile docker/base docker/ffdb
 	@touch $@
 
 
+docker/localizer: localizer.Dockerfile docker/base docker/weka36 docker/emboss docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg LOCALIZER_VERSION="$(LOCALIZER_VERSION)" \
+	  --build-arg LOCALIZER_URL="$(LOCALIZER_URL)" \
+	  --build-arg LOCALIZER_PREFIX_ARG="$(LOCALIZER_PREFIX_ARG)" \
+	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
+	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
+	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
+	  --build-arg WEKA_36_IMAGE="$(call make_image_name,weka36)" \
+	  --build-arg WEKA_36_VERSION="$(WEKA_36_VERSION)" \
+	  --build-arg WEKA_36_PREFIX_ARG="$(WEKA_36_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
 docker/mmseqs: mmseqs.Dockerfile docker/base
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
 	  --build-arg MMSEQS_TAG="$(MMSEQS_TAG)" \
 	  --build-arg MMSEQS_REPO="$(MMSEQS_REPO)" \
 	  --build-arg MMSEQS_PREFIX_ARG="$(MMSEQS_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/phobius: phobius.Dockerfile docker/base docker/ffindex $(PHOBIUS_TAR)
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg PHOBIUS_VERSION="$(PHOBIUS_VERSION)" \
+	  --build-arg PHOBIUS_TAR="$(PHOBIUS_TAR)" \
+	  --build-arg PHOBIUS_PREFIX_ARG="$(PHOBIUS_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
 	  --file $< \
 	  -t "$(call make_image_name,$@)" \
 	  .
@@ -300,22 +452,6 @@ docker/signalp5: signalp5.Dockerfile docker/base docker/ffindex $(SIGNALP5_TAR)
 	@touch $@
 
 
-docker/tmhmm: tmhmm.Dockerfile docker/base docker/ffindex $(TMHMM_TAR)
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg TMHMM_VERSION="$(TMHMM_VERSION)" \
-	  --build-arg TMHMM_TAR="$(TMHMM_TAR)" \
-	  --build-arg TMHMM_PREFIX_ARG="$(TMHMM_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
 docker/targetp: targetp.Dockerfile docker/base docker/signalp3 docker/ffindex $(TARGETP_TAR)
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
@@ -338,64 +474,15 @@ docker/targetp: targetp.Dockerfile docker/base docker/signalp3 docker/ffindex $(
 	@touch $@
 
 
-docker/deeploc: deeploc.Dockerfile docker/base docker/ffindex $(DEEPLOC_TAR)
+docker/tmhmm: tmhmm.Dockerfile docker/base docker/ffindex $(TMHMM_TAR)
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg DEEPLOC_VERSION="$(DEEPLOC_VERSION)" \
-	  --build-arg DEEPLOC_TAR="$(DEEPLOC_TAR)" \
-	  --build-arg DEEPLOC_PREFIX_ARG="$(DEEPLOC_PREFIX_ARG)" \
+	  --build-arg TMHMM_VERSION="$(TMHMM_VERSION)" \
+	  --build-arg TMHMM_TAR="$(TMHMM_TAR)" \
+	  --build-arg TMHMM_PREFIX_ARG="$(TMHMM_PREFIX_ARG)" \
 	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
 	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
 	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/deepsig: deepsig.Dockerfile docker/base docker/ffindex
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg DEEPSIG_COMMIT="$(DEEPSIG_COMMIT)" \
-	  --build-arg DEEPSIG_REPO="$(DEEPSIG_REPO)" \
-	  --build-arg DEEPSIG_PREFIX_ARG="$(DEEPSIG_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --build-arg TENSORFLOW_VERSION="$(TENSORFLOW_VERSION)" \
-	  --build-arg TENSORFLOW_PREFIX_ARG="$(TENSORFLOW_PREFIX_ARG)" \
-	  --build-arg KERAS_VERSION="$(KERAS_VERSION)" \
-	  --build-arg KERAS_PREFIX_ARG="$(KERAS_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/phobius: phobius.Dockerfile docker/base docker/ffindex $(PHOBIUS_TAR)
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg PHOBIUS_VERSION="$(PHOBIUS_VERSION)" \
-	  --build-arg PHOBIUS_TAR="$(PHOBIUS_TAR)" \
-	  --build-arg PHOBIUS_PREFIX_ARG="$(PHOBIUS_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/weka38: weka.Dockerfile docker/base
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg WEKA_VERSION="$(WEKA_38_VERSION)" \
-	  --build-arg WEKA_URL="$(WEKA_38_URL)" \
-	  --build-arg WEKA_PREFIX_ARG="$(WEKA_38_PREFIX_ARG)" \
 	  --file $< \
 	  -t "$(call make_image_name,$@)" \
 	  .
@@ -416,100 +503,12 @@ docker/weka36: weka.Dockerfile docker/base
 	@touch $@
 
 
-docker/emboss: emboss.Dockerfile docker/base
+docker/weka38: weka.Dockerfile docker/base
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
-	  --build-arg EMBOSS_URL="$(EMBOSS_URL)" \
-	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/effectorp1: effectorp1.Dockerfile docker/base docker/weka36 docker/emboss docker/ffindex
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg EFFECTORP1_VERSION="$(EFFECTORP1_VERSION)" \
-	  --build-arg EFFECTORP1_URL="$(EFFECTORP1_URL)" \
-	  --build-arg EFFECTORP1_PREFIX_ARG="$(EFFECTORP1_PREFIX_ARG)" \
-	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
-	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
-	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
-	  --build-arg WEKA_36_IMAGE="$(call make_image_name,weka36)" \
-	  --build-arg WEKA_36_VERSION="$(WEKA_36_VERSION)" \
-	  --build-arg WEKA_36_PREFIX_ARG="$(WEKA_36_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/effectorp2: effectorp2.Dockerfile docker/base docker/weka38 docker/emboss docker/ffindex
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg EFFECTORP2_VERSION="$(EFFECTORP2_VERSION)" \
-	  --build-arg EFFECTORP2_URL="$(EFFECTORP2_URL)" \
-	  --build-arg EFFECTORP2_PREFIX_ARG="$(EFFECTORP2_PREFIX_ARG)" \
-	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
-	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
-	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
-	  --build-arg WEKA_38_IMAGE="$(call make_image_name,weka38)" \
-	  --build-arg WEKA_38_VERSION="$(WEKA_38_VERSION)" \
-	  --build-arg WEKA_38_PREFIX_ARG="$(WEKA_38_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/localizer: localizer.Dockerfile docker/base docker/weka36 docker/emboss docker/ffindex
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg LOCALIZER_VERSION="$(LOCALIZER_VERSION)" \
-	  --build-arg LOCALIZER_URL="$(LOCALIZER_URL)" \
-	  --build-arg LOCALIZER_PREFIX_ARG="$(LOCALIZER_PREFIX_ARG)" \
-	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
-	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
-	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
-	  --build-arg WEKA_36_IMAGE="$(call make_image_name,weka36)" \
-	  --build-arg WEKA_36_VERSION="$(WEKA_36_VERSION)" \
-	  --build-arg WEKA_36_PREFIX_ARG="$(WEKA_36_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
-	  --file $< \
-	  -t "$(call make_image_name,$@)" \
-	  .
-	@mkdir -p "$(dir $@)"
-	@touch $@
-
-
-docker/apoplastp: apoplastp.Dockerfile docker/base docker/weka38 docker/emboss docker/ffindex
-	docker build \
-	  --build-arg IMAGE="$(BASE_IMAGE)" \
-	  --build-arg APOPLASTP_VERSION="$(APOPLASTP_VERSION)" \
-	  --build-arg APOPLASTP_URL="$(APOPLASTP_URL)" \
-	  --build-arg APOPLASTP_PREFIX_ARG="$(APOPLASTP_PREFIX_ARG)" \
-	  --build-arg EMBOSS_IMAGE="$(call make_image_name,emboss)" \
-	  --build-arg EMBOSS_VERSION="$(EMBOSS_VERSION)" \
-	  --build-arg EMBOSS_PREFIX_ARG="$(EMBOSS_PREFIX_ARG)" \
-	  --build-arg WEKA_38_IMAGE="$(call make_image_name,weka38)" \
-	  --build-arg WEKA_38_VERSION="$(WEKA_38_VERSION)" \
-	  --build-arg WEKA_38_PREFIX_ARG="$(WEKA_38_PREFIX_ARG)" \
-	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
-	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
-	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --build-arg WEKA_VERSION="$(WEKA_38_VERSION)" \
+	  --build-arg WEKA_URL="$(WEKA_38_URL)" \
+	  --build-arg WEKA_PREFIX_ARG="$(WEKA_38_PREFIX_ARG)" \
 	  --file $< \
 	  -t "$(call make_image_name,$@)" \
 	  .
