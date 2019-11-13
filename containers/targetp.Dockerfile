@@ -4,7 +4,6 @@ ARG FFINDEX_IMAGE
 FROM "${FFINDEX_IMAGE}" as ffindex_builder
 
 FROM "${IMAGE}"
-LABEL maintainer="darcy.ab.jones@gmail.com"
 
 
 ARG TARGETP_VERSION
