@@ -1,6 +1,6 @@
 PWD=$(shell pwd)
 DEBIAN_VERSION=buster-20191014-slim
-TAG=pannot-v0.0.1
+TAG=predector-v0.0.1
 MAINTAINER=Darcy Jones <darcy.ab.jones@gmail.com>
 DOCKER_USER=darcyabjones
 BASE_IMAGE=$(DOCKER_USER)/base:$(TAG)
@@ -68,17 +68,17 @@ SIGNALP3_VERSION=3.0
 SIGNALP3_PREFIX_ARG=$(INSTALL_BASE)/signalp/$(SIGNALP3_VERSION)
 SIGNALP3_TAR=sources/signalp-3.0.Linux.tar.Z
 
-SIGNALP4_VERSION=4.1f
+SIGNALP4_VERSION=4.1g
 SIGNALP4_PREFIX_ARG=$(INSTALL_BASE)/signalp/$(SIGNALP4_VERSION)
-SIGNALP4_TAR=sources/signalp-4.1f.Linux.tar.gz
+SIGNALP4_TAR=sources/signalp-4.1g.Linux.tar.gz
 
 SIGNALP5_VERSION=5.0
 SIGNALP5_PREFIX_ARG=$(INSTALL_BASE)/signalp/$(SIGNALP5_VERSION)
-SIGNALP5_TAR=sources/signalp-5.0.Linux.tar.gz
+SIGNALP5_TAR=sources/signalp-5.0b.Linux.tar.gz
 
-TARGETP_VERSION=1.1b
+TARGETP_VERSION=2.0
 TARGETP_PREFIX_ARG=$(INSTALL_BASE)/targetp/$(TARGETP_VERSION)
-TARGETP_TAR=sources/targetp-1.1b.Linux.tar.Z
+TARGETP_TAR=sources/targetp-2.0.Linux.tar.gz
 
 TMHMM_VERSION=2.0c
 TMHMM_PREFIX_ARG=$(INSTALL_BASE)/tmhmm/$(TMHMM_VERSION)
