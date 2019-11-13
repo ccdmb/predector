@@ -29,6 +29,7 @@ ENV PATH="${FFINDEX_PREFIX}/bin:${PATH}"
 COPY --from=ffindex_builder "${FFINDEX_PREFIX}" "${FFINDEX_PREFIX}"
 COPY --from=ffindex_builder "${APT_REQUIREMENTS_FILE}" /build/apt/ffindex.txt
 
+ENV TMPDIR="/tmp"
 
 WORKDIR /tmp
 RUN  set -eu \
@@ -42,9 +43,9 @@ RUN  set -eu \
   && rm signalp.tar.gz \
   && mkdir -p "${SIGNALP4_PREFIX%/*}" \
   && mv signalp* "${SIGNALP4_PREFIX}" \
-  && sed -i "s~/usr/cbs/bio/src/signalp-4.1~${SIGNALP4_PREFIX}~" "${SIGNALP4_PREFIX}/signalp" \
-  && sed -i "s~/var/tmp~/tmp~" "${SIGNALP4_PREFIX}/signalp" \
-  && sed -i "s~MAX_ALLOWED_ENTRIES=10000~MAX_ALLOWED_ENTRIES=999999999999999~" "${SIGNALP4_PREFIX}/signalp" \
+  && sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${SIGNALP4_PREFIX}~" "${SIGNALP4_PREFIX}/signalp" \
+  && sed -i 's~/var/tmp~$ENV{TMPDIR}~' "${SIGNALP4_PREFIX}/signalp" \
+  && sed -i "s~MAX_ALLOWED_ENTRIES=20000~MAX_ALLOWED_ENTRIES=999999999999999~" "${SIGNALP4_PREFIX}/signalp" \
   && ln -sf "${SIGNALP4_PREFIX}/signalp" "${SIGNALP4_PREFIX}/signalp-${SIGNALP4_VERSION}" \
   && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"
 

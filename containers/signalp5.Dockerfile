@@ -41,11 +41,6 @@ RUN  set -eu \
   && mkdir "${SIGNALP5_PREFIX%/*}" \
   && mv signalp* "${SIGNALP5_PREFIX}" \
   && cd "${SIGNALP5_PREFIX}" \
-  && mv "${SIGNALP5_PREFIX}/bin" "${SIGNALP5_PREFIX}/exe" \
-  && mkdir -p "${SIGNALP5_PREFIX}/bin" \
-  && echo "#!/usr/bin/env sh" > "${SIGNALP5_PREFIX}/bin/signalp" \
-  && echo '${SIGNALP5_PREFIX}/exe/signalp $*' >> "${SIGNALP5_PREFIX}/bin/signalp" \
-  && chmod a+x "${SIGNALP5_PREFIX}/bin/signalp" \
   && ln -sf "${SIGNALP5_PREFIX}/bin/signalp" "${SIGNALP5_PREFIX}/bin/signalp-${SIGNALP5_VERSION}" \
   && rm -rf -- "${SIGNALP5_PREFIX}/signalp.1" "${SIGNALP5_PREFIX}/test" \
   && cat /build/apt/*.txt >> "${APT_REQUIREMENTS_FILE}"
