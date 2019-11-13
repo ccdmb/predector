@@ -49,6 +49,10 @@ FFINDEX_TAG=0.9.9.9
 FFINDEX_REPO=https://github.com/ahcm/ffindex.git
 FFINDEX_PREFIX_ARG=$(INSTALL_BASE)/ffindex/$(FFINDEX_TAG)
 
+HMMER3_VERSION=3.2.1
+HMMER3_URL=http://eddylab.org/software/hmmer/hmmer-3.2.1.tar.gz
+HMMER3_PREFIX_ARG=$(INSTALL_BASE)/hmmer3/$(HMMER3_VERSION)
+
 KERAS_VERSION=2.2.4
 KERAS_PREFIX_ARG=$(INSTALL_BASE)/keras/$(KERAS_VERSION)
 
@@ -346,6 +350,22 @@ docker/ffindex: ffindex.Dockerfile docker/base docker/ffdb
 	  --build-arg FFDB_IMAGE="$(call make_image_name,ffdb)" \
 	  --build-arg FFDB_TAG="$(FFDB_TAG)" \
 	  --build-arg FFDB_PREFIX_ARG="$(FFDB_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/hmmer3: hmmer3.Dockerfile docker/base
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg HMMER3_VERSION="$(HMMER3_VERSION)" \
+	  --build-arg HMMER3_URL="$(HMMER3_URL)" \
+	  --build-arg HMMER3_PREFIX_ARG="$(HMMER3_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
 	  --file $< \
 	  -t "$(call make_image_name,$@)" \
 	  .
