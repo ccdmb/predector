@@ -5,9 +5,9 @@
  * Define the default parameters 
  */
 
-params.proteome   	= "test/*.fasta"
-params.phibase		= false
-params.domain		= "euk"
+params.proteome   	= "test/test_set.fasta"
+params.phibase		  = false
+params.domain		    = "euk"
 
 
 /*
@@ -16,7 +16,21 @@ params.domain		= "euk"
 Channel
     .fromPath(params.proteome)
     .map { f -> [ f.simpleName, f ] }
-    .into {from proteome_ch_signal3_hmm; signalp3_nn_ch; signalp3_hmm_ch}
+    .into {
+      proteome_ch_signalp3_hmm; 
+      proteome_ch_signalp3_nn; 
+      proteome_ch_signalp4;
+      proteome_ch_signalp5;
+      proteome_ch_targetp;
+      proteome_ch_deeploc;
+      proteome_ch_effectorp1;
+      proteome_ch_effectorp2;
+      proteome_ch_tmhmm;
+      proteome_ch_apoplastp;
+      proteome_ch_emboss;
+      proteome_ch_localizer;
+      proteome_ch_phobius      
+    }
 
 domain			= params.domain	
 
@@ -27,10 +41,10 @@ domain			= params.domain
 process 'SignalP_v3_hmm' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/signalp3:predector-v0.0.1'
+  label 'signalp3'
 
   input:
-      set val(name), file ("in.fasta") from proteome_ch_signal3_hmm
+      set val(name), file ("in.fasta") from proteome_ch_signalp3_hmm
 
   output:
       file "${name}.signalp3_hmm" into signalp3_hmm_ch 
@@ -48,7 +62,7 @@ process 'SignalP_v3_hmm' {
 process 'SignalP_v3_nn' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/signalp3:predector-v0.0.1'
+  label 'signalp3'
 
   input:
       set val(name), file ("in.fasta") from proteome_ch_signalp3_nn
@@ -65,12 +79,12 @@ process 'SignalP_v3_nn' {
 
 /*
  * Process 3A: Identify signal peptides using SignalP v4
- 
+ */
 
 process 'SignalP_v4' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/signalp4:predector-v0.0.1'
+  label 'signalp4'
 
   input:
       set val(name), file ("in.fasta") from proteome_ch_signalp4
@@ -83,7 +97,7 @@ process 'SignalP_v4' {
   signalp -t $domain -f short in.fasta > "${name}.signalp4"
   """
 }
-*/
+
 
 /*
  * Process 4A: Identify signal peptides using SignalP v5
@@ -92,18 +106,18 @@ process 'SignalP_v4' {
 process 'SignalP_v5' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/signalp5:predector-v0.0.1'
+  label 'signalp5'
 
   input:
       set val(name), file ("in.fasta") from proteome_ch_signalp5
 
   output:
       file "${name}_summary.signalp5" into signalp5_ch 
-
+      set val(name), file ("${name}_mature.fasta") into signalp5_mature_ch 
   script:
   """
   mkdir -p tmpdir
-  signalp -org $domain -format short -tmp tmpdir -fasta in.fasta -prefix "${name}"
+  signalp -org $domain -format short -tmp tmpdir -mature -fasta in.fasta -prefix "${name}"
   rm -rf -- tmpdir
   """
 }
@@ -115,7 +129,7 @@ process 'SignalP_v5' {
 process 'TargetP' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/targetp:predector-v0.0.1'
+  label 'targetp'
 
   input:
       set val(name), file ("in.fasta") from proteome_ch_targetp
@@ -138,18 +152,18 @@ process 'TargetP' {
 process 'DeepLoc' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/deeploc:predector-v0.0.1'
+  label 'deeploc'
 
   input:
       set val(name), file ("in.fasta") from proteome_ch_deeploc
 
   output:
-      file "${name}.deeploc" into targetp_ch 
+      file "${name}.deeploc" into deeploc_ch 
 
   script:
   """
   deeploc -f in.fasta -o "${name}"
-  mv "${name}_output.txt" "${name}.deeploc"
+  mv "${name}.txt" "${name}.deeploc"
   """
 }
 
@@ -160,17 +174,17 @@ process 'DeepLoc' {
 process 'EffectorP_v1' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/effectorp1:predector-v0.0.1'
+  label 'effectorp1'
 
   input:
-      file proteome from proteome_file
+      set val(name), file ("in.fasta") from proteome_ch_effectorp1
 
   output:
-      file "${proteome}.deeploc" into targetp_ch 
+      file "${name}.effectorp1" into effectorp1_ch 
 
   script:
   """
-  deeploc -f $proteome -o "${proteome}.deeploc"
+  EffectorP.py -s -i in.fasta > "${name}.effectorp1"
   """
 }
 
@@ -181,16 +195,123 @@ process 'EffectorP_v1' {
 process 'EffectorP_v2' { 
   publishDir "${params.outdir}"
   
-  container 'darcyabjones/effectorp2:predector-v0.0.1'
+  label 'effectorp2'
 
   input:
-      file proteome from proteome_file
+      set val(name), file ("in.fasta") from proteome_ch_effectorp2
 
   output:
-      file "${proteome}.deeploc" into targetp_ch 
+      file "${name}.effectorp2" into effectorp2_ch 
 
   script:
   """
-  EffectorP.py -s -i $proteome > "${proteome}.d"
+  EffectorP.py -s -i in.fasta > "${name}.effectorp2"
+  """
+}
+
+/*
+ * Process 9A: TMHMM
+ */
+
+process 'TMHMM' { 
+  publishDir "${params.outdir}"
+  
+  label 'tmhmm'
+
+  input:
+      set val(name), file ("in.fasta") from proteome_ch_tmhmm
+
+  output:
+      file "${name}.tmhmm" into tmhmm_ch 
+
+  script:
+  """
+  tmhmm -short -d < in.fasta > "${name}.tmhmm"
+  rm -rf -- TMHMM_*
+  """
+}
+
+/*
+ * Process 10A: ApoplastP
+ */
+
+process 'ApoplastP' { 
+  publishDir "${params.outdir}"
+  
+  label 'apoplastp'
+
+  input:
+      set val(name), file ("in.fasta") from proteome_ch_apoplastp
+
+  output:
+      file "${name}.apoplastp" into apoplastp_ch 
+
+  script:
+  """
+  ApoplastP.py -s -i in.fasta > "${name}.apoplastp"
+  """
+}
+
+
+/*
+ * Process 10A: Emboss
+ */
+
+process 'Emboss' { 
+  publishDir "${params.outdir}"
+  
+  label 'emboss'
+
+  input:
+      set val(name), file ("in.fasta") from proteome_ch_emboss
+
+  output:
+      file "${name}.emboss" into emboss_ch 
+
+  script:
+  """
+  pepstats -sequence in.fasta -outfile "${name}.emboss"
+  """
+}
+
+/*
+ * Process 10A: Localizer
+ */
+
+process 'Localizer' { 
+  publishDir "${params.outdir}"
+  
+  label 'localizer'
+
+  input:
+      set val(name), file ("mature.fasta") from signalp5_mature_ch
+
+  output:
+      file "${name}.localizer" into lozalizer_ch 
+
+  script:
+  """
+  LOCALIZER.py -e -M -i mature.fasta -o "${name}.localizer"
+  """
+}
+
+/*
+ * Process 10A: Phobius
+ */
+
+process 'Phobius' { 
+  publishDir "${params.outdir}"
+  
+  label 'phobius'
+
+  input:
+      set val(name), file ("in.fasta") from proteome_ch_phobius
+
+  output:
+      file "${name}.phobius" into phobius_ch 
+
+  script:
+  """
+  phobius.pl -short in.fasta > "${name}.phobius"
   """
 }
