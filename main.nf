@@ -35,6 +35,9 @@ if ( params.proteome ) {
             proteome_ch_emboss;
             proteome_ch_localizer;
             proteome_ch_phobius;
+            proteome_ch_pfamscan;
+            proteome_ch_dbcan;
+            proteome_ch_mmseqs_db;
         }
 
 } else {
@@ -551,6 +554,185 @@ process 'Emboss' {
 //
 
 
+process 'PressHmmer_db' {
+
+    label 'hmmer3'
+    label 'process_low'
+
+    input:
+    path "Pfam-A.hmm.gz" from pfam_hmm_file
+    path "Pfam-A.hmm.dat.gz" from pfam_dat_file
+    path "active_site.dat.gz" from pfam_active_site_file
+
+    output:
+    path "pfam_db" into pfam_db_file
+
+    script:
+    """
+    mkdir -p pfam_db
+    gunzip --force --stdout Pfam-A.hmm.gz > pfam_db/Pfam-A.hmm
+    gunzip --force --stdout Pfam-A.hmm.dat.gz > pfam_db/Pfam-A.hmm.dat
+    gunzip --force --stdout active_site.dat.gz > pfam_db/active_site.dat
+
+    hmmpress pfam_db/Pfam-A.hmm
+    """
+}
 
 
+process 'Search_Pfam' {
 
+    label 'pfamscan'
+    label 'process_low'
+
+    publishDir "${params.outdir}/raw"
+
+    tag "${name}"
+
+    input:
+    path 'pfam_db' from pfam_db_file
+    tuple val(name), path('in.fasta') from proteome_ch_pfamscan
+
+    output:
+    tuple val(name), path("${name}_pfamscan.json") into pfam_results_ch
+
+    script:
+    """
+    pfam_scan.pl -fasta in.fasta -dir pfam_db -as -json > "${name}_pfamscan.json"
+    """
+}
+
+
+process 'Press_dbcan_db' {
+
+    label 'hmmer3'
+    label 'process_low'
+
+    input:
+    path "dbCAN.txt" from dbcan_file
+
+    output:
+    path "dbcan_db" into dbcan_db_file
+
+    script:
+    """
+    mkdir -p dbcan_db
+    cp -L dbCAN.txt dbcan_db/dbCAN.hmm
+    hmmpress dbcan_db/dbCAN.hmm
+    """
+}
+
+
+process 'Search_DbCAN' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'hmmer3'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    path "dbcan_db" from dbcan_db_file
+    tuple val(name), path('in.fasta') from proteome_ch_dbcan
+
+    output:
+    tuple val(name), path("${name}_dbcan.domtab") into dbcan_results_ch
+
+    script:
+    """
+    hmmscan \
+      --domtblout "${name}_dbcan.domtab" \
+      dbcan_db/dbCAN.hmm \
+      in.fasta
+    """
+}
+
+
+process 'Prepare_Phibase_db' {
+
+    label "mmseqs"
+    label "process_medium"
+
+    input:
+    path "phibase.fasta" from phibase_file
+
+    output:
+    path "phidb" into phibase_db
+
+    script:
+    """
+    mkdir -p phidb
+    mmseqs createdb phibase.fasta phidb/db --max-seq-len 10000
+    """
+}
+
+
+process 'Prepare_Proteome_db' {
+
+    label "mmseqs"
+    label "process_medium"
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("in.fasta") from proteome_ch_mmseqs_db
+
+    output:
+    tuple val(name), path("prot_db") into proteome_db_ch
+
+    script:
+    """
+    mkdir -p prot_db
+    mmseqs createdb in.fasta prot_db/db --max-seq-len 10000
+    """
+}
+
+
+process 'SearchPhibase' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'mmseqs'
+    label 'process_medium'
+
+    tag "${name}"
+
+    input:
+    path "phidb" from phibase_db
+    tuple val(name), path("prot_db") from proteome_db_ch
+
+    output:
+    tuple val(name), path("${name}_phibase.tsv") into phibase_results_ch
+
+    script:
+    """
+    mkdir -p tmp matches
+
+    mmseqs search \
+      "prot_db/db" \
+      "phidb/db" \
+      "matches/db" \
+      "tmp" \
+      --threads "${task.cpus}" \
+      --max-seqs 300 \
+      -e 0.01 \
+      -s 7 \
+      --num-iterations 3 \
+      --realign \
+      -a
+
+    mmseqs convertalis \
+      prot_db/db \
+      phidb/db \
+      matches/db \
+      search_tmp.tsv \
+      --threads "${task.cpus}" \
+      --format-mode 0 \
+      --format-output 'target,query,tstart,tend,tlen,qstart,qend,qlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
+
+    sort -k1,1 -k3,3n -k4,4n -k2,2 search_tmp.tsv > "${name}_phibase.tsv"
+    sed -i '1i #target\tquery\ttstart\ttend\ttlen\tqstart\tqend\tqlen\tevalue\tgapopen\tpident\talnlen\traw\tbits\tcigar\tmismatch\tqcov\ttcov' "${name}_phibase.tsv"
+
+    rm -rf -- tmp matches
+    """
+}

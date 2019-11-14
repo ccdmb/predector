@@ -25,8 +25,9 @@ RUN  set -eu \
   && tar -zxf pfamscan.tar.gz \
   && cd PfamScan \ 
   && mkdir -p "${PFAMSCAN_PREFIX}/bin" \
-  && mv pfam_scan.pl Bio "${PFAMSCAN_PREFIX}/bin" \
-  && add_runtime_dep perl bioperl libmoose-perl
+  && mv pfam_scan.pl "${PFAMSCAN_PREFIX}/bin" \
+  && mv Bio "${PFAMSCAN_PREFIX}" \
+  && add_runtime_dep perl bioperl libjson-perl libmoose-perl libipc-run-perl
 
 
 FROM "${IMAGE}"
@@ -39,6 +40,7 @@ ENV PFAMSCAN_PREFIX="${PFAMSCAN_PREFIX_ARG}"
 LABEL pfamscan.version="${PFAMSCAN_VERSION}"
 
 ENV PATH="${PFAMSCAN_PREFIX}/bin:${PATH}"
+ENV PERL5LIB="${PFAMSCAN_PREFIX}:${PERL5LIB}"
 
 COPY --from=pfamscan_builder "${PFAMSCAN_PREFIX}" "${PFAMSCAN_PREFIX}"
 COPY --from=pfamscan_builder "${APT_REQUIREMENTS_FILE}" /build/apt/pfamscan.txt
