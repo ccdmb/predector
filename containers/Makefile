@@ -514,3 +514,10 @@ docker/weka38: weka.Dockerfile docker/base
 	  .
 	@mkdir -p "$(dir $@)"
 	@touch $@
+
+docker/pasta2: pasta2.tar docker/base
+	docker load -i pasta2.tar
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
