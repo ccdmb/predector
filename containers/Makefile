@@ -49,6 +49,10 @@ FFINDEX_TAG=0.9.9.9
 FFINDEX_REPO=https://github.com/ahcm/ffindex.git
 FFINDEX_PREFIX_ARG=$(INSTALL_BASE)/ffindex/$(FFINDEX_TAG)
 
+HMMER3_VERSION=3.2.1
+HMMER3_URL=http://eddylab.org/software/hmmer/hmmer-3.2.1.tar.gz
+HMMER3_PREFIX_ARG=$(INSTALL_BASE)/hmmer3/$(HMMER3_VERSION)
+
 KERAS_VERSION=2.2.4
 KERAS_PREFIX_ARG=$(INSTALL_BASE)/keras/$(KERAS_VERSION)
 
@@ -59,6 +63,10 @@ LOCALIZER_PREFIX_ARG=$(INSTALL_BASE)/localizer/$(LOCALIZER_VERSION)
 MMSEQS_TAG=10-6d92c
 MMSEQS_REPO=https://github.com/soedinglab/MMseqs2.git
 MMSEQS_PREFIX_ARG=$(INSTALL_BASE)/mmseqs/$(MMSEQS_TAG)
+
+PFAMSCAN_VERSION=1.6
+PFAMSCAN_URL=ftp://ftp.ebi.ac.uk/pub/databases/Pfam/Tools/PfamScan.tar.gz
+PFAMSCAN_PREFIX_ARG=$(INSTALL_BASE)/pfamscan/$(PFAMSCAN_VERSION)
 
 PHOBIUS_VERSION=101
 PHOBIUS_PREFIX_ARG=$(INSTALL_BASE)/phobius/$(PHOBIUS_VERSION)
@@ -353,6 +361,22 @@ docker/ffindex: ffindex.Dockerfile docker/base docker/ffdb
 	@touch $@
 
 
+docker/hmmer3: hmmer3.Dockerfile docker/base docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg HMMER3_VERSION="$(HMMER3_VERSION)" \
+	  --build-arg HMMER3_URL="$(HMMER3_URL)" \
+	  --build-arg HMMER3_PREFIX_ARG="$(HMMER3_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
 docker/localizer: localizer.Dockerfile docker/base docker/weka36 docker/emboss docker/ffindex
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
@@ -381,6 +405,25 @@ docker/mmseqs: mmseqs.Dockerfile docker/base
 	  --build-arg MMSEQS_TAG="$(MMSEQS_TAG)" \
 	  --build-arg MMSEQS_REPO="$(MMSEQS_REPO)" \
 	  --build-arg MMSEQS_PREFIX_ARG="$(MMSEQS_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/pfamscan: pfamscan.Dockerfile docker/base docker/hmmer3 docker/ffindex
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg PFAMSCAN_VERSION="$(PFAMSCAN_VERSION)" \
+	  --build-arg PFAMSCAN_URL="$(PFAMSCAN_URL)" \
+	  --build-arg PFAMSCAN_PREFIX_ARG="$(PFAMSCAN_PREFIX_ARG)" \
+	  --build-arg HMMER3_IMAGE="$(call make_image_name,hmmer3)" \
+	  --build-arg HMMER3_VERSION="$(HMMER3_VERSION)" \
+	  --build-arg HMMER3_PREFIX_ARG="$(HMMER3_PREFIX_ARG)" \
+	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
+	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
+	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
 	  --file $< \
 	  -t "$(call make_image_name,$@)" \
 	  .

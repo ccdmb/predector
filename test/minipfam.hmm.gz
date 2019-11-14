@@ -1,0 +1,3078 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b6.ebi.ac.uk / 27984 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b6.ebi.ac.uk / 27836 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b6.ebi.ac.uk / 27841 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b5.ebi.ac.uk / 18060 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b6.ebi.ac.uk / 27701 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b5.ebi.ac.uk / 18008 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b6.ebi.ac.uk / 27701 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b5.ebi.ac.uk / 17874 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+          <title>Pfam</title>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Description" content="Pfam is a large collection of protein families, represented by multiple sequence alignments and hidden Markov models (HMMs)" />
+
+
+<!-- ====================================================================== -->
+<!-- make the site RSS feed discoverable -->
+
+<link href="//xfam.wordpress.com/tag/pfam/feed/"
+      rel="alternate"
+      type="application/rss+xml"
+      title="Pfam News" />
+
+<!-- ====================================================================== -->
+<!-- third-party javascript libraries
+
+     we are now loading third-party libraries from remote sites. We get
+     prototype and scriptaculous from googleapis and the YUI components
+     for tree viewing directly from yahoo
+-->
+
+<!-- prototype / scriptaculous -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script> -->
+<!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script> -->
+
+<script type="text/javascript" src="/static/javascripts/third-party/prototype.js"></script>
+<script type="text/javascript" src="/static/javascripts/third-party/scriptaculous.js"></script>
+
+<!-- YUI -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/tabview/tabview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/tabview/assets/skins/sam/tabview.css"/> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/treeview/treeview-min.js"></script> -->
+<!-- <link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/2.8.0r4/build/treeview/assets/skins/sam/treeview.css" /> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/history/history-min.js"></script> -->
+<!-- <script type="text/javascript" src="//yui-s.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> -->
+
+<script type='text/javascript' src='/static/javascripts/third-party/yahoo-dom-event.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/element-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/tabview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/treeview-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/history-min.js'></script>
+<script type='text/javascript' src='/static/javascripts/third-party/utilities.js'></script>
+
+<link rel='stylesheet' href='/static/css/prototip.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/tabview.css' type='text/css' />
+<link rel='stylesheet' href='/static/css/treeview.css' type='text/css' />
+
+
+<!-- prototip -->
+<script type='text/javascript' src='/shared/javascripts/prototip.js'></script>
+<script type='text/javascript' src='/shared/javascripts/styles.js'></script>
+<link rel='stylesheet' href='/shared/css/prototip.css' type='text/css' />
+
+<!-- ====================================================================== -->
+<!-- local javascript files -->
+
+<!-- local javascript -->
+<script type="text/javascript" src="/shared/javascripts/sharedFunctions.js"></script>
+<script type="text/javascript" src="/static/javascripts/pfFunctions.js"></script>
+
+<!-- ====================================================================== -->
+<!-- local stylesheets -->
+
+<!-- global stylesheet -->
+<link rel="stylesheet" href="/static/css/pfam.css" type="text/css" />
+<link rel="stylesheet" href="/shared/css/buttons.css" type="text/css" />
+
+<!-- site-specific stylesheet -->
+<link rel="stylesheet" href="/static/css/ebi.css" type="text/css" />
+
+<!-- ====================================================================== -->
+<!-- load dynamically required stylesheets and javascript files-->
+
+
+
+<!-- required javascripts -->
+
+<!-- javascripts applicable to IE -->
+<!--[if IE]>
+<![endif]-->
+
+<!-- styles applicable to all browsers -->
+
+<!-- styles applicable to IE6 and below -->
+<!--[if lt IE 7 ]>
+  <link rel="stylesheet" href="/static/css/ie.css" type="text/css" />
+<![endif]-->
+
+<!-- styles applicable to all versions of IE -->
+<!--[if IE ]>
+  <link rel="stylesheet" href="/static/css/all_ie.css" type="text/css" / >
+<![endif]-->
+
+<!-- ====================================================================== -->
+<!-- set the favicon -->
+
+<link rel="shortcut icon"
+      type="image/png"
+      href="/static/images/favicon.png" />
+
+<!-- ====================================================================== -->
+
+<!-- google analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50480748-2', 'xfam.org');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+<!-- ====================================================================== -->
+
+  </head>
+
+  <body>
+
+        <!--[if IE]>
+        <iframe id="yui-history-iframe" src="/shared/images/blank.gif"></iframe>
+    <![endif]-->
+    <div><input id="yui-history-field" type="hidden" /></div>
+
+    
+<!-- header starts here -->
+
+<div id="header">
+
+  <div id="navbar" class="column">
+    <ul>
+          <li>
+                  <a href="/">HOME</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/search">SEARCH</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/browse">BROWSE</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="ftp://ftp.ebi.ac.uk/pub/databases/Pfam">FTP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/help">HELP</a>
+        &nbsp;|&nbsp;       </li>
+          <li>
+                  <a href="/about">ABOUT</a>
+               </li>
+        </ul>
+  </div>
+  
+  <div class="siteLogoHolder column">
+    <a href="https://www.ebi.ac.uk/">
+      <img alt="EMBL-EBI" 
+           id="siteLogo" 
+           src="/shared/images/blank.gif" /></a>
+  </div>
+
+  <div class="pfamLogoHolder column">
+    <a href="/">
+      <img alt="Pfam" 
+           id="pfamLogo" 
+           src="/shared/images/blank.gif" /></a>
+    <form action="/search/keyword" 
+          id="siteSearchForm">
+      <div id="searchBox">
+        <input class="entryField"
+             type="text" 
+             onfocus="if(!ssCleared){this.value='';ssCleared=true;}" 
+             name="query" 
+             id="siteSearchField" />
+        <a class="btn go"
+           onclick="if($F('siteSearchField')){if(ssCleared){$('siteSearchForm').submit();}}">
+          <span class="btn-inner">Go</span></a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<div class="cleaner"><!-- empty --></div>
+
+<div id="jsWarning" class="warningBox">
+  <strong>Please note:</strong> this site relies heavily on the use of javascript. 
+  Without a javascript-enabled browser, this site will not function correctly. 
+  Please enable javascript and reload the page, or switch to a different browser.
+</div>
+<script type="text/javascript">
+  // <![CDATA[
+  $("jsWarning").hide();
+
+  $("siteSearchField").value = "keyword search";
+  var ssCleared = false;
+  // ]]>
+</script>
+<!-- ves-pg-b5.ebi.ac.uk / 17873 -->
+
+<!-- header end -->
+
+
+    <!-- start of content -->
+    
+
+
+
+
+
+<!-- start error report -->
+
+<div class="errorReport">
+
+  
+
+  
+
+    <p>There was a problem loading the requested family page.</p>
+
+    
+      <p class="message">No Pfam family accession or ID specified</p>
+    
+
+  
+
+
+  <p>
+    This could be due to an error in the site, or because you followed a broken 
+    link from within this website or on an external site that links to us. 
+    Alternatively you may have entered an accession or ID which does not exist
+		.  </p>
+
+  <p>
+    You might like to go <a href="javascript:history.go(-1)">back</a> to the
+    previous page
+    or report a broken link in the site.
+  </p>
+
+</div>
+
+<script type="text/javascript">
+  // <![CDATA[
+
+  
+  var errorReport  = $$(".errorReport").first();
+  var errorWrapper = errorReport.up();
+
+  if ( errorWrapper.nodeName !== "BODY" ) {
+    var errorReportEl = errorReport.remove();
+    errorWrapper.update( errorReportEl );
+  }
+
+  // ]]>
+</script>
+
+<!-- end error report -->
+
+
+    <!-- end of content -->
+
+    
+    <!-- start of footer -->
+    <div id="footer"></div>
+
+    <div class="cleaner"><!-- wrap --></div>
+    <!-- end of footer -->
+
+    
+
+    <script type="text/javascript">
+      // <![CDATA[
+      Event.observe( window, 'load', addHoverListeners, false );
+      // ]]>
+    </script>
+
+    
+
+<!-- footer start -->
+
+<div id="siteFooter">
+
+  <div style="display:block">
+    <div style="margin:auto; width:60%">
+
+      <div style="display:inline-block">
+        <a href="https://www.elixir-europe.org/about-us/why-needed">
+          <img src="//ebi.emblstatic.net/web_guidelines/EBI-Framework/v1.2/images/logos/assorted/elixir_kitemark-60px.png">
+        </a>
+      </div>
+
+      <div style="width:29%; display:inline-block; vertical-align:top; text-align:left">
+        <h5 style="font-size:1.5em">
+          <a href="https://www.elixir-europe.org/about-us/why-needed">
+            <span>Pfam</span> is part of the ELIXIR infrastructure
+          </a>
+        </h5>
+        <small>
+          <span >Pfam is an Elixir service</span>
+          <span><a href="https://www.elixir-europe.org/about-us/why-needed">Read more</a></span>
+        </small>
+      </div>
+
+    </div>
+  </div>
+
+  <p>
+    Comments or questions on the site? Send a mail to <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;">&#112;&#102;&#097;&#109;&#045;&#104;&#101;&#108;&#112;&#064;&#101;&#098;&#105;&#046;&#097;&#099;&#046;&#117;&#107;</a>.&nbsp;
+  </p>
+  <p class="spaced"><a href="http://www.embl.org/">European Molecular Biology Laboratory</a></p>
+  <script>
+        var newDataProtectionNotificationBanner = document.createElement('script');
+        newDataProtectionNotificationBanner.src = '/static/javascripts/ebi-notification-banner.js';
+        document.head.appendChild(newDataProtectionNotificationBanner);
+        newDataProtectionNotificationBanner.onload = function() {
+            ebiFrameworkRunDataProtectionBanner('compliance'); // invoke the banner
+            var badElement = document.querySelector('div#data-protection-banner div.row');
+            if (badElement) {
+              badElement.style.marginLeft = "0px";
+              badElement.style.marginRight = "30px";
+            }
+        };
+    </script>
+</div>
+
+<!-- footer end -->
+
+  </body>
+
+</html>
+
