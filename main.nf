@@ -7,6 +7,11 @@
  * are too long.
  */
 
+println "$workflow.runName"
+println "$workflow.sessionId"
+println "$workflow.start"
+println "$workflow.revision"
+println "$workflow.manifest.version"
 
 /*
  *  Parse the input parameters
@@ -28,8 +33,10 @@ if ( params.proteome ) {
             proteome_ch_tmhmm;
             proteome_ch_apoplastp;
             proteome_ch_emboss;
-            proteome_ch_localizer;
             proteome_ch_phobius;
+            proteome_ch_pfamscan;
+            proteome_ch_dbcan;
+            proteome_ch_mmseqs_db;
         }
 
 } else {
@@ -45,18 +52,115 @@ if ( params.phibase ) {
 }
 
 
-if ( params.pfam ) {
-    user_pfam = Channel.value(file(params.pfam, checkIfExists: true, type: 'file'))
+if ( params.pfam_hmm ) {
+    pfam_hmm_file = file(params.pfam_hmm, checkIfExists: true, type: 'file')
+
 } else {
-    user_pfam = Channel.empty()
+
+    process 'DownloadPfamHMMs' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.pfam_hmm
+
+        output:
+        path "Pfam-A.hmm.gz" into pfam_hmm_file
+
+        script:
+        """
+        wget -O Pfam-A.hmm.gz "${params.pfam_hmm_url}"
+        """
+    }
+
+}
+
+
+if ( params.pfam_dat ) {
+    pfam_dat_file = file(params.pfam_dat, checkIfExists: true, type: 'file')
+
+} else {
+
+    process 'DownloadPfamDat' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.pfam_dat
+
+        output:
+        path "Pfam-A.hmm.dat.gz" into pfam_dat_file
+
+        script:
+        """
+        wget -O Pfam-A.hmm.dat.gz "${params.pfam_dat_url}"
+        """
+    }
+
+}
+
+
+if ( params.pfam_active_site ) {
+    pfam_active_site_file = file(params.pfam_active_site, checkIfExists: true, type: 'file')
+
+} else {
+
+    process 'DownloadPfamActiveSites' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.pfam_active_site
+
+        output:
+        path "active_site.dat.gz" into pfam_active_site_file
+
+        script:
+        """
+        wget -O active_site.dat.gz "${params.pfam_active_site_url}"
+        """
+    }
+
 }
 
 
 if ( params.dbcan ) {
-    user_dbcan = Channel.value(file(params.dbcan, checkIfExists: true, type: 'file'))
+    dbcan_file = file(params.dbcan, checkIfExists: true, type: 'file')
 } else {
-    // Unsure if this is the correct way to do optional input?
-    user_dbcan = Channel.empty()
+
+    process 'DownloadDbcan' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.dbcan
+
+        output:
+        path "dbCAN.txt" into dbcan_file
+
+        script:
+        """
+        wget -O dbCAN.txt "${params.dbcan_url}"
+        """
+
+    }
+}
+
+
+if ( params.phibase ) {
+    phibase_file = Channel.value(
+        file(params.phibase, checkIfExists: true, type: 'file')
+    )
+} else {
+    phibase_file = Channel.empty()
 }
 
 
@@ -352,7 +456,7 @@ process 'Localizer' {
     tuple val(name), path("mature.fasta") from signalp5_mature_ch
 
     output:
-    tuple val(name), path("${name}_localizer.txt") into lozalizer_ch
+    tuple val(name), path("${name}_localizer.txt") into localizer_ch
 
     script:
     """
@@ -449,3 +553,205 @@ process 'Emboss' {
 //
 
 
+process 'PressHmmer' {
+
+    label 'hmmer3'
+    label 'process_low'
+
+    input:
+    path "Pfam-A.hmm.gz" from pfam_hmm_file
+    path "Pfam-A.hmm.dat.gz" from pfam_dat_file
+    path "active_site.dat.gz" from pfam_active_site_file
+
+    output:
+    path "pfam_db" into pfam_db_file
+
+    script:
+    """
+    mkdir -p pfam_db
+    gunzip --force --stdout Pfam-A.hmm.gz > pfam_db/Pfam-A.hmm
+    gunzip --force --stdout Pfam-A.hmm.dat.gz > pfam_db/Pfam-A.hmm.dat
+    gunzip --force --stdout active_site.dat.gz > pfam_db/active_site.dat
+
+    hmmpress pfam_db/Pfam-A.hmm
+    """
+}
+
+
+process 'PfamScan' {
+
+    label 'pfamscan'
+    label 'process_low'
+
+    publishDir "${params.outdir}/raw"
+
+    tag "${name}"
+
+    input:
+    path 'pfam_db' from pfam_db_file
+    tuple val(name), path('in.fasta') from proteome_ch_pfamscan
+
+    output:
+    tuple val(name), path("${name}_pfamscan.json") into pfam_results_ch
+
+    script:
+    """
+    pfam_scan.pl -fasta in.fasta -dir pfam_db -as -json > "${name}_pfamscan.json"
+    """
+}
+
+
+process 'PressDbCAN' {
+
+    label 'hmmer3'
+    label 'process_low'
+
+    input:
+    path "dbCAN.txt" from dbcan_file
+
+    output:
+    path "dbcan_db" into dbcan_db_file
+
+    script:
+    """
+    mkdir -p dbcan_db
+    cp -L dbCAN.txt dbcan_db/dbCAN.hmm
+    hmmpress dbcan_db/dbCAN.hmm
+    """
+}
+
+
+process 'HMMER_dbCAN' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'hmmer3'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    path "dbcan_db" from dbcan_db_file
+    tuple val(name), path('in.fasta') from proteome_ch_dbcan
+
+    output:
+    tuple val(name), path("${name}_dbcan.domtab") into dbcan_results_ch
+
+    script:
+    """
+    hmmscan \
+      --domtblout "${name}_dbcan.domtab" \
+      dbcan_db/dbCAN.hmm \
+      in.fasta
+    """
+}
+
+
+process 'MMSeqs_Index_PHIbase' {
+
+    label "mmseqs"
+    label "process_medium"
+
+    input:
+    path "phibase.fasta" from phibase_file
+
+    output:
+    path "phidb" into phibase_db
+
+    script:
+    """
+    mkdir -p phidb
+    mmseqs createdb phibase.fasta phidb/db --max-seq-len 10000
+    """
+}
+
+
+process 'MMSeqs_Index_Proteome' {
+
+    label "mmseqs"
+    label "process_medium"
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("in.fasta") from proteome_ch_mmseqs_db
+
+    output:
+    tuple val(name), path("prot_db") into proteome_db_ch
+
+    script:
+    """
+    mkdir -p prot_db
+    mmseqs createdb in.fasta prot_db/db --max-seq-len 10000
+    """
+}
+
+
+process 'MMSeqs_PHIbase' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'mmseqs'
+    label 'process_medium'
+
+    tag "${name}"
+
+    input:
+    path "phidb" from phibase_db
+    tuple val(name), path("prot_db") from proteome_db_ch
+
+    output:
+    tuple val(name), path("${name}_phibase.tsv") into phibase_results_ch
+
+    script:
+    """
+    mkdir -p tmp matches
+
+    mmseqs search \
+      "prot_db/db" \
+      "phidb/db" \
+      "matches/db" \
+      "tmp" \
+      --threads "${task.cpus}" \
+      --max-seqs 300 \
+      -e 0.01 \
+      -s 7 \
+      --num-iterations 3 \
+      --realign \
+      -a
+
+    mmseqs convertalis \
+      prot_db/db \
+      phidb/db \
+      matches/db \
+      search_tmp.tsv \
+      --threads "${task.cpus}" \
+      --format-mode 0 \
+      --format-output 'target,query,tstart,tend,tlen,qstart,qend,qlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
+
+    sort -k1,1 -k3,3n -k4,4n -k2,2 search_tmp.tsv > "${name}_phibase.tsv"
+    sed -i '1i #target\tquery\ttstart\ttend\ttlen\tqstart\tqend\tqlen\tevalue\tgapopen\tpident\talnlen\traw\tbits\tcigar\tmismatch\tqcov\ttcov' "${name}_phibase.tsv"
+
+    rm -rf -- tmp matches
+    """
+}
+
+
+signalp3_hmm_ch.mix(
+    signalp3_nn_ch,
+    signalp4_ch,
+    signalp5_ch,
+    deeploc_ch,
+    deepsig_ch,
+    phobius_ch,
+    tmhmm_ch,
+    targetp_ch,
+    apoplastp_ch,
+    localizer_ch,
+    effectorp1_ch,
+    effectorp2_ch,
+    emboss_ch,
+    pfam_results_ch,
+    dbcan_results_ch,
+    phibase_results_ch
+).set { combined_results_ch }
