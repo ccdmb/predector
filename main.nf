@@ -20,6 +20,7 @@ if ( params.proteome ) {
             proteome_ch_signalp3_nn;
             proteome_ch_signalp4;
             proteome_ch_signalp5;
+            proteome_ch_deepsig;
             proteome_ch_targetp;
             proteome_ch_deeploc;
             proteome_ch_effectorp1;
@@ -174,6 +175,32 @@ process 'SignalP_v5' {
     rm -rf -- tmpdir
     """
 }
+
+
+/*
+ * Identify signal peptides using DeepSig
+ */
+process 'DeepSig' {
+
+    publishDir "${params.outdir}/raw"
+
+    label "deepsig"
+    label "process_low"
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("in.fasta") from proteome_ch_deepsig
+
+    output:
+    tuple val(name), path("${name}_deepsig.txt") into deepsig_ch
+
+    script:
+    """
+    deepsig.py -f in.fasta -k "${params.domain}" -o "${name}_deepsig.txt"
+    """
+}
+
 
 
 /*
