@@ -41,24 +41,22 @@ if ( params.proteome ) {
 if ( params.phibase ) {
     phibase = Channel.value(file(params.phibase, checkIfExists: true, type: 'file'))
 } else {
-    // Unsure if this is the correct way to do optional input?
     phibase = Channel.empty()
 }
 
 
 if ( params.pfam ) {
-    pfam = Channel.value(file(params.pfam, checkIfExists: true, type: 'file'))
+    user_pfam = Channel.value(file(params.pfam, checkIfExists: true, type: 'file'))
 } else {
-    // Unsure if this is the correct way to do optional input?
-    pfam = Channel.empty()
+    user_pfam = Channel.empty()
 }
 
 
 if ( params.dbcan ) {
-    dbcan = Channel.value(file(params.dbcan, checkIfExists: true, type: 'file'))
+    user_dbcan = Channel.value(file(params.dbcan, checkIfExists: true, type: 'file'))
 } else {
     // Unsure if this is the correct way to do optional input?
-    dbcan = Channel.empty()
+    user_dbcan = Channel.empty()
 }
 
 
@@ -70,6 +68,12 @@ if ( !["euk", "gramp", "gramn"].contains(params.domain)  ) {
 
 signalp_domain_map = ["euk": "euk", "gramp": "gram+", "gramn": "gram-"]
 signalp_domain = signalp_domain_map.get(params.domain)
+
+
+
+//
+// STEP 1: identify likely localisation signals.
+//
 
 
 /*
@@ -202,6 +206,56 @@ process 'DeepSig' {
 }
 
 
+/*
+ * Phobius for signal peptide and tm domain prediction.
+ */
+process 'Phobius' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'phobius'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("in.fasta") from proteome_ch_phobius
+
+    output:
+    tuple val(name), path("${name}_phobius.txt") into phobius_ch
+
+    script:
+    """
+    phobius.pl -short in.fasta > "${name}_phobius.txt"
+    """
+}
+
+
+/*
+ * TMHMM
+ */
+process 'TMHMM' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'tmhmm'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("in.fasta") from proteome_ch_tmhmm
+
+    output:
+    tuple val(name), path("${name}_tmhmm.txt") into tmhmm_ch
+
+    script:
+    """
+    tmhmm -short -d < in.fasta > "${name}_tmhmm.txt"
+    rm -rf -- TMHMM_*
+    """
+}
+
 
 /*
  * Subcellular location using TargetP
@@ -258,6 +312,64 @@ process 'DeepLoc' {
 
 
 /*
+ * ApoplastP
+ */
+process 'ApoplastP' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'apoplastp'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("in.fasta") from proteome_ch_apoplastp
+
+    output:
+    tuple val(name), path("${name}_apoplastp.txt") into apoplastp_ch
+
+    script:
+    """
+    ApoplastP.py -s -i in.fasta > "${name}_apoplastp.txt"
+    """
+}
+
+
+/*
+ * Localizer
+ */
+process 'Localizer' {
+
+    publishDir "${params.outdir}/raw"
+
+    label 'localizer'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("mature.fasta") from signalp5_mature_ch
+
+    output:
+    tuple val(name), path("${name}_localizer.txt") into lozalizer_ch
+
+    script:
+    """
+    LOCALIZER.py -e -M -i mature.fasta -o "run"
+
+    mv run/Results.txt "${name}_localizer.txt"
+    rm -rf -- run
+    """
+}
+
+
+//
+// STEP2 get protein properties and effector-characteristics stats.
+//
+
+
+/*
  * Effector ML using EffectorP v1
  */
 process 'EffectorP_v1' {
@@ -308,57 +420,6 @@ process 'EffectorP_v2' {
 
 
 /*
- * TMHMM
- */
-process 'TMHMM' {
-
-    publishDir "${params.outdir}/raw"
-
-    label 'tmhmm'
-    label 'process_low'
-
-    tag "${name}"
-
-    input:
-    tuple val(name), path("in.fasta") from proteome_ch_tmhmm
-
-    output:
-    tuple val(name), path("${name}_tmhmm.txt") into tmhmm_ch
-
-    script:
-    """
-    tmhmm -short -d < in.fasta > "${name}_tmhmm.txt"
-    rm -rf -- TMHMM_*
-    """
-}
-
-
-/*
- * ApoplastP
- */
-process 'ApoplastP' {
-
-    publishDir "${params.outdir}/raw"
-
-    label 'apoplastp'
-    label 'process_low'
-
-    tag "${name}"
-
-    input:
-    tuple val(name), path("in.fasta") from proteome_ch_apoplastp
-
-    output:
-    tuple val(name), path("${name}_apoplastp.txt") into apoplastp_ch
-
-    script:
-    """
-    ApoplastP.py -s -i in.fasta > "${name}_apoplastp.txt"
-    """
-}
-
-
-/*
  * Emboss
  */
 process 'Emboss' {
@@ -383,54 +444,8 @@ process 'Emboss' {
 }
 
 
-/*
- * Localizer
- */
-process 'Localizer' {
-
-    publishDir "${params.outdir}/raw"
-
-    label 'localizer'
-    label 'process_low'
-
-    tag "${name}"
-
-    input:
-    tuple val(name), path("mature.fasta") from signalp5_mature_ch
-
-    output:
-    tuple val(name), path("${name}_localizer.txt") into lozalizer_ch
-
-    script:
-    """
-    LOCALIZER.py -e -M -i mature.fasta -o "run"
-
-    mv run/Results.txt "${name}_localizer.txt"
-    rm -rf -- run
-    """
-}
+//
+// STEP 3: find domain & database matches.
+//
 
 
-/*
- * Phobius for signal peptide and tm domain prediction.
- */
-process 'Phobius' {
-
-    publishDir "${params.outdir}/raw"
-
-    label 'phobius'
-    label 'process_low'
-
-    tag "${name}"
-
-    input:
-    tuple val(name), path("in.fasta") from proteome_ch_phobius
-
-    output:
-    tuple val(name), path("${name}_phobius.txt") into phobius_ch
-
-    script:
-    """
-    phobius.pl -short in.fasta > "${name}_phobius.txt"
-    """
-}
