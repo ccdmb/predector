@@ -7,6 +7,11 @@
  * are too long.
  */
 
+println "$workflow.runName"
+println "$workflow.sessionId"
+println "$workflow.start"
+println "$workflow.revision"
+println "$workflow.manifest.version"
 
 /*
  *  Parse the input parameters
@@ -45,18 +50,115 @@ if ( params.phibase ) {
 }
 
 
-if ( params.pfam ) {
-    user_pfam = Channel.value(file(params.pfam, checkIfExists: true, type: 'file'))
+if ( params.pfam_hmm ) {
+    pfam_hmm_file = file(params.pfam_hmm, checkIfExists: true, type: 'file')
+
 } else {
-    user_pfam = Channel.empty()
+
+    process 'DownloadPfamHMMs' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.pfam_hmm
+
+        output:
+        path "Pfam-A.hmm.gz" into pfam_hmm_file
+
+        script:
+        """
+        wget -O Pfam-A.hmm.gz "${params.pfam_hmm_url}"
+        """
+    }
+
+}
+
+
+if ( params.pfam_dat ) {
+    pfam_dat_file = file(params.pfam_dat, checkIfExists: true, type: 'file')
+
+} else {
+
+    process 'DownloadPfamDat' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.pfam_dat
+
+        output:
+        path "Pfam-A.hmm.dat.gz" into pfam_dat_file
+
+        script:
+        """
+        wget -O Pfam-A.hmm.dat.gz "${params.pfam_dat_url}"
+        """
+    }
+
+}
+
+
+if ( params.pfam_active_site ) {
+    pfam_active_site_file = file(params.pfam_active_site, checkIfExists: true, type: 'file')
+
+} else {
+
+    process 'DownloadPfamActiveSites' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.pfam_active_site
+
+        output:
+        path "active_site.dat.gz" into pfam_active_site_file
+
+        script:
+        """
+        wget -O active_site.dat.gz "${params.pfam_active_site_url}"
+        """
+    }
+
 }
 
 
 if ( params.dbcan ) {
-    user_dbcan = Channel.value(file(params.dbcan, checkIfExists: true, type: 'file'))
+    dbcan_file = file(params.dbcan, checkIfExists: true, type: 'file')
 } else {
-    // Unsure if this is the correct way to do optional input?
-    user_dbcan = Channel.empty()
+
+    process 'DownloadDbcan' {
+
+        publishDir "${params.outdir}/downloads"
+        label "download"
+        label "process_low"
+
+        when:
+        !params.dbcan
+
+        output:
+        path "dbCAN.txt" into dbcan_file
+
+        script:
+        """
+        wget -O dbCAN.txt "${params.dbcan_url}"
+        """
+
+    }
+}
+
+
+if ( params.phibase ) {
+    phibase_file = Channel.value(
+        file(params.phibase, checkIfExists: true, type: 'file')
+    )
+} else {
+    phibase_file = Channel.empty()
 }
 
 
@@ -447,5 +549,8 @@ process 'Emboss' {
 //
 // STEP 3: find domain & database matches.
 //
+
+
+
 
 
