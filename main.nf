@@ -33,7 +33,6 @@ if ( params.proteome ) {
             proteome_ch_tmhmm;
             proteome_ch_apoplastp;
             proteome_ch_emboss;
-            proteome_ch_localizer;
             proteome_ch_phobius;
             proteome_ch_pfamscan;
             proteome_ch_dbcan;
@@ -457,7 +456,7 @@ process 'Localizer' {
     tuple val(name), path("mature.fasta") from signalp5_mature_ch
 
     output:
-    tuple val(name), path("${name}_localizer.txt") into lozalizer_ch
+    tuple val(name), path("${name}_localizer.txt") into localizer_ch
 
     script:
     """
@@ -554,7 +553,7 @@ process 'Emboss' {
 //
 
 
-process 'PressHmmer_db' {
+process 'PressHmmer' {
 
     label 'hmmer3'
     label 'process_low'
@@ -579,7 +578,7 @@ process 'PressHmmer_db' {
 }
 
 
-process 'Search_Pfam' {
+process 'PfamScan' {
 
     label 'pfamscan'
     label 'process_low'
@@ -602,7 +601,7 @@ process 'Search_Pfam' {
 }
 
 
-process 'Press_dbcan_db' {
+process 'PressDbCAN' {
 
     label 'hmmer3'
     label 'process_low'
@@ -622,7 +621,7 @@ process 'Press_dbcan_db' {
 }
 
 
-process 'Search_DbCAN' {
+process 'HMMER_dbCAN' {
 
     publishDir "${params.outdir}/raw"
 
@@ -648,7 +647,7 @@ process 'Search_DbCAN' {
 }
 
 
-process 'Prepare_Phibase_db' {
+process 'MMSeqs_Index_PHIbase' {
 
     label "mmseqs"
     label "process_medium"
@@ -667,7 +666,7 @@ process 'Prepare_Phibase_db' {
 }
 
 
-process 'Prepare_Proteome_db' {
+process 'MMSeqs_Index_Proteome' {
 
     label "mmseqs"
     label "process_medium"
@@ -688,7 +687,7 @@ process 'Prepare_Proteome_db' {
 }
 
 
-process 'SearchPhibase' {
+process 'MMSeqs_PHIbase' {
 
     publishDir "${params.outdir}/raw"
 
@@ -736,3 +735,23 @@ process 'SearchPhibase' {
     rm -rf -- tmp matches
     """
 }
+
+
+signalp3_hmm_ch.mix(
+    signalp3_nn_ch,
+    signalp4_ch,
+    signalp5_ch,
+    deeploc_ch,
+    deepsig_ch,
+    phobius_ch,
+    tmhmm_ch,
+    targetp_ch,
+    apoplastp_ch,
+    localizer_ch,
+    effectorp1_ch,
+    effectorp2_ch,
+    emboss_ch,
+    pfam_results_ch,
+    dbcan_results_ch,
+    phibase_results_ch
+).set { combined_results_ch }
