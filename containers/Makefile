@@ -49,6 +49,10 @@ FFINDEX_TAG=0.9.9.9
 FFINDEX_REPO=https://github.com/ahcm/ffindex.git
 FFINDEX_PREFIX_ARG=$(INSTALL_BASE)/ffindex/$(FFINDEX_TAG)
 
+GFFPAL_TAG=v0.0.2
+GFFPAL_REPO=https://github.com/darcyabjones/gffpal.git
+GFFPAL_PREFIX_ARG=$(INSTALL_BASE)/gffpal/$(GFFPAL_TAG)
+
 HMMER3_VERSION=3.2.1
 HMMER3_URL=http://eddylab.org/software/hmmer/hmmer-3.2.1.tar.gz
 HMMER3_PREFIX_ARG=$(INSTALL_BASE)/hmmer3/$(HMMER3_VERSION)
@@ -71,6 +75,10 @@ PFAMSCAN_PREFIX_ARG=$(INSTALL_BASE)/pfamscan/$(PFAMSCAN_VERSION)
 PHOBIUS_VERSION=101
 PHOBIUS_PREFIX_ARG=$(INSTALL_BASE)/phobius/$(PHOBIUS_VERSION)
 PHOBIUS_TAR=sources/phobius101_linux.tar.gz
+
+SEQRENAMER_TAG=v0.0.1
+SEQRENAMER_REPO=https://github.com/darcyabjones/seqrenamer.git
+SEQRENAMER_PREFIX_ARG=$(INSTALL_BASE)/seqrenamer/$(SEQRENAMER_TAG)
 
 SIGNALP3_VERSION=3.0
 SIGNALP3_PREFIX_ARG=$(INSTALL_BASE)/signalp/$(SIGNALP3_VERSION)
@@ -103,7 +111,7 @@ WEKA_38_VERSION=3.8.1
 WEKA_38_URL=https://sourceforge.net/projects/weka/files/weka-3-8/3.8.1/weka-3-8-1.zip/download
 WEKA_38_PREFIX_ARG=$(INSTALL_BASE)/weka/$(WEKA_38_VERSION)
 
-GENERAL=base python3 deepsig ffdb emboss mmseqs
+GENERAL=base python3 deepsig ffdb emboss mmseqs seqrenamer gffpal
 PROPRIETARY=phobius signalp3 signalp4 signalp5 tmhmm targetp deeploc
 SPERSCHNEIDER=effectorp1 effectorp2 localizer apoplastp
 
@@ -111,7 +119,7 @@ SPERSCHNEIDER=effectorp1 effectorp2 localizer apoplastp
 all: docker/all singularity/all
 
 # Docker targets
-docker: docker/pannot
+docker: docker/predector
 	touch $@
 
 docker/all: docker/general docker/sperschneider
@@ -148,7 +156,7 @@ singularity/proprietary: $(addprefix singularity/,$(addsuffix .sif,$(PROPRIETARY
 
 
 # Pull containers from dockerhub
-dockerpull: dockerpull/pannot
+dockerpull: dockerpull/predector
 	touch docker/$(notdir $@)
 
 dockerpull/all: dockerpull/general dockerpull/sperschneider
@@ -361,6 +369,19 @@ docker/ffindex: ffindex.Dockerfile docker/base docker/ffdb
 	@touch $@
 
 
+docker/gffpal: gffpal.Dockerfile docker/base
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg GFFPAL_TAG="$(GFFPAL_TAG)" \
+	  --build-arg GFFPAL_REPO="$(GFFPAL_REPO)" \
+	  --build-arg GFFPAL_PREFIX_ARG="$(GFFPAL_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
 docker/hmmer3: hmmer3.Dockerfile docker/base docker/ffindex
 	docker build \
 	  --build-arg IMAGE="$(BASE_IMAGE)" \
@@ -440,6 +461,22 @@ docker/phobius: phobius.Dockerfile docker/base docker/ffindex $(PHOBIUS_TAR)
 	  --build-arg FFINDEX_IMAGE="$(call make_image_name,ffindex)" \
 	  --build-arg FFINDEX_TAG="$(FFINDEX_TAG)" \
 	  --build-arg FFINDEX_PREFIX_ARG="$(FFINDEX_PREFIX_ARG)" \
+	  --file $< \
+	  -t "$(call make_image_name,$@)" \
+	  .
+	@mkdir -p "$(dir $@)"
+	@touch $@
+
+
+docker/seqrenamer: seqrenamer.Dockerfile docker/base docker/gffpal
+	docker build \
+	  --build-arg IMAGE="$(BASE_IMAGE)" \
+	  --build-arg SEQRENAMER_TAG="$(SEQRENAMER_TAG)" \
+	  --build-arg SEQRENAMER_REPO="$(SEQRENAMER_REPO)" \
+	  --build-arg SEQRENAMER_PREFIX_ARG="$(SEQRENAMER_PREFIX_ARG)" \
+	  --build-arg GFFPAL_IMAGE="$(call make_image_name,gffpal)" \
+	  --build-arg GFFPAL_TAG="$(GFFPAL_TAG)" \
+	  --build-arg GFFPAL_PREFIX_ARG="$(GFFPAL_PREFIX_ARG)" \
 	  --file $< \
 	  -t "$(call make_image_name,$@)" \
 	  .
@@ -562,5 +599,3 @@ docker/pasta2: pasta2.tar docker/base
 	docker load -i pasta2.tar
 	@mkdir -p "$(dir $@)"
 	@touch $@
-
-
