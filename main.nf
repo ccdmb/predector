@@ -596,7 +596,7 @@ process 'PfamScan' {
 
     script:
     """
-    pfam_scan.pl -fasta in.fasta -dir pfam_db -as -json > "${name}_pfamscan.json"
+    pfam_scan.pl -fasta in.fasta -dir pfam_db -as > "${name}_pfamscan.json"
     """
 }
 
@@ -727,10 +727,10 @@ process 'MMSeqs_PHIbase' {
       search_tmp.tsv \
       --threads "${task.cpus}" \
       --format-mode 0 \
-      --format-output 'target,query,tstart,tend,tlen,qstart,qend,qlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
+      --format-output 'query,target,qstart,qend,qlen,tstart,tend,tlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
 
     sort -k1,1 -k3,3n -k4,4n -k2,2 search_tmp.tsv > "${name}_phibase.tsv"
-    sed -i '1i #target\tquery\ttstart\ttend\ttlen\tqstart\tqend\tqlen\tevalue\tgapopen\tpident\talnlen\traw\tbits\tcigar\tmismatch\tqcov\ttcov' "${name}_phibase.tsv"
+    sed -i '1i #query\target\tqstart\tqend\tqlen\tttstart\ttend\ttlen\tevalue\tgapopen\tpident\talnlen\traw\tbits\tcigar\tmismatch\tqcov\ttcov' "${name}_phibase.tsv"
 
     rm -rf -- tmp matches
     """
