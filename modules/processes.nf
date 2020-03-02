@@ -70,7 +70,7 @@ process seqrenamer_encode {
 process signalp_v3_hmm {
 
     label 'signalp3'
-    label 'process_low'
+    label 'process_high'
 
     tag "${name}"
 
@@ -83,11 +83,29 @@ process signalp_v3_hmm {
 
     script:
     """
-    signalp \
-      -type "${domain}" \
-      -method "hmm" \
-      -short in.fasta \
-    > "${name}_signalp3_hmm.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 1 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      signalp -type "${domain}" -method "hmm" -short "/dev/stdin"
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        signalp3_hmm -
+
+    ffdb collect ld.ff{data,index} > "${name}_signalp3_hmm.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -98,7 +116,7 @@ process signalp_v3_hmm {
 process signalp_v3_nn {
 
     label 'signalp3'
-    label 'process_low'
+    label 'process_high'
 
     tag "${name}"
 
@@ -111,11 +129,29 @@ process signalp_v3_nn {
 
     script:
     """
-    signalp \
-      -type "${domain}" \
-      -method "nn" \
-      -short in.fasta \
-    > "${name}_signalp3_nn.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 1 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      signalp -type "${domain}" -method "nn" -short "/dev/stdin"
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        signalp3_nn -
+
+    ffdb collect ld.ff{data,index} > "${name}_signalp3_nn.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -126,7 +162,7 @@ process signalp_v3_nn {
 process signalp_v4 {
 
     label 'signalp4'
-    label 'process_low'
+    label 'process_high'
 
     tag "${name}"
 
@@ -139,10 +175,29 @@ process signalp_v4 {
 
     script:
     """
-    signalp \
-      -t "${domain}" \
-      -f short in.fasta \
-    > "${name}_signalp4.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      signalp -t "${domain}" -f short "/dev/stdin"
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        signalp4 -
+
+    ffdb collect ld.ff{data,index} > "${name}_signalp4.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -153,7 +208,7 @@ process signalp_v4 {
 process signalp_v5 {
 
     label 'signalp5'
-    label 'process_low'
+    label 'process_high'
 
     tag "${name}"
 
@@ -168,6 +223,7 @@ process signalp_v5 {
     script:
     """
     mkdir -p tmpdir
+    # This just uses all available cores by default.
     signalp \
       -org "${domain}" \
       -format short \
@@ -176,7 +232,13 @@ process signalp_v5 {
       -fasta in.fasta \
       -prefix "${name}"
 
-    mv "${name}_summary.signalp5" "${name}_signalp5.txt"
+    predector r2js \
+      --run-name "${workflow.runName}" \
+      --session-id "${workflow.sessionId}" \
+      --start "${workflow.start}" \
+      signalp5 "${name}_summary.signalp5" \
+    > "${name}_signalp5.txt"
+
     mv "${name}_mature.fasta" "${name}_signalp5_mature.fasta"
     rm -rf -- tmpdir
     """
@@ -239,7 +301,7 @@ process phobius {
 process tmhmm {
 
     label 'tmhmm'
-    label 'process_low'
+    label 'process_high'
 
     tag "${name}"
 
@@ -251,8 +313,30 @@ process tmhmm {
 
     script:
     """
-    tmhmm -short -d < in.fasta > "${name}_tmhmm.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      tmhmm -short -d
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        tmhmm -
+
+    ffdb collect ld.ff{data,index} > "${name}_tmhmm.ldjson"
+
     rm -rf -- TMHMM_*
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
