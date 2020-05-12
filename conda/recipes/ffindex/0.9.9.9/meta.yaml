@@ -1,0 +1,39 @@
+{% set version = "0.9.9.9" %}
+
+package:
+  name: ffindex
+  version: {{ version }}
+
+source:
+  fn:  {{ version }}.tar.gz
+  url: https://github.com/ahcm/ffindex/archive/{{ version }}.tar.gz
+  sha256: 4ffb59f471d48140a8bdf3b7d5334b3163fff6e068c9d9d375b8ffb0fb220569
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - zlib
+    - {{ mpi }}
+    - {{ mpicc }}
+
+  run:
+    - zlib
+    - {{ mpi }}
+
+test:
+  commands:
+    - "ffindex_apply || [ $? = 1 ]"
+    - "ffindex_apply_mpi || [ $? = 1 ]"
+    - "ffindex_build || [ $? = 1 ]"
+    - "ffindex_from_fasta || [ $? = 1 ]"
+    - "ffindex_from_tsv || [ $? = 1 ]"
+    - "ffindex_get || [ $? = 1 ]"
+    - "ffindex_modify || [ $? = 1 ]"
+    - "which ffindex_unpack"
+
+about:
+  home: https://github.com/ahcm/ffindex
+  license: CC BY-SA 4.0

@@ -1,0 +1,11 @@
+mpi:
+  - mpich
+  - openmpi
+
+mpicc:
+  - mpich-mpicc
+  - openmpi-mpicc
+
+zip_keys:
+  - mpi
+  - mpicc

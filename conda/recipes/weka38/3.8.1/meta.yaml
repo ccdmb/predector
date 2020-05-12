@@ -1,0 +1,28 @@
+{% set version = "3.8.1" %}
+
+package:
+  name: weka38
+  version: {{ version }}
+
+source:
+  fn: weka-3-8-1.zip
+  url: https://prdownloads.sourceforge.net/weka/weka-3-8-1.zip
+  sha256: b3f242984e9b8abdfdaaef184fca883fa213778cfe0ba1c0bd3ab2d0c851c19a
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  run:
+    - openjdk
+
+test:
+  commands:
+    - '[ ! -z "${WEKA38_3_8_1_DIR}" ]'
+    - '[ -f "${WEKA38_3_8_1_DIR}/weka.jar" ]'
+    - 'java -cp "${WEKA38_3_8_1_JAR}" weka.classifiers.bayes.NaiveBayes -h'
+
+about:
+  home: https://www.cs.waikato.ac.nz/ml/weka/index.html
+  license: GPL2
