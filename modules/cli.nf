@@ -1,6 +1,8 @@
 #!/usr/bin/env nextflow
 
-is_null = { f -> (f == null || f == '') }
+def is_null(f) {
+    return (f == null || f == '')
+}
 
 /**
  * Raises a generic error if we hit a branch that should be controlled for.

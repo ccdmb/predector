@@ -102,11 +102,11 @@ workflow validate_input {
 workflow {
 
     main:
-    println "$workflow.runName"
-    println "$workflow.sessionId"
-    println "$workflow.start"
-    println "$workflow.revision"
-    println "$workflow.manifest.version"
+    // println "$workflow.runName"
+    // println "$workflow.sessionId"
+    // println "$workflow.start"
+    // println "$workflow.revision"
+    // println "$workflow.manifest.version"
 
     (proteome_ch, pfam_hmm_val, pfam_dat_val,
      pfam_active_site_val, dbcan_val, phibase_val) = validate_input()
@@ -122,24 +122,21 @@ workflow {
 
     split_proteomes_ch = combined_proteomes_ch
         .splitFasta( by: params.chunk_size, file: true )
-        .toList()
-        .map { it.eachWithIndex { elem, i -> ["chunk_${i}", elem] } }
-        .flatten()
 
-    signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, split_proteome_ch)
-    signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteome_ch)
-    signalp_v4_ch = signalp_v4(signalp_domain, split_proteome_ch)
-    (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, split_proteome_ch)
-    deepsig_ch = deepsig(params.domain, split_proteome_ch)
-    phobius_ch = phobius(split_proteome_ch)
-    tmhmm_ch = tmhmm(split_proteome_ch)
-    targetp_ch = targetp(split_proteome_ch)
-    deeploc_ch = deeploc(split_proteome_ch)
-    apoplastp_ch = apoplastp(split_proteome_ch)
-    localizer_ch = localizer(split_signalp_v5_mature_ch)
-    effectorp_v1_ch = effectorp_v1(split_proteome_ch)
-    effectorp_v2_ch = effectorp_v2(split_proteome_ch)
-    pepstats_ch = pepstats(split_proteome_ch)
+    signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, split_proteomes_ch)
+    signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteomes_ch)
+    signalp_v4_ch = signalp_v4(signalp_domain, split_proteomes_ch)
+    (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, split_proteomes_ch)
+    deepsig_ch = deepsig(params.domain, split_proteomes_ch)
+    phobius_ch = phobius(split_proteomes_ch)
+    tmhmm_ch = tmhmm(split_proteomes_ch)
+    targetp_ch = targetp(split_proteomes_ch)
+    deeploc_ch = deeploc(split_proteomes_ch)
+    apoplastp_ch = apoplastp(split_proteomes_ch)
+    localizer_ch = localizer(signalp_v5_mature_ch)
+    effectorp_v1_ch = effectorp_v1(split_proteomes_ch)
+    effectorp_v2_ch = effectorp_v2(split_proteomes_ch)
+    pepstats_ch = pepstats(split_proteomes_ch)
 
     // Domain searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
@@ -147,12 +144,14 @@ workflow {
         pfam_dat_val,
         pfam_active_site_val
     )
-    pfamscan_ch = pfamscan(pressed_pfam_hmmer_val, split_proteome_ch)
+    pfamscan_ch = pfamscan(pressed_pfam_hmmer_val, split_proteomes_ch)
 
     pressed_dbcan_hmmer_val = press_dbcan_hmmer(dbcan_val)
-    dbcan_hmmer_ch = hmmscan_dbcan("dbcan", pressed_dbcan_hmmer_val, split_proteome_ch)
+    dbcan_hmmer_ch = hmmscan_dbcan("dbcan", pressed_dbcan_hmmer_val, split_proteomes_ch)
 
-    proteome_mmseqs_index_ch = mmseqs_index_proteomes(split_proteome_ch)
+    proteome_mmseqs_index_ch = mmseqs_index_proteomes(
+        split_proteomes_ch.map { f -> ["chunk", f] }
+    ).map { v, f -> f }
 
     phibase_mmseqs_index_val = mmseqs_index_phibase(phibase_val.map { f -> ["phibase", f] })
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(

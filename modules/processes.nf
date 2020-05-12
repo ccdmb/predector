@@ -4,8 +4,8 @@ process download {
     label 'process_low'
 
     input:
-    val url
     val outfile
+    val url
 
     output:
     path "${outfile}"
@@ -72,14 +72,12 @@ process signalp_v3_hmm {
     label 'signalp3'
     label 'process_high'
 
-    tag "${name}"
-
     input:
     val domain
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_signalp3_hmm.txt")
+    path "out.ldjson"
 
     script:
     """
@@ -103,7 +101,7 @@ process signalp_v3_hmm {
         --start "${workflow.start}" \
         signalp3_hmm -
 
-    ffdb collect ld.ff{data,index} > "${name}_signalp3_hmm.ldjson"
+    ffdb collect ld.ff{data,index} > "out.ldjson"
 
     rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
@@ -118,14 +116,12 @@ process signalp_v3_nn {
     label 'signalp3'
     label 'process_high'
 
-    tag "${name}"
-
     input:
     val domain
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_signalp3_nn.txt")
+    path "out.ldjson"
 
     script:
     """
@@ -149,7 +145,7 @@ process signalp_v3_nn {
         --start "${workflow.start}" \
         signalp3_nn -
 
-    ffdb collect ld.ff{data,index} > "${name}_signalp3_nn.ldjson"
+    ffdb collect ld.ff{data,index} > "out.ldjson"
 
     rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
@@ -164,14 +160,12 @@ process signalp_v4 {
     label 'signalp4'
     label 'process_high'
 
-    tag "${name}"
-
     input:
     val domain
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_signalp4.txt")
+    path "${name}_signalp4.txt"
 
     script:
     """
@@ -195,7 +189,7 @@ process signalp_v4 {
         --start "${workflow.start}" \
         signalp4 -
 
-    ffdb collect ld.ff{data,index} > "${name}_signalp4.ldjson"
+    ffdb collect ld.ff{data,index} > "out.ldjson"
 
     rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
@@ -210,15 +204,13 @@ process signalp_v5 {
     label 'signalp5'
     label 'process_high'
 
-    tag "${name}"
-
     input:
     val domain
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_signalp5.txt")
-    tuple val(name), path("${name}_signalp5_mature.fasta")
+    path "out.ldjson"
+    path "out.fasta"
 
     script:
     """
@@ -230,16 +222,16 @@ process signalp_v5 {
       -tmp tmpdir \
       -mature \
       -fasta in.fasta \
-      -prefix "${name}"
+      -prefix "out"
 
     predector r2js \
       --run-name "${workflow.runName}" \
       --session-id "${workflow.sessionId}" \
       --start "${workflow.start}" \
-      signalp5 "${name}_summary.signalp5" \
-    > "${name}_signalp5.txt"
+      signalp5 "out_summary.signalp5" \
+    > "out.ldjson"
 
-    mv "${name}_mature.fasta" "${name}_signalp5_mature.fasta"
+    mv "out_mature.fasta" "out.fasta"
     rm -rf -- tmpdir
     """
 }
@@ -251,23 +243,43 @@ process signalp_v5 {
 process deepsig {
 
     label "deepsig"
-    label "process_low"
-
-    tag "${name}"
+    label "process_high"
 
     input:
     val domain
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_deepsig.txt")
+    path "out.ldjson"
 
     script:
     """
-    deepsig.py \
-      -f in.fasta \
-      -k "${domain}" \
-      -o "${name}_deepsig.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      deepsig.py \
+        -f /dev/stdin \
+        -k "${domain}" \
+        -o /dev/stdout
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        deepsig -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -278,19 +290,39 @@ process deepsig {
 process phobius {
 
     label 'phobius'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_phobius.txt")
+    path "out.ldjson"
 
     script:
     """
-    phobius.pl -short in.fasta > "${name}_phobius.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      phobius.pl -short /dev/stdin
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        phobius -
+ 
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -303,13 +335,11 @@ process tmhmm {
     label 'tmhmm'
     label 'process_high'
 
-    tag "${name}"
-
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_tmhmm.txt")
+    path "out.ldjson"
 
     script:
     """
@@ -333,7 +363,7 @@ process tmhmm {
         --start "${workflow.start}" \
         tmhmm -
 
-    ffdb collect ld.ff{data,index} > "${name}_tmhmm.ldjson"
+    ffdb collect ld.ff{data,index} > "out.ldjson"
 
     rm -rf -- TMHMM_*
     rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
@@ -347,21 +377,27 @@ process tmhmm {
 process targetp {
 
     label 'targetp'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_targetp2.txt")
+    path "out.ldjson"
 
     script:
     """
     mkdir -p tmpdir
-    targetp -fasta in.fasta -org non-pl -format short -prefix "${name}"
-    mv "${name}_summary.targetp2" "${name}_targetp2.txt"
+    targetp -fasta in.fasta -org non-pl -format short -prefix "out"
+
+    predector r2js \
+      --run-name "${workflow.runName}" \
+      --session-id "${workflow.sessionId}" \
+      --start "${workflow.start}" \
+      targetp "out_summary.targetp2" \
+    > "out.ldjson"
+
+    mv "out_summary.targetp2"
     rm -rf -- tmpdir
     """
 }
@@ -373,20 +409,26 @@ process targetp {
 process deeploc {
 
     label 'deeploc'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_deeploc.txt")
+    path "out.ldjson"
 
     script:
     """
-    deeploc -f in.fasta -o "${name}"
-    mv "${name}.txt" "${name}_deeploc.txt"
+    deeploc -f in.fasta -o out
+
+    predector r2js \
+      --run-name "${workflow.runName}" \
+      --session-id "${workflow.sessionId}" \
+      --start "${workflow.start}" \
+      deeploc "out.txt" \
+    > "out.ldjson"
+
+    rm out.txt
     """
 }
 
@@ -397,19 +439,39 @@ process deeploc {
 process apoplastp {
 
     label 'apoplastp'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_apoplastp.txt")
+    path "out.ldjson"
 
     script:
     """
-    ApoplastP.py -s -i in.fasta > "${name}_apoplastp.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      ApoplastP.py -s -i /dev/stdin
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        apoplastp -
+
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -420,22 +482,39 @@ process apoplastp {
 process localizer {
 
     label 'localizer'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("mature.fasta")
+    path "mature.fasta"
 
     output:
-    tuple val(name), path("${name}_localizer.txt")
+    path "out.ldjson"
 
     script:
     """
-    LOCALIZER.py -e -M -i mature.fasta -o "run"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 mature.fasta
 
-    mv run/Results.txt "${name}_localizer.txt"
-    rm -rf -- run
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      bin/run_localizer.sh
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        deepsig -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -446,19 +525,39 @@ process localizer {
 process effectorp_v1 {
 
     label 'effectorp1'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_effectorp1.txt")
+    path "out.ldjson"
 
     script:
     """
-    EffectorP.py -s -i in.fasta > "${name}_effectorp1.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      EffectorP.py -s -i /dev/stdin
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        effectorp1 -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -469,19 +568,39 @@ process effectorp_v1 {
 process effectorp_v2 {
 
     label 'effectorp2'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_effectorp2.txt")
+    path "out.ldjson"
 
     script:
     """
-    EffectorP.py -s -i in.fasta > "${name}_effectorp2.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      EffectorP.py -s -i /dev/stdin
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        effectorp2 -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -492,19 +611,39 @@ process effectorp_v2 {
 process pepstats {
 
     label 'emboss'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
-    tuple val(name), path("in.fasta")
+    path "in.fasta"
 
     output:
-    tuple val(name), path("${name}_emboss.txt")
+    path "out.ldjson"
 
     script:
     """
-    pepstats -sequence in.fasta -outfile "${name}_emboss.txt"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      pepstats -sequence /dev/stdin -outfile /dev/stdout
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        pepstats -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -539,18 +678,38 @@ process pfamscan {
     label 'pfamscan'
     label 'process_low'
 
-    tag "${name}"
-
     input:
     path 'pfam_db'
-    tuple val(name), path('in.fasta')
+    path 'in.fasta'
 
     output:
-    tuple val(name), path("${name}_pfamscan.tab")
+    path "out.ldjson"
 
     script:
     """
-    pfam_scan.pl -fasta in.fasta -dir pfam_db -as > "${name}_pfamscan.tab"
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      pfam_scan.pl -fasta /dev/stdin -dir pfam_db -as
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        pfamscan -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -578,24 +737,44 @@ process press_hmmer {
 process hmmscan {
 
     label 'hmmer3'
-    label 'process_low'
-
-    tag "${name}"
+    label 'process_high'
 
     input:
     val database
     path "db"
-    tuple val(name), path('in.fasta')
+    path 'in.fasta'
 
     output:
-    tuple val(name), path("${name}_${database}.domtab")
+    path "out.ldjson"
 
     script:
     """
-    hmmscan \
-      --domtblout "${name}_${database}.domtab" \
-      db/db.hmm \
-      in.fasta
+    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      db.ff{data,index} \
+      -d sp.ffdata \
+      -i sp.ffindex \
+      -- \
+      hmmscan \
+        --domtblout /dev/stdout \
+        db/db.hmm \
+        /dev/stdin
+
+    mpirun -np "${task.cpus}" ffindex_apply_mpi \
+      sp.ff{data,index} \
+      -d ld.ffdata \
+      -i ld.ffindex \
+      -- \
+      predector r2js \
+        --run-name "${workflow.runName}" \
+        --session-id "${workflow.sessionId}" \
+        --start "${workflow.start}" \
+        "${database}" -
+     
+    ffdb collect ld.ff{data,index} > "out.ldjson"
+
+    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -603,9 +782,9 @@ process hmmscan {
 process mmseqs_index {
 
     label "mmseqs"
-    label "process_medium"
+    label "process_low"
 
-    label "${name}"
+    tag "${name}"
 
     input:
     tuple val(name), path("db.fasta")
@@ -624,16 +803,16 @@ process mmseqs_index {
 process mmseqs_search {
 
     label 'mmseqs'
-    label 'process_medium'
+    label 'process_high'
 
-    tag "${name}"
+    tag "${database}"
 
     input:
     tuple val(database), path("target")
-    tuple val(name), path("query")
+    path "query"
 
     output:
-    tuple val(name), path("${name}_${database}.tsv")
+    path "out.ldjson"
 
     script:
     """
@@ -656,14 +835,18 @@ process mmseqs_search {
       query/db \
       target/db \
       matches/db \
-      search_tmp.tsv \
+      search.tsv \
       --threads "${task.cpus}" \
       --format-mode 0 \
       --format-output 'query,target,qstart,qend,qlen,tstart,tend,tlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
 
-    sort -k1,1 -k3,3n -k4,4n -k2,2 search_tmp.tsv > "${name}_${database}.tsv"
-    sed -i '1i #query\target\tqstart\tqend\tqlen\tttstart\ttend\ttlen\tevalue\tgapopen\tpident\talnlen\traw\tbits\tcigar\tmismatch\tqcov\ttcov' "${name}_${database}.tsv"
+    predector r2js \
+      --run-name "${workflow.runName}" \
+      --session-id "${workflow.sessionId}" \
+      --start "${workflow.start}" \
+      "${database}" search.tsv \
+    > out.ldjson
 
-    rm -rf -- tmp matches search_tmp.tsv
+    rm -rf -- tmp matches search.tsv
     """
 }
