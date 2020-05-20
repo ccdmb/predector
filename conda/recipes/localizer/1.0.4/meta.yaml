@@ -1,0 +1,30 @@
+{% set version = "1.0.4" %}
+
+package:
+  name: localizer
+  version: {{ version }}
+
+source:
+  url: https://github.com/darcyabjones/LOCALIZER/archive/9208036e56dd5afec526fa34446cecd6b8197bbe.zip
+  sha256: 7fe47051ed8818be049494a78cd5b5f57f29fba853990d8b764b2cda82a8002d
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  run:
+    - python {{ python }}
+    - openjdk
+    - emboss
+    - numpy
+    - biopython
+
+test:
+  commands:
+    - 'LOCALIZER.py -h'
+    - 'LOCALIZER.py -e -i "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/Scripts/Effector_Testing.fasta"'
+
+about:
+  home: http://localizer.csiro.au/
+  license: GPL3

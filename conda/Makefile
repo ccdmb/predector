@@ -1,6 +1,7 @@
 ANACONDA_USER=predector
 
-TARGETS=ffindex/0.9.9.9 weka36/3.6.12 weka38/3.8.1
+TARGETS=ffindex/0.9.9.9 effectorp1/1.0 effectorp2/2.0 localizer/1.0.4 apoplastp/1.0.1 deepsig/0f1e1d9 \
+		signalp3/3.0
 
 all: $(addprefix targets/,$(TARGETS))
 
@@ -14,6 +15,8 @@ targets/%: recipes/%/meta.yaml recipes/%/build.sh
 	  --skip-existing \
 	  --output-folder "builds" \
 	  --keep-going \
+	  --channel bioconda \
+	  --channel conda-forge \
 	  --channel "file://$(PWD)/builds" \
 	  --channel "$(ANACONDA_USER)" \
 	  "$(dir $<)"

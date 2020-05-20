@@ -1,0 +1,28 @@
+{% set version = "0f1e1d9" %}
+
+package:
+  name: deepsig
+  version: {{ version }}
+
+source:
+  url: https://github.com/darcyabjones/deepsig/archive/0f1e1d9d307e6b87cff719a9fbb40f5c08c10bfa.zip
+  sha256: 34cb94361069c0fed9a3aef076ab6e8f0c973b7e4acb2423c6838f9b1801f24c
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  run:
+    - python {{ python }}
+    - keras
+    - biopython
+
+test:
+  commands:
+    - 'deepsig.py -h'
+    - 'deepsig.py -f "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/testdata/SPEuk.nr.fasta" -k euk -o test.txt'
+
+about:
+  home: https://github.com/BolognaBiocomp/deepsig
+  license: GPL3

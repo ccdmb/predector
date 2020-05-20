@@ -1,0 +1,30 @@
+{% set version = "1.0.1" %}
+
+package:
+  name: apoplastp
+  version: {{ version }}
+
+source:
+  url: https://github.com/darcyabjones/ApoplastP/archive/bbf401037a4492f1f67cfaf05e1560a252abc941.zip
+  sha256: c1fae7501f64b3b70576ff09c69b121b1cf4af3e1a1de8a73824e14dec2aabc3
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  run:
+    - python {{ python }}
+    - openjdk
+    - emboss
+    - numpy
+    - biopython
+
+test:
+  commands:
+    - 'ApoplastP.py -h'
+    - 'ApoplastP.py -i "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/Scripts/Testing.fasta"'
+
+about:
+  home: http://apoplastp.csiro.au/
+  license: GPL3

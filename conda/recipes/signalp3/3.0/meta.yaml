@@ -1,0 +1,24 @@
+{% set version = "3.0" %}
+
+package:
+  name: signalp3
+  version: {{ version }}
+
+build:
+  number: 1
+  noarch: generic
+
+requirements:
+  run:
+    - gawk
+    - sed
+    - coreutils
+
+test:
+  commands:
+    - 'signalp -h || [ $? == 1 ]'
+    - 'signalp3 -h || [ $? == 1 ]'
+    - 'signalp3-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/service.php?SignalP-3.0

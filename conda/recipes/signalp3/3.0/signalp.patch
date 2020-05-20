@@ -1,0 +1,40 @@
+1c1
+< #!/bin/sh
+---
+> #!/usr/bin/env sh
+17c17
+< SIGNALP=/usr/opt/signalp-3.0
+---
+> SIGNALP="$(dirname "$(readlink -f "${0}")")"
+21c21
+< SH=/bin/sh				# POSIX-compliant shell
+---
+> SH="/usr/bin/env sh"				# POSIX-compliant shell
+42c42
+< 	AWK=/usr/bin/gawk
+---
+> 	AWK=gawk
+80c80
+< TESTHOW="$SH $SIGNALP/bin/testhow"
+---
+> TESTHOW="${SH} ${SIGNALP}/bin/testhow -H ${HOW}"
+293c293
+< 	TMPDIR=$SIGNALP/tmp/$TMPDIRNAME
+---
+> 	TMPDIR=$DESTINATION/$TMPDIRNAME
+295c295
+< mkdir $TMPDIR || { echo Cannot create temporary directory; exit 1; }
+---
+> mkdir -p "${TMPDIR}" || { echo Cannot create temporary directory; exit 1; }
+360,361c360,364
+< 	$TESTHOW -w $SYN/CS.$TYPE.$p.syn $HOWFILE >$NNOUTRAW.C.$p &&
+< 	$TESTHOW -w $SYN/SP.$TYPE.$p.syn $HOWFILE >$NNOUTRAW.S.$p ||
+---
+>     cp $SYN/CS.$TYPE.$p.syn CS.$TYPE.$p.syn
+>     cp $SYN/SP.$TYPE.$p.syn SP.$TYPE.$p.syn
+> 	chmod a+w CS.$TYPE.$p.syn SP.$TYPE.$p.syn
+>     $TESTHOW -w CS.$TYPE.$p.syn $HOWFILE >$NNOUTRAW.C.$p &&
+> 	$TESTHOW -w SP.$TYPE.$p.syn $HOWFILE >$NNOUTRAW.S.$p ||
+362a366,367
+> 
+>     rm -f CS.$TYPE.$p.syn SP.$TYPE.$p.syn

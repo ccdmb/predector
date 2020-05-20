@@ -25,6 +25,16 @@ Ultimately, the pipeline should output a series of effector candidate clusters a
 
 Also we intend to inject as many [Predator](https://en.wikipedia.org/wiki/Predator_(film)) references as possible because predector kind of sounds like predator.
 
+## Install
+
+download:
+https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#
+https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#
+https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#
+https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#
+https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#
+https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#
+http://software.sbc.su.se/cgi-bin/request.cgi?project=phobius
 
 ~~Stay tuned!~~
 Stick around!

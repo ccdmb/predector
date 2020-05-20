@@ -5,9 +5,8 @@ package:
   version: {{ version }}
 
 source:
-  fn: 
-  url: https://prdownloads.sourceforge.net/weka/weka-3-6-12.zip
-  sha256: 504f8ccc0915cd6664eb6aff74bcf5b3796dbdd55917e0b37c3d976cc38eb069
+  url: https://github.com/darcyabjones/EffectorP-1.0/archive/4c862a5992624224bdbc770ceda35edf46e5f64b.zip
+  sha256: 64e99986da168438e2418fee4f3b061aa09ad20631f64091ef2d258efeafe9f6
 
 build:
   number: 0
@@ -15,13 +14,15 @@ build:
 
 requirements:
   run:
+    - python >=3
     - openjdk
+    - emboss
 
 test:
   commands:
-    - '[ ! -z "${WEKA36_3_6_12_DIR}" ]'
-    - '[ -f "${WEKA36_3_6_12_DIR}/weka.jar" ]'
-    - 'java -cp "${WEKA36_3_6_12_JAR}" weka.classifiers.bayes.NaiveBayes -h'
+    - 'EffectorP.py -h'
+    - 'EffectorP1.py -h'
+    - 'EffectorP1.py -i "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/Scripts/Effector_Testing.fasta"'
 about:
-  home: https://www.cs.waikato.ac.nz/ml/weka/index.html
-  license: GPL2
+  home: http://effectorp.csiro.au/
+  license: GPL3

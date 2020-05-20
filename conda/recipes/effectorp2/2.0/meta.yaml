@@ -1,0 +1,29 @@
+{% set version = "2.0" %}
+
+package:
+  name: effectorp2
+  version: {{ version }}
+
+source:
+  url: https://github.com/darcyabjones/EffectorP-2.0/archive/1614ed91ce26819adc31982d1005e7a97010d429.zip
+  sha256: 10911e785e3f7e4fe2a22cb5a08ce09f80618c0a89e226e1867d714d46717e01
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  run:
+    - python {{ python }}
+    - openjdk
+    - emboss
+    - numpy
+
+test:
+  commands:
+    - 'EffectorP.py -h'
+    - 'EffectorP2.py -h'
+    - 'EffectorP2.py -i "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/Scripts/Effector_Testing.fasta"'
+about:
+  home: http://effectorp.csiro.au/
+  license: GPL3
