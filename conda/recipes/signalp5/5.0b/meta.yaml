@@ -1,0 +1,22 @@
+{% set version = "5.0b" %}
+
+package:
+  name: signalp5
+  version: {{ version }}
+
+build:
+  number: 0
+  skip: True  # [win]
+
+requirements:
+  run:
+    - openmp
+
+test:
+  commands:
+    - 'signalp -h || [ $? == 1 ]'
+    - 'signalp5 -h || [ $? == 1 ]'
+    - 'signalp5-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/services/SignalP-5.0#

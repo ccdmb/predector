@@ -33,15 +33,15 @@ function print_license_notice(){
     echo " Due to license restrictions, this recipe cannot distribute and "
     echo " install SignalP directly. To complete the installation you must "
     echo " download a licensed copy from DTU: "
-    echo "     https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php# "
+    echo "     https://services.healthtech.dtu.dk/services/SignalP-4.1g/9-Downloads.php# "
     echo " and run (after installing this package):"
-    echo "     signalp3-register /path/to/SignalP-3.0.tar.Z"
+    echo "     $(basename ${0}) /path/to/SignalP-4.1g.Linux.tar.gz"
     echo " This will copy ${PKG_NAME} into your conda environment."
 }
 
 
 function print_usage(){
-    echo " Usage: $(basename ${0}) /path/to/SignalP-3.0.tar.Z"
+    echo " Usage: $(basename ${0}) /path/to/SignalP-4.1g.Linux.tar.gz"
 }
 
 
@@ -69,13 +69,20 @@ EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
 
 WORKDIR="${TMPDIR:-/tmp}/tmp$$"
 mkdir -p "${WORKDIR}"
+
 tar --directory=${WORKDIR} -xf "${ARCHIVE}"
 
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
-mv ./* "${SIGNALP_DIR}"
+
+chmod -R a+rw ./*
+
+cp -r ./* "${SIGNALP_DIR}"
 
 cd "${SIGNALP_DIR}"
 rm -rf -- "${WORKDIR}"
 
 patch signalp signalp.patch
-sed -i 's~`which nawk`~gawk~' ./bin/testhow
+
+# I don't know enough perl to make it resolve the relative symlink, so
+# continuing to hard code the path is the best I can do.
+sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${SIGNALP_DIR}~" ./signalp

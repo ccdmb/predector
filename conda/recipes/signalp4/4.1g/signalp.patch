@@ -1,0 +1,23 @@
+1c1
+< #!/usr/bin/perl
+---
+> #!/usr/bin/env perl
+17c17,24
+< my $outputDir = "/var/tmp";
+---
+> 
+> my $outputDir;
+> 
+> if ( defined $ENV{TMPDIR} ) {
+>     $outputDir = $ENV{TMPDIR};
+> } else {
+>     $outputDir = '/tmp';
+> }
+20c27
+< my $MAX_ALLOWED_ENTRIES=20000;
+---
+> my $MAX_ALLOWED_ENTRIES=99999;
+26c33
+< my $version='4.1';
+---
+> my $version='4.1g';

@@ -33,15 +33,15 @@ function print_license_notice(){
     echo " Due to license restrictions, this recipe cannot distribute and "
     echo " install SignalP directly. To complete the installation you must "
     echo " download a licensed copy from DTU: "
-    echo "     https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php# "
+    echo "     https://services.healthtech.dtu.dk/services/SignalP-${PKG_VERSION}/9-Downloads.php# "
     echo " and run (after installing this package):"
-    echo "     signalp3-register /path/to/SignalP-3.0.tar.Z"
+    echo "     $(basename ${0}) /path/to/SignalP-${PKG_VERSION}.Linux.tar.gz"
     echo " This will copy ${PKG_NAME} into your conda environment."
 }
 
 
 function print_usage(){
-    echo " Usage: $(basename ${0}) /path/to/SignalP-3.0.tar.Z"
+    echo " Usage: $(basename ${0}) /path/to/SignalP-${PKG_VERSION}.Linux.tar.gz"
 }
 
 
@@ -72,10 +72,15 @@ mkdir -p "${WORKDIR}"
 tar --directory=${WORKDIR} -xf "${ARCHIVE}"
 
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
+
+mkdir -p "${SIGNALP_DIR}/bin"
+mkdir -p "${SIGNALP_DIR}/lib"
+
+mv bin/* "${SIGNALP_DIR}/bin"
+mv lib/* "${SIGNALP_DIR}/lib"
+
+rm -rf -- bin lib
 mv ./* "${SIGNALP_DIR}"
 
 cd "${SIGNALP_DIR}"
 rm -rf -- "${WORKDIR}"
-
-patch signalp signalp.patch
-sed -i 's~`which nawk`~gawk~' ./bin/testhow

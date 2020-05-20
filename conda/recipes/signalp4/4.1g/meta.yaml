@@ -1,0 +1,23 @@
+{% set version = "4.1g" %}
+
+package:
+  name: signalp4
+  version: {{ version }}
+
+build:
+  number: 0
+  skip: True  # [not linux]
+
+requirements:
+  run:
+    - patch
+    - perl
+
+test:
+  commands:
+    - 'signalp -h || [ $? == 1 ]'
+    - 'signalp4 -h || [ $? == 1 ]'
+    - 'signalp4-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/services/SignalP-4.1#
