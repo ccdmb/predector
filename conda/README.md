@@ -1,11 +1,11 @@
 # Conda recipes
 
 These are the recipes and simple build system that we're using to distribute packages.
-Eventually I hope to get most of these packages into bioconda and/or conda-forge, but that will take extra time that I don't have right now.
+Eventually I hope to get most of these packages into bioconda or conda-forge, but that will take extra time that I don't have right now.
 
 USERS DO NOT NEED TO BUILD THESE PACKAGES.
+This is for developers and the curious.
 
-This is for developers and the especially curious.
 Note that all of our recipes and the commands below assume you're running Linux
 on an x86 computer. Things should be ok on MacOS or a windows bash emulator (especially if you're running things in containers),
 but I can't really test it. Most bioinformatics servers/clusters etc will be running linux.
@@ -49,8 +49,8 @@ We rely on a lot of software that we can't redistribute.
 In most cases there aren't good open-source alternatives, so we're forced to find ways to make
 the installation process easier, without being able to just handle everything.
 
-Our solution is to create a placeholder package, which contains a script that users can run to add the downloaded licensed software to their conda environment (or to a Docker image containing the environment).
-
+Our solution is to create a placeholder package, which contains a script that users
+can run to add the downloaded licensed software to their conda environment (or to a Docker image containing the environment).
 This pattern is based on the [Bioconda gatk 3 recipe](https://github.com/bioconda/bioconda-recipes/tree/master/recipes/gatk).
 
 The signalp, targetp, tmhmm, phobius, and deeploc recipes all have:
