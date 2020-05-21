@@ -1,0 +1,14 @@
+1c1
+< #!/usr/bin/perl -w
+---
+> #!/usr/bin/env -S perl -w
+25c25
+< my $DECODEANHMM =      "$PHOBIUS_DIR/decodeanhmm";
+---
+> my $DECODEANHMM =      "$PHOBIUS_DIR/decodeanhmm.64bit";
+181c181
+<   my $predstr;
+---
+>   my $predstr="";
+244a245
+>   $predstr="";
