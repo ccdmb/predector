@@ -76,6 +76,7 @@ cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 chmod -R a+rw ./*
 
+mv "${SIGNALP_DIR}/signalp" "${SIGNALP_DIR}/signalp-placeholder.sh"
 cp -r ./* "${SIGNALP_DIR}"
 
 cd "${SIGNALP_DIR}"

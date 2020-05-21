@@ -18,30 +18,30 @@ then
         [[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
 
-    SIGNALP_DIR="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
-    ENV_PREFIX="$(dirname $(dirname ${SIGNALP_DIR}))"
+    TARGET_DIR="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+    ENV_PREFIX="$(dirname $(dirname ${TARGET_DIR}))"
 
     unset SOURCE
     unset DIR
 else
     ENV_PREFIX="${CONDA_PREFIX}"
-    SIGNALP_DIR="${ENV_PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}"
+    TARGET_DIR="${ENV_PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}"
 fi
 
 function print_license_notice(){
     echo
     echo " Due to license restrictions, this recipe cannot distribute and "
-    echo " install SignalP directly. To complete the installation you must "
+    echo " install TargetP directly. To complete the installation you must "
     echo " download a licensed copy from DTU: "
-    echo "     https://services.healthtech.dtu.dk/services/SignalP-${PKG_VERSION}/9-Downloads.php# "
+    echo "     https://services.healthtech.dtu.dk/services/TargetP-${PKG_VERSION}/9-Downloads.php# "
     echo " and run (after installing this package):"
-    echo "     $(basename ${0}) /path/to/SignalP-${PKG_VERSION}.Linux.tar.gz"
+    echo "     $(basename ${0}) /path/to/targetp-${PKG_VERSION}.Linux.tar.gz"
     echo " This will copy ${PKG_NAME} into your conda environment."
 }
 
 
 function print_usage(){
-    echo " Usage: $(basename ${0}) /path/to/SignalP-${PKG_VERSION}.Linux.tar.gz"
+    echo " Usage: $(basename ${0}) /path/to/targetp-${PKG_VERSION}.Linux.tar.gz"
 }
 
 
@@ -50,7 +50,7 @@ function print_usage(){
 
 if [[ "$#" -lt 1 ]]
 then
-    if ! $(${SIGNALP_DIR}/signalp -h > /dev/null 2>&1)
+    if ! $(${TARGET_DIR}/targetp -h > /dev/null 2>&1)
     then
         echo " It looks ${PKG_NAME} hasn't been installed yet."
         echo
@@ -73,17 +73,17 @@ tar --directory=${WORKDIR} -xf "${ARCHIVE}"
 
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
-mkdir -p "${SIGNALP_DIR}/bin"
-mkdir -p "${SIGNALP_DIR}/lib"
+mkdir -p "${TARGET_DIR}/bin"
+mkdir -p "${TARGET_DIR}/lib"
 
-mv "${SIGNALP_DIR}/bin/signalp" "${SIGNALP_DIR}/signalp-placeholder.sh"
-mv "${SIGNALP_DIR}/lib/libtensorflow.so" "${SIGNALP_DIR}/libtensorflow-placeholder.so"
+mv "${TARGET_DIR}/bin/targetp" "${TARGET_DIR}/targetp-placeholder.sh"
+mv "${TARGET_DIR}/lib/libtensorflow.so" "${TARGET_DIR}/libtensorflow-placeholder.so"
 
-mv bin/* "${SIGNALP_DIR}/bin"
-mv lib/* "${SIGNALP_DIR}/lib"
+mv bin/* "${TARGET_DIR}/bin"
+mv lib/* "${TARGET_DIR}/lib"
 
 rm -rf -- bin lib
-mv ./* "${SIGNALP_DIR}"
+mv ./* "${TARGET_DIR}"
 
-cd "${SIGNALP_DIR}"
+cd "${TARGET_DIR}"
 rm -rf -- "${WORKDIR}"

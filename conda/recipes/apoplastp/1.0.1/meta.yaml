@@ -14,7 +14,7 @@ build:
 
 requirements:
   run:
-    - python {{ python }}
+    - python =3
     - openjdk
     - emboss
     - numpy

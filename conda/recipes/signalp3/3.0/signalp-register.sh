@@ -72,6 +72,8 @@ mkdir -p "${WORKDIR}"
 tar --directory=${WORKDIR} -xf "${ARCHIVE}"
 
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
+
+mv "${SIGNALP_DIR}/signalp" "${SIGNALP_DIR}/signalp-placeholder.sh"
 mv ./* "${SIGNALP_DIR}"
 
 cd "${SIGNALP_DIR}"

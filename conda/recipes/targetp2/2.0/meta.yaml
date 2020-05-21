@@ -1,0 +1,22 @@
+{% set version = "2.0" %}
+
+package:
+  name: targetp2
+  version: {{ version }}
+
+build:
+  number: 0
+  skip: True  # [win]
+
+requirements:
+  run:
+    - openmp
+
+test:
+  commands:
+    - 'targetp -h || [ $? == 1 ]'
+    - 'targetp2 -h || [ $? == 1 ]'
+    - 'targetp2-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/service.php?TargetP-2.0

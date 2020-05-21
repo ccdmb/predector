@@ -1,0 +1,27 @@
+{% set version = "1.0" %}
+
+package:
+  name: deeploc
+  version: {{ version }}
+
+build:
+  number: 0
+  noarch: python
+
+requirements:
+  run:
+    - python =3
+    - pip
+    - theano
+    - numpy >=1.14
+    - scipy
+    - lasagne ==0.2.dev1
+
+
+test:
+  commands:
+    - 'deeploc -h || [ $? == 1 ]'
+    - 'deeploc-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/service.php?DeepLoc-1.0

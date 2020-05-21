@@ -18,30 +18,30 @@ then
         [[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
 
-    SIGNALP_DIR="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
-    ENV_PREFIX="$(dirname $(dirname ${SIGNALP_DIR}))"
+    TARGET_DIR="$( cd -P "$( dirname "${SOURCE}" )" && pwd )"
+    ENV_PREFIX="$(dirname $(dirname ${TARGET_DIR}))"
 
     unset SOURCE
     unset DIR
 else
     ENV_PREFIX="${CONDA_PREFIX}"
-    SIGNALP_DIR="${ENV_PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}"
+    TARGET_DIR="${ENV_PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}"
 fi
 
 function print_license_notice(){
     echo
     echo " Due to license restrictions, this recipe cannot distribute and "
-    echo " install SignalP directly. To complete the installation you must "
+    echo " install DeepLoc directly. To complete the installation you must "
     echo " download a licensed copy from DTU: "
-    echo "     https://services.healthtech.dtu.dk/services/SignalP-${PKG_VERSION}/9-Downloads.php# "
+    echo "     https://services.healthtech.dtu.dk/services/DeepLoc-${PKG_VERSION}/9-Downloads.php# "
     echo " and run (after installing this package):"
-    echo "     $(basename ${0}) /path/to/SignalP-${PKG_VERSION}.Linux.tar.gz"
+    echo "     $(basename ${0}) /path/to/deeploc-${PKG_VERSION}.All.tar.gz"
     echo " This will copy ${PKG_NAME} into your conda environment."
 }
 
 
 function print_usage(){
-    echo " Usage: $(basename ${0}) /path/to/SignalP-${PKG_VERSION}.Linux.tar.gz"
+    echo " Usage: $(basename ${0}) /path/to/deeploc-${PKG_VERSION}.All.tar.gz"
 }
 
 
@@ -50,7 +50,7 @@ function print_usage(){
 
 if [[ "$#" -lt 1 ]]
 then
-    if ! $(${SIGNALP_DIR}/signalp -h > /dev/null 2>&1)
+    if ! $(${TARGET_DIR}/deeploc -h > /dev/null 2>&1)
     then
         echo " It looks ${PKG_NAME} hasn't been installed yet."
         echo
@@ -71,19 +71,13 @@ WORKDIR="${TMPDIR:-/tmp}/tmp$$"
 mkdir -p "${WORKDIR}"
 tar --directory=${WORKDIR} -xf "${ARCHIVE}"
 
-cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
+rm "${ENV_PREFIX}/bin/deeploc"
 
-mkdir -p "${SIGNALP_DIR}/bin"
-mkdir -p "${SIGNALP_DIR}/lib"
+cp -r "${WORKDIR}/${EXTRACTED_DIR_CALLED}" "${TARGET_DIR}/src"
+cd "${TARGET_DIR}/src"
 
-mv "${SIGNALP_DIR}/bin/signalp" "${SIGNALP_DIR}/signalp-placeholder.sh"
-mv "${SIGNALP_DIR}/lib/libtensorflow.so" "${SIGNALP_DIR}/libtensorflow-placeholder.so"
+# Correct source files give version 1.0 this is to keep it consistent.
+sed -i 's/version=\'0.1\'/version="1.0"/' ./setup.py
+pip install --no-deps --upgrade --force-reinstall --compile --prefix "${ENV_PREFIX}" .
 
-mv bin/* "${SIGNALP_DIR}/bin"
-mv lib/* "${SIGNALP_DIR}/lib"
-
-rm -rf -- bin lib
-mv ./* "${SIGNALP_DIR}"
-
-cd "${SIGNALP_DIR}"
 rm -rf -- "${WORKDIR}"

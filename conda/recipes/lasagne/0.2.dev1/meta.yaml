@@ -1,0 +1,44 @@
+{% set name = "lasagne" %}
+{% set version = "0.2.dev1" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://github.com/Lasagne/Lasagne/archive/5d3c63cb315c50b1cbd27a6bc8664b406f34dd99.tar.gz"
+  sha256: 6dbcc97b5378e4f17e7ba4043d1a65cb4adb33c616a0a8683244e8e1423e83f3
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . -vv"
+
+requirements:
+  host:
+    - python =3
+    - numpy
+    - pip
+    - theano
+  run:
+    - python =3
+    - numpy
+    - theano
+
+test:
+  imports:
+    - lasagne
+    - lasagne.layers
+    - lasagne.theano_extensions
+
+about:
+  home: "https://github.com/Lasagne/Lasagne"
+  license: MIT
+  license_family: MIT
+  license_file: 
+  summary: "A lightweight library to build and train neural networks in Theano"
+  doc_url: https://github.com/Lasagne/Lasagne
+  dev_url: https://github.com/Lasagne/Lasagne
+
+extra:
+  recipe-maintainers:
+    - darcyabjones
