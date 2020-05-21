@@ -19,7 +19,7 @@ cp "${RECIPE_DIR}/signalp-placeholder.sh" "${SIGNALP_DIR}/bin/signalp"
 chmod a+x "${SIGNALP_DIR}/bin/signalp"
 ln -s "${SIGNALP_DIR}/bin/signalp" "${PREFIX}/bin/signalp"
 ln -s "${SIGNALP_DIR}/bin/signalp" "${PREFIX}/bin/signalp5"
-ln -rs "${SIGNALP_DIR}/bin/signalp" "${SIGNALP_DIR}/bin/signalp5"
+ln -s "${SIGNALP_DIR}/bin/signalp" "${SIGNALP_DIR}/bin/signalp5"
 
 
 REGISTER_FILE="${SIGNALP_DIR}/signalp-register.sh"

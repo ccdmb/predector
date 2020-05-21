@@ -19,7 +19,7 @@ cp "${RECIPE_DIR}/targetp-placeholder.sh" "${TARGET_DIR}/bin/targetp"
 chmod a+x "${TARGET_DIR}/bin/targetp"
 ln -s "${TARGET_DIR}/bin/targetp" "${PREFIX}/bin/targetp"
 ln -s "${TARGET_DIR}/bin/targetp" "${PREFIX}/bin/targetp2"
-ln -rs "${TARGET_DIR}/bin/targetp" "${TARGET_DIR}/bin/targetp2"
+ln -s "${TARGET_DIR}/bin/targetp" "${TARGET_DIR}/bin/targetp2"
 
 
 REGISTER_FILE="${TARGET_DIR}/targetp-register.sh"

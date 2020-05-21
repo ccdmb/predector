@@ -15,6 +15,7 @@ build:
 requirements:
   run:
     - python =3
+    - perl
     - openjdk
     - emboss
     - numpy

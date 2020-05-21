@@ -17,8 +17,8 @@ cp "${RECIPE_DIR}/tmhmm-placeholder.sh" "${TARGET_DIR}/bin/tmhmmformat.pl"
 
 chmod a+x "${TARGET_DIR}/bin/tmhmm"
 chmod a+x "${TARGET_DIR}/bin/tmhmmformat.pl"
-ln -sr "${TARGET_DIR}/bin/tmhmm" "${PREFIX}/bin/tmhmm"
-ln -sr "${TARGET_DIR}/bin/tmhmmformat.pl" "${PREFIX}/bin/tmhmmformat.pl"
+ln -s "${TARGET_DIR}/bin/tmhmm" "${PREFIX}/bin/tmhmm"
+ln -s "${TARGET_DIR}/bin/tmhmmformat.pl" "${PREFIX}/bin/tmhmmformat.pl"
 
 cp "${RECIPE_DIR}/tmhmm.patch" "${TARGET_DIR}/tmhmm.patch"
 

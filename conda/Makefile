@@ -1,5 +1,6 @@
-BUILD_IMAGE="bioconda/bioconda-utils-build-env"
-
+BUILD_IMAGE="condaforge/linux-anvil-comp7:latest"
+CONTAINER=1
+DOCKER=podman
 ANACONDA_USER=predector
 
 TARGETS=ffindex/0.9.9.9 effectorp1/1.0 effectorp2/2.0 localizer/1.0.4 apoplastp/1.0.1 deepsig/0f1e1d9 \
@@ -12,24 +13,45 @@ all: $(addprefix targets/,$(TARGETS))
 clean:
 	rm -rf -- targets builds
 
+targets/deeploc/1.0: targets/lasagne/0.2.dev1
+
+ifeq ($(CONTAINER), 0)
 targets/%: recipes/%/*
 	@mkdir -p "$(dir $@)"
 	@mkdir -p builds
-	docker run \
-		--rm \
-		-v "${CWD}:/work:rw" \
-		--entrypoint "/usr/bin/env bash" \
-		conda build \
-		  --skip-existing \
-		  --output-folder "builds" \
-		  --keep-going \
-		  --channel bioconda \
-		  --channel conda-forge \
-		  --channel "file://$(PWD)/builds" \
-		  --channel "$(ANACONDA_USER)" \
-		  "$(dir $<)"
+	conda build \
+	  --skip-existing \
+	  --output-folder "builds" \
+	  --keep-going \
+	  --channel bioconda \
+	  --channel conda-forge \
+	  --channel "file://${PWD}/builds" \
+	  --channel "$(ANACONDA_USER)" \
+	  "$(dir $<)"
 
 	touch $@
+else
+targets/%: recipes/%/*
+	@mkdir -p "$(dir $@)"
+	@mkdir -p builds
+	chmod a+w builds
+	$(DOCKER) run \
+	  --rm \
+	  -v "${PWD}:/work:z" \
+	  -w "/work" \
+	  $(BUILD_IMAGE) \
+	  conda build \
+	    --skip-existing \
+	    --output-folder "/work/builds" \
+	    --keep-going \
+	    --channel bioconda \
+	    --channel conda-forge \
+	    --channel "$(ANACONDA_USER)" \
+	    "/work/$(dir $<)"
+
+	touch $@
+endif
+
 
 upload:
 	mkdir -p builds/linux-64 builds/noarch
