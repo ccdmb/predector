@@ -31,17 +31,17 @@ fi
 function print_license_notice(){
     echo
     echo " Due to license restrictions, this recipe cannot distribute and "
-    echo " install DeepLoc directly. To complete the installation you must "
+    echo " install TMHMM directly. To complete the installation you must "
     echo " download a licensed copy from DTU: "
-    echo "     https://services.healthtech.dtu.dk/services/DeepLoc-${PKG_VERSION}/9-Downloads.php# "
+    echo "     https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php# "
     echo " and run (after installing this package):"
-    echo "     $(basename ${0}) /path/to/deeploc-${PKG_VERSION}.All.tar.gz"
+    echo "     tmhmm-register /path/to/tmhmm-2.0c.Linux.tar.gz"
     echo " This will copy ${PKG_NAME} into your conda environment."
 }
 
 
 function print_usage(){
-    echo " Usage: $(basename ${0}) /path/to/deeploc-${PKG_VERSION}.All.tar.gz"
+    echo " Usage: $(basename ${0}) /path/to/tmhmm-2.0c.Linux.tar.gz"
 }
 
 
@@ -50,7 +50,7 @@ function print_usage(){
 
 if [[ "$#" -lt 1 ]]
 then
-    if ! $(${TARGET_DIR}/deeploc -h > /dev/null 2>&1)
+    if ! $(${TARGET_DIR}/signalp -h > /dev/null 2>&1)
     then
         echo " It looks ${PKG_NAME} hasn't been installed yet."
         echo
@@ -71,13 +71,20 @@ WORKDIR="${TMPDIR:-/tmp}/tmp$$"
 mkdir -p "${WORKDIR}"
 tar --directory=${WORKDIR} -xf "${ARCHIVE}"
 
-rm -f "${ENV_PREFIX}/bin/deeploc"
+cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
-cp -r "${WORKDIR}/${EXTRACTED_DIR_CALLED}" "${TARGET_DIR}/src"
-cd "${TARGET_DIR}/src"
+mv "${TARGET_DIR}/bin/tmhmm" "${TARGET_DIR}/tmhmm-placeholder.sh"
+mv "${TARGET_DIR}/bin/tmhmmformat.pl" "${TARGET_DIR}/tmhmmformat-placeholder.sh"
+cp bin/* "${TARGET_DIR}/bin"
 
-# Correct source files give version 1.0 this is to keep it consistent.
-sed -i "s/version='0.1'/version='1.0'/" ./setup.py
-pip install --no-deps --upgrade --force-reinstall --compile --prefix "${ENV_PREFIX}" .
+rm -rf -- "${TARGET_DIR}/lib"
+cp -r lib "${TARGET_DIR}/lib"
 
+cp README TMHMM2.0.html "${TARGET_DIR}"
+
+cd "${TARGET_DIR}"
 rm -rf -- "${WORKDIR}"
+
+patch bin/tmhmm tmhmm.patch
+sed -i "s~INSERT_BASENAME_HERE~${TARGET_DIR}~" bin/tmhmm
+sed -i "s~/usr/local/bin/perl -w~/usr/bin/env -S perl -w~" bin/tmhmmformat.pl

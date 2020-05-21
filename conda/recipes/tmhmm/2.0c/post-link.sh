@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 # Prints the install instructions to screen.
-${PREFIX}/bin/deeploc-register || true
+${PREFIX}/bin/tmhmm-register || true
 
 exit 0

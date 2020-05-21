@@ -12,9 +12,9 @@ mkdir -p "${PREFIX}/bin"
 
 # This is just so that conda doesn't delete the empty folder.
 
-cp "${RECIPE_DIR}/deeploc-placeholder.sh" "${TARGET_DIR}/bin/deeploc"
-chmod a+x "${TARGET_DIR}/bin/signalp"
-ln -s "${TARGET_DIR}/bin/deeploc" "${PREFIX}/bin/deeploc"
+cp "${RECIPE_DIR}/deeploc-placeholder.sh" "${TARGET_DIR}/deeploc"
+chmod a+x "${TARGET_DIR}/deeploc"
+ln -s "${TARGET_DIR}/deeploc" "${PREFIX}/bin/deeploc"
 
 
 REGISTER_FILE="${TARGET_DIR}/deeploc-register.sh"

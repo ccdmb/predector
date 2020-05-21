@@ -1,0 +1,12 @@
+1c1
+< #!/usr/local/bin/perl
+---
+> #!/usr/bin/env perl
+38,42c38
+<    $opt_basedir = $0;
+<    # Remove program name so only the path remains
+<    $opt_basedir =~ s/[^\/]*$//;
+<    $opt_basedir =~ s/[^\/]*\/$//;
+<    $opt_basedir = "." if ($opt_basedir =~ /^\s*$/ );
+---
+>    $opt_basedir = "INSERT_BASENAME_HERE";
