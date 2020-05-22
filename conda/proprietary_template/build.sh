@@ -3,16 +3,16 @@
 set -eux
 
 # Where can users download the source from?
-DOWNLOAD_URL=https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#
+DOWNLOAD_URL=
 
 # What is the expected source tarball named?
-TAR_FILE=signalp-4.1g.Linux.tar.gz
+TAR_FILE=
 
 # What is the main executable of the program? e.g. signalp
-EXE=signalp
+EXE=
 
 # What should be the executable name with a version e.g. signalp5
-VEXE=signalp4
+VEXE=
 
 # Where is the actual file relative to the basedir in the share folder?
 # This will only need to be changed if your program folder uses a subdirectory under the target directory.

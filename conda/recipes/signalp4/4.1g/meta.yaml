@@ -6,7 +6,7 @@ package:
 
 build:
   number: 0
-  skip: True  # [not linux]
+  skip: True  # [win]
 
 requirements:
   run:
@@ -21,3 +21,8 @@ test:
 
 about:
   home: https://services.healthtech.dtu.dk/services/SignalP-4.1#
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

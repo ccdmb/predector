@@ -33,10 +33,14 @@ Stick around!
 ## Install
 
 download:
+https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#
+signalp-5.0b.Linux.tar.gz
+
 https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#
+
+
 https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#
 https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#
-https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#
 https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#
 https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#
 http://software.sbc.su.se/cgi-bin/request.cgi?project=phobius

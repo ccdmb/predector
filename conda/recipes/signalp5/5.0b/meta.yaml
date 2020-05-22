@@ -20,3 +20,8 @@ test:
 
 about:
   home: https://services.healthtech.dtu.dk/services/SignalP-5.0#
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

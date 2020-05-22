@@ -92,3 +92,12 @@ $ signalp3 -version
 ```
 
 I think this is a good compromise solution, and it should play nicely with a docker ONBUILD style containerisation strategy.
+
+
+## Creating your own recipe for proprietary software
+
+Creating recipes is fairly straightforward, because conda does most of the checking for you.
+Unfortunately, with the `-register` model we need to be a bit more cautious about checking for errors and making sure things are sane.
+
+In the build scripts we set some environment variables that write out a script to register and unregister the actual software and a place holder script that warns people that they haven't installed it yet.
+

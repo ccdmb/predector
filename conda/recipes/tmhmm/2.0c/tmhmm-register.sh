@@ -52,7 +52,7 @@ if [[ "$#" -lt 1 ]]
 then
     if ! $(${TARGET_DIR}/signalp -h > /dev/null 2>&1)
     then
-        echo " It looks ${PKG_NAME} hasn't been installed yet."
+        echo " ${PKG_NAME} hasn't been installed yet."
         echo
         print_usage
         print_license_notice

@@ -1,0 +1,26 @@
+{% set version = "xxxxxxx" %}
+
+package:
+  name: xxxxxxx
+  version: {{ version }}
+
+build:
+  number: 0
+  skip: True  # [win]
+
+requirements:
+  run:
+    - xxxx
+
+test:
+  commands:
+    - 'xxxxxx -h || [ $? == 1 ]'
+    - 'xxxxxx-register || [ $? == 1 ]'
+
+about:
+  home: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

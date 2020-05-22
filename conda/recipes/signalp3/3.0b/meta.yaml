@@ -1,4 +1,4 @@
-{% set version = "3.0" %}
+{% set version = "3.0b" %}
 
 package:
   name: signalp3
@@ -6,7 +6,7 @@ package:
 
 build:
   number: 0
-  skip: True  # [not linux]
+  skip: True  # [win]
 
 requirements:
   run:
@@ -22,3 +22,8 @@ test:
 
 about:
   home: https://services.healthtech.dtu.dk/service.php?SignalP-3.0
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

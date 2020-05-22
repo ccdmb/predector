@@ -3,16 +3,16 @@
 set -eux
 
 # Where can users download the source from?
-DOWNLOAD_URL=https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#
+DOWNLOAD_URL=https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#
 
 # What is the expected source tarball named?
-TAR_FILE=signalp-4.1g.Linux.tar.gz
+TAR_FILE=signalp-3.0.Linux.tar.Z
 
 # What is the main executable of the program? e.g. signalp
 EXE=signalp
 
 # What should be the executable name with a version e.g. signalp5
-VEXE=signalp4
+VEXE=signalp3
 
 # Where is the actual file relative to the basedir in the share folder?
 # This will only need to be changed if your program folder uses a subdirectory under the target directory.
@@ -44,7 +44,6 @@ and run the following command to complete the installation:
 \$ ${VEXE}-register ${TAR_FILE}
 
 This will copy ${PKG_NAME} into your conda environment."
-
 
 ## Setup the placeholder script
 

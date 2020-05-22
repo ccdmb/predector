@@ -4,7 +4,7 @@ DOCKER=podman
 ANACONDA_USER=predector
 
 TARGETS=ffindex/0.9.9.9 effectorp1/1.0 effectorp2/2.0 localizer/1.0.4 apoplastp/1.0.1 deepsig/0f1e1d9 \
-		signalp3/3.0 signalp4/4.1g signalp5/5.0b \
+		signalp3/3.0b signalp4/4.1g signalp5/5.0b \
 		targetp2/2.0 lasagne/0.2.dev1 deeploc/1.0 \
 		tmhmm/2.0c phobius/1.01
 

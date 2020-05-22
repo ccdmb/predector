@@ -52,7 +52,7 @@ if [[ "$#" -lt 1 ]]
 then
     if ! $(${TARGET_DIR}/targetp -h > /dev/null 2>&1)
     then
-        echo " It looks ${PKG_NAME} hasn't been installed yet."
+        echo " ${PKG_NAME} hasn't been installed yet."
         echo
         print_usage
         print_license_notice
@@ -69,7 +69,7 @@ EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
 
 WORKDIR="${TMPDIR:-/tmp}/tmp$$"
 mkdir -p "${WORKDIR}"
-tar --directory=${WORKDIR} -xf "${ARCHIVE}"
+tar --no-same-owner --directory=${WORKDIR} -xf "${ARCHIVE}"
 
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
