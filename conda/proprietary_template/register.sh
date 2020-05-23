@@ -38,5 +38,6 @@ echo "Testing installation..."
 
 # Example test for signalp 5
 # If you get a non-zero exit code, the test will fail.
+cd "${WORKDIR}"
 TEST_RESULT=$(signalp5 -stdout -fasta "${TARGET_DIR}/test/euk10.fsa")
 TEST_RETCODE=$?

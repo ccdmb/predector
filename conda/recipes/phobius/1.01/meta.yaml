@@ -16,8 +16,12 @@ requirements:
 test:
   commands:
     - 'phobius.pl -h || [ $? == 1 ]'
-    - 'phobius.pl -h || [ $? == 1 ]'
     - 'phobius-register || [ $? == 1 ]'
 
 about:
   home: http://phobius.sbc.su.se/
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

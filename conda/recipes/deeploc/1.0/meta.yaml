@@ -10,6 +10,7 @@ build:
 
 requirements:
   run:
+    - {{ compiler('cxx') }}
     - python =3
     - pip
     - theano
@@ -17,11 +18,14 @@ requirements:
     - scipy
     - lasagne ==0.2.dev1
 
-
 test:
   commands:
-    - 'deeploc -h || [ $? == 1 ]'
     - 'deeploc-register || [ $? == 1 ]'
 
 about:
   home: https://services.healthtech.dtu.dk/service.php?DeepLoc-1.0
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

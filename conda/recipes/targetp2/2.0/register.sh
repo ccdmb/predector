@@ -14,13 +14,16 @@ cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 #### Add your code to install here.
 
-mkdir -p "${TARGET_DIR}"
+mkdir -p "${TARGET_DIR}/bin"
+mkdir -p "${TARGET_DIR}/lib"
 
+mv bin/* "${TARGET_DIR}/bin"
+mv lib/* "${TARGET_DIR}/lib"
+
+rm -rf -- bin lib
 mv ./* "${TARGET_DIR}"
-cd "${TARGET_DIR}"
 
-patch signalp signalp.patch
-sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${TARGET_DIR}~" ./signalp
+cd "${TARGET_DIR}"
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 
@@ -35,5 +38,5 @@ echo "Testing installation..."
 
 # If you get a non-zero exit code, the test will fail.
 cd "${WORKDIR}"
-TEST_RESULT=$(signalp4 "${TARGET_DIR}/test/euk10.fsa")
+TEST_RESULT=$(targetp2 -stdout -fasta "${TARGET_DIR}/test/example.fsa")
 TEST_RETCODE=$?

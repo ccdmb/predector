@@ -4,7 +4,7 @@
 # For most applications this will find the folder that will be extracted from
 # the tarball, but some e.g. phobius, will give you weird results.
 # Check that this works as expected.
-EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
+EXTRACTED_DIR_CALLED="$(tar -tf "${ARCHIVE}" | head -n1)"
 
 # Don't change the next 3 lines
 mkdir -p "${WORKDIR}"
@@ -15,12 +15,10 @@ cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 #### Add your code to install here.
 
 mkdir -p "${TARGET_DIR}"
-
 mv ./* "${TARGET_DIR}"
-cd "${TARGET_DIR}"
 
-patch signalp signalp.patch
-sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${TARGET_DIR}~" ./signalp
+cd "${TARGET_DIR}"
+patch phobius.pl phobius.pl.patch
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 
@@ -34,6 +32,7 @@ echo "Testing installation..."
 # If you REALLY have to skip tests, set TEST_RETCODE=0.
 
 # If you get a non-zero exit code, the test will fail.
+
 cd "${WORKDIR}"
-TEST_RESULT=$(signalp4 "${TARGET_DIR}/test/euk10.fsa")
+TEST_RESULT=$(phobius.pl -short "${TARGET_DIR}/Q8TCT8")
 TEST_RETCODE=$?

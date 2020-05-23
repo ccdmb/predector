@@ -36,5 +36,6 @@ echo "Testing installation..."
 # If you REALLY have to skip tests, set TEST_RETCODE=0.
 
 # If you get a non-zero exit code, the test will fail.
+cd "${WORKDIR}"
 TEST_RESULT=$(signalp3 -t euk -short "${TARGET_DIR}/test/test5.seq")
 TEST_RETCODE=$?

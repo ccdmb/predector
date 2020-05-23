@@ -15,7 +15,12 @@ requirements:
 test:
   commands:
     - 'tmhmm -h || [ $? == 1 ]'
-    - 'tmhmm-register || [ $? == 1 ]'
+    - 'tmhmm2-register || [ $? == 1 ]'
 
 about:
   home: https://services.healthtech.dtu.dk/service.php?TMHMM-2.0
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

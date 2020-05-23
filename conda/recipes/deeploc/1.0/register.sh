@@ -9,18 +9,26 @@ EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
 # Don't change the next 3 lines
 mkdir -p "${WORKDIR}"
 tar --no-same-owner --directory=${WORKDIR} -xf "${ARCHIVE}"
-cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 
 #### Add your code to install here.
 
-mkdir -p "${TARGET_DIR}"
+cp -r "${WORKDIR}/${EXTRACTED_DIR_CALLED}" "${TARGET_DIR}/src"
+cd "${TARGET_DIR}/src"
 
-mv ./* "${TARGET_DIR}"
-cd "${TARGET_DIR}"
+# Correct source files give version 1.0 this is to keep it consistent.
+sed -i "s/version='0.1'/version='1.0'/" ./setup.py
 
-patch signalp signalp.patch
-sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${TARGET_DIR}~" ./signalp
+# Theano complains _a lot_ because it things we arent using gcc
+# I can't set the log level to error, so i'm just disabling logging.
+sed -i "2a import logging; logging.getLogger('theano').addHandler(logging.NullHandler())" bin/deeploc
+
+if [ ! -z "${CXX:-}" ]
+then
+    sed -i "/os.environ\['THEANO_FLAGS'\]/s~fast_compile~fast_compile,cxx=${CXX}~" bin/deeploc
+fi
+
+pip install --no-deps --upgrade --force-reinstall --compile --prefix "${ENV_PREFIX}" .
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 
@@ -35,5 +43,5 @@ echo "Testing installation..."
 
 # If you get a non-zero exit code, the test will fail.
 cd "${WORKDIR}"
-TEST_RESULT=$(signalp4 "${TARGET_DIR}/test/euk10.fsa")
+TEST_RESULT=$(deeploc --fasta "${TARGET_DIR}/src/test.fasta" --output "${WORKDIR}/test")
 TEST_RETCODE=$?
