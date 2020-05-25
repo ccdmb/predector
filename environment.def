@@ -1,0 +1,64 @@
+bootstrap: docker
+From: predector/predector-base:0.0.1
+
+%labels
+    Author "darcy.ab.jones@gmail.com"
+    Version "0.0.1"
+
+%help
+    A containter will all dependencies for the predector pipeline.
+
+%environment
+    export SIGNALP3=""
+    export SIGNALP4=""
+    export SIGNALP5=""
+    export TARGETP2=""
+    export DEEPLOC=""
+    export PHOBIUS=""
+    export TMHMM=""
+
+%setup
+    ANY_WAS_UNSET=false
+    [ -z "${SIGNALP3:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${SIGNALP4:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${SIGNALP5:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${TARGETP2:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${DEEPLOC:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${PHOBIUS:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${TMHMM:-}" ] && ANY_WAS_UNSET=true
+
+    if [ "${ANY_WAS_UNSET}" = "true" ]
+    then
+        echo "One or more of the required variables was not set." 1>&2
+        echo "Please provide the variables:" 1>&2
+        echo -e "- SIGNALP3\n- SIGNALP4\n- SIGNALP5\n- TARGETP2\n- DEEPLOC\n- PHOBIUS\n- TMHMM" 1>&2
+        exit 1
+    fi
+    mkdir -p /tmp/onbuild
+
+%files
+    "${SIGNALP3}" /tmp/onbuild/
+    "${SIGNALP4}" /tmp/onbuild/
+    "${SIGNALP5}" /tmp/onbuild/
+    "${TARGETP2}" /tmp/onbuild/
+    "${DEEPLOC}" /tmp/onbuild/
+    "${PHOBIUS}" /tmp/onbuild/
+    "${TMHMM}" /tmp/onbuild/
+
+%post
+    function cleanup() {
+      if [ -d /tmp/onbuild ]
+      then
+        rm -rf -- /tmp/onbuild
+      fi
+    }
+
+    trap cleanup EXIT
+
+    signalp3-register "/tmp/onbuild/$(basename "${SIGNALP3}")"
+    signalp4-register "/tmp/onbuild/$(basename "${SIGNALP4}")"
+    signalp5-register "/tmp/onbuild/$(basename "${SIGNALP5}")"
+    targetp2-register "/tmp/onbuild/$(basename "${TARGETP2}")"
+    deeploc-register "/tmp/onbuild/$(basename "${DEEPLOC}")"
+    phobius-register "/tmp/onbuild/$(basename "${PHOBIUS}")"
+    tmhmm2-register "/tmp/onbuild/$(basename "${TMHMM}")"
