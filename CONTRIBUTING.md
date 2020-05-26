@@ -1,6 +1,10 @@
 # Contributing to this project.
 
-This document is intended a brief cheatsheet for using git, docker, and singularity.
+This document is intended to be a brief cheatsheet for people wanting to contribute.
+
+We have some short guides on how to use git, docker, and singularity etc.
+For now while we're still developing the first version of the pipeline, this document is fine.
+Once we publish (version 1), we'll need to re-organise these guidelines a bit to follow something more like the [git workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) model.
 
 
 ## Git
@@ -8,7 +12,7 @@ This document is intended a brief cheatsheet for using git, docker, and singular
 Git is a version control tool.
 It tracks differences of *lines* between changes of text documents.
 
-The basic workflow using git with other people goes a bit like this:
+The basic workflow for using git with other people goes a bit like this:
 
 1. Clone (or fork and then clone) the repository to your computer with `git clone`.
 2. Create a new branch just for yourself with `git checkout -b my_branch_name`.
@@ -160,9 +164,105 @@ More fancy people will create a new branch for every new "feature" that is going
 
 ## Versioning
 
-We're using bump2version to automatically handle version increases.
-Because we have to store the version in several places, doing this manually is very error prone.
+We will try to follow the ["semver" guidelines](https://semver.org/).
 
+We're using [bump2version](https://github.com/c4urself/bump2version) to automatically handle version increases.
+Because we have to store the version in several places, doing this manually is very error prone so we let a program handle it all for us.
+
+Versions follow the standard semver `major.minor.patch` versioning scheme with optional `alpha`, `beta` pre-releases.
+In the context of a bioinformatics pipeline, I interpret the tags like this:
+
+- "Major" version changes should be reserved for restructuring the pipeline, or major changes to the output formats.
+  E.G. Adding a lot of new analyses, removing analyses, new summarization and ranking methods etc.
+- "Minor" version changes are stable releases that don't really change the analysis or result formats much.
+  E.G. Updated versions and/or parameters for software or databases, performance upgrades, retrained models with new databases, new utilities or reporting features.
+- "Patches" are used for bug-fixes and very minor changes.
+- Pre-releases will be mostly for making sure that continuous integration stuff is working (e.g. conda environment pushes and docker automated builds) and for final checks before saying that something is "stable".
+  They'll also be useful if you're trying to debug the CI stuff, since we can create `-alpha.1`, `-alpha.2` versions to trigger builds on dockerhub but indicate that they aren't proper releases.
+  We should run `beta` releases through a few different realistic datasets to make sure everything is ok.
+  If you're sure that everything is ok, you can just skip through the pre-release stuff and straight into a patch release.
+
+
+#### Example version change commands
+
+We have some copy-pastable commands that you can use below, but note that these will update several files, commit those changes, tag them with the new version, and push the changes and tags to github.
+You'll need to be in the git repository root directory to run the commands because it looks for a file called `.bumpversion.cfg`.
+For major and minor releases, you should add a brief message using the `--tag-message` argument.
+You can also add a `--commit-message` if you like.
+
+To bump the patch version:
+
+```bash
+# version 0.0.1
+bump2version patch
+# version 0.0.2-alpha
+```
+
+Bump the release version:
+
+```bash
+# version 0.0.1-alpha
+
+bump2version release
+# version 0.0.1-beta
+
+bump2version release
+# version 0.0.1
+
+bump2version release
+# version 0.0.2-alpha
+```
+
+
+To trigger the automated builds but not indicate a stable version, use a pre-release:
+
+```bash
+# BEFORE: version 0.0.1-alpha
+bump2version pre
+# AFTER: version 0.0.1-alpha.1
+
+# BEFORE: version 0.0.1-beta.2
+bump2version pre
+# AFTER: version 0.0.1-beta.3
+
+# BEFORE: version 0.0.1
+bump2version pre
+# AFTER: version 0.0.2-alpha
+```
+
+
+To skip the pre-releases you need to manually specify what it should be updated to.
+It's my feeling that the pre-releases should only ever be skipped for patch releases and when they have been pretty thoroughly tested.
+Don't just go straight from `0.1.1` to `0.2.0`, use `bump2version minor` instead to go to `0.2.0-alpha`.
+
+```bash
+# BEFORE: version 0.0.1-alpha
+bump2version --new-version 0.0.1
+# AFTER: version 0.0.1
+# Remember that alpha is a PRE-release
+
+# BEFORE: version 0.0.1
+bump2version --new-version 0.0.2
+# AFTER: version 0.0.2
+
+# If the version is already beta, you should just use release.
+# BEFORE: version 0.0.1-beta.4
+bump2version release
+# AFTER: version 0.0.1
+```
+
+
+## Conda
+
+We use conda as our main "supported" way of distributing dependencies.
+You can find more information in the `conda` directory where we store some of our own recipes to build conda packages.
+Preference packages in `conda-forge` or `bioconda` over packaging something yourself.
+My hope is to get those packages into `bioconda` when I have some more time.
+
+If you're developing the pipeline or adding new software, conda is probably the easiest way to run the pipeline because you can modify the environment easily.
+But to test that everything is working correctly, i'd suggest building the containers and running there.
+This is because it's easy to get software dependencies leaking in from your own computer, which means that the commands might fail for someone else on a different computer.
+Since containers try to provide the bare minimum, you have greater assurance that the conda environment (and therefore all containers) contains everything needed to run the pipeline.
 
 
 ## Docker
