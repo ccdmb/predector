@@ -42,6 +42,44 @@ make CONTAINER=0 all
 The built packages will be in `./builds` and also in you conda base directory somewhere under `pkg`.
 
 
+### Pushing things to anaconda cloud
+
+Maybe we'll get some CI/CD tools to do this in the future, but for now we do it manually.
+
+Make sure you have the anaconda cloud cli installed (note that some operating systems like fedora have an unrelated `anaconda` program, make sure you're using the right one).
+
+```
+conda install anaconda-client
+anaconda login
+```
+
+You'll need to enter your anaconda username and password.
+Note that your anaconda cloud username needs to be a member of the "predector" organisation to push to the official predector channel (Ask Darcy to add you).
+
+Now that you've logged in you can push up the images.
+
+```
+make upload
+```
+
+You should notice that any packages that already exist in the channel with the same version and build number will be skipped.
+Only new versions of the software, or new builds (set in the `meta.yaml` files) of the package will be uploaded.
+
+
+Pushing an environment (e.g. `environment.yml` in the repo root) is similar.
+Assuming you've logged in etc.
+
+```bash
+anaconda upload \
+  -u predector \
+  --version 0.0.1 \
+  --summary "Conda environment for the predector pipeline." \
+  environment.yml
+```
+
+Make sure you set the version correctly to match the one in the `nextflow.config` file.
+Again, we'll try to setup some sort of thing that does this automatically with tags.
+
 
 ### Dealing with closed-source software
 
@@ -70,10 +108,10 @@ It looks signalp3 hasn't been installed yet.
 
 Usage: signalp3-register /path/to/SignalP-3.0.tar.Z
 
-Due to license restrictions, this recipe cannot distribute and 
-install SignalP directly. To complete the installation you must 
-download a licensed copy from DTU: 
-    https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php# 
+Due to license restrictions, this recipe cannot distribute and
+install SignalP directly. To complete the installation you must
+download a licensed copy from DTU:
+    https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#
 and run (after installing this package):
     signalp3-register /path/to/SignalP-3.0.tar.Z
 This will copy signalp3 into your conda environment.
