@@ -19,6 +19,7 @@ We plan to include.
  - [x] ApoplastP
  - [x] LOCALIZER
  - [x] Protein similarity searches against PHIbase using MMSeqs2
+ - [x] CAZyme annotations using HMMER and dbCAN
  - [x] Protein domain annotation using Pfam-scan
  - [ ] Integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting.
  - [ ] A classifier and clustering scheme for prioritising effector candidates
@@ -61,7 +62,7 @@ Mac and Windows users are recommended to use a virtual environment or one of the
 
 ```bash
 # This pulls a version from anaconda.org
-conda env create predector/predector/0.0.1
+conda env create predector/predector/0.0.1-alpha
 conda activate predector
 
 signalp3-register signalp-3.0.Linux.tar.Z

@@ -13,3 +13,4 @@ containers/downloads
 .nextflow
 run
 results
+sources

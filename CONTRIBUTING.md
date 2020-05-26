@@ -158,6 +158,13 @@ To continue working you can just stay in the same branch and continue to create 
 More fancy people will create a new branch for every new "feature" that is going to be implemented, and those branches get removed when the new feature is finished and merged.
 
 
+## Versioning
+
+We're using bump2version to automatically handle version increases.
+Because we have to store the version in several places, doing this manually is very error prone.
+
+
+
 ## Docker
 
 Docker is a type of container virtualisation system.
