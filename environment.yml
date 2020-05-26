@@ -4,8 +4,8 @@ name: predector
 channels:
   - predector
   - darcyabjones
-  - bioconda
   - conda-forge
+  - bioconda
   - defaults
 dependencies:
   ## Custom packages
@@ -14,8 +14,6 @@ dependencies:
   - deepsig=0f1e1d9
   - effectorp1=1.0
   - effectorp2=2.0
-  - ffindex=0.9.9.9
-  - ffindexdb=0.0.2
   - localizer=1.0.4
   - phobius=1.01
   - predectorutils=0.0.2
@@ -24,14 +22,13 @@ dependencies:
   - signalp5=5.0b
   - targetp2=2.0
   - tmhmm=2.0c
+  ## Conda-forge packages
+  - bash
+  - gawk=5.1.0
+  - wget=1.20.1
+  - parallel
   ## Bioconda packages
   - emboss=6.6.0
   - hmmer=3.3
   - pfam_scan=1.6
   - mmseqs2=11.e1a1c
-  ## Conda-forge packages
-  - bash
-  - gawk=5.1.0
-  - mpi=1.0
-  - mpich=3.3.2
-  - wget=1.20.1
