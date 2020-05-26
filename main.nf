@@ -106,6 +106,9 @@ workflow {
     // println "$workflow.start"
     // println "$workflow.revision"
     // println "$workflow.manifest.version"
+
+    // We're hard-coding this for now since a lot of analyses don't make sense
+    // for bacteria and archaea
     params.domain = "euk"
 
     (proteome_ch, pfam_hmm_val, pfam_dat_val,
@@ -160,4 +163,33 @@ workflow {
         proteome_mmseqs_index_ch
     )
 
+    // At this point, all of the analyses have their own ldjson files.
+    // Here we just merge that all into one big file.
+    ldjson_ch = signalp_v3_hmm_ch
+        .mix(
+            signalp_v3_nn_ch,
+            signalp_v4_ch,
+            signalp_v5_ch,
+            deepsig_ch,
+            phobius_ch,
+            tmhmm_ch,
+            targetp_ch,
+            deeploc_ch,
+            apoplastp_ch,
+            localizer_ch,
+            effectorp_v1_ch,
+            effectorp_v2_ch,
+            pepstats_ch,
+            pfamscan_ch,
+            dbcan_hmmer_ch,
+            phibase_mmseqs_matches_ch
+        )
+        .collectFile(name: "combined.ldjson", newLine: true)
+
+    publish:
+    ldjson_ch to: "${params.outdir}"
+    pfam_hmm_val to: "${params.outdir}/downloads"
+    pfam_dat_val to: "${params.outdir}/downloads"
+    pfam_active_site_val to: "${params.outdir}/downloads"
+    dbcan_val to: "${params.outdir}/downloads"
 }

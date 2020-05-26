@@ -101,3 +101,8 @@ docker build \
 
 Soon we'll have a way to build the final image directly with singularity.
 For now you'll need to build the image with docker, and use singularity to convert it to their format.
+
+
+## Run the test datasets
+
+nextflow run -profile test,podman -resume ccdmb/predector
