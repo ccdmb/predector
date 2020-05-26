@@ -96,13 +96,46 @@ docker build \
   .
 ```
 
+Podman is nice because it uses cgroups v2, so can do pretty much everything docker can do but without requiring root permission.
+That includes building images, which i think you still need permission for with singularity.
+
 
 #### Singularity
 
 Soon we'll have a way to build the final image directly with singularity.
-For now you'll need to build the image with docker, and use singularity to convert it to their format.
+For now you'll need to build the image with docker or podman, and use singularity to convert it to their format.
 
+for podman:
+
+```
+podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-alpha
+singularity build predector.sif oci-archive://predector.tar
+```
+
+for docker:
+
+```
+singularity build predector.sif docker://predector/predector:0.0.1-alpha
+```
 
 ## Run the test datasets
 
+
+```bash
+# NB CONDA_DIR should be set if you have conda installed
+# Make sure that the path actually points to where conda is installed.
+nextflow run -profile test -with-conda "${CONDA_DIR}/envs/predector" -resume ccdmb/predector
+
+# or
 nextflow run -profile test,podman -resume ccdmb/predector
+
+# or
+nextflow run -profile test,docker -resume ccdmb/predector
+
+# or
+# NB this one assumes you've build the container using docker and it's in your local docker registry.
+nextflow run -profile test,singularity -resume ccdmb/predector
+
+# or
+nextflow run -profile test -with-singularity path/to/container.sif -resume ccdmb/predector
+```
