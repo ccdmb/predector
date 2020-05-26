@@ -8,7 +8,7 @@ fi
 if [ "${TEST_RETCODE}" -eq 0 ]
 then
     echo "Test succeeded."
-    echo "${PKG_NAME} is now full installed!"
+    echo "${PKG_NAME} is now fully installed!"
 else
     echo "ERROR: tests for ${PKG_NAME} failed with exit code ${TEST_RETCODE}." 1>&2
     echo "Please check for any error messages printed to screen." 1>&2

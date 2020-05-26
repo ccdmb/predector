@@ -5,11 +5,11 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/darcyabjones/EffectorP-1.0/archive/4c862a5992624224bdbc770ceda35edf46e5f64b.zip
-  sha256: 64e99986da168438e2418fee4f3b061aa09ad20631f64091ef2d258efeafe9f6
+  url: https://github.com/darcyabjones/EffectorP-1.0/archive/3e0107f64a371200a6ede7d659c04f507f35af01.zip
+  sha256: 3c83393b83bf58b81e0b4b3b749facd3568b7fa793d4a3830a361d9e29f42579
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win]
 
 requirements:

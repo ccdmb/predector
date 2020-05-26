@@ -15,8 +15,9 @@ cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 #### Add your code to install here.
 
 mkdir -p "${TARGET_DIR}"
+chmod -R a+rw .
 
-mv ./* "${TARGET_DIR}"
+cp -rL ./* "${TARGET_DIR}"
 cd "${TARGET_DIR}"
 
 patch signalp signalp.patch

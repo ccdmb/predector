@@ -2,14 +2,13 @@
 nextflow.preview.dsl=2
 
 include {get_file; is_null} from './modules/cli'
-
+include check_env from './modules/versions'
 include {
     download as download_pfam_hmm;
     download as download_pfam_dat;
     download as download_pfam_active_site;
     download as download_dbcan;
-    add_name_to_id;
-    seqrenamer_encode;
+    encode_seqs;
     signalp_v3_hmm;
     signalp_v3_nn;
     signalp_v4;
@@ -107,21 +106,23 @@ workflow {
     // println "$workflow.start"
     // println "$workflow.revision"
     // println "$workflow.manifest.version"
+    params.domain = "euk"
 
     (proteome_ch, pfam_hmm_val, pfam_dat_val,
      pfam_active_site_val, dbcan_val, phibase_val) = validate_input()
+
+    versions = check_env()
 
     signalp_domain_map = ["euk": "euk", "gramp": "gram+", "gramn": "gram-"]
     signalp_domain = signalp_domain_map.get(params.domain)
 
     // Maybe download precomputed results?
-    proteomes_with_names_ch = add_name_to_id(proteome_ch)
-    (combined_proteomes_ch, combined_proteomes_tsv_ch) = seqrenamer_encode(
-        proteomes_with_names_ch.map {n, f -> f}.collect()
+    (combined_proteomes_ch, combined_proteomes_tsv_ch) = encode_seqs(
+        params.chunk_size,
+        proteome_ch.map {n, f -> f}.collect()
     )
 
-    split_proteomes_ch = combined_proteomes_ch
-        .splitFasta( by: params.chunk_size, file: true )
+    split_proteomes_ch = combined_proteomes_ch.flatten()
 
     signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, split_proteomes_ch)
     signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteomes_ch)

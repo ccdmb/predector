@@ -17,48 +17,41 @@ process download {
 }
 
 
-process add_name_to_id {
+// Here we remove duplicate sequences and split them into chunks for
+// parallel processing.
+// Eventually, we should also take precomputed results and filter them
+// out here.
+// Note that we split this here because the nextflow split fasta thing
+// seems to not work well with checkpointing.
+process encode_seqs {
 
-    label "posix"
-    label "process_low"
-
-    input:
-    tuple val(name), path("in.fasta")
-
-    output:
-    tuple val(name), path("out.fasta")
-
-    script:
-    """
-    sed '/^>/s/^>/>${name}|/' < in.fasta > out.fasta
-    """
-}
-
-
-process seqrenamer_encode {
-
-    label 'seqrenamer'
+    label 'predectorutils'
     label 'process_low'
 
     input:
+    val chunk_size
     path "in/*"
 
+
     output:
-    path "combined.fasta"
+    path "combined/*"
     path "combined.tsv"
 
     script:
     """
-    sr encode \
-      --format fasta \
-      --column id \
-      --deduplicate \
+    predutils encode \
+      --prefix "P" \
+      --length 8 \
       --upper \
-      --drop-desc \
       --strip "*-" \
-      --map "combined.tsv" \
-      --outfile "combined.fasta" \
+      combined.fasta \
+      combined.tsv \
       in/*
+
+    predutils split_fasta \
+      --size "${chunk_size}" \
+      --template "combined/chunk{index:0>4}.fasta" \
+      combined.fasta
     """
 
 }
@@ -81,29 +74,21 @@ process signalp_v3_hmm {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 1 in.fasta
+    # This has a tendency to fail randomly, we just have 1 per chunk
+    # so that we don't lose everything
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      signalp -type "${domain}" -method "hmm" -short "/dev/stdin"
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    parallel \
+        -j "${task.cpus}" \
+        -N 1 \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        'signalp3 -type "${domain}" -method "hmm" -short "{}"' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         signalp3_hmm -
-
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -125,29 +110,21 @@ process signalp_v3_nn {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 1 in.fasta
+    # This has a tendency to fail randomly, we just have 1 per chunk
+    # so that we don't lose everything
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      signalp -type "${domain}" -method "nn" -short "/dev/stdin"
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    parallel \
+        -j "${task.cpus}" \
+        -N 1 \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        'signalp3 -type "${domain}" -method nn -short "{}"' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         signalp3_nn -
-
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -165,33 +142,24 @@ process signalp_v4 {
     path "in.fasta"
 
     output:
-    path "${name}_signalp4.txt"
+    path "out.ldjson"
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      signalp -t "${domain}" -f short "/dev/stdin"
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        'signalp4 -t "${domain}" -f short "{}"' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         signalp4 -
-
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -216,7 +184,7 @@ process signalp_v5 {
     """
     mkdir -p tmpdir
     # This just uses all available cores by default.
-    signalp \
+    signalp5 \
       -org "${domain}" \
       -format short \
       -tmp tmpdir \
@@ -224,14 +192,13 @@ process signalp_v5 {
       -fasta in.fasta \
       -prefix "out"
 
-    predector r2js \
-      --run-name "${workflow.runName}" \
-      --session-id "${workflow.sessionId}" \
-      --start "${workflow.start}" \
+    predutils r2js \
+      --pipeline-version "${workflow.manifest.version}" \
       signalp5 "out_summary.signalp5" \
     > "out.ldjson"
 
     mv "out_mature.fasta" "out.fasta"
+    rm -f out_summary.signalp5
     rm -rf -- tmpdir
     """
 }
@@ -254,32 +221,29 @@ process deepsig {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      deepsig.py \
-        -f /dev/stdin \
-        -k "${domain}" \
-        -o /dev/stdout
+    run () {
+        OUT="tmp\$\$"
+        deepsig.py -f \$1 -k euk -o "\${OUT}" 1>&2
+        cat "\${OUT}"
+        rm -f "\${OUT}"
+    }
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    export -f run
+
+
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat run \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         deepsig -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -300,29 +264,21 @@ process phobius {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      phobius.pl -short /dev/stdin
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    # tail -n+2 is to remove header
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        'phobius.pl -short "{}" | tail -n+2' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         phobius -
- 
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -343,30 +299,23 @@ process tmhmm {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      tmhmm -short -d
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    # tail -n+2 is to remove header
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --pipe \
+        'tmhmm -short -d' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         tmhmm -
 
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
     rm -rf -- TMHMM_*
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -390,17 +339,16 @@ process targetp {
     mkdir -p tmpdir
     targetp -fasta in.fasta -org non-pl -format short -prefix "out"
 
-    predector r2js \
-      --run-name "${workflow.runName}" \
-      --session-id "${workflow.sessionId}" \
-      --start "${workflow.start}" \
-      targetp "out_summary.targetp2" \
+    predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+      targetp_non_plant "out_summary.targetp2" \
     > "out.ldjson"
 
-    mv "out_summary.targetp2"
+    rm -f "out_summary.targetp2"
     rm -rf -- tmpdir
     """
 }
+
 
 
 /*
@@ -419,16 +367,29 @@ process deeploc {
 
     script:
     """
-    deeploc -f in.fasta -o out
+    run () {
+        TMPFILE="tmp\$\$"
+        deeploc -f "\$1" -o "\${TMPFILE}" 1>&2
+        cat "\${TMPFILE}.txt"
 
-    predector r2js \
-      --run-name "${workflow.runName}" \
-      --session-id "${workflow.sessionId}" \
-      --start "${workflow.start}" \
-      deeploc "out.txt" \
-    > "out.ldjson"
+        rm -f "\${TMPFILE}.txt"
+    }
+    export -f run
 
-    rm out.txt
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
+        deeploc -
     """
 }
 
@@ -449,29 +410,29 @@ process apoplastp {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    run () {
+        TMPFILE="tmp\$\$"
+        ApoplastP.py -s -i "\$1" -o "\${TMPFILE}" 1>&2
+        cat "\${TMPFILE}"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      ApoplastP.py -s -i /dev/stdin
+        rm -f "\${TMPFILE}"
+    }
+    export -f run
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         apoplastp -
-
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -492,29 +453,29 @@ process localizer {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 mature.fasta
+    run () {
+        TMP="tmp\$\$"
+        LOCALIZER.py -e -M -i "\$1" -o "\${TMP}" 1>&2
+        cat "\${TMP}/Results.txt"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      bin/run_localizer.sh
+        rm -rf -- "\${TMP}"
+    }
+    export -f run
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
-        deepsig -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
+    CHUNKSIZE="\$(decide_task_chunksize.sh mature.fasta "${task.cpus}" 100)"
 
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < mature.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
+        localizer -
     """
 }
 
@@ -535,29 +496,29 @@ process effectorp_v1 {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    run () {
+        TMPFILE="tmp\$\$"
+        EffectorP1.py -s -i "\$1" -o "\${TMPFILE}" 1>&2
+        cat "\${TMPFILE}"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      EffectorP.py -s -i /dev/stdin
+        rm -f "\${TMPFILE}"
+    }
+    export -f run
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         effectorp1 -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -578,29 +539,29 @@ process effectorp_v2 {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    run () {
+        TMPFILE="tmp\$\$"
+        EffectorP2.py -s -i "\$1" -o "\${TMPFILE}" 1>&2
+        cat "\${TMPFILE}"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      EffectorP.py -s -i /dev/stdin
+        rm -f "\${TMPFILE}"
+    }
+    export -f run
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         effectorp2 -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -621,29 +582,20 @@ process pepstats {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      pepstats -sequence /dev/stdin -outfile /dev/stdout
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    # NB linebuffer isn't safe here because pepstats is multiline.
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --recstart '>' \
+        --pipe  \
+        'pepstats -sequence stdin -outfile stdout' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         pepstats -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -687,29 +639,20 @@ process pfamscan {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      pfam_scan.pl -fasta /dev/stdin -dir pfam_db -as
-
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --recstart '>' \
+        --line-buffer  \
+        --cat  \
+        'pfam_scan.pl -fasta "{}" -dir pfam_db -as' \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         pfamscan -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -749,32 +692,35 @@ process hmmscan {
 
     script:
     """
-    ffdb fasta -d db.ffdata -i db.ffindex --size 100 in.fasta
+    run () {
+        TMPFILE="tmp\$\$"
+        hmmscan \
+          --domtblout "\${TMPFILE}" \
+          db/db.hmm \
+          "\$1" \
+        > /dev/null
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      db.ff{data,index} \
-      -d sp.ffdata \
-      -i sp.ffindex \
-      -- \
-      hmmscan \
-        --domtblout /dev/stdout \
-        db/db.hmm \
-        /dev/stdin
+        cat "\${TMPFILE}"
+        rm -f "\${TMPFILE}"
+    }
 
-    mpirun -np "${task.cpus}" ffindex_apply_mpi \
-      sp.ff{data,index} \
-      -d ld.ffdata \
-      -i ld.ffindex \
-      -- \
-      predector r2js \
-        --run-name "${workflow.runName}" \
-        --session-id "${workflow.sessionId}" \
-        --start "${workflow.start}" \
+    export -f run
+
+
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+
+    parallel \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --recstart '>' \
+        --line-buffer  \
+        --cat \
+        run \
+    < in.fasta \
+    | predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
         "${database}" -
-     
-    ffdb collect ld.ff{data,index} > "out.ldjson"
-
-    rm -rf -- ld.ff{data,index} sp.ff{data,index} db.ff{data,index}
     """
 }
 
@@ -783,8 +729,6 @@ process mmseqs_index {
 
     label "mmseqs"
     label "process_low"
-
-    tag "${name}"
 
     input:
     tuple val(name), path("db.fasta")
@@ -795,7 +739,7 @@ process mmseqs_index {
     script:
     """
     mkdir -p db
-    mmseqs createdb db.fasta db/db --max-seq-len 15000
+    mmseqs createdb db.fasta db/db
     """
 }
 
@@ -804,8 +748,6 @@ process mmseqs_search {
 
     label 'mmseqs'
     label 'process_high'
-
-    tag "${database}"
 
     input:
     tuple val(database), path("target")
@@ -840,10 +782,8 @@ process mmseqs_search {
       --format-mode 0 \
       --format-output 'query,target,qstart,qend,qlen,tstart,tend,tlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
 
-    predector r2js \
-      --run-name "${workflow.runName}" \
-      --session-id "${workflow.sessionId}" \
-      --start "${workflow.start}" \
+    predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
       "${database}" search.tsv \
     > out.ldjson
 

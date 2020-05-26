@@ -5,11 +5,11 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/darcyabjones/ApoplastP/archive/bbf401037a4492f1f67cfaf05e1560a252abc941.zip
-  sha256: c1fae7501f64b3b70576ff09c69b121b1cf4af3e1a1de8a73824e14dec2aabc3
+  url: https://github.com/darcyabjones/ApoplastP/archive/8414c0ea35dbd7390eccb44523bbc259957faea7.zip
+  sha256: 1005207c5561fc0b30207ac14ab0bd4ad3309bfa72bdfbec5dc2aed0acd5a60b
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win]
 
 requirements:

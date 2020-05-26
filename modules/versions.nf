@@ -3,38 +3,38 @@
 workflow check_env {
 
     main:
-    signalp3_version = get_signalp3_version()
-    signalp4_version = get_signalp4_version()
-    signalp5_version = get_signalp5_version()
-    targetp2_version = get_targetp2_version()
-    tmhmm2_version = get_tmhmm2_version()
-    deeploc1_version = get_deeploc1_version()
-    phobius_version = get_phobius_version()
-    effectorp1_version = get_effectorp1_version()
-    effectorp2_version = get_effectorp2_version()
-    localizer_version = get_localizer_version()
-    apoplastp_version = get_apoplastp_version()
-    deepsig_version = get_deepsig_version()
-    emboss_version = get_emboss_version()
-    mmseqs2_version = get_mmseqs2_version()
-    hmmer_version = get_hmmer_version()
+    signalp3 = get_signalp3_version()
+    signalp4 = get_signalp4_version()
+    signalp5 = get_signalp5_version()
+    targetp2 = get_targetp2_version()
+    tmhmm2 = get_tmhmm2_version()
+    deeploc1 = get_deeploc1_version()
+    phobius = get_phobius_version()
+    effectorp1 = get_effectorp1_version()
+    effectorp2 = get_effectorp2_version()
+    localizer = get_localizer_version()
+    apoplastp = get_apoplastp_version()
+    deepsig = get_deepsig_version()
+    emboss = get_emboss_version()
+    mmseqs2 = get_mmseqs2_version()
+    hmmer = get_hmmer_version()
 
     emit:
-    signalp3_version
-    signalp4_version
-    signalp5_version
-    targetp2_version
-    tmhmm2_version
-    deeploc1_version
-    phobius_version
-    effectorp1_version
-    effectorp2_version
-    localizer_version
-    apoplastp_version
-    deepsig_version
-    emboss_version
-    mmseqs2_version
-    hmmer_version
+    signalp3
+    signalp4
+    signalp5
+    targetp2
+    tmhmm2
+    deeploc1
+    phobius
+    effectorp1
+    effectorp2
+    localizer
+    apoplastp
+    deepsig
+    emboss
+    mmseqs2
+    hmmer
 }
 
 
