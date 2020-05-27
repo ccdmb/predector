@@ -72,7 +72,7 @@ conda activate predector
 
 # These commands make fixes to the source code when necessary
 # and copy the source into your conda environment so that it all works together.
-signalp3-register signalp-3.0.Linux.tar.Z
+signalp3-register signalp-3.0.Linux.tar.gz
 signalp4-register signalp-4.1g.Linux.tar.gz
 signalp5-register signalp-5.0b.Linux.tar.gz
 targetp2-register targetp-2.0.Linux.tar.gz
