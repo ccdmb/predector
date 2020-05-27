@@ -25,7 +25,8 @@ cp README TMHMM2.0.html "${TARGET_DIR}"
 cd "${TARGET_DIR}"
 patch bin/tmhmm tmhmm.patch
 sed -i "s~INSERT_BASENAME_HERE~${TARGET_DIR}~" bin/tmhmm
-sed -i "s~/usr/local/bin/perl -w~/usr/bin/env -S perl -w~" bin/tmhmmformat.pl
+sed -i "s~/usr/local/bin/perl -w~/usr/bin/env perl~" bin/tmhmmformat.pl
+sed -i "1a use warnings;" bin/tmhmmformat.pl
 chmod -R a+r .
 chmod a+x bin/*
 

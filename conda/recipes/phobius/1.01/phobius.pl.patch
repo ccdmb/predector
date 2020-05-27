@@ -1,14 +1,16 @@
 1c1
 < #!/usr/bin/perl -w
 ---
-> #!/usr/bin/env -S perl -w
-25c25
+> #!/usr/bin/env perl
+15a16
+> use warnings;
+25c26
 < my $DECODEANHMM =      "$PHOBIUS_DIR/decodeanhmm";
 ---
 > my $DECODEANHMM =      "$PHOBIUS_DIR/decodeanhmm.64bit";
-181c181
+181c182
 <   my $predstr;
 ---
 >   my $predstr="";
-244a245
+244a246
 >   $predstr="";
