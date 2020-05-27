@@ -5,7 +5,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 0
+  number: 1
   noarch: generic
 
 requirements:
@@ -24,6 +24,7 @@ test:
 
 about:
   home: https://services.healthtech.dtu.dk/service.php?DeepLoc-1.0
+  summary: "A placeholder library to install DeepLoc."
   license: Proprietary
 
 extra:

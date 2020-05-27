@@ -14,4 +14,7 @@ cp -r Scripts "${APOPLASTP_DIR}"
 cp *.txt "${APOPLASTP_DIR}"
 cp *.md "${APOPLASTP_DIR}"
 
+chmod -R a+r "${APOPLASTP_DIR}"
+chmod a+x "${APOPLASTP_DIR}/Scripts/"{"ApoplastP.py","weka-3-8-1/weka.jar"}
+
 ln -s "${APOPLASTP_DIR}/Scripts/ApoplastP.py" "${PREFIX}/bin/ApoplastP.py"

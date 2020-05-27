@@ -17,10 +17,9 @@ cp -r tools "${DEEPSIG_DIR}"
 cp LICENSE "${DEEPSIG_DIR}"
 cp README.md "${DEEPSIG_DIR}"
 
-# Delete this line.
-# The script will be in the deepsig root, and the script path name is
-# automatically in sys.path
 cp deepsig.py "${DEEPSIG_DIR}"
 
+chmod -R a+r "${DEEPSIG_DIR}"
+chmod a+x "${DEEPSIG_DIR}/"{"deepsig.py","tools/biocrf-static"}
 
 ln -s "${DEEPSIG_DIR}/deepsig.py" "${PREFIX}/bin/deepsig.py"

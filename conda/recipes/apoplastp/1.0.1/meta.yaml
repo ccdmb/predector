@@ -27,4 +27,7 @@ test:
 
 about:
   home: http://apoplastp.csiro.au/
+  summary: "Prediction of effectors and plant proteins in the plant apoplast using machine learning"
   license: GPL3
+  doc_url: https://github.com/JanaSperschneider/ApoplastP
+  dev_url: https://github.com/JanaSperschneider/ApoplastP

@@ -5,7 +5,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win]
 
 requirements:
@@ -20,6 +20,7 @@ test:
 
 about:
   home: https://services.healthtech.dtu.dk/services/SignalP-5.0#
+  summary: "A placeholder library to install SignalP versions 5."
   license: Proprietary
 
 extra:

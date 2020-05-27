@@ -24,6 +24,8 @@ rm -rf -- bin lib
 mv ./* "${TARGET_DIR}"
 
 cd "${TARGET_DIR}"
+chmod -R a+r .
+chmod a+x bin/* lib/*
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 

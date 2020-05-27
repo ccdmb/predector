@@ -19,10 +19,11 @@ RUN conda env create --force -f /environment.yml \
 
 ENV CONDA_PREFIX="/opt/conda/envs/${ENVIRONMENT}"
 ENV PATH="${CONDA_PREFIX}/bin:${PATH}"
-ENV CPATH="${CONDA_PREFIX}/include:${CPATH}"
-ENV LIBRARY_PATH="${CONDA_PREFIX}/lib:${LIBRARY_PATH}"
-ENV LD_LIBRARY_PATH="${CONDA_PREFIX}/lib:${LD_LIBRARY_PATH}"
 ENV PYTHONPATH="${CONDA_PREFIX}/lib/python3.7/site-packages:${PYTHONPATH}"
+
+ENV CPATH="${CPATH}:${CONDA_PREFIX}/include"
+ENV LIBRARY_PATH="${LIBRARY_PATH}:${CONDA_PREFIX}/lib"
+#ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib"
 
 # Needed for theano/deeploc
 ENV CC="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-cc"

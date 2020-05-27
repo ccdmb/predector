@@ -23,7 +23,12 @@ mv lib/* "${TARGET_DIR}/lib"
 rm -rf -- bin lib
 mv ./* "${TARGET_DIR}"
 
+
+# MAKE SURE THAT ALL FILES CAN BE READ BY ANY USER AND
+# EXECUTABLES CAN BE RUN BY ANY USER (important for containers)
 cd "${TARGET_DIR}"
+chmod -R a+r .
+chmod a+x bin/*
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 

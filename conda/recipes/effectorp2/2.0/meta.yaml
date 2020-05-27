@@ -27,3 +27,6 @@ test:
 about:
   home: http://effectorp.csiro.au/
   license: GPL3
+  summary: "Improved prediction of fungal effector proteins from secretomes with EffectorP 2.0"
+  doc_url: https://github.com/JanaSperschneider/EffectorP-2.0
+  dev_url: https://github.com/JanaSperschneider/EffectorP-2.0

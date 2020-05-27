@@ -98,6 +98,9 @@ docker build \
 
 Podman is nice because it uses cgroups v2, so can do pretty much everything docker can do but without requiring root permission.
 That includes building images, which i think you still need permission for with singularity.
+However, I have had some intermittent issues with volume mounting and permissions that I haven't been able to solve.
+**Docker original and Singularity are probably the better runtime options for now for stability.**
+Podman seems to be fine for building the containers though.
 
 
 #### Singularity
@@ -107,15 +110,24 @@ For now you'll need to build the image with docker or podman, and use singularit
 
 for podman:
 
-```
+```bash
 podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-alpha
 singularity build predector.sif oci-archive://predector.tar
 ```
 
 for docker:
 
-```
+```bash
 singularity build predector.sif docker://predector/predector:0.0.1-alpha
+```
+
+Because the container images are quite large, `singularity build` will sometimes fail if your `/tmp` partition isn't big enough.
+In that case, set the following environment variables and remove the cache directory (`rm -rf -- "${PWD}/cache"`) when `singularity build` is finished.
+
+```bash
+export SINGULARITY_CACHEDIR="${PWD}/cache"
+export SINGULARITY_TMPDIR="${PWD}/cache"
+export SINGULARITY_LOCALCACHEDIR="${PWD}/cache"
 ```
 
 ## Run the test datasets
@@ -127,6 +139,7 @@ singularity build predector.sif docker://predector/predector:0.0.1-alpha
 nextflow run -profile test -with-conda "${CONDA_DIR}/envs/predector" -resume ccdmb/predector
 
 # or
+# NB i've had some issues running this, so may be less advisable for now.
 nextflow run -profile test,podman -resume ccdmb/predector
 
 # or
@@ -139,3 +152,31 @@ nextflow run -profile test,singularity -resume ccdmb/predector
 # or
 nextflow run -profile test -with-singularity path/to/container.sif -resume ccdmb/predector
 ```
+
+In the case of podman, it's a bit weird but I've found that cloning the repo and running `./main.nf` instead of `/ccdmb/predector` might work.
+Try this:
+
+```bash
+git clone https://github.com/ccdmb/predector.git
+cd predector
+
+nextflow run -profile test,podman -resume ./main
+```
+
+
+If you're running the tests with a few different environments e.g. docker and conda you may want to keep the downloaded databases and reuse them because they can take some time to download.
+
+If you've already run the pipeline once, they'll be in the `results` folder (unless you specified `--outdir`) so you can do:
+
+```bash
+cp -rL results/downloads ./downloads
+nextflow run \
+  -profile test \
+  -resume ccdmb/predector \
+  --pfam_hmm downloads/Pfam-A.hmm.gz \
+  --pfam_dat downloads/Pfam-A.hmm.dat.gz \
+  --pfam_active_site downloads/active_site.dat.gz \
+  --dbcan downloads/dbCAN.txt
+```
+
+This will skip the download step at the beginning and just use those files, which saves about 10 mins.

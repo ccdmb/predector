@@ -29,3 +29,6 @@ test:
 about:
   home: http://localizer.csiro.au/
   license: GPL3
+  summary: "LOCALIZER: subcellular localization prediction of plant and effector proteins in the plant cell"
+  doc_url: https://github.com/JanaSperschneider/LOCALIZER
+  dev_url: https://github.com/JanaSperschneider/LOCALIZER

@@ -23,6 +23,10 @@ cd "${TARGET_DIR}"
 patch signalp signalp.patch
 sed -i 's~`which nawk`~gawk~' bin/testhow
 
+# These should already be fine but i'm paranoid.
+chmod -R a+r .
+chmod a+x signalp
+chmod a+x signalp bin/* how/* hmm/*
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 

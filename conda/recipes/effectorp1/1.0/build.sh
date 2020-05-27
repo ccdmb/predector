@@ -13,5 +13,9 @@ mkdir -p "${PREFIX}/bin"
 cp -r Scripts "${EFFECTORP1_DIR}"
 cp *.txt "${EFFECTORP1_DIR}"
 
+chmod -R a+r "${EFFECTORP1_DIR}"
+chmod a+x "${EFFECTORP1_DIR}/Scripts/EffectorP.py"
+chmod a+x "${EFFECTORP1_DIR}/Scripts/weka-3-6-12/weka.jar"
+
 ln -s "${EFFECTORP1_DIR}/Scripts/EffectorP.py" "${PREFIX}/bin/EffectorP.py"
 ln -s "${EFFECTORP1_DIR}/Scripts/EffectorP.py" "${PREFIX}/bin/EffectorP1.py"

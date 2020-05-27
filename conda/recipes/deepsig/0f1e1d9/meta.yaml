@@ -24,5 +24,8 @@ test:
     - 'deepsig.py -f "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/testdata/SPEuk.nr.fasta" -k euk -o test.txt'
 
 about:
-  home: https://github.com/BolognaBiocomp/deepsig
+  home: https://deepsig.biocomp.unibo.it
   license: GPL3
+  summary: "DeepSig - Predictor of signal peptides in proteins based on deep learning"
+  doc_url: https://github.com/BolognaBiocomp/deepsig
+  dev_url: https://github.com/BolognaBiocomp/deepsig

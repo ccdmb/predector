@@ -23,7 +23,6 @@ dependencies:
   - targetp2=2.0
   - tmhmm=2.0c
   ## Conda-forge packages
-  - bash
   - gawk=5.1.0
   - wget=1.20.1
   - parallel

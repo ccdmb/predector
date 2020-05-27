@@ -23,6 +23,9 @@ cd "${TARGET_DIR}"
 patch signalp signalp.patch
 sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${TARGET_DIR}~" ./signalp
 
+chmod -R a+r .
+chmod a+x signalp bin/* lib/*
+
 #nb we delete WORKDIR using a trap command in register-base.sh
 
 # Don't change the next two lines

@@ -26,6 +26,8 @@ cd "${TARGET_DIR}"
 patch bin/tmhmm tmhmm.patch
 sed -i "s~INSERT_BASENAME_HERE~${TARGET_DIR}~" bin/tmhmm
 sed -i "s~/usr/local/bin/perl -w~/usr/bin/env -S perl -w~" bin/tmhmmformat.pl
+chmod -R a+r .
+chmod a+x bin/*
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 
