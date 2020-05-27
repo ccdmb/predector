@@ -62,7 +62,7 @@ Mac and Windows users are recommended to use a virtual environment or one of the
 
 ```bash
 # This pulls a version from anaconda.org
-conda env create predector/predector/0.0.1-alpha
+conda env create predector/predector/0.0.1-dev.1
 conda activate predector
 
 signalp3-register signalp-3.0.Linux.tar.Z
@@ -92,7 +92,7 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/master/Dockerfile \
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:0.0.1-alpha \
+  -t predector/predector:0.0.1-dev.1 \
   -f - \
   .
 ```
@@ -112,14 +112,14 @@ For now you'll need to build the image with docker or podman, and use singularit
 for podman:
 
 ```bash
-podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-alpha
+podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-dev.1
 singularity build predector.sif oci-archive://predector.tar
 ```
 
 for docker:
 
 ```bash
-singularity build predector.sif docker://predector/predector:0.0.1-alpha
+singularity build predector.sif docker://predector/predector:0.0.1-dev.1
 ```
 
 Because the container images are quite large, `singularity build` will sometimes fail if your `/tmp` partition isn't big enough.
