@@ -67,7 +67,7 @@ proprietary software, and install them into the conda environment for you.
 
 ```bash
 # Download the environment config file.
-curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/environment.yml
+curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/environment.yml
 
 # Create the environment
 conda env create -f environment.yml
@@ -97,7 +97,7 @@ for all following commands you can just substitute podman for docker.
 If you're using docker, you may need to use `sudo docker`.
 
 ```bash
-curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/Dockerfile \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/Dockerfile \
 | docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
@@ -106,7 +106,7 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/Dockerfile
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:0.0.1-dev.1 \
+  -t predector/predector:0.0.1-dev.2 \
   -f - \
   .
 ```
@@ -138,7 +138,7 @@ export TMHMM=tmhmm-2.0c.Linux.tar.gz
 export DEEPLOC=deeploc-1.0.All.tar.gz
 
 # Download the .def file
-curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/singularity.def
+curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/singularity.def
 
 # Build the .sif singularity image.
 # Note that `sudo -E` is important, it tells sudo to keep the environment variables
@@ -154,13 +154,13 @@ singularity format. You don't have to be a root user.
 for docker:
 
 ```bash
-singularity build predector.sif docker://predector/predector:0.0.1-dev.1
+singularity build predector.sif docker://predector/predector:0.0.1-dev.2
 ```
 
 for podman:
 
 ```bash
-podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-dev.1
+podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-dev.2
 singularity build predector.sif oci-archive://predector.tar
 ```
 
@@ -249,7 +249,7 @@ Docker containers can be saved as a tarball and copied wherever you like.
 
 ```bash
 # You could pipe this through gzip if you wanted.
-docker save predector/predector:0.0.1-dev.1 > predector.tar
+docker save predector/predector:0.0.1-dev.2 > predector.tar
 ```
 
 And the on the other end
