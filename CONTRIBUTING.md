@@ -169,7 +169,7 @@ We will try to follow the ["semver" guidelines](https://semver.org/).
 We're using [bump2version](https://github.com/c4urself/bump2version) to automatically handle version increases.
 Because we have to store the version in several places, doing this manually is very error prone so we let a program handle it all for us.
 
-Versions follow the standard semver `major.minor.patch` versioning scheme with optional `alpha`, `beta` pre-releases.
+Versions follow the standard semver `major.minor.patch` versioning scheme with optional `dev`, `alpha`, and `beta` pre-releases.
 In the context of a bioinformatics pipeline, I interpret the tags like this:
 
 - "Major" version changes should be reserved for restructuring the pipeline, or major changes to the output formats.
@@ -178,7 +178,7 @@ In the context of a bioinformatics pipeline, I interpret the tags like this:
   E.G. Updated versions and/or parameters for software or databases, performance upgrades, retrained models with new databases, new utilities or reporting features.
 - "Patches" are used for bug-fixes and very minor changes.
 - Pre-releases will be mostly for making sure that continuous integration stuff is working (e.g. conda environment pushes and docker automated builds) and for final checks before saying that something is "stable".
-  They'll also be useful if you're trying to debug the CI stuff, since we can create `-alpha.1`, `-alpha.2` versions to trigger builds on dockerhub but indicate that they aren't proper releases.
+  They'll also be useful if you're trying to debug the CI stuff, since we can create `-dev.1`, `-dev.2` versions to trigger builds on dockerhub but indicate that they aren't proper releases.
   We should run `beta` releases through a few different realistic datasets to make sure everything is ok.
   If you're sure that everything is ok, you can just skip through the pre-release stuff and straight into a patch release.
 
@@ -195,7 +195,7 @@ To bump the patch version:
 ```bash
 # version 0.0.1
 bump2version patch
-# version 0.0.2-alpha
+# version 0.0.2-dev
 ```
 
 Bump the release version:
@@ -208,6 +208,9 @@ bump2version release
 
 bump2version release
 # version 0.0.1
+
+bump2version release
+# version 0.0.2-dev
 
 bump2version release
 # version 0.0.2-alpha
@@ -227,7 +230,7 @@ bump2version pre
 
 # BEFORE: version 0.0.1
 bump2version pre
-# AFTER: version 0.0.2-alpha
+# AFTER: version 0.0.2-dev
 ```
 
 
