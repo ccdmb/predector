@@ -66,8 +66,11 @@ Essentially, these placeholder packages contain scripts to take the source files
 proprietary software, and install them into the conda environment for you.
 
 ```bash
-# This pulls a version from anaconda.org
-conda env create predector/predector/0.0.1-dev.1
+# Download the environment config file.
+curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/environment.yml
+
+# Create the environment
+conda env create -f environment.yml
 conda activate predector
 
 # These commands make fixes to the source code when necessary
@@ -94,7 +97,7 @@ for all following commands you can just substitute podman for docker.
 If you're using docker, you may need to use `sudo docker`.
 
 ```bash
-curl -s https://raw.githubusercontent.com/ccdmb/predector/master/Dockerfile \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/Dockerfile \
 | docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
@@ -135,7 +138,7 @@ export TMHMM=tmhmm-2.0c.Linux.tar.gz
 export DEEPLOC=deeploc-1.0.All.tar.gz
 
 # Download the .def file
-curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/master/singularity.def
+curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.1/singularity.def
 
 # Build the .sif singularity image.
 # Note that `sudo -E` is important, it tells sudo to keep the environment variables
@@ -172,37 +175,43 @@ export SINGULARITY_LOCALCACHEDIR="${PWD}/cache"
 
 ## Run the test datasets
 
+To use a conda environment you'll need to find the path where it is installed.
 
 ```bash
-# NB CONDA_DIR should be set if you have conda installed
-# Make sure that the path actually points to where conda is installed.
-nextflow run -profile test -with-conda "${CONDA_DIR}/envs/predector" -resume ccdmb/predector
+conda info -e | grep "predector"
+```
 
-# or
-# NB i've had some issues running this, so may be less advisable for now.
-nextflow run -profile test,podman -resume ccdmb/predector
+Copy the path of the environment.
+On linux this will usually be `${HOME}/miniconda3/envs/predector`.
 
-# or
+Now provide that path to the `-with-conda` parameter.
+
+```bash
+nextflow run \
+  -profile test \
+  -with-conda "${HOME}/miniconda3/envs/predector" \
+  -resume \
+  ccdmb/predector
+```
+
+
+Using containers is a similar process.
+
+```bash
 nextflow run -profile test,docker -resume ccdmb/predector
+
 # if your docker condiguration requires sudo use this profile instead
 nextflow run -profile test,docker_sudo -resume ccdmb/predector
 
-# or
-nextflow run -profile test -with-singularity path/to/container.sif -resume ccdmb/predector
+# or if you want to use singularity
+nextflow run \
+  -profile test \
+  -with-singularity path/to/predector.sif \
+  -resume \
+  ccdmb/predector
 
-# or
-# NB this one assumes you've build the container using docker and it's in your local docker registry.
+# or if you've build the container using docker and it's in your local docker registry.
 nextflow run -profile test,singularity -resume ccdmb/predector
-```
-
-In the case of podman, it's a bit weird but I've found that cloning the repo and running `./main.nf` instead of `/ccdmb/predector` might work.
-Try this:
-
-```bash
-git clone https://github.com/ccdmb/predector.git
-cd predector
-
-nextflow run -profile test,podman -resume ./main
 ```
 
 
