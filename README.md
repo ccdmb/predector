@@ -144,6 +144,8 @@ nextflow run -profile test,podman -resume ccdmb/predector
 
 # or
 nextflow run -profile test,docker -resume ccdmb/predector
+# if your docker condiguration requires sudo use this profile instead
+nextflow run -profile test,docker_sudo -resume ccdmb/predector
 
 # or
 # NB this one assumes you've build the container using docker and it's in your local docker registry.

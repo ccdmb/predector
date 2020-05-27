@@ -29,4 +29,4 @@ ENV LIBRARY_PATH="${LIBRARY_PATH}:${CONDA_PREFIX}/lib"
 ENV CC="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-cc"
 ENV CXX="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-c++"
 
-CMD [ "${CONDA_PREFIX}/bin/bash" ]
+CMD [ "/bin/bash" ]

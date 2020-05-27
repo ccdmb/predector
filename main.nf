@@ -101,6 +101,13 @@ workflow validate_input {
 workflow {
 
     main:
+    if ( params.help ) {
+        log.error "Hey I'm really sorry but I haven't written the help thing yet."
+        log.error "Please check out the nextflow.config file params section for current options."
+        log.error "It's coming soon, i promise :)"
+        exit 1
+    }
+
     // println "$workflow.runName"
     // println "$workflow.sessionId"
     // println "$workflow.start"
@@ -110,15 +117,18 @@ workflow {
     // We're hard-coding this for now since a lot of analyses don't make sense
     // for bacteria and archaea
     params.domain = "euk"
-
-    (proteome_ch, pfam_hmm_val, pfam_dat_val,
-     pfam_active_site_val, dbcan_val, phibase_val) = validate_input()
-
-    versions = check_env()
-
     signalp_domain_map = ["euk": "euk", "gramp": "gram+", "gramn": "gram-"]
     signalp_domain = signalp_domain_map.get(params.domain)
 
+    // This handles the user input, downloads required databases etc.
+    (proteome_ch, pfam_hmm_val, pfam_dat_val,
+     pfam_active_site_val, dbcan_val, phibase_val) = validate_input()
+
+    // This checks that all of the software is installed and finds the version
+    // info where it can.
+    versions = check_env()
+
+    // Remove duplicates and split fasta(s) into chunks to run in parallel.
     // Maybe download precomputed results?
     (combined_proteomes_ch, combined_proteomes_tsv_ch) = encode_seqs(
         params.chunk_size,
@@ -127,6 +137,7 @@ workflow {
 
     split_proteomes_ch = combined_proteomes_ch.flatten()
 
+    // Run the machine-learning/simple statistics analyses.
     signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, split_proteomes_ch)
     signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteomes_ch)
     signalp_v4_ch = signalp_v4(signalp_domain, split_proteomes_ch)
@@ -142,7 +153,7 @@ workflow {
     effectorp_v2_ch = effectorp_v2(split_proteomes_ch)
     pepstats_ch = pepstats(split_proteomes_ch)
 
-    // Domain searches
+    // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
         pfam_hmm_val,
         pfam_dat_val,
@@ -187,7 +198,7 @@ workflow {
         .collectFile(name: "combined.ldjson", newLine: true)
 
     publish:
-    ldjson_ch to: "${params.outdir}"
+    ldjson_ch to: "${params.outdir}" // For some reason this puts it into a subfolder with a shasum.
     pfam_hmm_val to: "${params.outdir}/downloads"
     pfam_dat_val to: "${params.outdir}/downloads"
     pfam_active_site_val to: "${params.outdir}/downloads"
