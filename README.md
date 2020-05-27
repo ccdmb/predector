@@ -91,7 +91,7 @@ docker build \
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:0.0.1 \
+  -t predector/predector:0.0.1-alpha \
   -f https://raw.githubusercontent.com/ccdmb/predector/master/Dockerfile \
   .
 ```
