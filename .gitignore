@@ -1,6 +1,8 @@
 *.sif
 .nextflow*
 *.log*
+*.tar
+*.tar.gz
 
 conda/builds
 conda/targets
@@ -15,3 +17,4 @@ run
 results
 sources
 downloads
+cache

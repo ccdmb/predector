@@ -83,7 +83,8 @@ for all following commands you can just substitute podman for docker.
 If you're using docker, you may need to use `sudo` before commands.
 
 ```bash
-docker build \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/master/Dockerfile \
+| docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
   --build-arg SIGNALP5=signalp-5.0b.Linux.tar.gz \
@@ -92,7 +93,7 @@ docker build \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
   -t predector/predector:0.0.1-alpha \
-  -f https://raw.githubusercontent.com/ccdmb/predector/master/Dockerfile \
+  -f - \
   .
 ```
 
