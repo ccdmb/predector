@@ -1,11 +1,4 @@
-# Predector
-
-
-## Overview
-
-Description of the pipeline
-
-## Installing dependencies
+# Installing dependencies
 
 To run the pipeline itself you'll need to install [Nextflow](https://www.nextflow.io/).
 We provide a conda environment and containers to handle software dependencies.
@@ -27,7 +20,7 @@ Mac and Windows users are recommended to use a virtual environment or one of the
 3) Open a terminal, move into the directory where you saved the source files, and create the conda environment or container by following the relevant steps below.
 
 
-#### Conda
+## Conda
 
 We provide a conda environment file that can be downloaded and installed.
 This environment contains several "placeholder" packages to deal with the proprietary software.
@@ -64,7 +57,7 @@ signalp3-register signalp-3.0.Linux.tar.Z \
 If any of the `*-register` scripts fail, please contact the authors or raise an issue on github (we'll try to have an FAQ setup soon).
 
 
-#### Docker
+## Docker
 
 For docker and anything that supports docker images we have a [prebuilt container on DockerHub](https://hub.docker.com/repository/docker/predector/predector-base) containing all of the open-source components.
 To install the proprietary software we use this image as a base to build on with a new dockerfile.
@@ -90,7 +83,7 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/Dockerfile
 Your container should now be available as `predector/predector:0.0.1-dev.2` in your docker registry `docker images`.
 
 
-#### Singularity
+## Singularity
 
 There are a few ways to build the singularity image with the proprietary software installed (the filename `predector.sif` in the sections below).
 
@@ -139,26 +132,3 @@ export SINGULARITY_TMPDIR="${PWD}/cache"
 export SINGULARITY_LOCALCACHEDIR="${PWD}/cache"
 ```
 
-## Running the pipeline
-
-TODO
-
-
-## Advanced configuration
-
-TODO
-
-
-## Running on supercomputers
-
-TODO
-
-
-## Common installation issues
-
-TODO
-
-
-## FAQ
-
-TODO
