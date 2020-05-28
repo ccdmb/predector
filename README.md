@@ -65,6 +65,10 @@ This environment contains several "placeholder" packages to deal with the propri
 Essentially, these placeholder packages contain scripts to take the source files of the
 proprietary software, and install them into the conda environment for you.
 
+**It is necessary to run both of the code blocks below to properly install the environment.**
+
+First we create the conda environment, which includes the non-proprietary dependencies and the "placeholder" packages.
+
 ```bash
 # Download the environment config file.
 curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/environment.yml
@@ -72,17 +76,23 @@ curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.0.1-
 # Create the environment
 conda env create -f environment.yml
 conda activate predector
-
-# These commands make fixes to the source code when necessary
-# and copy the source into your conda environment so that it all works together.
-signalp3-register signalp-3.0.Linux.tar.Z
-signalp4-register signalp-4.1g.Linux.tar.gz
-signalp5-register signalp-5.0b.Linux.tar.gz
-targetp2-register targetp-2.0.Linux.tar.gz
-deeploc-register deeploc-1.0.All.tar.gz
-phobius-register phobius101_linux.tar.gz
-tmhmm2-register tmhmm-2.0c.Linux.tar.gz
 ```
+
+To complete the installation we need to run the `*-register` scripts, which install the proprietary source archives you downloaded yourself.
+You can copy-paste the entire command below directly into your terminal.
+Modify the source tar archive filenames if necessary.
+
+```bash
+signalp3-register signalp-3.0.Linux.tar.Z \
+&& signalp4-register signalp-4.1g.Linux.tar.gz \
+&& signalp5-register signalp-5.0b.Linux.tar.gz \
+&& targetp2-register targetp-2.0.Linux.tar.gz \
+&& deeploc-register deeploc-1.0.All.tar.gz \
+&& phobius-register phobius101_linux.tar.gz \
+&& tmhmm2-register tmhmm-2.0c.Linux.tar.gz
+```
+
+If any of the `*-register` scripts fail, please contact the authors or raise an issue on github (we'll try to have an FAQ setup soon).
 
 
 #### Docker and Podman
@@ -95,6 +105,9 @@ The interface to podman is exactly the same as for docker, so
 for all following commands you can just substitute podman for docker.
 
 If you're using docker, you may need to use `sudo docker`.
+
+You can copy-paste the entire command below directly into your terminal.
+Modify the source tar archive filenames if necessary.
 
 ```bash
 curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/Dockerfile \
@@ -124,7 +137,10 @@ There are a few ways to build the singularity image (the filename `predector.sif
 
 If you only have singularity installed, you can build the container directly
 by downloading the `.def` file and setting some environment variables with the
-paths to the sources:
+paths to the sources.
+
+You can copy-paste the entire block of commands below directly into your terminal.
+Modify the source tar archive filenames if necessary.
 
 ```bash
 # This is used to emulate the --build-args functionality of docker.
