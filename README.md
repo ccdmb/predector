@@ -45,7 +45,7 @@ However, because we rely on several tools with proprietary licenses there are a 
 Because some of the software only works with linux, we cannot support MacOS or Windows.
 Mac and Windows users are recommended to use a virtual environment or one of the containerised options (rather than conda).
 
-1) Install [Docker](https://docs.docker.com/engine/install/), [Podman](https://podman.io/), [Singularity](https://sylabs.io/guides/3.5/user-guide/), or [Conda](https://docs.conda.io/en/latest/miniconda.html)
+1) Install [Docker](https://docs.docker.com/engine/install/), [Singularity](https://sylabs.io/guides/3.5/user-guide/), or [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html)
 2) Download the linux source files for proprietary dependencies.
    Move them all into the same folder.
    - [SignalP v3](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#)
@@ -80,7 +80,7 @@ conda activate predector
 
 To complete the installation we need to run the `*-register` scripts, which install the proprietary source archives you downloaded yourself.
 You can copy-paste the entire command below directly into your terminal.
-Modify the source tar archive filenames if necessary.
+Modify the source tar archive filenames in the commands if necessary.
 
 ```bash
 signalp3-register signalp-3.0.Linux.tar.Z \
@@ -97,17 +97,11 @@ If any of the `*-register` scripts fail, please contact the authors or raise an 
 
 #### Docker and Podman
 
-For docker and anything that supports docker images we have a [prebuilt container](https://hub.docker.com/repository/docker/predector/predector-base) on dockerhub containing all of the open-source components.
+For docker and anything that supports docker images we have a [prebuilt container on DockerHub](https://hub.docker.com/repository/docker/predector/predector-base) containing all of the open-source components.
 To install the proprietary software we use this image as a base to build on with a new dockerfile.
-Essentially it does the same thing that the conda `*-register` commands do.
-
-The interface to podman is exactly the same as for docker, so
-for all following commands you can just substitute podman for docker.
-
-If you're using docker, you may need to use `sudo docker`.
-
-You can copy-paste the entire command below directly into your terminal.
-Modify the source tar archive filenames if necessary.
+To build the new image with the proprietary dependencies, you need to run the command below which can all be copy-pasted directly into your terminal.
+Modify the source `.tar` archive filenames in the command if necessary.
+Depending on how you installed docker you may need to use `sudo docker` in place of `docker`.
 
 ```bash
 curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/Dockerfile \
@@ -124,22 +118,17 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/Dockerfile
   .
 ```
 
-Podman is nice because it uses cgroups v2, so can do pretty much everything docker can do but without requiring root permission.
-That includes building images, which i think you still need permission for with singularity.
-However, I have had some intermittent issues with volume mounting and permissions that I haven't been able to solve.
-**Docker original and Singularity are probably the better runtime options for now for stability.**
-Podman seems to be fine for building the containers though.
+Your container should now be available as `predector/predector:0.0.1-dev.2` in your docker registry `docker images`.
 
 
 #### Singularity
 
-There are a few ways to build the singularity image (the filename `predector.sif` in the sections below).
+There are a few ways to build the singularity image with the proprietary software installed (the filename `predector.sif` in the sections below).
 
 If you only have singularity installed, you can build the container directly
 by downloading the `.def` file and setting some environment variables with the
-paths to the sources.
-
-You can copy-paste the entire block of commands below directly into your terminal.
+paths to the proprietary source archives.
+The following commands will build this image for you, and can be copy-pasted directly into your terminal.
 Modify the source tar archive filenames if necessary.
 
 ```bash
@@ -164,21 +153,13 @@ sudo -E singularity build \
   ./singularity.def
 ```
 
-If you've already built the container using docker or podman, you can convert them to
-singularity format. You don't have to be a root user.
-
-for docker:
+If you've already built the container using docker, you can convert them to singularity format.
+You don't need to use `sudo` even if your docker installation usually requires it.
 
 ```bash
 singularity build predector.sif docker://predector/predector:0.0.1-dev.2
 ```
 
-for podman:
-
-```bash
-podman save --format oci-archive --output predector.tar localhost/predector/predector:0.0.1-dev.2
-singularity build predector.sif oci-archive://predector.tar
-```
 
 Because the container images are quite large, `singularity build` will sometimes fail if your `/tmp` partition isn't big enough.
 In that case, set the following environment variables and remove the cache directory (`rm -rf -- "${PWD}/cache"`) when `singularity build` is finished.
