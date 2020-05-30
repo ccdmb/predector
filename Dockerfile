@@ -22,12 +22,19 @@ COPY "${PHOBIUS}" /tmp/onbuild/
 COPY "${TMHMM}" /tmp/onbuild/
 
 # CONDA_PREFIX should be set by the base container.
-RUN signalp3-register "/tmp/onbuild/$(basename "${SIGNALP3}")" \
+RUN echo \
+ && signalp3-register "/tmp/onbuild/$(basename "${SIGNALP3}")" \
+ && echo \
  && signalp4-register "/tmp/onbuild/$(basename "${SIGNALP4}")" \
+ && echo \
  && signalp5-register "/tmp/onbuild/$(basename "${SIGNALP5}")" \
+ && echo \
  && targetp2-register "/tmp/onbuild/$(basename "${TARGETP2}")" \
+ && echo \
  && deeploc-register "/tmp/onbuild/$(basename "${DEEPLOC}")" \
+ && echo \
  && phobius-register "/tmp/onbuild/$(basename "${PHOBIUS}")" \
+ && echo \
  && tmhmm2-register "/tmp/onbuild/$(basename "${TMHMM}")" \
+ && echo \
  && rm -rf -- /tmp/onbuild
-
