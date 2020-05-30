@@ -677,6 +677,8 @@ process press_hmmer {
 }
 
 
+// DBCAN Optimized parameters for fungi E-value < 10−17; coverage > 0.45
+
 process hmmscan {
 
     label 'hmmer3'
