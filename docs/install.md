@@ -28,8 +28,8 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
-- [DeepLoc v1](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
-- [TMHMM v2](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
+- [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
+- [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
 - [Phobius](http://software.sbc.su.se/cgi-bin/request.cgi?project=phobius) version 1.01
 
 Note that DTU (SignalP etc) don't keep older patches and minor versions available.
@@ -228,6 +228,44 @@ export SINGULARITY_CACHEDIR="${PWD}/cache"
 export SINGULARITY_TMPDIR="${PWD}/cache"
 export SINGULARITY_LOCALCACHEDIR="${PWD}/cache"
 ```
+
+
+## Copying environments to places where you don't have root user permission
+
+We can't really just put the final container images up on dockerhub or singularity hub,
+since that would violate the proprietary license agreements.
+So if you don't have root user permission on the computer (e.g. a supercomputing cluster) you're going to run the analysis on you can either use the conda environments or build a container on a different computer and copy the image up.
+
+
+If the option is available to you, I would recommend using the singularity containers for HPC.
+Singularity container `.sif` files can be simply copied to whereever you're running the analysis.
+
+
+Some supercomputing centres will have [`shifter`](https://docs.nersc.gov/programming/shifter/overview/) installed, which allows you to run jobs with docker containers. Note that there are two versions of `shifter` and nextflow only supports one of them (the nersc one).
+Docker containers can be saved as a tarball and copied wherever you like.
+
+```bash
+# You could pipe this through gzip if you wanted.
+docker save predector/predector:0.0.1-dev.2 > predector.tar
+```
+
+And the on the other end
+
+```bash
+docker load -i predector.tar
+```
+
+
+Conda environment should be able to be built anywhere, since they don't require root user permission.
+You should just be able to follow the instructions described earlier.
+Just make sure that you install the environment on a shared filesystem (i.e. one that all nodes in your cluster can access).
+
+There are also options for "packing" a conda environment into something that you can copy around (e.g. [conda-pack](https://conda.github.io/conda-pack/)), though we haven't tried this yet.
+
+
+
+Hopefully, one of these options will work for you.
+
 
 
 ## Common install issues
