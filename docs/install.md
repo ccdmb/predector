@@ -1,26 +1,123 @@
-# Installing dependencies
+# Installing predector and its dependencies.
 
-To run the pipeline itself you'll need to install [Nextflow](https://www.nextflow.io/).
-We provide a conda environment and containers to handle software dependencies.
-However, because we rely on several tools with proprietary licenses there are a few extra steps necessary to get things running.
-
-Because some of the software only works with linux, we cannot support MacOS or Windows.
-Mac and Windows users are recommended to use a virtual environment or one of the containerised options (rather than conda).
-
-1) Install [Docker](https://docs.docker.com/engine/install/), [Singularity](https://sylabs.io/guides/3.5/user-guide/), or [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html)
-2) Download the linux source files for proprietary dependencies.
-   Move them all into the same folder.
-   - [SignalP v3](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#)
-   - [SignalP v4](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#)
-   - [SignalP v5](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#)
-   - [TargetP v2](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#)
-   - [DeepLoc v1](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#)
-   - [TMHMM v2](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#)
-   - [Phobius](http://software.sbc.su.se/cgi-bin/request.cgi?project=phobius)
-3) Open a terminal, move into the directory where you saved the source files, and create the conda environment or container by following the relevant steps below.
+## Quick install
 
 
-## Conda
+### 1. Install Conda, Docker, or Singularity
+
+We provide automated ways of installing dependencies using [conda](https://docs.conda.io/en/latest/) environments (linux OS only), or [docker](https://www.docker.com/why-docker) or [singularity](https://sylabs.io/singularity/) containers.
+
+Please follow the instructions at one of the following links to install:
+
+- https://conda.io/projects/conda/en/latest/user-guide/install/linux.html
+- https://docs.docker.com/engine/install/
+- https://sylabs.io/guides/
+
+
+NB. We cannot support conda environments on Mac or Windows.
+Please use a Linux virtual machine or one of the containerised options.
+
+
+### 2. Download the proprietary software dependencies
+
+Predector runs several tools that we cannot download for you automatically.
+Please register for and download each of the following tools, and place them all somewhere that you can access from your terminal.
+Where you have a choice between versions for different operating systems, you should always take the **Linux** version (even if using Mac or Windows).
+
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
+- [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
+- [DeepLoc v1](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
+- [TMHMM v2](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
+- [Phobius](http://software.sbc.su.se/cgi-bin/request.cgi?project=phobius) version 1.01
+
+Note that DTU (SignalP etc) don't keep older patches and minor versions available.
+If the specified version isn't available to download, another version with the same major number _should_ be fine.
+
+
+### 3. Build the conda environment or container
+
+We provide an install script that should install the dependencies for the majority of users.
+
+In the following command, substitute `<environment>` for `conda`, `docker`, or `singularity`.
+Make sure you're in the same directory as the proprietary source archives.
+If the names below don't match the filenames you have exactly, adjust the command accordingly.
+For singularity and docker container building you may be prompted for your root password (via `sudo`).
+
+```bash
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/master/install.sh" \
+| bash -s <environment> \
+    -3 signalp-3.0.Linux.tar.Z \
+    -4 signalp-4.1g.Linux.tar.gz \
+    -5 signalp-5.0b.Linux.tar.gz \
+    -t targetp-2.0.Linux.tar.gz \
+    -d deeploc-1.0.All.tar.gz \
+    -m tmhmm-2.0c.Linux.tar.gz \
+    -p phobius101_linux.tar.gz
+```
+
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:0.0.1-dev.2`) or singularity (file `./predector.sif`) containers.
+
+**Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
+
+If you have issues during installation or want to customise where things are built, please consult the extended documentation.
+Or save the install script locally and run `install.sh --help`.
+
+
+### 4. Install NextFlow
+
+NextFlow requires a bash compatible terminal, and Java version 8+.
+We require NextFlow version 20 or above.
+Extended install instructions available at: [https://www.nextflow.io/](https://www.nextflow.io).
+
+```bash
+curl -s https://get.nextflow.io | bash
+```
+
+Or using conda:
+
+```bash
+conda install -c bioconda nextflow
+```
+
+### 5. Test the pipeline
+
+Use one of the commands below using information given upon completion of dependency install script.
+**Make sure you use the environment that you specified in [Step 3](#3--Build-the-conda-environment-or-container).**
+
+#### Using conda
+
+```bash
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume ccdmb/predector
+```
+
+#### Using docker
+
+```bash
+nextflow run -profile test,docker -resume ccdmb/predector
+
+# if your docker configuration requires sudo use this profile instead
+nextflow run -profile test,docker_sudo -resume ccdmb/predector
+```
+
+#### Using singularity
+
+```bash
+nextflow run -profile test -with-singularity path/to/predector.sif -resume ccdmb/predector
+
+# or if you've build the container using docker and it's in your local docker registry.
+nextflow run -profile test,singularity -resume ccdmb/predector
+```
+
+## Extended dependency install guide
+
+If the quick install method doesn't work for you, you might need to run the environment build steps manually.
+It would be great if you could also contact us to report the issue, so that we can get the quick install instructions working for more people.
+
+The following guides assume that you have successfully followed the steps 1, 2, and 4, and aim to teplace step 3.
+
+### Building the conda environment the long way
 
 We provide a conda environment file that can be downloaded and installed.
 This environment contains several "placeholder" packages to deal with the proprietary software.
@@ -57,7 +154,7 @@ signalp3-register signalp-3.0.Linux.tar.Z \
 If any of the `*-register` scripts fail, please contact the authors or raise an issue on github (we'll try to have an FAQ setup soon).
 
 
-## Docker
+### Building the Docker container the long way
 
 For docker and anything that supports docker images we have a [prebuilt container on DockerHub](https://hub.docker.com/repository/docker/predector/predector-base) containing all of the open-source components.
 To install the proprietary software we use this image as a base to build on with a new dockerfile.
@@ -83,7 +180,7 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/Dockerfile
 Your container should now be available as `predector/predector:0.0.1-dev.2` in your docker registry `docker images`.
 
 
-## Singularity
+### Building the Singularity container the long way
 
 There are a few ways to build the singularity image with the proprietary software installed (the filename `predector.sif` in the sections below).
 
@@ -132,3 +229,13 @@ export SINGULARITY_TMPDIR="${PWD}/cache"
 export SINGULARITY_LOCALCACHEDIR="${PWD}/cache"
 ```
 
+
+## Common install issues
+
+### Running with docker `Unable to find image 'predector/predector:0.0.1-dev.2' locally`
+
+This usually means that you haven't built the docker image locally.
+Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.
+
+It's also possible that you built a different environment (e.g. conda or singularity).
+Check `conda info -e` or for any `.sif` files where your source archives are.

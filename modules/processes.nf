@@ -42,8 +42,6 @@ process encode_seqs {
     predutils encode \
       --prefix "P" \
       --length 8 \
-      --upper \
-      --strip "*-" \
       combined.fasta \
       combined.tsv \
       in/*
@@ -78,6 +76,8 @@ process signalp_v3_hmm {
     # so that we don't lose everything
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N 1 \
         --line-buffer  \
@@ -114,6 +114,8 @@ process signalp_v3_nn {
     # so that we don't lose everything
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N 1 \
         --line-buffer  \
@@ -149,6 +151,8 @@ process signalp_v4 {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -234,6 +238,8 @@ process deepsig {
 
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -268,6 +274,8 @@ process phobius {
 
     # tail -n+2 is to remove header
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -303,6 +311,8 @@ process tmhmm {
 
     # tail -n+2 is to remove header
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -376,9 +386,11 @@ process deeploc {
     }
     export -f run
 
-    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 500)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -422,6 +434,8 @@ process apoplastp {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -465,6 +479,8 @@ process localizer {
     CHUNKSIZE="\$(decide_task_chunksize.sh mature.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -508,6 +524,8 @@ process effectorp_v1 {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -551,6 +569,8 @@ process effectorp_v2 {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --line-buffer  \
@@ -586,6 +606,8 @@ process pepstats {
 
     # NB linebuffer isn't safe here because pepstats is multiline.
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --recstart '>' \
@@ -642,6 +664,8 @@ process pfamscan {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --recstart '>' \
@@ -712,6 +736,8 @@ process hmmscan {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
         -j "${task.cpus}" \
         -N "\${CHUNKSIZE}" \
         --recstart '>' \

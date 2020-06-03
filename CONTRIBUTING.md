@@ -7,6 +7,19 @@ For now while we're still developing the first version of the pipeline, this doc
 Once we publish (version 1), we'll need to re-organise these guidelines a bit to follow something more like the [git workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) model.
 
 
+## Documentation
+
+Please don't edit the files in the wiki directly, modify them from this github repo.
+The changes will be automatically pushed to the wiki when we make a new release.
+
+We do this because we use version numbers the documentation a lot, so we use a tool to automatically change the version as we go.
+It's not really practical to run this separated across multiple repos.
+
+As you're writing documentation, make sure that your version numbers match the version of the current pipeline.
+Also make sure that your file will be matched by one of the rules in the `.bumpversion.cfg` file.
+Contact us if you need help with this :)
+
+
 ## Git
 
 Git is a version control tool.

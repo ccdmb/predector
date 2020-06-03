@@ -199,6 +199,8 @@ workflow {
 
     publish:
     ldjson_ch to: "${params.outdir}" // For some reason this puts it into a subfolder with a shasum.
+    combined_proteomes_ch to: "${params.outdir}"
+    combined_proteomes_tsv_ch to: "${params.outdir}"
     pfam_hmm_val to: "${params.outdir}/downloads"
     pfam_dat_val to: "${params.outdir}/downloads"
     pfam_active_site_val to: "${params.outdir}/downloads"
