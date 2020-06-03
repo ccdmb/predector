@@ -87,7 +87,7 @@ If the names below don't match the filenames you have exactly, adjust the comman
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
 
 ```bash
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/master/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/install.sh" \
 | bash -s <environment> \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \

@@ -516,7 +516,7 @@ setup_docker() {
     echo
 
     # This will still fail if non-zero exit not related to permission.
-    NEED_SUDO=$(check_docker_needs_sudo) 
+    NEED_SUDO=$(check_docker_needs_sudo)
 
     if [ "${NEED_SUDO}" = "true" ]
     then
