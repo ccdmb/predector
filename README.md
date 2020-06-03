@@ -87,7 +87,7 @@ If the names below don't match the filenames you have exactly, adjust the comman
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
 
 ```bash
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.3/install.sh" \
 | bash -s <environment> \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -98,7 +98,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.0.1-dev.2/install.s
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:0.0.1-dev.2`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:0.0.1-dev.3`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
