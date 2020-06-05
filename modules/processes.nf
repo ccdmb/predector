@@ -17,6 +17,26 @@ process download {
 }
 
 
+process extract_effector_seqs {
+
+    label 'posix'
+    label 'process_low'
+
+    input:
+    path "effectors.tsv"
+
+    output:
+    path "effectors.fasta"
+
+    script:
+    """
+    tail -n+2 effectors.tsv \
+    | awk -F'\t' '{printf(">%s\n%s\n", $4, $12)}' \
+    > effectors.fasta
+    """
+}
+
+
 // Here we remove duplicate sequences and split them into chunks for
 // parallel processing.
 // Eventually, we should also take precomputed results and filter them

@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 nextflow.preview.dsl=2
 
-include {get_file; is_null} from './modules/cli'
+include {get_file; is_null; param_unexpected_error} from './modules/cli'
 include check_env from './modules/versions'
 include {
     download as download_pfam_hmm;
@@ -29,7 +29,9 @@ include {
     hmmscan as hmmscan_dbcan;
     mmseqs_index as mmseqs_index_proteomes;
     mmseqs_index as mmseqs_index_phibase;
+    mmseqs_index as mmseqs_index_effectors;
     mmseqs_search as mmseqs_search_phibase;
+    mmseqs_search as mmseqs_search_effectors;
 } from './modules/processes'
 
 
@@ -82,6 +84,9 @@ workflow validate_input {
         phibase_val = Channel.empty()
     }
 
+    // This has a default value set, so it shouldn't be possible to not specify the parameter.
+    effector_val = get_file(params.effector_table)
+
     if ( !["euk", "gramp", "gramn"].contains(params.domain)  ) {
         log.error "Invalid argument to `--domain`: ${params.domain}."
         log.error "Must be one of 'euk', 'gramp', 'gramn'."
@@ -95,6 +100,7 @@ workflow validate_input {
     pfam_active_site_val
     dbcan_val
     phibase_val
+    effector_val
 }
 
 
@@ -122,7 +128,7 @@ workflow {
 
     // This handles the user input, downloads required databases etc.
     (proteome_ch, pfam_hmm_val, pfam_dat_val,
-     pfam_active_site_val, dbcan_val, phibase_val) = validate_input()
+     pfam_active_site_val, dbcan_val, phibase_val, effector_val) = validate_input()
 
     // This checks that all of the software is installed and finds the version
     // info where it can.
@@ -171,6 +177,12 @@ workflow {
     phibase_mmseqs_index_val = mmseqs_index_phibase(phibase_val.map { f -> ["phibase", f] })
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
         phibase_mmseqs_index_val,
+        proteome_mmseqs_index_ch
+    )
+
+    effectors_mmseqs_index_val = mmseqs_index_effectors(phibase_val.map { f -> ["effectorsearch", f] })
+    effectors_mmseqs_matches_ch = mmseqs_search_effectors(
+        effectors_mmseqs_index_val,
         proteome_mmseqs_index_ch
     )
 
