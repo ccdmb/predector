@@ -105,10 +105,12 @@ process signalp_v3_hmm {
         --cat  \
         'signalp3 -type "${domain}" -method "hmm" -short "{}"' \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        signalp3_hmm -
+        signalp3_hmm out.txt
     """
 }
 
@@ -189,10 +191,12 @@ process signalp_v4 {
         --cat  \
         'signalp4 -t "${domain}" -f short "{}"' \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        signalp4 -
+        signalp4 out.txt
     """
 }
 
@@ -216,7 +220,12 @@ process signalp_v5 {
     script:
     """
     mkdir -p tmpdir
-    # This just uses all available cores by default.
+
+    # Signalp5 just uses all available cores afaik.
+    # Although it seems to use omp, i don't seem to be able to force it
+    # to use a specific number of cores.
+    export OMP_NUM_THREADS="${task.cpus}"
+
     signalp5 \
       -org "${domain}" \
       -format short \
@@ -275,10 +284,12 @@ process deepsig {
         --recstart '>' \
         --cat run \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        deepsig -
+        deepsig out.txt
     """
 }
 
@@ -312,10 +323,12 @@ process phobius {
         --cat  \
         'phobius.pl -short "{}" | tail -n+2' \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        phobius -
+        phobius out.txt
     """
 }
 
@@ -349,10 +362,12 @@ process tmhmm {
         --pipe \
         'tmhmm -short -d' \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        tmhmm -
+        tmhmm out.txt
 
     rm -rf -- TMHMM_*
     """
@@ -376,6 +391,12 @@ process targetp {
     script:
     """
     mkdir -p tmpdir
+
+    # targetp2 just uses all available cores afaik.
+    # Although it seems to use omp, i don't seem to be able to force it
+    # to use a specific number of cores.
+    export OMP_NUM_THREADS="${task.cpus}"
+
     targetp -fasta in.fasta -org non-pl -format short -prefix "out"
 
     predutils r2js \
@@ -487,10 +508,12 @@ process apoplastp {
         --cat  \
         run \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        apoplastp -
+        apoplastp out.txt
     """
 }
 
@@ -532,10 +555,12 @@ process localizer {
         --cat  \
         run \
     < mature.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        localizer -
+        localizer out.txt
     """
 }
 
@@ -577,10 +602,12 @@ process effectorp_v1 {
         --cat  \
         run \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        effectorp1 -
+        effectorp1 out.txt
     """
 }
 
@@ -622,10 +649,12 @@ process effectorp_v2 {
         --cat  \
         run \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        effectorp2 -
+        effectorp2 out.txt
     """
 }
 
@@ -636,7 +665,7 @@ process effectorp_v2 {
 process pepstats {
 
     label 'emboss'
-    label 'process_high'
+    label 'process_low'
 
     input:
     path "in.fasta"
@@ -646,22 +675,11 @@ process pepstats {
 
     script:
     """
-    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
-
-    # NB linebuffer isn't safe here because pepstats is multiline.
-    parallel \
-        --halt now,fail=1 \
-        --joblog log.txt \
-        -j "${task.cpus}" \
-        -N "\${CHUNKSIZE}" \
-        --recstart '>' \
-        --pipe  \
-        'pepstats -sequence stdin -outfile stdout' \
-    < in.fasta \
-    | predutils r2js \
+    pepstats -sequence in.fasta -outfile out.txt
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        pepstats -
+        pepstats out.txt
     """
 }
 
@@ -717,10 +735,12 @@ process pfamscan {
         --cat  \
         'pfam_scan.pl -fasta "{}" -dir pfam_db -as' \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        pfamscan -
+        pfamscan out.txt
     """
 }
 
@@ -776,7 +796,6 @@ process hmmscan {
 
     export -f run
 
-
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
@@ -789,10 +808,12 @@ process hmmscan {
         --cat \
         run \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        "${database}" -
+        "${database}" out.txt
     """
 }
 
