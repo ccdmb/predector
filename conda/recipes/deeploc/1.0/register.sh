@@ -19,14 +19,11 @@ cd "${TARGET_DIR}/src"
 # Correct source files give version 1.0 this is to keep it consistent.
 sed -i "s/version='0.1'/version='1.0'/" ./setup.py
 
-# Theano complains _a lot_ because it things we arent using gcc
-# I can't set the log level to error, so i'm just disabling logging.
-sed -i "2a import logging; logging.getLogger('theano').addHandler(logging.NullHandler())" bin/deeploc
-
-if [ ! -z "${CXX:-}" ]
-then
-    sed -i "/os.environ\['THEANO_FLAGS'\]/s~fast_compile~fast_compile,cxx=${CXX}~" bin/deeploc
-fi
+# This patch does three things.
+# 1. disable theano warnings. I can't set the log level to error, so i'm just disabling logging.
+# 2. Allow users to specify THEANO_FLAGS.
+# 3. Add the CXX environment variable to use in THEANO_FLAGS defaults, because otherwise it looks for gcc.
+patch bin/deeploc "${TARGET_DIR}/deeploc.patch"
 
 pip install --no-deps --upgrade --force-reinstall --compile --prefix "${ENV_PREFIX}" .
 
@@ -43,5 +40,9 @@ echo "Testing installation..."
 
 # If you get a non-zero exit code, the test will fail.
 cd "${WORKDIR}"
+
+export THEANO_FLAGS="device=cpu,floatX=float32,optimizer=fast_compile,cxx=${CXX},base_compiledir=${PWD}/theano"
 TEST_RESULT=$(deeploc --fasta "${TARGET_DIR}/src/test.fasta" --output "${WORKDIR}/test")
 TEST_RETCODE=$?
+
+rm -rf -- "${PWD}/theano"

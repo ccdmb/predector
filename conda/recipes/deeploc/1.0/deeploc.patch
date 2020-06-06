@@ -1,0 +1,15 @@
+5,6c5,15
+< os.environ['THEANO_FLAGS']='device=cpu,floatX=float32,optimizer=fast_compile'
+< os.environ['OMP_NUM_THREADS']='1'
+---
+> import logging
+> logging.getLogger('theano').addHandler(logging.NullHandler())
+> 
+> if 'THEANO_FLAGS' not in os.environ:
+>     cxx = os.environ.get('CXX')
+>     if cxx is not None:
+>         os.environ['THEANO_FLAGS'] = f'device=cpu,floatX=float32,optimizer=fast_compile,cxx={cxx}'
+>     else:
+>         os.environ['THEANO_FLAGS'] = 'device=cpu,floatX=float32,optimizer=fast_compile'
+> 
+> os.environ['OMP_NUM_THREADS'] = '1'
