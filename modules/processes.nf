@@ -398,15 +398,27 @@ process deeploc {
     script:
     """
     run () {
-        TMPFILE="tmp\$\$"
+        TMPDIR="\${PWD}/tmp\$\$"
+        mkdir -p "\${TMPDIR}"
+        TMPFILE="tmp\$\$.out"
+
+        # The base_compiledir is the important bit here.
+        # This is where cache-ing happens. But it also creates a lock
+        # for parallel operations.
+        export THEANO_FLAGS="device=cpu,floatX=float32,optimizer=fast_compile,cxx=\${CXX},base_compiledir=\${TMPDIR}"
+
         deeploc -f "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPFILE}.txt"
 
-        rm -f "\${TMPFILE}.txt"
+        rm -rf -- "\${TMPFILE}.txt" "\${TMPDIR}"
     }
     export -f run
 
-    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 500)"
+    # This just always divides it up into even chunks for each cpu.
+    # Since deeploc caches compilation, it's more efficient to run big chunks
+    # and waste a bit of cpu time at the end if one finishes early.
+    NSEQS="\$(grep -c '^>' in.fasta || echo 0)"
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" "\${NSEQS}")"
 
     parallel \
         --halt now,fail=1 \
@@ -418,10 +430,12 @@ process deeploc {
         --cat  \
         run \
     < in.fasta \
-    | predutils r2js \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        deeploc -
+        deeploc out.txt
     """
 }
 
