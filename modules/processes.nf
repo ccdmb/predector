@@ -31,7 +31,7 @@ process extract_effector_seqs {
     script:
     """
     tail -n+2 effectors.tsv \
-    | awk -F'\t' '{printf(">%s\n%s\n", $4, $12)}' \
+    | awk -F'\t' '{printf(">%s\\n%s\\n", \$4, \$12)}' \
     > effectors.fasta
     """
 }
@@ -133,6 +133,12 @@ process signalp_v3_nn {
     # This has a tendency to fail randomly, we just have 1 per chunk
     # so that we don't lose everything
 
+    # Signalp3 nn fails if a sequence is longer than 6000 AAs.
+    fasta_to_tsv.sh in.fasta \
+    | awk -F'\t' '{ s=substr(\$2, 1, 6000); print \$1"\t"s }' \
+    | tsv_to_fasta.sh \
+    > trunc.fasta
+
     parallel \
         --halt now,fail=1 \
         --joblog log.txt \
@@ -142,11 +148,14 @@ process signalp_v3_nn {
         --recstart '>' \
         --cat  \
         'signalp3 -type "${domain}" -method nn -short "{}"' \
-    < in.fasta \
-    | predutils r2js \
+    < trunc.fasta \
+    | cat > out.txt
+
+    predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
-        signalp3_nn -
+        signalp3_nn \
+        out.txt
     """
 }
 
@@ -398,6 +407,7 @@ process deeploc {
     script:
     """
     run () {
+        set -e
         TMPDIR="\${PWD}/tmp\$\$"
         mkdir -p "\${TMPDIR}"
         TMPFILE="tmp\$\$.out"
@@ -684,7 +694,7 @@ process press_pfam_hmmer {
 process pfamscan {
 
     label 'pfamscan'
-    label 'process_low'
+    label 'process_high'
 
     input:
     path 'pfam_db'

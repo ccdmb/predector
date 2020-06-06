@@ -7,7 +7,7 @@ MAX_CHUNK="$3"
 NSEQS=$(grep -c '^>' "$1" || echo "0")
 
 rounded_up () {
-    echo $((("$1" - 1) / "$2" + 1))
+    echo $(( ($1 - 1) / $2 + 1 ))
 }
 
 min () {

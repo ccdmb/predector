@@ -27,6 +27,7 @@ include {
     pfamscan;
     press_hmmer as press_dbcan_hmmer;
     hmmscan as hmmscan_dbcan;
+    extract_effector_seqs;
     mmseqs_index as mmseqs_index_proteomes;
     mmseqs_index as mmseqs_index_phibase;
     mmseqs_index as mmseqs_index_effectors;
@@ -180,7 +181,11 @@ workflow {
         proteome_mmseqs_index_ch
     )
 
-    effectors_mmseqs_index_val = mmseqs_index_effectors(phibase_val.map { f -> ["effectorsearch", f] })
+    effectors_mmseqs_index_val = effector_val \
+        | extract_effector_seqs \
+        | map { f -> ["effectorsearch", f] } \
+        | mmseqs_index_effectors
+
     effectors_mmseqs_matches_ch = mmseqs_search_effectors(
         effectors_mmseqs_index_val,
         proteome_mmseqs_index_ch
