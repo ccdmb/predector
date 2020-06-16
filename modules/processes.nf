@@ -266,6 +266,7 @@ process deepsig {
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     run () {
+        set -e
         OUT="tmp\$\$"
         deepsig.py -f \$1 -k euk -o "\${OUT}" 1>&2
         cat "\${OUT}"
@@ -488,6 +489,7 @@ process apoplastp {
     script:
     """
     run () {
+        set -e
         TMPFILE="tmp\$\$"
         ApoplastP.py -s -i "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPFILE}"
@@ -535,6 +537,7 @@ process localizer {
     script:
     """
     run () {
+        set -e
         TMP="tmp\$\$"
         LOCALIZER.py -e -M -i "\$1" -o "\${TMP}" 1>&2
         cat "\${TMP}/Results.txt"
@@ -582,6 +585,7 @@ process effectorp_v1 {
     script:
     """
     run () {
+        set -e
         TMPFILE="tmp\$\$"
         EffectorP1.py -s -i "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPFILE}"
@@ -629,6 +633,7 @@ process effectorp_v2 {
     script:
     """
     run () {
+        set -e
         TMPFILE="tmp\$\$"
         EffectorP2.py -s -i "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPFILE}"
@@ -783,6 +788,7 @@ process hmmscan {
     script:
     """
     run () {
+        set -e
         TMPFILE="tmp\$\$"
         hmmscan \
           --domtblout "\${TMPFILE}" \

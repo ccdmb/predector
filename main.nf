@@ -210,7 +210,8 @@ workflow {
             pepstats_ch,
             pfamscan_ch,
             dbcan_hmmer_ch,
-            phibase_mmseqs_matches_ch
+            phibase_mmseqs_matches_ch,
+            effectors_mmseqs_matches_ch
         )
         .collectFile(name: "combined.ldjson", newLine: true)
 
