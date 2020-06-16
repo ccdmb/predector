@@ -9,6 +9,10 @@ include {
     download as download_pfam_active_site;
     download as download_dbcan;
     encode_seqs;
+    decode_seqs;
+    gff_results;
+    tabular_results;
+    ranked_results;
     signalp_v3_hmm;
     signalp_v3_nn;
     signalp_v4;
@@ -87,6 +91,8 @@ workflow validate_input {
 
     // This has a default value set, so it shouldn't be possible to not specify the parameter.
     effector_val = get_file(params.effector_table)
+    pfam_targets_val = get_file(params.pfam_targets)
+    dbcan_targets_val = get_file(params.dbcan_targets)
 
     if ( !["euk", "gramp", "gramn"].contains(params.domain)  ) {
         log.error "Invalid argument to `--domain`: ${params.domain}."
@@ -102,6 +108,8 @@ workflow validate_input {
     dbcan_val
     phibase_val
     effector_val
+    pfam_targets_val
+    dbcan_targets_val
 }
 
 
@@ -129,7 +137,8 @@ workflow {
 
     // This handles the user input, downloads required databases etc.
     (proteome_ch, pfam_hmm_val, pfam_dat_val,
-     pfam_active_site_val, dbcan_val, phibase_val, effector_val) = validate_input()
+     pfam_active_site_val, dbcan_val, phibase_val, effector_val,
+     pfam_targets_val, dbcan_targets_val) = validate_input()
 
     // This checks that all of the software is installed and finds the version
     // info where it can.
@@ -193,7 +202,9 @@ workflow {
 
     // At this point, all of the analyses have their own ldjson files.
     // Here we just merge that all into one big file.
-    ldjson_ch = signalp_v3_hmm_ch
+    decoded_ch = decode_seqs(
+        combined_proteomes_tsv_ch,
+        signalp_v3_hmm_ch
         .mix(
             signalp_v3_nn_ch,
             signalp_v4_ch,
@@ -213,10 +224,21 @@ workflow {
             phibase_mmseqs_matches_ch,
             effectors_mmseqs_matches_ch
         )
-        .collectFile(name: "combined.ldjson", newLine: true)
+    )
+    decoded_with_names_ch = decoded_ch
+        .flatten()
+        .map { f -> [f.baseName, f] }
+
+    gff_ch = gff_results(decoded_with_names_ch)
+    tabular_ch = tabular_results(decoded_with_names_ch)
+    ranked_ch = ranked_results(dbcan_targets_val, pfam_targets_val, decoded_with_names_ch)
 
     publish:
-    ldjson_ch to: "${params.outdir}" // For some reason this puts it into a subfolder with a shasum.
+    decoded_ch.flatten() to: "${params.outdir}"
+    gff_ch to: "${params.outdir}"
+    tabular_ch to: "${params.outdir}"
+    ranked_ch to: "${params.outdir}"
+
     combined_proteomes_ch to: "${params.outdir}"
     combined_proteomes_tsv_ch to: "${params.outdir}"
     pfam_hmm_val to: "${params.outdir}/downloads"

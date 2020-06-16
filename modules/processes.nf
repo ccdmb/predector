@@ -75,6 +75,100 @@ process encode_seqs {
 }
 
 
+process decode_seqs {
+
+    label 'predectorutils'
+    label 'process_low'
+
+    input:
+    path "combined.tsv"
+    path "results/*.ldjson"
+
+    output:
+    path "decoded/*.ldjson"
+
+    script:
+    """
+    cat results/* \
+    | predutils decode \
+      --template 'decoded/{filename}.ldjson' \
+      combined.tsv
+      -
+    """
+}
+
+
+process gff_results {
+
+    label 'predectorutils'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("results.ldjson")
+
+    output:
+    path "${name}.gff3"
+
+    script:
+    """
+    predutils gff \
+      --outfile "${name}.gff3" \
+      results.ldjson
+    """
+}
+
+
+process tabular_results {
+
+    label 'predectorutils'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    tuple val(name), path("results.ldjson")
+
+    output:
+    path "${name}_*.tsv"
+
+    script:
+    """
+    predutils tables \
+      --template "${name}_{analysis}.tsv" \
+      results.ldjson
+    """
+}
+
+
+process ranked_results {
+
+    label 'predectorutils'
+    label 'process_low'
+
+    tag "${name}"
+
+    input:
+    path "dbcan.txt"
+    path "pfam.txt"
+    tuple val(name), path("results.ldjson")
+
+    output:
+    path "${name}_ranked.tsv"
+
+    script:
+    """
+    predutils rank \
+      --dbcan dbcan.txt \
+      --pfam pfam.txt \
+      --outfile "${name}_ranked.tsv" \
+      results.ldjson
+    """
+}
+
+
+
 /*
  * Identify signal peptides using SignalP v3 hmm
  */
