@@ -40,6 +40,28 @@ include {
 } from './modules/processes'
 
 
+// Until we get some clarity on what will replace the publish
+// workflow section, this is the workaround.
+// I don't love it.
+process publish_it {
+
+    label "process_low"
+    label "posix"
+
+    publishDir saveAs: { name }
+
+    input:
+    tuple val(name), path("infile")
+
+    output:
+    path "infile" includeInputs: true
+
+    script:
+    """
+    """
+}
+
+
 workflow validate_input {
 
     main:
@@ -136,9 +158,7 @@ workflow {
     signalp_domain = signalp_domain_map.get(params.domain)
 
     // This handles the user input, downloads required databases etc.
-    (proteome_ch, pfam_hmm_val, pfam_dat_val,
-     pfam_active_site_val, dbcan_val, phibase_val, effector_val,
-     pfam_targets_val, dbcan_targets_val) = validate_input()
+    input = validate_input()
 
     // This checks that all of the software is installed and finds the version
     // info where it can.
@@ -148,7 +168,7 @@ workflow {
     // Maybe download precomputed results?
     (combined_proteomes_ch, combined_proteomes_tsv_ch) = encode_seqs(
         params.chunk_size,
-        proteome_ch.map {n, f -> f}.collect()
+        input.proteome_ch.map { n, f -> f }.collect()
     )
 
     split_proteomes_ch = combined_proteomes_ch.flatten()
@@ -158,15 +178,19 @@ workflow {
     signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteomes_ch)
     signalp_v4_ch = signalp_v4(signalp_domain, split_proteomes_ch)
     (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, split_proteomes_ch)
+
     deepsig_ch = deepsig(params.domain, split_proteomes_ch)
     phobius_ch = phobius(split_proteomes_ch)
     tmhmm_ch = tmhmm(split_proteomes_ch)
+
     targetp_ch = targetp(split_proteomes_ch)
     deeploc_ch = deeploc(split_proteomes_ch)
+
     apoplastp_ch = apoplastp(split_proteomes_ch)
     localizer_ch = localizer(signalp_v5_mature_ch)
     effectorp_v1_ch = effectorp_v1(split_proteomes_ch)
     effectorp_v2_ch = effectorp_v2(split_proteomes_ch)
+
     pepstats_ch = pepstats(split_proteomes_ch)
 
     // Run the domain and database searches
@@ -203,6 +227,7 @@ workflow {
     // At this point, all of the analyses have their own ldjson files.
     // Here we just merge that all into one big file.
     decoded_ch = decode_seqs(
+        !params.nostrip,
         combined_proteomes_tsv_ch,
         signalp_v3_hmm_ch
         .mix(
@@ -226,24 +251,23 @@ workflow {
         )
         .collect()
     )
-    decoded_with_names_ch = decoded_ch
-        .flatten()
-        .map { f -> [f.baseName, f] }
 
+    decoded_with_names_ch = decoded_ch.flatten().map { f -> [f.baseName, f] }
     gff_ch = gff_results(decoded_with_names_ch)
     tabular_ch = tabular_results(decoded_with_names_ch)
     ranked_ch = ranked_results(dbcan_targets_val, pfam_targets_val, decoded_with_names_ch)
 
-    publish:
-    decoded_with_names_ch to: "${params.outdir}"
-    gff_ch to: "${params.outdir}"
-    tabular_ch to: "${params.outdir}"
-    ranked_ch to: "${params.outdir}"
-
-    combined_proteomes_ch to: "${params.outdir}"
-    combined_proteomes_tsv_ch to: "${params.outdir}"
-    pfam_hmm_val to: "${params.outdir}/downloads"
-    pfam_dat_val to: "${params.outdir}/downloads"
-    pfam_active_site_val to: "${params.outdir}/downloads"
-    dbcan_val to: "${params.outdir}/downloads"
+    ( \
+        pfam_hmm_val.map { ["${params.outdir}/downloads/${it}", it]} \
+      & pfam_dat_val.map { ["${params.outdir}/downloads/${it}", it]} \
+      & pfam_active_site_val.map { ["${params.outdir}/downloads/${it}", it]} \
+      & dbcan_val.map { ["${params.outdir}/downloads/${it}", it]} \
+      & combined_proteomes_ch.map { ["${params.outdir}/deduplicated/${it}", it]} \
+      & combined_proteomes_tsv_ch.map { ["${params.outdir}/deduplicated/${it}", it]} \
+      & decoded_with_names_ch.map { n, f -> ["${params.outdir}/${n}/${n}.ldjson", f]} \
+      & gff_ch.map { n, f -> ["${params.outdir}/${n}/${f}", f]} \
+      & tabular_ch.flatMap { n, fs -> fs.collect { f -> ["${params.outdir}/${n}/${f}", f]} } \
+      & ranked_ch.map { n, f -> ["${params.outdir}/${n}/${f}", f]} \
+    ) | mix \
+      | publish_it
 }

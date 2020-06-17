@@ -71,7 +71,6 @@ process encode_seqs {
       --template "combined/chunk{index:0>4}.fasta" \
       combined.fasta
     """
-
 }
 
 
@@ -81,6 +80,7 @@ process decode_seqs {
     label 'process_low'
 
     input:
+    val stripext
     path "combined.tsv"
     path "results/*.ldjson"
 
@@ -88,10 +88,16 @@ process decode_seqs {
     path "decoded/*.ldjson"
 
     script:
+    if (stripext) {
+        templ = "decoded/{filename_noext}.ldjson"
+    } else {
+        templ = "decoded/{filename}.ldjson"
+    }
+
     """
     cat results/* \
     | predutils decode \
-      --template 'decoded/{filename}.ldjson' \
+      --template '${templ}' \
       combined.tsv \
       -
     """
@@ -109,7 +115,7 @@ process gff_results {
     tuple val(name), path("results.ldjson")
 
     output:
-    path "${name}.gff3"
+    tuple val(name), path("${name}.gff3")
 
     script:
     """
@@ -131,12 +137,12 @@ process tabular_results {
     tuple val(name), path("results.ldjson")
 
     output:
-    path "${name}_*.tsv"
+    table val(name), path("${name}-*.tsv")
 
     script:
     """
     predutils tables \
-      --template "${name}_{analysis}.tsv" \
+      --template "${name}-{analysis}.tsv" \
       results.ldjson
     """
 }
@@ -155,14 +161,14 @@ process ranked_results {
     tuple val(name), path("results.ldjson")
 
     output:
-    path "${name}_ranked.tsv"
+    tuple val(name), path("${name}-ranked.tsv")
 
     script:
     """
     predutils rank \
       --dbcan dbcan.txt \
       --pfam pfam.txt \
-      --outfile "${name}_ranked.tsv" \
+      --outfile "${name}-ranked.tsv" \
       results.ldjson
     """
 }
