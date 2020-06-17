@@ -48,13 +48,13 @@ process publish_it {
     label "process_low"
     label "posix"
 
-    publishDir saveAs: { name }
+    publishDir "${params.outdir}", saveAs: { name }
 
     input:
     tuple val(name), path("infile")
 
     output:
-    path "infile" includeInputs: true
+    path "infile", includeInputs: true
 
     script:
     """
@@ -195,26 +195,31 @@ workflow {
 
     // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
-        pfam_hmm_val,
-        pfam_dat_val,
-        pfam_active_site_val
+        input.pfam_hmm_val,
+        input.pfam_dat_val,
+        input.pfam_active_site_val
     )
     pfamscan_ch = pfamscan(pressed_pfam_hmmer_val, split_proteomes_ch)
 
-    pressed_dbcan_hmmer_val = press_dbcan_hmmer(dbcan_val)
+    pressed_dbcan_hmmer_val = press_dbcan_hmmer(input.dbcan_val)
     dbcan_hmmer_ch = hmmscan_dbcan("dbcan", pressed_dbcan_hmmer_val, split_proteomes_ch)
 
     proteome_mmseqs_index_ch = mmseqs_index_proteomes(
         split_proteomes_ch.map { f -> ["chunk", f] }
     ).map { v, f -> f }
 
-    phibase_mmseqs_index_val = mmseqs_index_phibase(phibase_val.map { f -> ["phibase", f] })
+    phibase_mmseqs_index_val = mmseqs_index_phibase(
+        input
+        .phibase_val
+        .map { f -> ["phibase", f] }
+    )
+
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
         phibase_mmseqs_index_val,
         proteome_mmseqs_index_ch
     )
 
-    effectors_mmseqs_index_val = effector_val \
+    effectors_mmseqs_index_val = input.effector_val \
         | extract_effector_seqs \
         | map { f -> ["effectorsearch", f] } \
         | mmseqs_index_effectors
@@ -255,19 +260,24 @@ workflow {
     decoded_with_names_ch = decoded_ch.flatten().map { f -> [f.baseName, f] }
     gff_ch = gff_results(decoded_with_names_ch)
     tabular_ch = tabular_results(decoded_with_names_ch)
-    ranked_ch = ranked_results(dbcan_targets_val, pfam_targets_val, decoded_with_names_ch)
 
-    ( \
-        pfam_hmm_val.map { ["${params.outdir}/downloads/${it}", it]} \
-      & pfam_dat_val.map { ["${params.outdir}/downloads/${it}", it]} \
-      & pfam_active_site_val.map { ["${params.outdir}/downloads/${it}", it]} \
-      & dbcan_val.map { ["${params.outdir}/downloads/${it}", it]} \
-      & combined_proteomes_ch.map { ["${params.outdir}/deduplicated/${it}", it]} \
-      & combined_proteomes_tsv_ch.map { ["${params.outdir}/deduplicated/${it}", it]} \
-      & decoded_with_names_ch.map { n, f -> ["${params.outdir}/${n}/${n}.ldjson", f]} \
-      & gff_ch.map { n, f -> ["${params.outdir}/${n}/${f}", f]} \
-      & tabular_ch.flatMap { n, fs -> fs.collect { f -> ["${params.outdir}/${n}/${f}", f]} } \
-      & ranked_ch.map { n, f -> ["${params.outdir}/${n}/${f}", f]} \
-    ) | mix \
-      | publish_it
+    ranked_ch = ranked_results(
+        input.dbcan_targets_val,
+        input.pfam_targets_val,
+        decoded_with_names_ch
+    )
+
+    input.pfam_hmm_val.map { ["downloads/${it.name}", it]}
+        .mix(
+            input.pfam_dat_val.map { ["downloads/${it.name}", it] },
+            input.pfam_active_site_val.map { ["downloads/${it.name}", it] },
+            input.dbcan_val.map { ["downloads/${it.name}", it] },
+            combined_proteomes_ch.map { ["deduplicated/${it.name}", it] },
+            combined_proteomes_tsv_ch.map { ["deduplicated/${it.name}", it] },
+            decoded_with_names_ch.map { n, f -> ["${n}/${n}.ldjson", f] },
+            gff_ch.map { n, f -> ["${n}/${f.name}", f] },
+            ranked_ch.map { n, f -> ["${n}/${f.name}", f] },
+            tabular_ch.flatMap { n, fs -> fs.collect { f -> ["${n}/${f.name}", f] } }
+        ) \
+    | publish_it
 }

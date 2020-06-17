@@ -137,7 +137,7 @@ process tabular_results {
     tuple val(name), path("results.ldjson")
 
     output:
-    table val(name), path("${name}-*.tsv")
+    tuple val(name), path("${name}-*.tsv")
 
     script:
     """
