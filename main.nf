@@ -62,18 +62,54 @@ process publish_it {
 }
 
 
+workflow check_duplicates {
+
+    take:
+    nostrip
+    proteomes
+
+    main:
+    if ( ! nostrip ) {
+        proteomes
+            .map { f -> [f.baseName, f] }
+            .toList()
+            .map { li ->
+                // Find any duplicated basenames
+                duplicates = li.countBy { it[0] }.findResults { it.value > 1 ? it.key : null }
+
+                // Find the filenames with the duplicated basenames.
+                duplicated = li.findAll { duplicates.contains(it[0]) }.collect { n, f -> f }
+
+                // Raise an error if there are duplicates.
+                if (duplicated.size() > 0) {
+                    log.error(
+                        "Some filenames are duplicated after stripping the final extension.\n" +
+                        "We strip this extension from the end to make the output filenames a bit friendlier.\n" +
+                        "The offending filenames are: ${duplicated}\n" +
+                        "Please either rename the files or use the '--nostrip' option to disable the extension stripping for output filenames."
+                    )
+                    exit 1
+                }
+            }
+    }
+
+
+}
+
+
 workflow validate_input {
 
     main:
     if ( params.proteome ) {
         Channel
             .fromPath(params.proteome, checkIfExists: true, type: 'file')
-            .map { f -> [ f.baseName, f] }
             .set { proteome_ch }
     } else {
         log.error "Please provide some proteomes to the `--proteome` parameter."
         exit 1
     }
+
+    check_duplicates(params.nostrip, proteome_ch)
 
     // Check proteins for weirdness?
 
@@ -168,7 +204,7 @@ workflow {
     // Maybe download precomputed results?
     (combined_proteomes_ch, combined_proteomes_tsv_ch) = encode_seqs(
         params.chunk_size,
-        input.proteome_ch.map { n, f -> f }.collect()
+        input.proteome_ch.collect()
     )
 
     split_proteomes_ch = combined_proteomes_ch.flatten()
