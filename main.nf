@@ -224,6 +224,7 @@ workflow {
             phibase_mmseqs_matches_ch,
             effectors_mmseqs_matches_ch
         )
+        .collect()
     )
     decoded_with_names_ch = decoded_ch
         .flatten()
@@ -234,7 +235,7 @@ workflow {
     ranked_ch = ranked_results(dbcan_targets_val, pfam_targets_val, decoded_with_names_ch)
 
     publish:
-    decoded_ch.flatten() to: "${params.outdir}"
+    decoded_with_names_ch to: "${params.outdir}"
     gff_ch to: "${params.outdir}"
     tabular_ch to: "${params.outdir}"
     ranked_ch to: "${params.outdir}"

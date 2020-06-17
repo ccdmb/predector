@@ -92,7 +92,7 @@ process decode_seqs {
     cat results/* \
     | predutils decode \
       --template 'decoded/{filename}.ldjson' \
-      combined.tsv
+      combined.tsv \
       -
     """
 }
