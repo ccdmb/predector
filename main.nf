@@ -295,9 +295,7 @@ workflow validate_input {
         exit 1
     }
 
-    check_duplicates(params.nostrip, proteome_ch)
-
-    // Check proteins for weirdness?
+    dups = check_duplicates(params.nostrip, proteome_ch)
 
     if ( params.pfam_hmm ) {
         pfam_hmm_val = get_file(params.pfam_hmm)
@@ -490,7 +488,10 @@ workflow {
         .collect()
     )
 
+    // Get the original protein names and input filename back
     decoded_with_names_ch = decoded_ch.flatten().map { f -> [f.baseName, f] }
+
+    // Get the summarised results
     gff_ch = gff_results(decoded_with_names_ch)
     tabular_ch = tabular_results(decoded_with_names_ch)
 
@@ -515,12 +516,15 @@ workflow {
         decoded_with_names_ch
     )
 
+    // Publish the results to an output folder.
+    // This is a temporary workaround for the publish workflow section being depreciated.
+    // Make sure you flatten channels if necessary, one file per publish call.
     input.pfam_hmm_val.map { ["downloads/${it.name}", it]}
         .mix(
             input.pfam_dat_val.map { ["downloads/${it.name}", it] },
             input.pfam_active_site_val.map { ["downloads/${it.name}", it] },
             input.dbcan_val.map { ["downloads/${it.name}", it] },
-            combined_proteomes_ch.map { ["deduplicated/${it.name}", it] },
+            combined_proteomes_ch.flatten().map { ["deduplicated/${it.name}", it] },
             combined_proteomes_tsv_ch.map { ["deduplicated/${it.name}", it] },
             decoded_with_names_ch.map { n, f -> ["${n}/${n}.ldjson", f] },
             gff_ch.map { n, f -> ["${n}/${f.name}", f] },
