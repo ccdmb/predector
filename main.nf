@@ -12,7 +12,7 @@ include {
     decode_seqs;
     gff_results;
     tabular_results;
-    ranked_results;
+    rank_results;
     signalp_v3_hmm;
     signalp_v3_nn;
     signalp_v4;
@@ -38,6 +38,192 @@ include {
     mmseqs_search as mmseqs_search_phibase;
     mmseqs_search as mmseqs_search_effectors;
 } from './modules/processes'
+
+
+def helpMessage() {
+    log.info "# Predector pipeline"
+
+    log.info"""
+
+    ## Usage
+
+    ```bash
+    nextflow run ccdmb/predector --proteome proteins.fasta --phibase phibase.fas
+
+    nextflow run ccdmb/predector \
+      -with-conda /path/to/conda/env \
+      --proteome proteins.fasta \
+      --phibase phibase.fas
+
+    nextflow run ccdmb/predector \
+      -with-singularity /path/to/singularity_container.sif \
+      --proteome proteins.fasta \
+      --phibase phibase.fas
+
+    nextflow run ccdmb/predector \
+      -profile docker \
+      --proteome proteins.fasta \
+      --phibase phibase.fas
+    ```
+
+    ## Mandatory parameters
+
+      --proteome <path or glob>
+          Path to the fasta formatted protein sequences.
+          Multiple files can be specified using globbing patterns in quotes.
+      --phibase <path>
+          Path to the PHI-base fasta dataset.
+
+    ## Useful parameters
+
+      -profile <string>
+          Specify a pre-set configuration profile to use.
+          Multiple profiles can be specified by separating them with a comma.
+          Common choices: test, docker, docker_sudo
+
+      -c | -config <path>
+          Provide a custom configuration file.
+          If you want to customise things like how many CPUs different tasks
+          can use, whether to use the SLURM scheduler etc, this is the way
+          to do it. See the predector or nextflow documentation for details
+          on how to write these.
+
+      -with-conda <path>
+          The path to a conda environment to use for dependencies.
+
+      -with-singularity <path>
+          Path to the singularity container file to use for dependencies.
+
+      --outdir <path>
+          Base directory to store the pipeline results
+          default: '${params.outdir}'
+
+      --tracedir <path>
+          Directory to store pipeline runtime information
+          default: '${params.outdir}/pipeline_info'
+
+      --chunk_size <int>
+          The number of proteins to run as a single chunk in the pipeline
+          default: '${params.chunk_size}'
+
+      --nostrip
+          Don't strip the proteome filename extension when creating the output filenames
+          default: false
+
+      --help
+          Print this message and exit
+
+      --version
+          Print the pipeline version and exit
+
+      --license
+          Print the license information and exit
+
+    ## Additional arguments
+
+      --pfam_hmm <path>
+          Path to already downloaded gzipped pfam HMM database
+          default: download the hmms
+
+      --pfam_hmm_url <url>
+          URL to download the pfam HMM database from if --pfam_hmm is not provided
+          default: '${params.pfam_hmm_url}'
+
+      --pfam_dat <path>
+          Path to already downloaded gzipped pfam DAT database
+          default: download the DAT file
+
+      --pfam_dat_url <url>
+          URL to download the pfam DAT database from if --pfam_dat is not provided
+          default: '${params.pfam_dat_url}'
+
+      --pfam_active_site <path>
+          Path to already downloaded gzipped pfam active sites database
+          default: download the active sites file
+
+      --pfam_active_site_url <url>
+          URL to download the pfam active sites database from if --pfam_active_site is not provided
+          default: '${params.pfam_active_site_url}'
+
+      --dbcan <path>
+          Path to already downloaded gzipped dbCAN HMM database
+          default: download the hmms
+
+      --dbcan_url <url>
+          URL to download the dbcan HMM database from if --dbcan is not provided
+          default: '${params.dbcan_url}'
+
+      --pfam_targets <path>
+          Path to a text file containing PFAM ids considered predictive of effector function.
+          Ids should be separated by newlines.
+          default: '${params.pfam_targets}'
+
+      --effector_table <path>
+          Path to a table containing known effector sequences.
+          default: '${params.effector_table}'
+
+      --secreted_weight = 3
+      --sigpep_good_weight = 0.5
+      --sigpep_ok_weight = 0.25
+      --transmembrane_weight = -6
+      --deeploc_extracellular_weight = 0.5
+      --deeploc_intracellular_weight = -0.5
+      --deeploc_membrane_weight = -0.5
+      --targetp_secreted_weight = 1
+      --targetp_mitochondrial_weight = -0.5
+      --effectorp1_weight = 3
+      --effectorp2_weight = 3
+      --effector_homology_weight = 5
+      --virulence_homology_weight = 1
+      --lethal_homology_weight = -5
+      --sigpep_tm_coverage_threshold = 0.58
+
+    ## Output
+
+      - List
+      - the
+      - folders/files
+
+    Detailed documentation can be found at <https://github.com/ccdmb/predector>
+
+    """.stripIndent()
+}
+
+
+def licenseMessage() {
+    log.info"""
+    
+    ## License
+
+    Predector is released under the Apache 2.0 license.
+    See the full license at <https://github.com/ccdmb/predector/blob/master/LICENSE>.
+
+    If this license is somehow restrictive for you, please let us know.
+    We really just want to make sure it's free for people to use.
+    """.stripIndent()
+}
+
+
+def versionMessage() {
+    log.info "${manifest.version}"
+}
+
+
+def contactMessage() {
+    log.info"""
+    
+    ## Contact us
+
+    The best way to contact us is to raise an issue on github.
+      https://github.com/ccdmb/predector/issues
+
+    If you prefer, you can also contact the main authors directly:
+    - Darcy Jones <darcy.a.jones@postgrad.curtin.edu.au>
+    - James Hane <james.hane@curtin.edu.au>
+
+    """.stripIndent()
+
+}
 
 
 // Until we get some clarity on what will replace the publish
@@ -175,10 +361,21 @@ workflow {
 
     main:
     if ( params.help ) {
-        log.error "Hey I'm really sorry but I haven't written the help thing yet."
-        log.error "Please check out the nextflow.config file params section for current options."
-        log.error "It's coming soon, i promise :)"
-        exit 1
+        helpMessage()
+        licenseMessage()
+        contactMessage()
+        exit 0
+    }
+
+    if ( params.license ) {
+        licenseMessage()
+        contactMessage()
+        exit 0
+    }
+
+    if ( params.version ) {
+        versionMessage()
+        exit 0
     }
 
     // println "$workflow.runName"
@@ -297,7 +494,22 @@ workflow {
     gff_ch = gff_results(decoded_with_names_ch)
     tabular_ch = tabular_results(decoded_with_names_ch)
 
-    ranked_ch = ranked_results(
+    ranked_ch = rank_results(
+        params.secreted_weight,
+        params.sigpep_good_weight,
+        params.sigpep_ok_weight,
+        params.transmembrane_weight,
+        params.deeploc_extracellular_weight,
+        params.deeploc_intracellular_weight,
+        params.deeploc_membrane_weight,
+        params.targetp_secreted_weight,
+        params.targetp_mitochondrial_weight,
+        params.effectorp1_weight,
+        params.effectorp2_weight,
+        params.effector_homology_weight,
+        params.virulence_homology_weight,
+        params.lethal_homology_weight,
+        params.sigpep_tm_coverage_threshold,
         input.dbcan_targets_val,
         input.pfam_targets_val,
         decoded_with_names_ch
