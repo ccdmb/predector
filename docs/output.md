@@ -1,4 +1,4 @@
-# Output data
+# Output
 
 Predector output several files for each input file that you provide, and some additional ones that can be useful for debugging results.
 
