@@ -12,7 +12,7 @@ include {
     decode_seqs;
     gff_results;
     tabular_results;
-    ranked_results;
+    rank_results;
     signalp_v3_hmm;
     signalp_v3_nn;
     signalp_v4;
@@ -38,6 +38,273 @@ include {
     mmseqs_search as mmseqs_search_phibase;
     mmseqs_search as mmseqs_search_effectors;
 } from './modules/processes'
+
+
+def helpMessage() {
+    log.info "# Predector"
+    log.info ""
+
+    log.info"""
+    Predector predicts effectors in your proteomes.
+
+    ## Usage
+
+    ```bash
+    nextflow run ccdmb/predector --proteome proteins.fasta --phibase phibase.fas
+
+    nextflow run ccdmb/predector \\
+      -with-conda /path/to/conda/env \\
+      --proteome proteins.fasta \\
+      --phibase phibase.fas
+
+    nextflow run ccdmb/predector \\
+      -with-singularity /path/to/singularity_container.sif \\
+      --proteome proteins.fasta \\
+      --phibase phibase.fas
+
+    nextflow run ccdmb/predector \\
+      -profile docker \\
+      --proteome proteins.fasta \\
+      --phibase phibase.fas
+    ```
+
+    ## Mandatory parameters
+
+      --proteome <path or glob>
+          Path to the fasta formatted protein sequences.
+          Multiple files can be specified using globbing patterns in quotes.
+      --phibase <path>
+          Path to the PHI-base fasta dataset.
+
+    ## Useful parameters
+
+      -profile <string>
+          Specify a pre-set configuration profile to use.
+          Multiple profiles can be specified by separating them with a comma.
+          Common choices: test, docker, docker_sudo
+
+      -c | -config <path>
+          Provide a custom configuration file.
+          If you want to customise things like how many CPUs different tasks
+          can use, whether to use the SLURM scheduler etc, this is the way
+          to do it. See the predector or nextflow documentation for details
+          on how to write these.
+
+      -with-conda <path>
+          The path to a conda environment to use for dependencies.
+
+      -with-singularity <path>
+          Path to the singularity container file to use for dependencies.
+
+      --outdir <path>
+          Base directory to store the pipeline results
+          default: '${params.outdir}'
+
+      --tracedir <path>
+          Directory to store pipeline runtime information
+          default: '${params.outdir}/pipeline_info'
+
+      --chunk_size <int>
+          The number of proteins to run as a single chunk in the pipeline
+          default: '${params.chunk_size}'
+
+      --nostrip
+          Don't strip the proteome filename extension when creating the output filenames
+          default: false
+
+      --help
+          Print this message and exit
+
+      --version
+          Print the pipeline version and exit
+
+      --license
+          Print the license information and exit
+
+    ## Additional arguments
+
+      --pfam_hmm <path>
+          Path to already downloaded gzipped pfam HMM database
+          default: download the hmms
+
+      --pfam_hmm_url <url>
+          URL to download the pfam HMM database from if --pfam_hmm is not provided
+          default: '${params.pfam_hmm_url}'
+
+      --pfam_dat <path>
+          Path to already downloaded gzipped pfam DAT database
+          default: download the DAT file
+
+      --pfam_dat_url <url>
+          URL to download the pfam DAT database from if --pfam_dat is not provided
+          default: '${params.pfam_dat_url}'
+
+      --pfam_active_site <path>
+          Path to already downloaded gzipped pfam active sites database
+          default: download the active sites file
+
+      --pfam_active_site_url <url>
+          URL to download the pfam active sites database from if --pfam_active_site is not provided
+          default: '${params.pfam_active_site_url}'
+
+      --dbcan <path>
+          Path to already downloaded gzipped dbCAN HMM database
+          default: download the hmms
+
+      --dbcan_url <url>
+          URL to download the dbcan HMM database from if --dbcan is not provided
+          default: '${params.dbcan_url}'
+
+      --pfam_targets <path>
+          Path to a text file containing PFAM ids considered predictive of effector function.
+          Ids should be separated by newlines.
+          default: '${params.pfam_targets}'
+
+      --effector_table <path>
+          Path to a table containing known effector sequences.
+          default: '${params.effector_table}'
+
+      --secreted_weight <float>
+          The weight to give a protein if it is predicted to be secreted.
+          default: ${params.secreted_weight}
+
+      --sigpep_good_weight <float>
+          The weight to give a protein if it is predicted to have a signal
+          peptide by one of the more reliable methods (SignalP4 or 5, or DeepSig).
+          default: ${params.sigpep_good_weight}
+
+      --sigpep_ok_weight <float>
+          The weight to give a protein if it is predicted to have a signal
+          peptide by one of the reasonably reliable methods (SignalP3 or Phobius).
+          default: ${params.sigpep_ok_weight}
+
+      --transmembrane_weight <float>
+          The weight to give a protein if it is predicted to be
+          transmembrane. Use negative numbers to penalise.
+          default: ${params.transmembrane_weight}
+
+      --deeploc_extracellular_weight <float>
+          The weight to give a protein if it is predicted to be
+          extracellular by deeploc.
+          default: ${params.deeploc_extracellular_weight}
+
+      --deeploc_intracellular_weight <float>
+          The score to give a protein if it is predicted to be
+          intracellular by deeploc. Use negative numbers to penalise.
+          default: ${params.deeploc_intracellular_weight}
+
+      --deeploc_membrane_weight <float>
+          The score to give a protein if it is predicted to be
+          membrane associated by deeploc. Use negative numbers to penalise.
+          default: ${params.deeploc_membrane_weight}
+
+      --targetp_secreted_weight <float>
+          The weight to give a protein if it is predicted to be
+          secreted by targetp.
+          default: ${params.targetp_secreted_weight}
+
+      --targetp_mitochondrial_weight <float>
+          The weight to give a protein if it is predicted to be
+          mitochondrial by targetp. Use negative numbers to penalise.
+          default: ${params.targetp_mitochondrial_weight}
+
+      --effectorp1_weight <float>
+          The weight to give a protein if it is predicted to be
+          an effector by effectorp1.
+          default: ${params.effectorp1_weight}
+
+      --effectorp2_weight <float>
+          The weight to give a protein if it is predicted to be
+          an effector by effectorp2.
+          default: ${params.effectorp2_weight}
+
+      --effector_homology_weight <float>
+          The weight to give a protein if it is similar to a known
+          effector or effector domain.
+          default: ${params.effector_homology_weight}
+
+      --virulence_homology_weight <float>
+          The weight to give a protein if it is similar to a known
+          protein that may be involved in virulence.
+          default: ${params.virulence_homology_weight}
+
+      --lethal_homology_weight <float>
+          The weight to give a protein if it is similar to a known
+          protein in phibase which caused a lethal phenotype.
+          default: ${params.lethal_homology_weight}
+
+      --sigpep_tm_coverage_threshold <float [0, 1]>
+          The minimum proportion of the first tm domain that overlaps a
+          predicted signal peptide for the tm to be considered a false
+          positive (caused by hydrophobic region in sp).
+          default: ${params.sigpep_tm_coverage_threshold}
+
+
+    ## Output
+
+      - `downloads` Contains the downloaded Pfam and dbCAN databases.
+
+      - `deduplicated/`
+        Contains the deduplicated sequences that we run through the pipeline.
+        - `deduplicated/chunk*.fasta`
+          The deduplicated fasta chunks with simplified names.
+        - `deduplicated/combined.tsv`
+          A file mapping the simplified names to the input filenames and
+          original sequence ids.
+
+      - `{input}/` Contains the results for each input proteome.
+        If you use the `--nostrip` option, the folder name will be the same
+        as the input filename, otherwise it will have the first extension
+        removed.
+        - `{input}/{input}-ranked.tsv`
+          The final ranked output summary table.
+        - `{input}/{input}.gff3`
+          A GFF3 version of the results of analyses with location coordinates.
+        - `{input}/{input}.ldjson`
+          The raw results for each protein as a newline delimited JSON file.
+        - `{input}/{input}-{analysis}.tsv`
+          Tabular versions of the individual analysis results.
+
+
+    Detailed documentation can be found at <https://github.com/ccdmb/predector>
+
+    """.stripIndent()
+    log.info ""
+}
+
+
+def licenseMessage() {
+    log.info"""
+    ## License
+
+    Predector is released under the Apache 2.0 license.
+    See the full license at <https://github.com/ccdmb/predector/blob/master/LICENSE>.
+
+    If this license is somehow restrictive for you, please let us know.
+    We really just want to make sure it's free for people to use.
+    """.stripIndent()
+    log.info ""
+}
+
+
+def versionMessage() {
+    log.info "${manifest.version}"
+}
+
+
+def contactMessage() {
+    log.info"""
+    ## Contact us
+
+    The best way to contact us is to raise an issue on github.
+      https://github.com/ccdmb/predector/issues
+
+    If you prefer, you can also contact the main authors directly:
+    - Darcy Jones <darcy.a.jones@postgrad.curtin.edu.au>
+    - James Hane <james.hane@curtin.edu.au>
+    """.stripIndent()
+    log.info ""
+}
 
 
 // Until we get some clarity on what will replace the publish
@@ -173,10 +440,21 @@ workflow {
 
     main:
     if ( params.help ) {
-        log.error "Hey I'm really sorry but I haven't written the help thing yet."
-        log.error "Please check out the nextflow.config file params section for current options."
-        log.error "It's coming soon, i promise :)"
-        exit 1
+        helpMessage()
+        licenseMessage()
+        contactMessage()
+        exit 0
+    }
+
+    if ( params.license ) {
+        licenseMessage()
+        contactMessage()
+        exit 0
+    }
+
+    if ( params.version ) {
+        versionMessage()
+        exit 0
     }
 
     // println "$workflow.runName"
@@ -297,7 +575,23 @@ workflow {
     // Get the summarised results
     gff_ch = gff_results(decoded_with_names_ch)
     tabular_ch = tabular_results(decoded_with_names_ch)
-    ranked_ch = ranked_results(
+
+    ranked_ch = rank_results(
+        params.secreted_weight,
+        params.sigpep_good_weight,
+        params.sigpep_ok_weight,
+        params.transmembrane_weight,
+        params.deeploc_extracellular_weight,
+        params.deeploc_intracellular_weight,
+        params.deeploc_membrane_weight,
+        params.targetp_secreted_weight,
+        params.targetp_mitochondrial_weight,
+        params.effectorp1_weight,
+        params.effectorp2_weight,
+        params.effector_homology_weight,
+        params.virulence_homology_weight,
+        params.lethal_homology_weight,
+        params.sigpep_tm_coverage_threshold,
         input.dbcan_targets_val,
         input.pfam_targets_val,
         decoded_with_names_ch
