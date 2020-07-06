@@ -178,10 +178,16 @@ def helpMessage() {
           peptide by one of the reasonably reliable methods (SignalP3 or Phobius).
           default: ${params.sigpep_ok_weight}
 
-      --transmembrane_weight <float>
-          The weight to give a protein if it is predicted to be
-          transmembrane. Use negative numbers to penalise.
-          default: ${params.transmembrane_weight}
+      --single_transmembrane_weight <float>
+          The weight to give a protein if it is predicted to have a single
+          transmembrane domain. Use negative numbers to penalise.
+          default: ${params.single_transmembrane_weight}
+
+      --multiple_transmembrane_weight <float>
+          The weight to give a protein if it is predicted to have multiple
+          transmembrane domains. Use negative numbers to penalise.
+          default: ${params.multiple_transmembrane_weight}
+
 
       --deeploc_extracellular_weight <float>
           The weight to give a protein if it is predicted to be
@@ -233,11 +239,11 @@ def helpMessage() {
           protein in phibase which caused a lethal phenotype.
           default: ${params.lethal_homology_weight}
 
-      --sigpep_tm_coverage_threshold <float [0, 1]>
-          The minimum proportion of the first tm domain that overlaps a
-          predicted signal peptide for the tm to be considered a false
-          positive (caused by hydrophobic region in sp).
-          default: ${params.sigpep_tm_coverage_threshold}
+      --tmhmm_first60_threshold <float [0, 60]>
+          The minimum number of expected AAs to be TM associated in the first
+          60 residues for a single TM domain match to be caused by a signal
+          peptide. Only applied if there is a signal peptide detected.
+          default: ${params.tmhmm_first60_threshold}
 
 
     ## Output
@@ -580,7 +586,8 @@ workflow {
         params.secreted_weight,
         params.sigpep_good_weight,
         params.sigpep_ok_weight,
-        params.transmembrane_weight,
+        params.single_transmembrane_weight,
+        params.multiple_transmembrane_weight,
         params.deeploc_extracellular_weight,
         params.deeploc_intracellular_weight,
         params.deeploc_membrane_weight,
@@ -591,7 +598,7 @@ workflow {
         params.effector_homology_weight,
         params.virulence_homology_weight,
         params.lethal_homology_weight,
-        params.sigpep_tm_coverage_threshold,
+        params.tmhmm_first60_threshold,
         input.dbcan_targets_val,
         input.pfam_targets_val,
         decoded_with_names_ch

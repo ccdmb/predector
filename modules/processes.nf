@@ -159,7 +159,8 @@ process rank_results {
     val secreted_weight
     val sigpep_good_weight
     val sigpep_ok_weight
-    val transmembrane_weight
+    val single_transmembrane_weight
+    val multiple_transmembrane_weight
     val deeploc_extracellular_weight
     val deeploc_intracellular_weight
     val deeploc_membrane_weight
@@ -170,7 +171,7 @@ process rank_results {
     val effector_homology_weight
     val virulence_homology_weight
     val lethal_homology_weight
-    val sigpep_tm_coverage_threshold
+    val tmhmm_first60_threshold
     path "dbcan.txt"
     path "pfam.txt"
     tuple val(name), path("results.ldjson")
@@ -187,18 +188,18 @@ process rank_results {
       --secreted-weight "${secreted_weight}" \
       --sigpep-good-weight "${sigpep_good_weight}" \
       --sigpep-ok-weight "${sigpep_ok_weight}" \
-      --transmembrane-weight "${transmembrane_weight}" \
+      --single-transmembrane-weight "${single_transmembrane_weight}" \
+      --multiple-transmembrane-weight "${multiple_transmembrane_weight}" \
       --deeploc-extracellular-weight "${deeploc_extracellular_weight}" \
       --deeploc-intracellular-weight "${deeploc_intracellular_weight}" \
       --deeploc-membrane-weight "${deeploc_membrane_weight}" \
-      --targetp-secreted-weight "${targetp_secreted_weight}" \
       --targetp-mitochondrial-weight "${targetp_mitochondrial_weight}" \
       --effectorp1-weight "${effectorp1_weight}" \
       --effectorp2-weight "${effectorp2_weight}" \
       --effector-homology-weight "${effector_homology_weight}" \
       --virulence-homology-weight "${virulence_homology_weight}" \
       --lethal-homology-weight "${lethal_homology_weight}" \
-      --sp-tm-coverage-threshold "${sigpep_tm_coverage_threshold}" \
+      --tmhmm-first-60-threshold "${tmhmm_first60_threshold}" \
       results.ldjson
     """
 }
