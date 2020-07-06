@@ -164,7 +164,6 @@ process rank_results {
     val deeploc_extracellular_weight
     val deeploc_intracellular_weight
     val deeploc_membrane_weight
-    val targetp_secreted_weight
     val targetp_mitochondrial_weight
     val effectorp1_weight
     val effectorp2_weight

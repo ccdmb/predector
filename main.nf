@@ -591,7 +591,6 @@ workflow {
         params.deeploc_extracellular_weight,
         params.deeploc_intracellular_weight,
         params.deeploc_membrane_weight,
-        params.targetp_secreted_weight,
         params.targetp_mitochondrial_weight,
         params.effectorp1_weight,
         params.effectorp2_weight,
