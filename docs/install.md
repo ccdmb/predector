@@ -57,7 +57,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/master/install.sh" \
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:0.0.2-dev.1`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:0.1.0-dev`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -130,7 +130,7 @@ First we create the conda environment, which includes the non-proprietary depend
 
 ```bash
 # Download the environment config file.
-curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.0.2-dev.1/environment.yml
+curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/0.1.0-dev/environment.yml
 
 # Create the environment
 conda env create -f environment.yml
@@ -163,7 +163,7 @@ Modify the source `.tar` archive filenames in the command if necessary.
 Depending on how you installed docker you may need to use `sudo docker` in place of `docker`.
 
 ```bash
-curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.2-dev.1/Dockerfile \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/0.1.0-dev/Dockerfile \
 | docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
@@ -172,12 +172,12 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/0.0.2-dev.1/Dockerfile
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:0.0.2-dev.1 \
+  -t predector/predector:0.1.0-dev \
   -f - \
   .
 ```
 
-Your container should now be available as `predector/predector:0.0.2-dev.1` in your docker registry `docker images`.
+Your container should now be available as `predector/predector:0.1.0-dev` in your docker registry `docker images`.
 
 
 ### Building the Singularity container the long way
@@ -202,7 +202,7 @@ export TMHMM=tmhmm-2.0c.Linux.tar.gz
 export DEEPLOC=deeploc-1.0.All.tar.gz
 
 # Download the .def file
-curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/0.0.2-dev.1/singularity.def
+curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/0.1.0-dev/singularity.def
 
 # Build the .sif singularity image.
 # Note that `sudo -E` is important, it tells sudo to keep the environment variables
@@ -216,7 +216,7 @@ If you've already built the container using docker, you can convert them to sing
 You don't need to use `sudo` even if your docker installation usually requires it.
 
 ```bash
-singularity build predector.sif docker://predector/predector:0.0.2-dev.1
+singularity build predector.sif docker://predector/predector:0.1.0-dev
 ```
 
 
@@ -246,7 +246,7 @@ Docker containers can be saved as a tarball and copied wherever you like.
 
 ```bash
 # You could pipe this through gzip if you wanted.
-docker save predector/predector:0.0.2-dev.1 > predector.tar
+docker save predector/predector:0.1.0-dev > predector.tar
 ```
 
 And the on the other end
@@ -270,7 +270,7 @@ Hopefully, one of these options will work for you.
 
 ## Common install issues
 
-### Running with docker `Unable to find image 'predector/predector:0.0.2-dev.1' locally`
+### Running with docker `Unable to find image 'predector/predector:0.1.0-dev' locally`
 
 This usually means that you haven't built the docker image locally.
 Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.
