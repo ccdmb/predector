@@ -2,40 +2,17 @@
 
 Predict effectors in your proteomes using the Predector!
 
+Predector runs numerous tools for fungal secretome and effector discovery analysis, and outputs a list of ranked candidates.
+
+This includes: SignalP (3, 4, 5), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER and EffectorP 1 and 2.
+These results are summarised as a table that includes most information that would typically be used for secretome analysis.
+Effector candidates are ranked using a novel [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
+We recommend that incorporate these ranked effector scores with experimental evidence or homology matches to prioritise other more expensive efforts (e.g. cloning or structural modelling).
+
+We hope that this pipeline can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
+
+
 **WARNING: This pipeline is currently still in fairly early development. Some documentation may be incomplete, and software may not perform as expected. Get in contact if you're really keen to continue.**
-
-
-# What's the plan?
-
-The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protein properties.
-
-We plan to include.
-
- - [x] SignalP 3, 4, and 5
- - [x] TMHMM
- - [x] Phobius
- - [x] Deepsig
- - [x] DeepLoc
- - [x] TargetP
- - [x] EffectorP 1 and 2
- - [x] ApoplastP
- - [x] LOCALIZER
- - [x] Protein similarity searches against PHIbase using MMSeqs2
- - [x] CAZyme annotations using HMMER and dbCAN
- - [x] Protein domain annotation using Pfam-scan
- - [ ] Integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting.
- - [ ] A classifier and clustering scheme for prioritising effector candidates
-
-Possible add-on pipelines in the future.
- - [ ] Protein structural prediction tools from the RaptorX toolkit, and comparison with structural features of known effectors.
-
-
-
-Also we intend to inject as many [Predator](https://en.wikipedia.org/wiki/Predator_(film)) references as possible because predector kind of sounds like predator.
-
-~~Stay tuned!~~
-Stick around!
-![](https://images.amcnetworks.com/ifc.com/wp-content/uploads/2016/03/stickaround.gif)
 
 
 ## Install
@@ -160,6 +137,29 @@ The following command will run the complete analysis and the results will be ava
 nextflow run ccdmb/predector --proteome "proteomes/*" --phibase "phibase.fasta"
 ```
 
+## Future plans
+
+The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protein properties.
+
+We currently intend to include.
+
+ - [x] SignalP 3, 4, and 5
+ - [x] TMHMM
+ - [x] Phobius
+ - [x] Deepsig
+ - [x] DeepLoc
+ - [x] TargetP
+ - [x] EffectorP 1 and 2
+ - [x] ApoplastP
+ - [x] LOCALIZER
+ - [x] Protein similarity searches against PHIbase using MMSeqs2
+ - [x] CAZyme annotations using HMMER and dbCAN
+ - [x] Protein domain annotation using Pfam-scan
+ - [x] A classifier and ranking scheme for prioritising effector candidates
+ - [ ] A meta-secretion prediction model for better secretome prediction.
+ - [ ] Integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting.
+ - [ ] Protein structural prediction tools from the RaptorX toolkit, and comparison with structural features of known effectors.
+
 
 ## Contributing
 
@@ -167,6 +167,10 @@ We're aware that basically every bioinformatician working with pathogens has wri
 If you're willing, we'd really like for you to help us make this pipeline better.
 
 If you have an analysis that you think should be included, know of better parameters, or think the documentation could be better, please get involved!
+
+If you are a person working on non-fungal plant-pathogens we'd love for you to get in touch.
+These methods should apply equally well for Oomycete (etc...) effector discovery, but our expertise is in fungal pathology.
+If you can help us understand the needs of your research community, and what proteins you are interested in (perhaps beyond RxLR effectors), we'd really love to collaborate.
 
 We'll make sure that appropriate credit is given, potentially including future authorship for more substantial contributions.
 It would be lovely to develop a bit of a community around this thing :)
