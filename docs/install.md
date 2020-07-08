@@ -216,7 +216,7 @@ If you've already built the container using docker, you can convert them to sing
 You don't need to use `sudo` even if your docker installation usually requires it.
 
 ```bash
-singularity build predector.sif docker://predector/predector:0.1.0-dev
+singularity build predector.sif docker-daemon://predector/predector:0.1.0-dev
 ```
 
 
