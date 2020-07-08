@@ -209,7 +209,6 @@ case $key in
     --debug)
     DEBUG=true
     shift # past argument
-    shift # past value
     ;;
     conda|docker|singularity)    # required positional subcommand
     if [ ! -z "${ENVIRONMENT:-}" ]
@@ -529,7 +528,7 @@ setup_docker() {
     fi
 
     curl -s "${URL}" \
-    | "${SUDO}" docker build \
+    | "{SUDO} docker build \
       --build-arg SIGNALP3="${SIGNALP3}" \
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
