@@ -528,7 +528,7 @@ setup_docker() {
     fi
 
     curl -s "${URL}" \
-    | "{SUDO} docker build \
+    | ${SUDO} docker build \
       --build-arg SIGNALP3="${SIGNALP3}" \
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
