@@ -106,25 +106,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 0.1.0-dev ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume ccdmb/predector
+nextflow run -profile test,docker -resume -r 0.1.0-dev ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 0.1.0-dev ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 0.1.0-dev ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume ccdmb/predector
+nextflow run -profile test,singularity -resume -r 0.1.0-dev ccdmb/predector
 ```
 
 
@@ -134,7 +134,7 @@ Say you have a set of amino-acid sequences in fasta format in the directory `pro
 The following command will run the complete analysis and the results will be available in a `results` folder.
 
 ```bash
-nextflow run ccdmb/predector --proteome "proteomes/*" --phibase "phibase.fasta"
+nextflow run -resume -r 0.1.0-dev ccdmb/predector --proteome "proteomes/*" --phibase "phibase.fasta"
 ```
 
 ## Future plans

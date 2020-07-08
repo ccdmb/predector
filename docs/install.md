@@ -46,7 +46,7 @@ If the names below don't match the filenames you have exactly, adjust the comman
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
 
 ```bash
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/master/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.1.0-dev/install.sh" \
 | bash -s <environment> \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -89,25 +89,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 0.1.0-dev ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume ccdmb/predector
+nextflow run -profile test,docker -resume -r 0.1.0-dev ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 0.1.0-dev ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 0.1.0-dev ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume ccdmb/predector
+nextflow run -profile test,singularity -resume -r 0.1.0-dev ccdmb/predector
 ```
 
 ## Extended dependency install guide
