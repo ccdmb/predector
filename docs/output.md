@@ -1,4 +1,4 @@
-# Output
+## Pipeline output
 
 Predector output several files for each input file that you provide, and some additional ones that can be useful for debugging results.
 
@@ -9,7 +9,7 @@ Deduplicated sequences and a tab-separated values file mapping the deduplicated 
 
 Other directories will be named after the input filenames and each contain several tables.
 
-## `*-ranked.tsv`
+### `*-ranked.tsv`
 
 This is the main output table that includes the scores and most of the parameters that are important for effector or secretion prediction.
 There are a lot of columns, though generally you'll only be interested in a few of them.
@@ -84,7 +84,7 @@ There are a lot of columns, though generally you'll only be interested in a few 
 68. signalp5_prob -- Float. The SignalP 5 signal peptide pseudo-probability.
 
 
-## `*.gff3`
+### `*.gff3`
 
 This file contains gff3 versions of results from analyses that have some positional information (e.g. signal/target peptides or alignments).
 The columns are:
@@ -100,7 +100,7 @@ The columns are:
 9. The GFF attributes. In here the remaining raw results and scores will be present. Of particular interest are the [`Gap` and `Target` attributes](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#the-gap-attribute), which define what database match an alignment found and the bounds in the matched sequence, and match/mismatch positions.
 
 
-## Individual results tables
+### Individual results tables
 
 There are a bunch of tables that are just TSV versions of the original outputs.
 Most of the tools outputs are not well described and not in convenient formats for parsing so we don't keep them around.
