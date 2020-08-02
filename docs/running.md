@@ -95,6 +95,92 @@ Important parameters are:
 ```
 
 
+### Profiles and configuration
+
+Nextflow uses configuration files to specify how many cpus or RAM a task can use, or whether to use
+a SLURM scheduler on a supercomputing cluster etc.
+You can also use these config files to provide parameters.
+
+To select different configurations, you can either use one of the preset "profiles", or you can provide your own
+nextflow config files to the `-config` parameter <https://www.nextflow.io/docs/latest/config.html>.
+This enables you to tune the number of CPUs used per task etc to your own computing system.
+
+
+#### Profiles
+
+We have several available profiles that configure where to find software, cpu, memory etc.
+
+| type     | profile     | description                                                                                                                                                                |
+|----------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| software | docker      | Run the processes in a docker container.                                                                                                                                   |
+| software | docker_sudo | Run the processes in a docker container, using `sudo docker`.                                                                                                              |
+| software | podman      | Run the processes in a container using `podman`.                                                                                                                           |
+| software | singularity | Run the process using singularity (by pulling it from the local docker registry). To use a singularity image file use the `-with-singularity image.sif` parameter instead. |
+| cpu    | c4          | Use up to 4 CPUs/cores per computer/node.                                                                                                                                  |
+| cpu    | c8          | Use up to 8 CPUs/cores ...                                                                                                                                                 |
+| cpu    | c16         | Use up to 16 CPUs/cores ...                                                                                                                                                |
+| memory   | r8          | Use up to 8Gb RAM per computer/node.                                                                                                                                       |
+| memory   | r16         | Use up to 16Gb RAM                                                                                                                                                         |
+| memory   | r32         | Use up to 32Gb RAM                                                                                                                                                         |
+| memory   | r64         | Use up to 64Gb RAM                                                                                                                                                         |
+| time     | t1          | Limits process time to 1hr, 5hr, and 12hr for short, medium and long tasks.                                                                                                |
+| time     | t2          | Limits process time to 2hr, 10hr, and 24hr for short, medium and long tasks.                                                                                               |
+| time     | t3          | Limits process time to 3hr, 15hr, and 24hr for short, medium and long tasks.                                                                                               |
+| time     | t4          | Limits process time to 4hr, 20hr, and 48hr for short, medium and long tasks.                                                                                               |
+| compute  | pawsey_zeus | A combined profile to use the Pawsey supercomputing centre's Zeus cluster. This sets cpu, memory, and time parameters appropriate for using this cluster. |
+
+
+You can mix and match these profiles, using the `-profile` parameter.
+By default, the pipeline will behave as if you ran the pipeline with `-profile c4,r8` (4 CPUs, and 8 Gb memory) which should be compatible with most modern laptop computers and smaller cloud instances.
+But you can increase the number of CPUs available e.g. to make up to 16 CPUs available with `-profile c16` which will have 16 cores available and 8 GB of memory. To make more memory available, specify one of the `r*` profiles e.g. `-profile c16,r32`.
+
+The time profiles (`t*`) are useful for limiting running times of tasks. By default the times are not limited, but these can be useful to use if you are running on a supercomputing cluster (specifying the times can get you through the queue faster) or on commercial cloud computing services (so you don't rack up an unexpected bill if something stalls somehow).
+
+So to use combine all of these things; to use docker containers, extra ram and CPUs etc you can provide the profile `-profile c16,r32,t2,docker`.
+
+
+#### Custom configuration
+
+If the preset profiles don't meet your needs you can provide a custom config file. Extended documentation can be found here: <https://www.nextflow.io/docs/latest/config.html>.
+
+I'll detail some pipeline specific configuration below but I suggest you start by copying the file <https://github.com/ccdmb/predector/tree/master/conf/template_single_node.config> and modify as necessary.
+
+Each nextflow task is labelled with the software name, cpu, ram, and time requirements for each task.
+In the config files, you can select these tasks by label.
+
+
+| kind     | label          | description                                                                                                          |
+|----------|----------------|----------------------------------------------------------------------------------------------------------------------|
+| cpu      | `cpu_low`        | Used for single threaded tasks. Generally doesn't need to be touched.                                                |
+| cpu      | `cpu_medium`     | Used for parallelised tasks that are IO bound. E.G. signalp 3 & 4, deeploc etc.                                      |
+| cpu      | `cpu_high`       | Used for parallelised tasks that use lots of CPUs efficiently. Usually this should be all available CPUs.            |
+| memory   | `ram_low`        | Used for processes with low RAM requirements, e.g. downloads.                                                        |
+| memory   | `ram_medium`     | Used for tasks with moderate RAM requirements, and many of the parallelised tasks (e.g. with `cpu_medium`).          |
+| memory   | `ram_high`       | Used for tasks with high RAM requirements. Usually this should be all available RAM.                                 |
+| time     | `time_short`     | Used with tasks that should be super quick like `sed` or splitting files etc (1 or 2 hours at the very most).        |
+| time     | `time_medium`    | Used for more expensive tasks, most parallelised tasks should be able to complete within this time (e.g 5-10 hours). |
+| time     | `time_long`      | Used for potentially long running tasks or tasks with times that depends on external factors e.g. downloads.         |
+| software | `download`       | Software environment for downloading things. (i.e. contains wget)                                                    |
+| software | `posix`          | " for using general posix/GNU tools                                                                                  |
+| software | `predectorutils` | " Tasks that use the predector-utils scripts.                                                                        |
+| software | `signalp3`       |                                                                                                                      |
+| software | `signalp4`       |                                                                                                                      |
+| software | `signalp5`       |                                                                                                                      |
+| software | `deepsig`        |                                                                                                                      |
+| software | `phobius`        |                                                                                                                      |
+| software | `tmhmm`          |                                                                                                                      |
+| software | `deeploc`        |                                                                                                                      |
+| software | `apoplastp`      |                                                                                                                      |
+| software | `localizer`      |                                                                                                                      |
+| software | `effectorp1`     |                                                                                                                      |
+| software | `effectorp2`     |                                                                                                                      |
+| software | `emboss`         |                                                                                                                      |
+| software | `hmmer3`         |                                                                                                                      |
+| software | `pfamscan`       |                                                                                                                      |
+| software | `mmseqs`         |                                                                                                                      |
+
+
+
 ### Running different pipeline versions.
 
 We pin the version of the pipeline to run in all of our example commands with the -r `0.1.0-alpha` parameter.
@@ -106,16 +192,6 @@ You can also pull new changes without running the pipeline using `nextflow pull 
 
 Note that the software environments (conda, docker, singularity) often will not be entirely compatible between versions. You should probably rebuild the container or conda environment from scratch when changing versions.
 I suggest keeping copies of the proprietary dependencies handy in a folder or archive, and just building and removing the container/environment as you need it.
-
-
-### Configuration
-
-You can provide your own nextflow config files to the `-config` parameter <https://www.nextflow.io/docs/latest/config.html>.
-This enables you to tune the number of CPUs used per task etc to your own computing system.
-
-We'll try to add some details on how to do this soon.
-For now I suggest you copy one of the files in <https://github.com/ccdmb/predector/tree/master/conf>, and modify as needed.
-
 
 
 ### Providing pre-downloaded Pfam and dbCAN datasets.
