@@ -1,7 +1,9 @@
 process download {
 
     label 'download'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_long'
 
     input:
     val outfile
@@ -20,7 +22,9 @@ process download {
 process extract_effector_seqs {
 
     label 'posix'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_short'
 
     input:
     path "effectors.tsv"
@@ -46,7 +50,9 @@ process extract_effector_seqs {
 process encode_seqs {
 
     label 'predectorutils'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     val chunk_size
@@ -77,7 +83,9 @@ process encode_seqs {
 process decode_seqs {
 
     label 'predectorutils'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     val stripext
@@ -107,7 +115,9 @@ process decode_seqs {
 process gff_results {
 
     label 'predectorutils'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
 
     tag "${name}"
 
@@ -129,7 +139,9 @@ process gff_results {
 process tabular_results {
 
     label 'predectorutils'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
 
     tag "${name}"
 
@@ -151,7 +163,9 @@ process tabular_results {
 process rank_results {
 
     label 'predectorutils'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
 
     tag "${name}"
 
@@ -211,7 +225,9 @@ process rank_results {
 process signalp_v3_hmm {
 
     label 'signalp3'
-    label 'process_high'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     val domain
@@ -251,7 +267,9 @@ process signalp_v3_hmm {
 process signalp_v3_nn {
 
     label 'signalp3'
-    label 'process_high'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     val domain
@@ -298,7 +316,9 @@ process signalp_v3_nn {
 process signalp_v4 {
 
     label 'signalp4'
-    label 'process_high'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     val domain
@@ -337,7 +357,9 @@ process signalp_v4 {
 process signalp_v5 {
 
     label 'signalp5'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     val domain
@@ -382,7 +404,9 @@ process signalp_v5 {
 process deepsig {
 
     label "deepsig"
-    label "process_high"
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     val domain
@@ -431,7 +455,9 @@ process deepsig {
 process phobius {
 
     label 'phobius'
-    label 'process_high'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -470,7 +496,9 @@ process phobius {
 process tmhmm {
 
     label 'tmhmm'
-    label 'process_high'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -511,7 +539,9 @@ process tmhmm {
 process targetp {
 
     label 'targetp'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -548,7 +578,9 @@ process targetp {
 process deeploc {
 
     label 'deeploc'
-    label 'process_high'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -608,7 +640,9 @@ process deeploc {
 process apoplastp {
 
     label 'apoplastp'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -656,7 +690,9 @@ process apoplastp {
 process localizer {
 
     label 'localizer'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     path "mature.fasta"
@@ -704,7 +740,9 @@ process localizer {
 process effectorp_v1 {
 
     label 'effectorp1'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -752,7 +790,9 @@ process effectorp_v1 {
 process effectorp_v2 {
 
     label 'effectorp2'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     path "in.fasta"
@@ -800,7 +840,9 @@ process effectorp_v2 {
 process pepstats {
 
     label 'emboss'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_short'
 
     input:
     path "in.fasta"
@@ -822,7 +864,9 @@ process pepstats {
 process press_pfam_hmmer {
 
     label 'hmmer3'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_medium'
 
     input:
     path "Pfam-A.hmm.gz"
@@ -847,7 +891,9 @@ process press_pfam_hmmer {
 process pfamscan {
 
     label 'pfamscan'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     path 'pfam_db'
@@ -883,7 +929,9 @@ process pfamscan {
 process press_hmmer {
 
     label 'hmmer3'
-    label 'process_low'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_short'
 
     input:
     path "db.txt"
@@ -905,7 +953,9 @@ process press_hmmer {
 process hmmscan {
 
     label 'hmmer3'
-    label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     val database
@@ -957,7 +1007,9 @@ process hmmscan {
 process mmseqs_index {
 
     label "mmseqs"
-    label "process_low"
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_short'
 
     input:
     tuple val(name), path("db.fasta")
@@ -977,6 +1029,9 @@ process mmseqs_search {
 
     label 'mmseqs'
     label 'process_high'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
 
     input:
     tuple val(database), path("target")
