@@ -2,6 +2,26 @@
 
 We'll update these as we find new issues and get feedback.
 
+### What do predector "effector scores" actually mean?
+
+It's best to think of the learning to rank scores (and the manually designed ranking scores) as arbitrary numbers that attempt to make effectors appear near the top of a sorted list.
+The scores will not be consistent between different versions of the model, so please be careful if you're trying to compare scores.
+Similarly, like with EffectorP the scores should not be treated as a 'likelihood'.
+Although the you can generally say that proteins with higher scores will be more like known effectors, the difference in "effector-ness" between 0 and 1 is not necessarily the same as it is between 1 and 2 (and so on).
+
+In the upcoming paper for version 1 we present some comparisons with EffectorP classification using a score threshold of 0, but this is not how we suggest you use these scores and the threshold may not be applicable in the future if we change how the model is trained.
+In general, it's best to look at some additional evidence (e.g. homologues or presence-absence) and manually evaluate candidates in descending order of score (i.e. using predector as a decision support system) until you have enough to work with.
+
+In the first version of the model, the predictions between 0 and 1 can contain some odd effector predictions (e.g. NRPS genes).
+This is because the model has tried to accomodate some unusual effectors, but the decision tree rules (with discontinuous boundaries) can let some things through that obviously aren't effectors.
+If you delve into the proteins with lower scores we recommended that you manually evaluate the protein properties in the ranking sheet yourself to select candidates.
+
+With predector we really wanted to encourage you to look at your data.
+Ranking separates the bulk of good proteins from bad ones, so a it's easier to decide when to stop manually evaluating candidates and settle on a list.
+Think of it like searching for papers on the web.
+The first page usually contains something relevant to what you're interested in, but sometimes there are some gems in the 2nd and 3rd pages.
+
+
 ### How should I cite predector?
 
 Predector isn't published yet though the manuscript is near submission.
