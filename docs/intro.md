@@ -13,4 +13,3 @@ Predector is designed to be run on complete predicted proteomes, as you would ge
 Although the pipeline will happily run with processed mature proteins or peptide fragments, the analyses that are run as part of the pipeline are not
 intended for this purpose and any results from such input should be considered with **extreme caution**.
 
-

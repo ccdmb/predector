@@ -1,6 +1,7 @@
 ## FAQ
 
 We'll update these as we find new issues and get feedback.
+Please raise an issue on GitHub or email us if you have an issue not covered here.
 
 ### What do predector "effector scores" actually mean?
 

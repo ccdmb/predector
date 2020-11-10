@@ -12,9 +12,6 @@ We recommend that users incorporate these ranked effector scores with experiment
 We hope that this pipeline can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
 
 
-**WARNING: This pipeline is currently still in fairly early development. Some documentation may be incomplete, and software may not perform as expected. Get in contact if you're really keen to continue.**
-
-
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
