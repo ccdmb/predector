@@ -12,6 +12,9 @@ We recommend that users incorporate these ranked effector scores with experiment
 We hope that this pipeline can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
 
 
+Extended documentation can be found on the project [Wiki page](https://github.com/ccdmb/predector/wiki), but brief instructions are provided below.
+
+
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
