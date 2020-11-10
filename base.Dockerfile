@@ -1,7 +1,7 @@
 FROM continuumio/miniconda3:4.8.2
 
 ENV ENVIRONMENT=predector
-ENV VERSION=0.1.0-alpha
+ENV VERSION=1.0.0-beta
 
 LABEL maintainer="darcy.ab.jones@gmail.com"
 LABEL description="Docker image containing all non-proprietary requirements for the predector pipeline"

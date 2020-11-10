@@ -61,7 +61,7 @@ If the names below don't match the filenames you have exactly, adjust the comman
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
 
 ```bash
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.1.0-alpha/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.0.0-beta/install.sh" \
 | bash -s <environment> \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -72,7 +72,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/0.1.0-alpha/install.s
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:0.1.0-alpha`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.0.0-beta`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -103,25 +103,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 0.1.0-alpha ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.0.0-beta ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume -r 0.1.0-alpha ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.0.0-beta ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 0.1.0-alpha ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.0.0-beta ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 0.1.0-alpha ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.0.0-beta ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 0.1.0-alpha ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.0.0-beta ccdmb/predector
 ```
 
 
@@ -131,7 +131,7 @@ Say you have a set of amino-acid sequences in fasta format in the directory `pro
 The following command will run the complete analysis and the results will be available in a `results` folder.
 
 ```bash
-nextflow run -resume -r 0.1.0-alpha ccdmb/predector --proteome "proteomes/*" --phibase "phibase.fasta"
+nextflow run -resume -r 1.0.0-beta ccdmb/predector --proteome "proteomes/*" --phibase "phibase.fasta"
 ```
 
 ## Future plans
