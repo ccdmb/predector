@@ -15,6 +15,11 @@ We hope that this pipeline can become a platform enabling multiple secretome ana
 Extended documentation can be found on the project [Wiki page](https://github.com/ccdmb/predector/wiki), but brief instructions are provided below.
 
 
+** Checkout our preprint! **
+
+https://doi.org/10.21203/rs.3.rs-379941/v1
+
+
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
