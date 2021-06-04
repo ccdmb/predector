@@ -7,7 +7,7 @@ MAINTAINER="Darcy Jones <darcy.ab.jones@gmail.com>"
 REPOBASE="https://raw.githubusercontent.com/ccdmb/predector"
 
 ### DEFAULT PARAMETERS
-VERSION=1.0.0-beta
+VERSION=1.0.0
 
 SIGNALP3= #signalp-3.0.Linux.tar.Z
 SIGNALP4= #signalp-4.1g.Linux.tar.gz
