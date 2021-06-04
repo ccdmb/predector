@@ -871,7 +871,6 @@ process press_pfam_hmmer {
     input:
     path "Pfam-A.hmm.gz"
     path "Pfam-A.hmm.dat.gz"
-    path "active_site.dat.gz"
 
     output:
     path "pfam_db"
@@ -881,7 +880,6 @@ process press_pfam_hmmer {
     mkdir -p pfam_db
     gunzip --force --stdout Pfam-A.hmm.gz > pfam_db/Pfam-A.hmm
     gunzip --force --stdout Pfam-A.hmm.dat.gz > pfam_db/Pfam-A.hmm.dat
-    gunzip --force --stdout active_site.dat.gz > pfam_db/active_site.dat
 
     hmmpress pfam_db/Pfam-A.hmm
     """
@@ -914,7 +912,7 @@ process pfamscan {
         --recstart '>' \
         --line-buffer  \
         --cat  \
-        'pfam_scan.pl -fasta "{}" -dir pfam_db -as' \
+        'pfam_scan.pl -fasta "{}" -dir pfam_db' \
     < in.fasta \
     | cat > out.txt
 

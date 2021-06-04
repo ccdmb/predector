@@ -37,14 +37,16 @@ If the specified version isn't available to download, another version with the s
 
 We provide an install script that should install the dependencies for the majority of users.
 
-In the following command, substitute `<environment>` for `conda`, `docker`, or `singularity`.
+In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `docker`, or `singularity` as suitable.
 Make sure you're in the same directory as the proprietary source archives.
 If the names below don't match the filenames you have exactly, adjust the command accordingly.
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
 
 ```bash
+ENVIRONMENT=docker
+
 curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.0.0-beta/install.sh" \
-| bash -s <environment> \
+| bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
     -5 signalp-5.0b.Linux.tar.gz \
@@ -65,7 +67,7 @@ Or save the install script locally and run `install.sh --help`.
 ### 4. Install NextFlow
 
 NextFlow requires a bash compatible terminal, and Java version 8+.
-We require NextFlow version 20 or above.
+We require NextFlow version 21 or above.
 Extended install instructions are available at: [https://www.nextflow.io/](https://www.nextflow.io).
 
 ```bash
@@ -75,7 +77,7 @@ curl -s https://get.nextflow.io | bash
 Or using conda:
 
 ```bash
-conda install -c bioconda nextflow
+conda install -c bioconda nextflow>=21
 ```
 
 ### 5. Test the pipeline

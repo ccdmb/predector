@@ -1,12 +1,11 @@
 #!/usr/bin/env nextflow
-nextflow.preview.dsl=2
+nextflow.enable.dsl=2
 
 include {get_file; is_null; param_unexpected_error} from './modules/cli'
-include check_env from './modules/versions'
+include {check_env} from './modules/versions'
 include {
     download as download_pfam_hmm;
     download as download_pfam_dat;
-    download as download_pfam_active_site;
     download as download_dbcan;
     encode_seqs;
     decode_seqs;
@@ -138,14 +137,6 @@ def helpMessage() {
       --pfam_dat_url <url>
           URL to download the pfam DAT database from if --pfam_dat is not provided
           default: '${params.pfam_dat_url}'
-
-      --pfam_active_site <path>
-          Path to already downloaded gzipped pfam active sites database
-          default: download the active sites file
-
-      --pfam_active_site_url <url>
-          URL to download the pfam active sites database from if --pfam_active_site is not provided
-          default: '${params.pfam_active_site_url}'
 
       --dbcan <path>
           Path to already downloaded gzipped dbCAN HMM database
@@ -396,15 +387,6 @@ workflow validate_input {
         pfam_dat_val = download_pfam_dat("Pfam-A.hmm.dat.gz", params.pfam_dat_url)
     }
 
-    if ( params.pfam_active_site ) {
-        pfam_active_site_val = get_file(params.pfam_active_site)
-    } else {
-        pfam_active_site_val = download_pfam_active_site(
-            "active_site.dat.gz",
-            params.pfam_active_site_url
-        )
-    }
-
     if ( params.dbcan ) {
         dbcan_val = get_file(params.dbcan)
     } else {
@@ -433,7 +415,6 @@ workflow validate_input {
     proteome_ch
     pfam_hmm_val
     pfam_dat_val
-    pfam_active_site_val
     dbcan_val
     phibase_val
     effector_val
@@ -514,8 +495,7 @@ workflow {
     // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
         input.pfam_hmm_val,
-        input.pfam_dat_val,
-        input.pfam_active_site_val
+        input.pfam_dat_val
     )
     pfamscan_ch = pfamscan(pressed_pfam_hmmer_val, split_proteomes_ch)
 
@@ -609,7 +589,6 @@ workflow {
     input.pfam_hmm_val.map { ["downloads/${it.name}", it]}
         .mix(
             input.pfam_dat_val.map { ["downloads/${it.name}", it] },
-            input.pfam_active_site_val.map { ["downloads/${it.name}", it] },
             input.dbcan_val.map { ["downloads/${it.name}", it] },
             combined_proteomes_ch.flatten().map { ["deduplicated/${it.name}", it] },
             combined_proteomes_tsv_ch.map { ["deduplicated/${it.name}", it] },

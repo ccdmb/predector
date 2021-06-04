@@ -26,6 +26,8 @@ dependencies:
   - gawk=5.1.0
   - wget=1.20.1
   - parallel
+  ## Fudge to get keras working with deepsig...
+  - h5py<3
   ## Bioconda packages
   - emboss=6.6.0
   - hmmer=3.3
