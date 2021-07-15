@@ -1,0 +1,31 @@
+{% set version = "a0465c1" %}
+
+package:
+  name: effectorp3
+  version: {{ version }}
+
+source:
+  url: https://github.com/JanaSperschneider/EffectorP-3.0/archive/a0465c1ed99e0dddc92b8e247dee0f0ab3645f4f.zip
+  sha256: 9c9a44e118d487819960c545e5d1157db1e0451973e42d02728e7ba13354422e
+
+build:
+  number: 1
+  skip: True  # [win]
+
+requirements:
+  run:
+    - python =3
+    - openjdk
+    - numpy
+
+test:
+  commands:
+    - 'EffectorP.py -h'
+    - 'EffectorP3.py -h'
+    - 'EffectorP3.py -i "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/Effectors.fasta"'
+about:
+  home: http://effectorp.csiro.au/
+  license: GPL3
+  summary: "Improved prediction of fungal effector proteins from secretomes with EffectorP 3.0"
+  doc_url: https://github.com/JanaSperschneider/EffectorP-3.0
+  dev_url: https://github.com/JanaSperschneider/EffectorP-3.0
