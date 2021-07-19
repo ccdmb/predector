@@ -15,7 +15,7 @@ cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 #### Add your code to install here.
 
-python3 -m pip install . -vv
+python3 -m pip install . -vv --no-deps
 
 
 # MAKE SURE THAT ALL FILES CAN BE READ BY ANY USER AND
@@ -41,5 +41,5 @@ EXE=$(which signalp6)
 NEW_EXE=${EXE%6}
 ln -sf ${EXE} ${NEW_EXE}
 
-TEST_RESULT=$(signalp6 --fastafile "${TARGET_DIR}/test_set.fasta" --format none --mode fast --organism eukarya --output-dir "${WORKDIR}/test")
+TEST_RESULT=$(signalp6 --fastafile "${TARGET_DIR}/test_set.fasta" --format none --mode fast --organism eukarya --output_dir "${WORKDIR}/test")
 TEST_RETCODE=$?

@@ -3,5 +3,5 @@
 
 # Make sure you use the -f variants to avoid errors if a file doesn't exist.
 
-python3 -m pip uninstall signalp6
+python3 -m pip uninstall -y signalp6
 # An example is here for the signalp 5 recipe

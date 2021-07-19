@@ -12,7 +12,7 @@ requirements:
   run:
     - matplotlib>3.3.2
     - numpy>1.19.2
-    - pytorch-cpu>1.7.0
+    - pytorch>1.7.0
     - tqdm>4.46.1
 
 test:
@@ -24,7 +24,7 @@ test:
 about:
   home: https://services.healthtech.dtu.dk/services/signalp-6.0#
   summary: "a placeholder library to install signalp versions 6."
-  license: Proprietary
+  license: proprietary
 
 extra:
   recipe-maintainers:

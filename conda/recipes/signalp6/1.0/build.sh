@@ -56,11 +56,11 @@ cp "${TARGET_DIR}/${PEXE}" "${TARGET_DIR}/placeholder.sh"
 chmod a+rx "${TARGET_DIR}/${PEXE}"
 chmod a+rx "${TARGET_DIR}/placeholder.sh"
 
-ln -s "${TARGET_DIR}/${PEXE}" "${PREFIX}/bin/${EXE}"
-ln -s "${TARGET_DIR}/${PEXE}" "${PREFIX}/bin/${VEXE}"
+ln -sf "${TARGET_DIR}/${PEXE}" "${PREFIX}/bin/${EXE}"
+ln -sf "${TARGET_DIR}/${PEXE}" "${PREFIX}/bin/${VEXE}"
 
 # This is necessary because some binaries hard code to the symlink filename.
-ln -s "${TARGET_DIR}/${PEXE}" "${TARGET_DIR}/${PVEXE}"
+ln -sf "${TARGET_DIR}/${PEXE}" "${TARGET_DIR}/${PVEXE}"
 
 
 ## Setup the script that will actually install things for us.
@@ -84,7 +84,7 @@ cat "${RECIPE_DIR}/register.sh" >> "${REGISTER_FILE}"
 echo 'touch ${TARGET_DIR}/completed' >> "${REGISTER_FILE}"
 cat "${RECIPE_DIR}/register-test.sh" >> "${REGISTER_FILE}"
 chmod a+rx "${REGISTER_FILE}"
-ln -s "${REGISTER_FILE}" "${PREFIX}/bin/${VEXE}-register"
+ln -sf "${REGISTER_FILE}" "${PREFIX}/bin/${VEXE}-register"
 
 
 ## Setup the script that removes the things we installed

@@ -4,6 +4,7 @@ nextflow.enable.dsl=2
 include {get_file; is_null; param_unexpected_error} from './modules/cli'
 include {check_env} from './modules/versions'
 include {
+    download as download_phibase;
     download as download_pfam_hmm;
     download as download_pfam_dat;
     download as download_dbcan;
@@ -72,8 +73,6 @@ def helpMessage() {
       --proteome <path or glob>
           Path to the fasta formatted protein sequences.
           Multiple files can be specified using globbing patterns in quotes.
-      --phibase <path>
-          Path to the PHI-base fasta dataset.
 
     ## Useful parameters
 
@@ -121,6 +120,12 @@ def helpMessage() {
           Print the license information and exit
 
     ## Additional arguments
+      --phibase <path>
+          Path to the PHI-base fasta dataset.
+
+      --phibase_url <url>
+          URL to download the PHI-base fasta file if --phibase is not provided
+          default: '${params.phibase_url}'
 
       --pfam_hmm <path>
           Path to already downloaded gzipped pfam HMM database
@@ -397,7 +402,7 @@ workflow validate_input {
         phibase_val = get_file(params.phibase)
     } else {
         // Should this error out?
-        phibase_val = Channel.empty()
+        phibase_val = download_phibase("phi-base_current.fas", params.phibase_url)
     }
 
     // This has a default value set, so it shouldn't be possible to not specify the parameter.

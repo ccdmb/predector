@@ -1,28 +1,34 @@
-{% set version = "a0465c1" %}
+{% set version = "3.0" %}
 
 package:
   name: effectorp3
   version: {{ version }}
 
 source:
-  url: https://github.com/JanaSperschneider/EffectorP-3.0/archive/a0465c1ed99e0dddc92b8e247dee0f0ab3645f4f.zip
-  sha256: 9c9a44e118d487819960c545e5d1157db1e0451973e42d02728e7ba13354422e
+  url: "https://github.com/darcyabjones/EffectorP-3.0/archive/6228bb6e0c183a9e4f30e8ea3ca118afbad4282d.zip"
+  sha256: 3f0b04c8315c8d907a172f8bb3cabd9db46d506315682c4e7ad2f9949a076e8a
 
 build:
   number: 1
-  skip: True  # [win]
+  script: "{{ PYTHON }} -m pip install . -vv"
+  noarch: python
 
 requirements:
   run:
     - python =3
     - openjdk
     - numpy
+  host:
+    - python =3
+    - openjdk
+    - conda-verify
 
 test:
   commands:
     - 'EffectorP.py -h'
     - 'EffectorP3.py -h'
-    - 'EffectorP3.py -i "${PREFIX}/share/${PKG_NAME}-${PKG_VERSION}-${PKG_BUILDNUM}/Effectors.fasta"'
+    - "EffectorP3.py -i \"$(python3 -c 'from EP3 import data; print(data.FASTA_PATH)')\""
+
 about:
   home: http://effectorp.csiro.au/
   license: GPL3

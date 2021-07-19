@@ -1,6 +1,6 @@
 BUILD_IMAGE="condaforge/linux-anvil-comp7:latest"
 CONTAINER=1
-DOCKER=podman
+DOCKER=docker
 ANACONDA_USER=predector
 
 TARGETS=effectorp1/1.0 effectorp2/2.0 effectorp3/3.0 localizer/1.0.4 apoplastp/1.0.1 deepsig/0f1e1d9 \
