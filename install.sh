@@ -13,6 +13,7 @@ VERSION=1.0.0
 SIGNALP3= #signalp-3.0.Linux.tar.Z
 SIGNALP4= #signalp-4.1g.Linux.tar.gz
 SIGNALP5= #signalp-5.0b.Linux.tar.gz
+SIGNALP6= #signalp-6.0.fast.tar.gz
 TARGETP2= #targetp-2.0.Linux.tar.gz
 DEEPLOC= #deeploc-1.0.All.tar.gz
 TMHMM= #tmhmm-2.0c.Linux.tar.gz
@@ -23,6 +24,7 @@ PHOBIUS= #phobius101_linux.tar.gz
 # We set defaults separately
 NAME=
 CONDA_DEFAULTNAME="predector"
+DOCKER_DEFAULTNAME="predector/predector:${VERSION}"
 DOCKER_DEFAULTNAME="predector/predector:${VERSION}"
 SINGULARITY_DEFAULTNAME="predector.sif"
 
@@ -44,6 +46,7 @@ $ install.sh [conda|docker|singularity] \\
     -3 signalp-3.0.Linux.tar.Z \\
     -4 signalp-4.1g.Linux.tar.gz \\
     -5 signalp-5.0b.Linux.tar.gz \\
+    -6 signalp-6.0.fast.tar.gz \\
     -t targetp-2.0.Linux.tar.gz \\
     -d deeploc-1.0.All.tar.gz \\
     -m tmhmm-2.0c.Linux.tar.gz \\
@@ -72,6 +75,7 @@ To use the script, you will need:
     - https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#
+    - https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#
@@ -90,6 +94,7 @@ Required parameters:
   -3|--signalp3  -- The path to the signalp v3 source archive.
   -4|--signalp4  -- The path to the signalp v4 source archive.
   -5|--signalp5  -- The path to the signalp v5 source archive.
+  -6|--signalp6  -- The path to the signalp v6 source archive.
   -t|--targetp2  -- The path to the signalp v5 source archive.
   -d|--deeploc   -- The path to the deeploc v1 source archive.
   -m|--tmhmm     -- The path to the tmhmm v2 source archive.
@@ -266,7 +271,7 @@ fi
 [ ! -f "${SIGNALP3:-}" ] && echo "The specified archive for signalp3 '${SIGNALP3}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP4:-}" ] && echo "The specified archive for signalp4 '${SIGNALP4}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP5:-}" ] && echo "The specified archive for signalp5 '${SIGNALP5}' does not exist." 1>&2 && FAILED=true
-[ ! -f "${SIGNALP5:-}" ] && echo "The specified archive for signalp6 '${SIGNALP5}' does not exist." 1>&2 && FAILED=true
+[ ! -f "${SIGNALP6:-}" ] && echo "The specified archive for signalp6 '${SIGNALP6}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TARGETP2:-}" ] && echo "The specified archive for targetp2 '${TARGETP2}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${DEEPLOC:-}" ] && echo "The specified archive for deeploc '${DEEPLOC}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TMHMM:-}" ] && echo "The specified archive for tmhmm '${TMHMM}' does not exist." 1>&2 && FAILED=true

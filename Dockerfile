@@ -6,6 +6,7 @@ LABEL description="Docker image containing all requirements for the predector pi
 ARG SIGNALP3
 ARG SIGNALP4
 ARG SIGNALP5
+ARG SIGNALP6
 ARG TARGETP2
 ARG DEEPLOC
 ARG PHOBIUS
@@ -16,6 +17,7 @@ RUN mkdir -p /tmp/onbuild
 COPY "${SIGNALP3}" /tmp/onbuild/
 COPY "${SIGNALP4}" /tmp/onbuild/
 COPY "${SIGNALP5}" /tmp/onbuild/
+COPY "${SIGNALP6}" /tmp/onbuild/
 COPY "${TARGETP2}" /tmp/onbuild/
 COPY "${DEEPLOC}" /tmp/onbuild/
 COPY "${PHOBIUS}" /tmp/onbuild/
@@ -28,6 +30,8 @@ RUN echo \
  && signalp4-register "/tmp/onbuild/$(basename "${SIGNALP4}")" \
  && echo \
  && signalp5-register "/tmp/onbuild/$(basename "${SIGNALP5}")" \
+ && echo \
+ && signalp6-register "/tmp/onbuild/$(basename "${SIGNALP6}")" \
  && echo \
  && targetp2-register "/tmp/onbuild/$(basename "${TARGETP2}")" \
  && echo \
