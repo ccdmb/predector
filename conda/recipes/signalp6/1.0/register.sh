@@ -15,7 +15,7 @@ cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 #### Add your code to install here.
 
-python3 -m pip install . -vv --no-deps
+python3 -m pip install . -vv --no-deps --compile
 
 
 # MAKE SURE THAT ALL FILES CAN BE READ BY ANY USER AND

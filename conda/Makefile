@@ -21,9 +21,9 @@ targets/%: recipes/%/*
 	@mkdir -p "$(dir $@)"
 	@mkdir -p builds
 	conda build \
-	  --skip-existing \
 	  --output-folder "builds" \
 	  --keep-going \
+          --user $(ANACONDA_USER) \
 	  --channel bioconda \
 	  --channel conda-forge \
 	  --channel "file://${PWD}/builds" \
@@ -45,6 +45,7 @@ targets/%: recipes/%/*
 	    --skip-existing \
 	    --output-folder "/work/builds" \
 	    --keep-going \
+            --user $(ANACONDA_USER) \
 	    --channel bioconda \
 	    --channel conda-forge \
 	    --channel "$(ANACONDA_USER)" \

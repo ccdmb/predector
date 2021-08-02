@@ -10,14 +10,13 @@ source:
 
 build:
   number: 1
-  script: "{{ PYTHON }} -m pip install . -vv"
+  script: "{{ PYTHON }} -m pip install . -vv --no-deps --compile"
   noarch: python
 
 requirements:
   run:
     - python =3
     - openjdk
-    - numpy
   host:
     - python =3
     - openjdk

@@ -5,6 +5,7 @@ set -euo pipefail
 ISSUES_URL="https://github.com/ccdmb/predector/issues"
 MAINTAINER="Darcy Jones <darcy.ab.jones@gmail.com>"
 REPOBASE="https://raw.githubusercontent.com/ccdmb/predector"
+DOCUMENTATION_URL="https://github.com/ccdmb/predector/wiki"
 
 ### DEFAULT PARAMETERS
 VERSION=1.0.0
@@ -164,6 +165,12 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -6|--signalp6)
+    check_param "-6|--signalp6" "${2:-}"
+    SIGNALP6="$2"
+    shift # past argument
+    shift # past value
+    ;;
     -t|--targetp2)
     check_param "-t|--targetp2" "${2:-}"
     TARGETP2="$2"
@@ -239,6 +246,7 @@ FAILED=false
 [ -z "${SIGNALP3:-}" ] && echo "Please provide the source for signalp3." 1>&2 && FAILED=true
 [ -z "${SIGNALP4:-}" ] && echo "Please provide the source for signalp4." 1>&2 && FAILED=true
 [ -z "${SIGNALP5:-}" ] && echo "Please provide the source for signalp5." 1>&2 && FAILED=true
+[ -z "${SIGNALP6:-}" ] && echo "Please provide the source for signalp6." 1>&2 && FAILED=true
 [ -z "${TARGETP2:-}" ] && echo "Please provide the source for targetp2." 1>&2 && FAILED=true
 [ -z "${DEEPLOC:-}" ] && echo "Please provide the source for deeploc." 1>&2 && FAILED=true
 [ -z "${TMHMM:-}" ] && echo "Please provide the source for tmhmm." 1>&2 && FAILED=true
@@ -258,6 +266,7 @@ fi
 [ ! -f "${SIGNALP3:-}" ] && echo "The specified archive for signalp3 '${SIGNALP3}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP4:-}" ] && echo "The specified archive for signalp4 '${SIGNALP4}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP5:-}" ] && echo "The specified archive for signalp5 '${SIGNALP5}' does not exist." 1>&2 && FAILED=true
+[ ! -f "${SIGNALP5:-}" ] && echo "The specified archive for signalp6 '${SIGNALP5}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TARGETP2:-}" ] && echo "The specified archive for targetp2 '${TARGETP2}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${DEEPLOC:-}" ] && echo "The specified archive for deeploc '${DEEPLOC}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TMHMM:-}" ] && echo "The specified archive for tmhmm '${TMHMM}' does not exist." 1>&2 && FAILED=true
@@ -305,13 +314,13 @@ docker_build_error() {
 }
 
 contact_fix_issue() {
-    # TODO add docs url to this message
     echo "Please look at our documentation and advanced install guide for tips." 1>&2
     echo "If you are unable to resolve the issue please contact the authors or create an issue on github." 1>&2
     echo "We'll do our best to help you, and make updates to resolve or document the issue." 1>&2
     echo 1>&2
     echo "Maintainer: ${MAINTAINER}" 1>&2
     echo "GitHub Issues: ${ISSUES_URL}" 1>&2
+    echo "Documentation: ${DOCUMENTATION_URL}" 1>&2
 }
 
 
@@ -452,6 +461,7 @@ setup_conda() {
     signalp3-register "${SIGNALP3}" && echo \
     && signalp4-register "${SIGNALP4}" && echo \
     && signalp5-register "${SIGNALP5}" && echo \
+    && signalp6-register "${SIGNALP6}" && echo \
     && targetp2-register "${TARGETP2}" && echo \
     && deeploc-register "${DEEPLOC}" && echo \
     && phobius-register "${PHOBIUS}" && echo \
@@ -532,6 +542,7 @@ setup_docker() {
       --build-arg SIGNALP3="${SIGNALP3}" \
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
+      --build-arg SIGNALP6="${SIGNALP6}" \
       --build-arg TARGETP2="${TARGETP2}" \
       --build-arg PHOBIUS="${PHOBIUS}" \
       --build-arg TMHMM="${TMHMM}" \
@@ -606,6 +617,7 @@ setup_singularity() {
     export SIGNALP3="${SIGNALP3}"
     export SIGNALP4="${SIGNALP4}"
     export SIGNALP5="${SIGNALP5}"
+    export SIGNALP6="${SIGNALP6}"
     export TARGETP2="${TARGETP2}"
     export PHOBIUS="${PHOBIUS}"
     export TMHMM="${TMHMM}"

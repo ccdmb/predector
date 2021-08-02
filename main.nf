@@ -8,8 +8,10 @@ include {
     download as download_pfam_hmm;
     download as download_pfam_dat;
     download as download_dbcan;
+    extract_effector_seqs;
     encode_seqs;
     decode_seqs;
+    sanitise_phibase;
     gff_results;
     tabular_results;
     rank_results;
@@ -17,6 +19,7 @@ include {
     signalp_v3_nn;
     signalp_v4;
     signalp_v5;
+    signalp_v6;
     deepsig;
     phobius;
     tmhmm;
@@ -26,12 +29,12 @@ include {
     localizer;
     effectorp_v1;
     effectorp_v2;
+    effectorp_v3;
     pepstats;
     press_pfam_hmmer;
     pfamscan;
     press_hmmer as press_dbcan_hmmer;
     hmmscan as hmmscan_dbcan;
-    extract_effector_seqs;
     mmseqs_index as mmseqs_index_proteomes;
     mmseqs_index as mmseqs_index_phibase;
     mmseqs_index as mmseqs_index_effectors;
@@ -468,6 +471,8 @@ workflow {
     // info where it can.
     versions = check_env()
 
+    tidied_phibase = sanitise_phibase(input.phibase_val)
+
     // Remove duplicates and split fasta(s) into chunks to run in parallel.
     // Maybe download precomputed results?
     (combined_proteomes_ch, combined_proteomes_tsv_ch) = encode_seqs(
@@ -482,6 +487,7 @@ workflow {
     signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteomes_ch)
     signalp_v4_ch = signalp_v4(signalp_domain, split_proteomes_ch)
     (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, split_proteomes_ch)
+    signalp_v6_ch = signalp_v6(signalp_domain, split_proteomes_ch)
 
     deepsig_ch = deepsig(params.domain, split_proteomes_ch)
     phobius_ch = phobius(split_proteomes_ch)
@@ -494,6 +500,7 @@ workflow {
     localizer_ch = localizer(signalp_v5_mature_ch)
     effectorp_v1_ch = effectorp_v1(split_proteomes_ch)
     effectorp_v2_ch = effectorp_v2(split_proteomes_ch)
+    effectorp_v3_ch = effectorp_v3(split_proteomes_ch)
 
     pepstats_ch = pepstats(split_proteomes_ch)
 
@@ -512,8 +519,7 @@ workflow {
     ).map { v, f -> f }
 
     phibase_mmseqs_index_val = mmseqs_index_phibase(
-        input
-        .phibase_val
+        tidied_phibase
         .map { f -> ["phibase", f] }
     )
 
@@ -542,6 +548,7 @@ workflow {
             signalp_v3_nn_ch,
             signalp_v4_ch,
             signalp_v5_ch,
+            signalp_v6_ch,
             deepsig_ch,
             phobius_ch,
             tmhmm_ch,
@@ -551,6 +558,7 @@ workflow {
             localizer_ch,
             effectorp_v1_ch,
             effectorp_v2_ch,
+            effectorp_v3_ch,
             pepstats_ch,
             pfamscan_ch,
             dbcan_hmmer_ch,
@@ -595,6 +603,7 @@ workflow {
         .mix(
             input.pfam_dat_val.map { ["downloads/${it.name}", it] },
             input.dbcan_val.map { ["downloads/${it.name}", it] },
+            input.phibase_val.map { ["downloads/${it.name}", it] },
             combined_proteomes_ch.flatten().map { ["deduplicated/${it.name}", it] },
             combined_proteomes_tsv_ch.map { ["deduplicated/${it.name}", it] },
             decoded_with_names_ch.map { n, f -> ["${n}/${n}.ldjson", f] },
