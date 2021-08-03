@@ -10,7 +10,7 @@ Conda:
 ```bash
 nextflow run \
   -resume \
-  -r 1.1.0-dev.1 \
+  -r 1.1.0-alpha \
   -with-conda /path/to/conda/env \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -21,7 +21,7 @@ Docker:
 ```bash
 nextflow run \
   -resume \
-  -r 1.1.0-dev.1 \
+  -r 1.1.0-alpha \
   -profile docker \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -32,7 +32,7 @@ Singularity:
 ```bash
 nextflow run \
   -resume \
-  -r 1.1.0-dev.1 \
+  -r 1.1.0-alpha \
   -with-singularity ./path/to/singularity.sif \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -182,7 +182,7 @@ In the config files, you can select these tasks by label.
 
 ### Running different pipeline versions.
 
-We pin the version of the pipeline to run in all of our example commands with the `-r 1.1.0-dev.1` parameter.
+We pin the version of the pipeline to run in all of our example commands with the `-r 1.1.0-alpha` parameter.
 These flags are optional, but recommended so that you know which version you ran. Different versions of the pipelines may output different scores, use different parameters look etc. It also re-enforces the link between the pipeline version and the docker container tags.
 
 If you have previously run predector and want to update it to use a new version, you can either provide a new version to the `-r` parameter, and add the `-latest` flag to tell nextflow to pull new changes from the github repository.
