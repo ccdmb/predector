@@ -452,7 +452,6 @@ process signalp_v6 {
           --mode fast \
         1>&2
 
-        deeploc -f "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPDIR}/prediction_results.txt"
 
         rm -rf -- "\${TMPDIR}"

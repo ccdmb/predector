@@ -28,49 +28,51 @@ From: predector/predector-base:1.1.0-dev
         echo -e "- SIGNALP3\n- SIGNALP4\n- SIGNALP5\n- SIGNALP6\n- TARGETP2\n- DEEPLOC\n- PHOBIUS\n- TMHMM" 1>&2
         exit 1
     fi
-    mkdir -p "${SINGULARITY_ROOTFS}/tmp/onbuild"
+    mkdir -p "${SINGULARITY_ROOTFS}/onbuild"
 
-    cp "${SIGNALP3}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${SIGNALP4}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${SIGNALP5}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${SIGNALP6}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${TARGETP2}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${DEEPLOC}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${PHOBIUS}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
-    cp "${TMHMM}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
+    cp "${SIGNALP3}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${SIGNALP4}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${SIGNALP5}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${SIGNALP6}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${TARGETP2}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${DEEPLOC}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${PHOBIUS}" "${SINGULARITY_ROOTFS}/onbuild/"
+    cp "${TMHMM}" "${SINGULARITY_ROOTFS}/onbuild/"
 
-    echo export SIGNALP3="${SIGNALP3:-}" > "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export SIGNALP4="${SIGNALP4:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export SIGNALP5="${SIGNALP5:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export SIGNALP6="${SIGNALP6:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export TARGETP2="${TARGETP2:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export DEEPLOC="${DEEPLOC:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export PHOBIUS="${PHOBIUS:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
-    echo export TMHMM="${TMHMM:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
+    echo export SIGNALP3="${SIGNALP3:-}" > "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export SIGNALP4="${SIGNALP4:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export SIGNALP5="${SIGNALP5:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export SIGNALP6="${SIGNALP6:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export TARGETP2="${TARGETP2:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export DEEPLOC="${DEEPLOC:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export PHOBIUS="${PHOBIUS:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
+    echo export TMHMM="${TMHMM:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
 
 
 %post
     set +x
 
-    . /tmp/prenv.sh
+    ls /
+    ls /onbuild
+
+    . /onbuild/prenv.sh
     . /.singularity.d/env/10-docker2singularity.sh
     echo
-    signalp3-register "/tmp/onbuild/$(basename "${SIGNALP3}")"
+    signalp3-register "/onbuild/$(basename "${SIGNALP3}")"
     echo
-    signalp4-register "/tmp/onbuild/$(basename "${SIGNALP4}")"
+    signalp4-register "/onbuild/$(basename "${SIGNALP4}")"
     echo
-    signalp5-register "/tmp/onbuild/$(basename "${SIGNALP5}")"
+    signalp5-register "/onbuild/$(basename "${SIGNALP5}")"
     echo
-    signalp6-register "/tmp/onbuild/$(basename "${SIGNALP6}")"
+    signalp6-register "/onbuild/$(basename "${SIGNALP6}")"
     echo
-    targetp2-register "/tmp/onbuild/$(basename "${TARGETP2}")"
+    targetp2-register "/onbuild/$(basename "${TARGETP2}")"
     echo
-    deeploc-register "/tmp/onbuild/$(basename "${DEEPLOC}")"
+    deeploc-register "/onbuild/$(basename "${DEEPLOC}")"
     echo
-    phobius-register "/tmp/onbuild/$(basename "${PHOBIUS}")"
+    phobius-register "/onbuild/$(basename "${PHOBIUS}")"
     echo
-    tmhmm2-register "/tmp/onbuild/$(basename "${TMHMM}")"
+    tmhmm2-register "/onbuild/$(basename "${TMHMM}")"
     echo
 
-    rm -rf -- /tmp/onbuild
-    rm -f /tmp/prenv.sh
+    rm -rf -- /onbuild

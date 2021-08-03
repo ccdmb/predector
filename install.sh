@@ -286,7 +286,7 @@ fi
 [ ! -f "${TMHMM:-}" ] && echo "The specified archive for tmhmm '${TMHMM}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${PHOBIUS:-}" ] && echo "The specified archive for phobius '${PHOBIUS}' does not exist." 1>&2 && FAILED=true
 
-if [ -z "${CONDA_TEMPLATE:-}" ]
+if [ ! -z "${CONDA_TEMPLATE:-}" ]
 then
     [ ! -f "${CONDA_TEMPLATE:-}" ] && echo "The specified alternate conda template '${CONDA_TEMPLATE}' does not exist." 1>&2 && FAILED=true
 fi
@@ -429,12 +429,6 @@ get_abs_filename() {
 }
 
 
-get_conda_template() {
-    # $1 : New env filename
-
-    if [ -z
-}
-
 setup_conda() {
     NAME="${NAME:-${CONDA_DEFAULTNAME}}"
     URL="${REPOBASE}/${VERSION}/environment.yml"
@@ -447,17 +441,20 @@ setup_conda() {
 
     TMPFILE=".predector$$.yml"
 
-    if [ ! -z "${CONDA_TEMPLATE:-}" ]
+    if [ -z "${CONDA_TEMPLATE:-}" ]
     then
         curl -o "${TMPFILE}" -s "${URL}"
+        CONDA_TEMPLATE_FILE="${TMPFILE}"
+    else
+        CONDA_TEMPLATE_FILE="${CONDA_TEMPLATE}"
     fi
 
     # This is to allow non-standard environment paths
     if [ -z "${CONDA_ENV_DIR:-}" ]
     then
-        conda env create --name "${NAME}" --file "${TMPFILE}" || RETCODE="$?"
+        conda env create --name "${NAME}" --file "${CONDA_TEMPLATE_FILE}" || RETCODE="$?"
     else
-        conda env create --prefix "${CONDA_ENV_DIR}" --file "${TMPFILE}" || RETCODE="$?"
+        conda env create --prefix "${CONDA_ENV_DIR}" --file "${CONDA_TEMPLATE_FILE}" || RETCODE="$?"
     fi
 
     if [ ! -z "${CONDA_TEMPLATE:-}" ]
