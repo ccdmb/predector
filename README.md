@@ -4,7 +4,7 @@ Predict effectors in your proteomes using the Predector!
 
 Predector runs numerous tools for fungal secretome and effector discovery analysis, and outputs a list of ranked candidates.
 
-This includes: SignalP (3, 4, 5), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER and EffectorP 1 and 2.
+This includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER and EffectorP 1, 2 and 3.
 These results are summarised as a table that includes most information that would typically be used for secretome analysis.
 Effector candidates are ranked using a [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
 We recommend that users incorporate these ranked effector candidates with experimental evidence or homology matches, and manually evaluate candidates with regard to the targeted host-pathogen interaction to prioritise other more expensive efforts (e.g. cloning or structural modelling).
@@ -50,6 +50,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6 "fast"
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -71,18 +72,19 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.0.0/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.1.0-dev/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
     -5 signalp-5.0b.Linux.tar.gz \
+    -6 signalp-6.0.fast.tar.gz \
     -t targetp-2.0.Linux.tar.gz \
     -d deeploc-1.0.All.tar.gz \
     -m tmhmm-2.0c.Linux.tar.gz \
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.0.0`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.1.0-dev`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -113,25 +115,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.1.0-dev ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.1.0-dev ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.1.0-dev ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.1.0-dev ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.1.0-dev ccdmb/predector
 ```
 
 
@@ -141,7 +143,7 @@ Say you have a set of amino-acid sequences in fasta format in the directory `pro
 The following command will run the complete analysis and the results will be available in a `results` folder.
 
 ```bash
-nextflow run -resume -r 1.0.0 ccdmb/predector --proteome "proteomes/*" --phibase "phibase.fasta"
+nextflow run -resume -r 1.1.0-dev ccdmb/predector --proteome "proteomes/*"
 ```
 
 ## Future plans
@@ -150,13 +152,13 @@ The pipeline will run several common tools (and some less common ones) for effec
 
 We currently intend to include.
 
- - [x] SignalP 3, 4, and 5
+ - [x] SignalP 3, 4, 5, and 6
  - [x] TMHMM
  - [x] Phobius
  - [x] Deepsig
  - [x] DeepLoc
  - [x] TargetP
- - [x] EffectorP 1 and 2
+ - [x] EffectorP 1, 2, and 3
  - [x] ApoplastP
  - [x] LOCALIZER
  - [x] Protein similarity searches against PHIbase using MMSeqs2

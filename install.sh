@@ -5,13 +5,15 @@ set -euo pipefail
 ISSUES_URL="https://github.com/ccdmb/predector/issues"
 MAINTAINER="Darcy Jones <darcy.ab.jones@gmail.com>"
 REPOBASE="https://raw.githubusercontent.com/ccdmb/predector"
+DOCUMENTATION_URL="https://github.com/ccdmb/predector/wiki"
 
 ### DEFAULT PARAMETERS
-VERSION=1.0.0
+VERSION=1.1.0-dev
 
 SIGNALP3= #signalp-3.0.Linux.tar.Z
 SIGNALP4= #signalp-4.1g.Linux.tar.gz
 SIGNALP5= #signalp-5.0b.Linux.tar.gz
+SIGNALP6= #signalp-6.0.fast.tar.gz
 TARGETP2= #targetp-2.0.Linux.tar.gz
 DEEPLOC= #deeploc-1.0.All.tar.gz
 TMHMM= #tmhmm-2.0c.Linux.tar.gz
@@ -23,10 +25,12 @@ PHOBIUS= #phobius101_linux.tar.gz
 NAME=
 CONDA_DEFAULTNAME="predector"
 DOCKER_DEFAULTNAME="predector/predector:${VERSION}"
+DOCKER_DEFAULTNAME="predector/predector:${VERSION}"
 SINGULARITY_DEFAULTNAME="predector.sif"
 
 # Only valid for CONDA, use this path prefix instead of a name.
 CONDA_ENV_DIR=
+CONDA_TEMPLATE=
 
 # This sets -x
 DEBUG=false
@@ -43,6 +47,7 @@ $ install.sh [conda|docker|singularity] \\
     -3 signalp-3.0.Linux.tar.Z \\
     -4 signalp-4.1g.Linux.tar.gz \\
     -5 signalp-5.0b.Linux.tar.gz \\
+    -6 signalp-6.0.fast.tar.gz \\
     -t targetp-2.0.Linux.tar.gz \\
     -d deeploc-1.0.All.tar.gz \\
     -m tmhmm-2.0c.Linux.tar.gz \\
@@ -71,6 +76,7 @@ To use the script, you will need:
     - https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#
+    - https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#
     - https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#
@@ -89,6 +95,7 @@ Required parameters:
   -3|--signalp3  -- The path to the signalp v3 source archive.
   -4|--signalp4  -- The path to the signalp v4 source archive.
   -5|--signalp5  -- The path to the signalp v5 source archive.
+  -6|--signalp6  -- The path to the signalp v6 source archive.
   -t|--targetp2  -- The path to the signalp v5 source archive.
   -d|--deeploc   -- The path to the deeploc v1 source archive.
   -m|--tmhmm     -- The path to the tmhmm v2 source archive.
@@ -106,6 +113,8 @@ Optional parameters:
   -c|--conda-prefix -- If set, use this as the location to store the built conda
                        environment instead of setting a name and using the default
                        prefix.
+  --conda-template -- Use this conda environment.yml file instead of downloading it from github.
+                      Only affects conda installs.
 
 Flags:
   --debug        -- Increased verbosity for developer use.
@@ -164,6 +173,12 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    -6|--signalp6)
+    check_param "-6|--signalp6" "${2:-}"
+    SIGNALP6="$2"
+    shift # past argument
+    shift # past value
+    ;;
     -t|--targetp2)
     check_param "-t|--targetp2" "${2:-}"
     TARGETP2="$2"
@@ -206,6 +221,12 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    --conda-template)
+    check_nodefault_param "--conda-template" "${CONDA_TEMPLATE}" "${2:-}"
+    CONDA_TEMPLATE="$2"
+    shift
+    shift
+    ;;
     --debug)
     DEBUG=true
     shift # past argument
@@ -239,12 +260,13 @@ FAILED=false
 [ -z "${SIGNALP3:-}" ] && echo "Please provide the source for signalp3." 1>&2 && FAILED=true
 [ -z "${SIGNALP4:-}" ] && echo "Please provide the source for signalp4." 1>&2 && FAILED=true
 [ -z "${SIGNALP5:-}" ] && echo "Please provide the source for signalp5." 1>&2 && FAILED=true
+[ -z "${SIGNALP6:-}" ] && echo "Please provide the source for signalp6." 1>&2 && FAILED=true
 [ -z "${TARGETP2:-}" ] && echo "Please provide the source for targetp2." 1>&2 && FAILED=true
 [ -z "${DEEPLOC:-}" ] && echo "Please provide the source for deeploc." 1>&2 && FAILED=true
 [ -z "${TMHMM:-}" ] && echo "Please provide the source for tmhmm." 1>&2 && FAILED=true
 [ -z "${PHOBIUS:-}" ] && echo "Please provide the source for phobius." 1>&2 && FAILED=true
 
-[ -z "${ENVIRONMENT}" ] && (echo "Please tell us which environment you'd like to install: conda, docker or singularity." 1>&2; FAILED=true)
+[ -z "${ENVIRONMENT:-}" ] && (echo "Please tell us which environment you'd like to install: conda, docker or singularity." 1>&2; FAILED=true)
 
 if [ "${FAILED}" = true ]
 then
@@ -258,10 +280,16 @@ fi
 [ ! -f "${SIGNALP3:-}" ] && echo "The specified archive for signalp3 '${SIGNALP3}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP4:-}" ] && echo "The specified archive for signalp4 '${SIGNALP4}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP5:-}" ] && echo "The specified archive for signalp5 '${SIGNALP5}' does not exist." 1>&2 && FAILED=true
+[ ! -f "${SIGNALP6:-}" ] && echo "The specified archive for signalp6 '${SIGNALP6}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TARGETP2:-}" ] && echo "The specified archive for targetp2 '${TARGETP2}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${DEEPLOC:-}" ] && echo "The specified archive for deeploc '${DEEPLOC}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TMHMM:-}" ] && echo "The specified archive for tmhmm '${TMHMM}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${PHOBIUS:-}" ] && echo "The specified archive for phobius '${PHOBIUS}' does not exist." 1>&2 && FAILED=true
+
+if [ -z "${CONDA_TEMPLATE:-}" ]
+then
+    [ ! -f "${CONDA_TEMPLATE:-}" ] && echo "The specified alternate conda template '${CONDA_TEMPLATE}' does not exist." 1>&2 && FAILED=true
+fi
 
 if [ "${FAILED}" = "true" ]
 then
@@ -305,13 +333,13 @@ docker_build_error() {
 }
 
 contact_fix_issue() {
-    # TODO add docs url to this message
     echo "Please look at our documentation and advanced install guide for tips." 1>&2
     echo "If you are unable to resolve the issue please contact the authors or create an issue on github." 1>&2
     echo "We'll do our best to help you, and make updates to resolve or document the issue." 1>&2
     echo 1>&2
     echo "Maintainer: ${MAINTAINER}" 1>&2
     echo "GitHub Issues: ${ISSUES_URL}" 1>&2
+    echo "Documentation: ${DOCUMENTATION_URL}" 1>&2
 }
 
 
@@ -401,9 +429,15 @@ get_abs_filename() {
 }
 
 
+get_conda_template() {
+    # $1 : New env filename
+
+    if [ -z
+}
+
 setup_conda() {
-    URL="${REPOBASE}/${VERSION}/environment.yml"
     NAME="${NAME:-${CONDA_DEFAULTNAME}}"
+    URL="${REPOBASE}/${VERSION}/environment.yml"
 
     check_conda_installed
     check_is_linux
@@ -412,7 +446,11 @@ setup_conda() {
     echo
 
     TMPFILE=".predector$$.yml"
-    curl -o "${TMPFILE}" -s "${URL}"
+
+    if [ ! -z "${CONDA_TEMPLATE:-}" ]
+    then
+        curl -o "${TMPFILE}" -s "${URL}"
+    fi
 
     # This is to allow non-standard environment paths
     if [ -z "${CONDA_ENV_DIR:-}" ]
@@ -422,7 +460,10 @@ setup_conda() {
         conda env create --prefix "${CONDA_ENV_DIR}" --file "${TMPFILE}" || RETCODE="$?"
     fi
 
-    rm -f "${TMPFILE}"
+    if [ ! -z "${CONDA_TEMPLATE:-}" ]
+    then
+        rm -f "${TMPFILE}"
+    fi
 
     if [ "${RETCODE:-0}" -ne 0 ]
     then
@@ -452,6 +493,7 @@ setup_conda() {
     signalp3-register "${SIGNALP3}" && echo \
     && signalp4-register "${SIGNALP4}" && echo \
     && signalp5-register "${SIGNALP5}" && echo \
+    && signalp6-register "${SIGNALP6}" && echo \
     && targetp2-register "${TARGETP2}" && echo \
     && deeploc-register "${DEEPLOC}" && echo \
     && phobius-register "${PHOBIUS}" && echo \
@@ -532,6 +574,7 @@ setup_docker() {
       --build-arg SIGNALP3="${SIGNALP3}" \
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
+      --build-arg SIGNALP6="${SIGNALP6}" \
       --build-arg TARGETP2="${TARGETP2}" \
       --build-arg PHOBIUS="${PHOBIUS}" \
       --build-arg TMHMM="${TMHMM}" \
@@ -606,6 +649,7 @@ setup_singularity() {
     export SIGNALP3="${SIGNALP3}"
     export SIGNALP4="${SIGNALP4}"
     export SIGNALP5="${SIGNALP5}"
+    export SIGNALP6="${SIGNALP6}"
     export TARGETP2="${TARGETP2}"
     export PHOBIUS="${PHOBIUS}"
     export TMHMM="${TMHMM}"

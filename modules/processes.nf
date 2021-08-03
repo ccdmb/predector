@@ -112,6 +112,25 @@ process decode_seqs {
 }
 
 
+process sanitise_phibase {
+
+    label 'posix'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_low'
+
+    input:
+    path "phibase.fasta"
+
+    output:
+    path "tidied_phibase.fasta"
+
+    script:
+    """
+    LANG=C sed 's/[^[:print:]]//g' < phibase.fasta > tidied_phibase.fasta
+    """
+}
+
 process gff_results {
 
     label 'predectorutils'
@@ -394,6 +413,70 @@ process signalp_v5 {
     mv "out_mature.fasta" "out.fasta"
     rm -f out_summary.signalp5
     rm -rf -- tmpdir
+    """
+}
+
+
+/*
+ * Identify signal peptides using SignalP v6
+ */
+process signalp_v6 {
+
+    label 'signalp6'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
+
+    input:
+    val domain
+    path "in.fasta"
+
+    output:
+    path "out.ldjson"
+
+    script:
+    """
+    mkdir -p tmpdir
+
+    run () {
+        set -e
+        TMPDIR="\${PWD}/tmp\$\$"
+        mkdir -p "\${TMPDIR}"
+
+	export OMP_NUM_THREADS=1
+        signalp6 \
+          --fastafile "\$1" \
+          --output_dir "\${TMPDIR}" \
+          --format txt \
+          --organism eukarya \
+          --mode fast \
+        1>&2
+
+        deeploc -f "\$1" -o "\${TMPFILE}" 1>&2
+        cat "\${TMPDIR}/prediction_results.txt"
+
+        rm -rf -- "\${TMPDIR}"
+    }
+    export -f run
+
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" "100")"
+
+    parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < in.fasta \
+    | cat > out.txt
+
+    predutils r2js \
+      --pipeline-version "${workflow.manifest.version}" \
+      signalp6 "out.txt" \
+    > "out.ldjson"
     """
 }
 
@@ -830,6 +913,56 @@ process effectorp_v2 {
         --pipeline-version "${workflow.manifest.version}" \
         -o out.ldjson \
         effectorp2 out.txt
+    """
+}
+
+
+/*
+ * Effector ML using EffectorP v3
+ */
+process effectorp_v3 {
+
+    label 'effectorp3'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
+
+    input:
+    path "in.fasta"
+
+    output:
+    path "out.ldjson"
+
+    script:
+    """
+    run () {
+        set -e
+        TMPFILE="tmp\$\$"
+        EffectorP3.py -f -i "\$1" -o "\${TMPFILE}" 1>&2
+        cat "\${TMPFILE}"
+
+        rm -f "\${TMPFILE}"
+    }
+    export -f run
+
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
+
+    parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        run \
+    < in.fasta \
+    | cat > out.txt
+
+    predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        -o out.ldjson \
+        effectorp3 out.txt
     """
 }
 

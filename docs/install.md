@@ -24,6 +24,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6 "fast"
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -45,18 +46,19 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.0.0/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.1.0-dev/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
     -5 signalp-5.0b.Linux.tar.gz \
+    -6 signalp-6.0.fast.tar.gz \
     -t targetp-2.0.Linux.tar.gz \
     -d deeploc-1.0.All.tar.gz \
     -m tmhmm-2.0c.Linux.tar.gz \
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.0.0`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.1.0-dev`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -88,25 +90,25 @@ Use one of the commands below using information given upon completion of depende
 Using conda:
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.1.0-dev ccdmb/predector
 ```
 
 Using docker:
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.1.0-dev ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.1.0-dev ccdmb/predector
 ```
 
 Using singularity:
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.1.0-dev ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.0.0 ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.1.0-dev ccdmb/predector
 ```
 
 ## Extended dependency install guide
@@ -129,7 +131,7 @@ First we create the conda environment, which includes the non-proprietary depend
 
 ```bash
 # Download the environment config file.
-curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/1.0.0/environment.yml
+curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/1.1.0-dev/environment.yml
 
 # Create the environment
 conda env create -f environment.yml
@@ -144,6 +146,7 @@ Modify the source tar archive filenames in the commands if necessary.
 signalp3-register signalp-3.0.Linux.tar.Z \
 && signalp4-register signalp-4.1g.Linux.tar.gz \
 && signalp5-register signalp-5.0b.Linux.tar.gz \
+&& signalp6-register signalp-6.0.fast.tar.gz \
 && targetp2-register targetp-2.0.Linux.tar.gz \
 && deeploc-register deeploc-1.0.All.tar.gz \
 && phobius-register phobius101_linux.tar.gz \
@@ -162,21 +165,22 @@ Modify the source `.tar` archive filenames in the command if necessary.
 Depending on how you installed docker you may need to use `sudo docker` in place of `docker`.
 
 ```bash
-curl -s https://raw.githubusercontent.com/ccdmb/predector/1.0.0/Dockerfile \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/1.1.0-dev/Dockerfile \
 | docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
   --build-arg SIGNALP5=signalp-5.0b.Linux.tar.gz \
+  --build-arg SIGNALP6=signalp-6.0.fast.tar.gz \
   --build-arg TARGETP2=targetp-2.0.Linux.tar.gz \
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:1.0.0 \
+  -t predector/predector:1.1.0-dev \
   -f - \
   .
 ```
 
-Your container should now be available as `predector/predector:1.0.0` in your docker registry `docker images`.
+Your container should now be available as `predector/predector:1.1.0-dev` in your docker registry `docker images`.
 
 
 ### Building the Singularity container the long way
@@ -195,13 +199,14 @@ Modify the source tar archive filenames if necessary.
 export SIGNALP3=signalp-3.0.Linux.tar.Z
 export SIGNALP4=signalp-4.1g.Linux.tar.gz
 export SIGNALP5=signalp-5.0b.Linux.tar.gz
+export SIGNALP6=signalp-6.0.fast.tar.gz
 export TARGETP2=targetp-2.0.Linux.tar.gz
 export PHOBIUS=phobius101_linux.tar.gz
 export TMHMM=tmhmm-2.0c.Linux.tar.gz
 export DEEPLOC=deeploc-1.0.All.tar.gz
 
 # Download the .def file
-curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/1.0.0/singularity.def
+curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/1.1.0-dev/singularity.def
 
 # Build the .sif singularity image.
 # Note that `sudo -E` is important, it tells sudo to keep the environment variables
@@ -215,7 +220,7 @@ If you've already built the container using docker, you can convert them to sing
 You don't need to use `sudo` even if your docker installation usually requires it.
 
 ```bash
-singularity build predector.sif docker-daemon://predector/predector:1.0.0
+singularity build predector.sif docker-daemon://predector/predector:1.1.0-dev
 ```
 
 
@@ -245,7 +250,7 @@ Docker containers can be saved as a tarball and copied wherever you like.
 
 ```bash
 # You could pipe this through gzip if you wanted.
-docker save predector/predector:1.0.0 > predector.tar
+docker save predector/predector:1.1.0-dev > predector.tar
 ```
 
 And the on the other end
@@ -268,7 +273,7 @@ Hopefully, one of these options will work for you.
 
 ## Common install issues
 
-### Running with docker `Unable to find image 'predector/predector:1.0.0' locally`
+### Running with docker `Unable to find image 'predector/predector:1.1.0-dev' locally`
 
 This usually means that you haven't built the docker image locally.
 Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.

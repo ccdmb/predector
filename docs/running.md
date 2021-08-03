@@ -1,6 +1,6 @@
 ## Running the pipeline
 
-To run predector you need your input proteomes as uncompressed fasta files, and a downloaded copy of the [PHI-base](http://www.phi-base.org/) fasta file.
+To run predector you just need your input proteomes as uncompressed fasta files.
 
 Assuming that you've installed the dependencies, and know which dependency system you're using (conda, docker, or singularity), you can run like so:
 
@@ -10,10 +10,9 @@ Conda:
 ```bash
 nextflow run \
   -resume \
-  -r 1.0.0 \
+  -r 1.1.0-dev \
   -with-conda /path/to/conda/env \
   ccdmb/predector \
-  --phibase phibase-latest.fas \
   --proteome "my_proteomes/*.faa"
 ```
 
@@ -22,10 +21,9 @@ Docker:
 ```bash
 nextflow run \
   -resume \
-  -r 1.0.0 \
+  -r 1.1.0-dev \
   -profile docker \
   ccdmb/predector \
-  --phibase phibase-latest.fas \
   --proteome "my_proteomes/*.faa"
 ```
 
@@ -34,10 +32,9 @@ Singularity:
 ```bash
 nextflow run \
   -resume \
-  -r 1.0.0 \
+  -r 1.1.0-dev \
   -with-singularity ./path/to/singularity.sif \
   ccdmb/predector \
-  --phibase phibase-latest.fas \
   --proteome "my_proteomes/*.faa"
 ```
 
@@ -166,6 +163,7 @@ In the config files, you can select these tasks by label.
 | software | `signalp3`       |                                                                                                                      |
 | software | `signalp4`       |                                                                                                                      |
 | software | `signalp5`       |                                                                                                                      |
+| software | `signalp6`       |                                                                                                                      |
 | software | `deepsig`        |                                                                                                                      |
 | software | `phobius`        |                                                                                                                      |
 | software | `tmhmm`          |                                                                                                                      |
@@ -174,6 +172,7 @@ In the config files, you can select these tasks by label.
 | software | `localizer`      |                                                                                                                      |
 | software | `effectorp1`     |                                                                                                                      |
 | software | `effectorp2`     |                                                                                                                      |
+| software | `effectorp3`     |                                                                                                                      |
 | software | `emboss`         |                                                                                                                      |
 | software | `hmmer3`         |                                                                                                                      |
 | software | `pfamscan`       |                                                                                                                      |
@@ -183,7 +182,7 @@ In the config files, you can select these tasks by label.
 
 ### Running different pipeline versions.
 
-We pin the version of the pipeline to run in all of our example commands with the `-r 1.0.0` parameter.
+We pin the version of the pipeline to run in all of our example commands with the `-r 1.1.0-dev` parameter.
 These flags are optional, but recommended so that you know which version you ran. Different versions of the pipelines may output different scores, use different parameters look etc. It also re-enforces the link between the pipeline version and the docker container tags.
 
 If you have previously run predector and want to update it to use a new version, you can either provide a new version to the `-r` parameter, and add the `-latest` flag to tell nextflow to pull new changes from the github repository.
@@ -194,7 +193,7 @@ Note that the software environments (conda, docker, singularity) often will not 
 I suggest keeping copies of the proprietary dependencies handy in a folder or archive, and just building and removing the container/environment as you need it.
 
 
-### Providing pre-downloaded Pfam and dbCAN datasets.
+### Providing pre-downloaded Pfam, PHI-base, and dbCAN datasets.
 
 Sometimes the Pfam or dbCAN servers can be a bit slow for downloads, and are occasionally unavailable which will cause the pipeline to fail.
 You may want to keep the downloaded databases to reuse them (or pre-download them).
@@ -206,6 +205,7 @@ cp -rL results/downloads ./downloads
 nextflow run \
   -profile test \
   -resume ccdmb/predector \
+  --phibase phi-base_current.fas \
   --pfam_hmm downloads/Pfam-A.hmm.gz \
   --pfam_dat downloads/Pfam-A.hmm.dat.gz \
   --pfam_active_site downloads/active_site.dat.gz \

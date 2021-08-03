@@ -31,57 +31,62 @@ There are a lot of columns, though generally you'll only be interested in a few 
 15. dbcan_matches -- A comma separated lst of all dbCAN matches.
 16. effectorp1 -- Float. The raw EffectorP v1 prediction pseudo-probability. Values above 0.5 are considered to be effector predictions.
 17. effectorp2 -- Float. The raw EffectorP v2 prediction pseudo-probability. Values above 0.5 are considered to be effector predictions. Values below 0.6 are annotated in the raw EffectorP output as "unlikely effectors".
-18. is_secreted -- Boolean \[0, 1\] indicating whether the protein had a signal peptide predicted by any method, and does not have >=2 transmembrane domains predicted by either TMHMM or Phobius.
-19. any_signal_peptide -- Boolean \[0, 1\] indicating whether any of the signal peptide prediction methods predict the protein to have a signal peptide.
-20. apoplastp -- Float. The raw ApoplastP "apoplast" localised prediction pseudo probability. Values above 0.5 are considered to be apoplastically localised.
-21. single_transmembrane -- Boolean \[0, 1\] indicating whether the protein is predicted to have 1 transmembrane domain by TMHMM or Phobius (and not >1 for either), and in the case of TMHMM the predicted number of TM AAs in the first 60 residues is less than 10.
-22. multiple_transmembrane -- Boolean \[0, 1\] indicating whether a protein is predicted to have more than 1 transmembrane domain by either Phobius or TMHMM.
-23. molecular_weight -- Float. The predicted molecular weight (Daltons) of the protein.
-24. residue_number -- Integer. The length of the protein or number of residues/AAs.
-25. charge -- Float. The overall predicted charge of the protein.
-26. isoelectric_point -- Float. The predicted isoelectric point of the protein.
-27. aa_c_number -- Integer. The number of Cysteine residues in the protein.
-28. aa_tiny_number -- Integer. The number of tiny residues (A, C, G, S, or T) in the protein.
-29. aa_small_number -- Integer. The number of small residues (A, B, C, D, G, N, P, S, T, or V) in the protein.
-30. aa_aliphatic_number -- Integer. The number of aliphatic residues (A, I, L, or V) in the protein.
-31. aa_aromatic_number -- Integer. The number of aromatic residues (F, H, W, or Y) in the protein.
-32. aa_nonpolar_number -- Integer. The number of non-polar residues (A, C, F, G, I, L, M, P, V, W, or Y) in the protein.
-33. aa_charged_number -- Integer. The number of charged residues (B, D, E, H, K, R, or Z) in the protein.
-34. aa_basic_number -- Integer. The number of basic residues (H, K, or R) in the protein.
-35. aa_acidic_number -- Integer. The number of acidic residues (B, D, E or Z) in the protein.
-36. fykin_gap -- Float. The number of FYKIN residues + 1 divided by the number of GAP residues + 1. [Testa et al. 2016](https://doi.org/10.1093/gbe/evw121) describe RIP affected regions as being enriched for FYKIN residues, and depleted in GAP residues.
-37. localizer_nuclear -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal nuclear localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
-38. localizer_chloro -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal chloroplast localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
-39. localizer_mito -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal mitochondrial localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
-40. signalp3_nn -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by the neural network model in SignalP 3.
-41. signalp3_hmm -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by the HMM model in SignalP 3.
-42. signalp4 -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by SignalP 4.
-43. signalp5 -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by SignalP 5.
-44. deepsig -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by DeepSig.
-45. phobius_sp -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by Phobius.
-46. phobius_tmcount -- Integer. The number of transmembrane domains predicted by Phobius.
-47. tmhmm_tmcount -- Integer. The number of transmembrane domains predicted by TMHMM.
-48. tmhmm_first_60 -- Float. The predicted number of transmembrane AAs in the first 60 residues of the protein by TMHMM.
-49. tmhmm_exp_aa -- Float. The predicted number of transmembrane AAs in the protein by TMHMM.
-50. tmhmm_first_tm_sp_coverage -- Float. The proportion of the first predicted TM domain that overlaps with the median predicted signal-peptide cut site. Where no signal peptide or no TM domains are predicted, this will always be 0.
-51. targetp_secreted -- Boolean \[0, 1\] indicating whether TargetP 2 predicts the protein to be secreted.
-52. targetp_secreted_prob -- Float. The TargetP pseudo-probability of secretion.
-53. targetp_mitochondrial_prob -- Float. The TargetP pseudo-probability of mitochondrial localisation.
-54. deeploc_membrane -- Float. DeepLoc pseudo-probability of membrane association.
-55. deeploc_nucleus -- Float. DeepLoc pseudo-probability of nuclear localisation. Note that all DeepLoc values other than "membrane" are from the same classifier, so the sum of all of the pseudo-probabilities will be 1.
-56. deeploc_cytoplasm -- Float. DeepLoc pseudo-probability of cytoplasmic localisation.
-57. deeploc_extracellular -- Float. DeepLoc pseudo-probability of extracellular localisation.
-58. deeploc_mitochondrion -- Float. DeepLoc pseudo-probability of mitochondrial localisation.
-59. deeploc_cell_membrane -- Float. DeepLoc pseudo-probability of cell membrane localisation.
-60. deeploc_endoplasmic_reticulum -- Float. DeepLoc pseudo-probability of ER localisation.
-61. deeploc_plastid -- Float. DeepLoc pseudo-probability of plastid localisation.
-62. deeploc_golgi -- Float. DeepLoc pseudo-probability of golgi apparatus localisation.
-63. deeploc_lysosome -- Float. DeepLoc pseudo-probability of lysosomal localisation.
-64. deeploc_peroxisome -- Float. DeepLoc pseudo-probability of peroxisomal localisation.
-65. signalp3_nn_d -- Float. The raw D-score for the SignalP 3 neural network.
-66. signalp3_hmm_s -- Float. The raw S-score for the SignalP 3 HMM predictor.
-67. signalp4_d -- Float. The raw D-score for SignalP 4. See discussion of choosing multiple thresholds in the [SignalP FAQs](https://services.healthtech.dtu.dk/service.php?SignalP-5.0).
-68. signalp5_prob -- Float. The SignalP 5 signal peptide pseudo-probability.
+18. effectorp3_cytoplasmic -- Float or None '.'. The EffectorP v3 prediction pseudo-probability for cytoplasmic effectors. EffectorP only reports probabilities for classifiers over 0.5. '.' indicates where the value is not reported by EffectorP v3.
+19. effectorp3_apoplastic -- Float or None '.'. As for `effectorp3_cytoplasmic` but for apoplastic effector probability.
+20. effectorp3_noneffector -- Float or None '.'. As for `effectorp3_cytoplasmic` but for non-effector probability.
+21. is_secreted -- Boolean \[0, 1\] indicating whether the protein had a signal peptide predicted by any method, and does not have >=2 transmembrane domains predicted by either TMHMM or Phobius.
+22. any_signal_peptide -- Boolean \[0, 1\] indicating whether any of the signal peptide prediction methods predict the protein to have a signal peptide.
+23. apoplastp -- Float. The raw ApoplastP "apoplast" localised prediction pseudo probability. Values above 0.5 are considered to be apoplastically localised.
+24. single_transmembrane -- Boolean \[0, 1\] indicating whether the protein is predicted to have 1 transmembrane domain by TMHMM or Phobius (and not >1 for either), and in the case of TMHMM the predicted number of TM AAs in the first 60 residues is less than 10.
+25. multiple_transmembrane -- Boolean \[0, 1\] indicating whether a protein is predicted to have more than 1 transmembrane domain by either Phobius or TMHMM.
+26. molecular_weight -- Float. The predicted molecular weight (Daltons) of the protein.
+27. residue_number -- Integer. The length of the protein or number of residues/AAs.
+28. charge -- Float. The overall predicted charge of the protein.
+29. isoelectric_point -- Float. The predicted isoelectric point of the protein.
+30. aa_c_number -- Integer. The number of Cysteine residues in the protein.
+31. aa_tiny_number -- Integer. The number of tiny residues (A, C, G, S, or T) in the protein.
+32. aa_small_number -- Integer. The number of small residues (A, B, C, D, G, N, P, S, T, or V) in the protein.
+33. aa_aliphatic_number -- Integer. The number of aliphatic residues (A, I, L, or V) in the protein.
+34. aa_aromatic_number -- Integer. The number of aromatic residues (F, H, W, or Y) in the protein.
+35. aa_nonpolar_number -- Integer. The number of non-polar residues (A, C, F, G, I, L, M, P, V, W, or Y) in the protein.
+36. aa_charged_number -- Integer. The number of charged residues (B, D, E, H, K, R, or Z) in the protein.
+37. aa_basic_number -- Integer. The number of basic residues (H, K, or R) in the protein.
+38. aa_acidic_number -- Integer. The number of acidic residues (B, D, E or Z) in the protein.
+39. fykin_gap -- Float. The number of FYKIN residues + 1 divided by the number of GAP residues + 1. [Testa et al. 2016](https://doi.org/10.1093/gbe/evw121) describe RIP affected regions as being enriched for FYKIN residues, and depleted in GAP residues.
+40. localizer_nuclear -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal nuclear localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
+41. localizer_chloro -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal chloroplast localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
+42. localizer_mito -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal mitochondrial localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
+43. signalp3_nn -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by the neural network model in SignalP 3.
+44. signalp3_hmm -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by the HMM model in SignalP 3.
+45. signalp4 -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by SignalP 4.
+46. signalp5 -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by SignalP 5.
+47. signalp6 -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by SignalP 6.
+48. deepsig -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by DeepSig.
+49. phobius_sp -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by Phobius.
+50. phobius_tmcount -- Integer. The number of transmembrane domains predicted by Phobius.
+51. tmhmm_tmcount -- Integer. The number of transmembrane domains predicted by TMHMM.
+52. tmhmm_first_60 -- Float. The predicted number of transmembrane AAs in the first 60 residues of the protein by TMHMM.
+53. tmhmm_exp_aa -- Float. The predicted number of transmembrane AAs in the protein by TMHMM.
+54. tmhmm_first_tm_sp_coverage -- Float. The proportion of the first predicted TM domain that overlaps with the median predicted signal-peptide cut site. Where no signal peptide or no TM domains are predicted, this will always be 0.
+55. targetp_secreted -- Boolean \[0, 1\] indicating whether TargetP 2 predicts the protein to be secreted.
+56. targetp_secreted_prob -- Float. The TargetP pseudo-probability of secretion.
+57. targetp_mitochondrial_prob -- Float. The TargetP pseudo-probability of mitochondrial localisation.
+58. deeploc_membrane -- Float. DeepLoc pseudo-probability of membrane association.
+59. deeploc_nucleus -- Float. DeepLoc pseudo-probability of nuclear localisation. Note that all DeepLoc values other than "membrane" are from the same classifier, so the sum of all of the pseudo-probabilities will be 1.
+60. deeploc_cytoplasm -- Float. DeepLoc pseudo-probability of cytoplasmic localisation.
+61. deeploc_extracellular -- Float. DeepLoc pseudo-probability of extracellular localisation.
+62. deeploc_mitochondrion -- Float. DeepLoc pseudo-probability of mitochondrial localisation.
+63. deeploc_cell_membrane -- Float. DeepLoc pseudo-probability of cell membrane localisation.
+64. deeploc_endoplasmic_reticulum -- Float. DeepLoc pseudo-probability of ER localisation.
+65. deeploc_plastid -- Float. DeepLoc pseudo-probability of plastid localisation.
+66. deeploc_golgi -- Float. DeepLoc pseudo-probability of golgi apparatus localisation.
+67. deeploc_lysosome -- Float. DeepLoc pseudo-probability of lysosomal localisation.
+68. deeploc_peroxisome -- Float. DeepLoc pseudo-probability of peroxisomal localisation.
+69. signalp3_nn_d -- Float. The raw D-score for the SignalP 3 neural network.
+70. signalp3_hmm_s -- Float. The raw S-score for the SignalP 3 HMM predictor.
+71. signalp4_d -- Float. The raw D-score for SignalP 4. See discussion of choosing multiple thresholds in the [SignalP FAQs](https://services.healthtech.dtu.dk/service.php?SignalP-5.0).
+72. signalp5_prob -- Float. The SignalP 5 signal peptide pseudo-probability.
+73. signalp6_prob -- Float. The SignalP 6 signal peptide pseudo-probability.
 
 
 ### `*.gff3`
@@ -108,6 +113,7 @@ We've done our best to retain all of the information in the original formats as 
 
 The original formats are described in:
 
+- https://services.healthtech.dtu.dk/service.php?SignalP-6.0 
 - https://services.healthtech.dtu.dk/service.php?SignalP-5.0 
 - https://services.healthtech.dtu.dk/service.php?SignalP-4.1
 - https://services.healthtech.dtu.dk/service.php?SignalP-3.0

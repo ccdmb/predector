@@ -14,17 +14,19 @@ dependencies:
   - deepsig=0f1e1d9
   - effectorp1=1.0
   - effectorp2=2.0
+  - effectorp3=3.0
   - localizer=1.0.4
   - phobius=1.01
-  - predectorutils=0.2.0
+  - predectorutils=0.3.0
   - signalp3=3.0b
   - signalp4=4.1g
   - signalp5=5.0b
+  - signalp6=1.0
   - targetp2=2.0
   - tmhmm=2.0c
   ## Conda-forge packages
-  - gawk=5.1.0
-  - wget=1.20.1
+  - gawk=5.1
+  - wget=1.20
   - parallel
   ## Fudge to get keras working with deepsig...
   - h5py<3
@@ -32,4 +34,4 @@ dependencies:
   - emboss=6.6.0
   - hmmer=3.3
   - pfam_scan=1.6
-  - mmseqs2=11.e1a1c
+  - mmseqs2=13.45111

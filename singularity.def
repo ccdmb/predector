@@ -1,9 +1,9 @@
 bootstrap: docker
-From: predector/predector-base:1.0.0
+From: predector/predector-base:1.1.0-dev
 
 %labels
     Author "darcy.ab.jones@gmail.com"
-    Version "1.0.0"
+    Version "1.1.0-dev"
 
 %help
     A containter will all dependencies for the predector pipeline.
@@ -15,6 +15,7 @@ From: predector/predector-base:1.0.0
     [ -z "${SIGNALP3:-}" ] && ANY_WAS_UNSET=true
     [ -z "${SIGNALP4:-}" ] && ANY_WAS_UNSET=true
     [ -z "${SIGNALP5:-}" ] && ANY_WAS_UNSET=true
+    [ -z "${SIGNALP6:-}" ] && ANY_WAS_UNSET=true
     [ -z "${TARGETP2:-}" ] && ANY_WAS_UNSET=true
     [ -z "${DEEPLOC:-}" ] && ANY_WAS_UNSET=true
     [ -z "${PHOBIUS:-}" ] && ANY_WAS_UNSET=true
@@ -24,7 +25,7 @@ From: predector/predector-base:1.0.0
     then
         echo "One or more of the required variables was not set." 1>&2
         echo "Please provide the variables:" 1>&2
-        echo -e "- SIGNALP3\n- SIGNALP4\n- SIGNALP5\n- TARGETP2\n- DEEPLOC\n- PHOBIUS\n- TMHMM" 1>&2
+        echo -e "- SIGNALP3\n- SIGNALP4\n- SIGNALP5\n- SIGNALP6\n- TARGETP2\n- DEEPLOC\n- PHOBIUS\n- TMHMM" 1>&2
         exit 1
     fi
     mkdir -p "${SINGULARITY_ROOTFS}/tmp/onbuild"
@@ -32,6 +33,7 @@ From: predector/predector-base:1.0.0
     cp "${SIGNALP3}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
     cp "${SIGNALP4}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
     cp "${SIGNALP5}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
+    cp "${SIGNALP6}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
     cp "${TARGETP2}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
     cp "${DEEPLOC}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
     cp "${PHOBIUS}" "${SINGULARITY_ROOTFS}/tmp/onbuild/"
@@ -40,6 +42,7 @@ From: predector/predector-base:1.0.0
     echo export SIGNALP3="${SIGNALP3:-}" > "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
     echo export SIGNALP4="${SIGNALP4:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
     echo export SIGNALP5="${SIGNALP5:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
+    echo export SIGNALP6="${SIGNALP6:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
     echo export TARGETP2="${TARGETP2:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
     echo export DEEPLOC="${DEEPLOC:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
     echo export PHOBIUS="${PHOBIUS:-}" >> "${SINGULARITY_ROOTFS}/tmp/prenv.sh"
@@ -57,6 +60,8 @@ From: predector/predector-base:1.0.0
     signalp4-register "/tmp/onbuild/$(basename "${SIGNALP4}")"
     echo
     signalp5-register "/tmp/onbuild/$(basename "${SIGNALP5}")"
+    echo
+    signalp6-register "/tmp/onbuild/$(basename "${SIGNALP6}")"
     echo
     targetp2-register "/tmp/onbuild/$(basename "${TARGETP2}")"
     echo
