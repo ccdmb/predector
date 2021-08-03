@@ -30,6 +30,7 @@ SINGULARITY_DEFAULTNAME="predector.sif"
 
 # Only valid for CONDA, use this path prefix instead of a name.
 CONDA_ENV_DIR=
+CONDA_TEMPLATE=
 
 # This sets -x
 DEBUG=false
@@ -112,6 +113,8 @@ Optional parameters:
   -c|--conda-prefix -- If set, use this as the location to store the built conda
                        environment instead of setting a name and using the default
                        prefix.
+  --conda-template -- Use this conda environment.yml file instead of downloading it from github.
+                      Only affects conda installs.
 
 Flags:
   --debug        -- Increased verbosity for developer use.
@@ -218,6 +221,12 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    --conda-template)
+    check_nodefault_param "--conda-template" "${CONDA_TEMPLATE}" "${2:-}"
+    CONDA_TEMPLATE="$2"
+    shift
+    shift
+    ;;
     --debug)
     DEBUG=true
     shift # past argument
@@ -257,7 +266,7 @@ FAILED=false
 [ -z "${TMHMM:-}" ] && echo "Please provide the source for tmhmm." 1>&2 && FAILED=true
 [ -z "${PHOBIUS:-}" ] && echo "Please provide the source for phobius." 1>&2 && FAILED=true
 
-[ -z "${ENVIRONMENT}" ] && (echo "Please tell us which environment you'd like to install: conda, docker or singularity." 1>&2; FAILED=true)
+[ -z "${ENVIRONMENT:-}" ] && (echo "Please tell us which environment you'd like to install: conda, docker or singularity." 1>&2; FAILED=true)
 
 if [ "${FAILED}" = true ]
 then
@@ -276,6 +285,11 @@ fi
 [ ! -f "${DEEPLOC:-}" ] && echo "The specified archive for deeploc '${DEEPLOC}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TMHMM:-}" ] && echo "The specified archive for tmhmm '${TMHMM}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${PHOBIUS:-}" ] && echo "The specified archive for phobius '${PHOBIUS}' does not exist." 1>&2 && FAILED=true
+
+if [ -z "${CONDA_TEMPLATE:-}" ]
+then
+    [ ! -f "${CONDA_TEMPLATE:-}" ] && echo "The specified alternate conda template '${CONDA_TEMPLATE}' does not exist." 1>&2 && FAILED=true
+fi
 
 if [ "${FAILED}" = "true" ]
 then
@@ -415,9 +429,15 @@ get_abs_filename() {
 }
 
 
+get_conda_template() {
+    # $1 : New env filename
+
+    if [ -z
+}
+
 setup_conda() {
-    URL="${REPOBASE}/${VERSION}/environment.yml"
     NAME="${NAME:-${CONDA_DEFAULTNAME}}"
+    URL="${REPOBASE}/${VERSION}/environment.yml"
 
     check_conda_installed
     check_is_linux
@@ -426,7 +446,11 @@ setup_conda() {
     echo
 
     TMPFILE=".predector$$.yml"
-    curl -o "${TMPFILE}" -s "${URL}"
+
+    if [ ! -z "${CONDA_TEMPLATE:-}" ]
+    then
+        curl -o "${TMPFILE}" -s "${URL}"
+    fi
 
     # This is to allow non-standard environment paths
     if [ -z "${CONDA_ENV_DIR:-}" ]
@@ -436,7 +460,10 @@ setup_conda() {
         conda env create --prefix "${CONDA_ENV_DIR}" --file "${TMPFILE}" || RETCODE="$?"
     fi
 
-    rm -f "${TMPFILE}"
+    if [ ! -z "${CONDA_TEMPLATE:-}" ]
+    then
+        rm -f "${TMPFILE}"
+    fi
 
     if [ "${RETCODE:-0}" -ne 0 ]
     then
