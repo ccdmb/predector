@@ -1,3 +1,46 @@
+## Common issues
+
+### `` Cannot find revision `X.X.X` -- Make sure that it exists in the remote repository `https://github.com/ccdmb/predector` ``
+
+All of our code examples specify the pipeline version number, which is to ensure that the correct dependencies are used and it's always clear what is actually being run.
+
+Unfortunately this can cause a few issues if you have previously run the pipeline using the same computer.
+You can read about this in more detail in the section "[Running different pipeline versions](#running-different-pipeline-versions)".
+
+Try the following steps to resolve the issue.
+
+1. Double check that the specified version number is actually a tagged version of the pipeline (https://github.com/ccdmb/predector/tags).
+2. Try re-running the pipeline with the `-latest` flag included. i.e. `nextflow run -r X.X.X -latest ccdmb/predector --proteome "proteomes/*"`.
+3. Try pulling the updates down from GitHub with nextflow directly with the following command: `nextflow pull ccdmb/predector`. Then try re-running the pipeline.
+4. Try asking nextflow to delete it's local copy of Predector from its cache with the following command: `nextflow drop ccdmb/predector`. Then try re-running the pipeline.
+
+If you're still having problems after this, please either email us or raise an issue on GitHub.
+
+### Running with docker `Unable to find image 'predector/predector:1.1.0-alpha' locally`
+
+This usually means that you haven't built the docker image locally.
+Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.
+
+Please check that you have the docker container in your local registry:
+
+```bash
+docker images
+```
+
+It's also possible that you built a different environment (e.g. conda or singularity).
+Check `conda info -e` or for any `.sif` files where your source archives are.
+
+Another possibility is that you are trying to run the pipeline using a container built for a different version of the pipeline.
+Please check that the version tag in `docker images` is the same as the pipeline that you're trying to run.
+Update the pipeline if necessary using `nextflow pull ccdmb/predector`.
+
+
+### Running with singularity `ERROR : Failed to set loop flags on loop device: Resource temporarily unavailable`.
+
+This is caused by nextflow trying to launch lots of tasks with the same singularity image at the same time.
+Updating singularity to version >= 3.5 _should_ resolve the issue.
+
+
 ## FAQ
 
 We'll update these as we find new issues and get feedback.
@@ -21,7 +64,6 @@ With predector we really wanted to encourage you to look at your data.
 Ranking separates the bulk of good proteins from bad ones, so a it's easier to decide when to stop manually evaluating candidates and settle on a list.
 Think of it like searching for papers on the web.
 The first page usually contains something relevant to what you're interested in, but sometimes there are some gems in the 2nd and 3rd pages.
-
 
 ### How should I cite predector?
 

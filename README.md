@@ -12,18 +12,28 @@ We recommend that users incorporate these ranked effector candidates with experi
 We hope that this pipeline can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
 
 
-Extended documentation can be found on the project [Wiki page](https://github.com/ccdmb/predector/wiki), but brief instructions are provided below.
-
-
 ** Checkout our preprint! **
 
 https://doi.org/10.21203/rs.3.rs-379941/v1
 
 
+## Documentation
+
+Brief instructions are presented on this page, but extended documentation can be found on the project [Wiki page](https://github.com/ccdmb/predector/wiki).
+
+Quick documentation links:
+
+- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#quick-install)
+- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#extended-dependency-install-guide)
+- [Usage](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#running-the-pipeline)
+- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#pipeline-output)
+- [Common issues](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#common-issues)
+- [FAQ](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#faq)
+
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
-For extended documentation and troubleshooting advice, see the [install documentation](https://github.com/ccdmb/predector/blob/master/docs/install.md).
+For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#quick-install).
 
 
 ### 1. Install Conda, Docker, or Singularity
@@ -145,6 +155,11 @@ The following command will run the complete analysis and the results will be ava
 ```bash
 nextflow run -resume -r 1.1.0-alpha ccdmb/predector --proteome "proteomes/*"
 ```
+
+
+** Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes. **
+See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.1.0-alpha#common-issues).
+
 
 ## Future plans
 

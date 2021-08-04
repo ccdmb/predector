@@ -267,32 +267,4 @@ Just make sure that you install the environment on a shared filesystem (i.e. one
 There are also options for "packing" a conda environment into something that you can copy around (e.g. [conda-pack](https://conda.github.io/conda-pack/)), though we haven't tried this yet.
 
 
-
 Hopefully, one of these options will work for you.
-
-
-## Common install issues
-
-### Running with docker `Unable to find image 'predector/predector:1.1.0-alpha' locally`
-
-This usually means that you haven't built the docker image locally.
-Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.
-
-Please check that you have the docker container in your local registry:
-
-```bash
-docker images
-```
-
-It's also possible that you built a different environment (e.g. conda or singularity).
-Check `conda info -e` or for any `.sif` files where your source archives are.
-
-Another possibility is that you are trying to run the pipeline using a container built for a different version of the pipeline.
-Please check that the version tag in `docker images` is the same as the pipeline that you're trying to run.
-Update the pipeline if necessary using `nextflow pull ccdmb/predector`.
-
-
-### Running with singularity `ERROR : Failed to set loop flags on loop device: Resource temporarily unavailable`.
-
-This is caused by nextflow trying to launch lots of tasks with the same singularity image at the same time.
-Updating singularity to version >= 3.5 _should_ resolve the issue.

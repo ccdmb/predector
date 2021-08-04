@@ -39,6 +39,18 @@ nextflow run \
 ```
 
 
+Note that a peculiarity of nextflow is that any globbing patterns (e.g. `*`) need to be in quotes (single or double is fine), and you can't directly provide multiple filenames as you might expect.
+See below for some ways you can typically provide files to the `--proteome` parameter.
+
+| Use case | Correct | Incorrect |
+|----------|---------|-----------|
+| Single protein file | `--proteome my.fasta` | |
+| All fasta files in a folder | `--proteome "folder/*.fasta"` | `--proteome folder/*.fasta` |
+| Directly specify two files | `--proteome "{folder/file1.fasta,other/file2.fasta}"` (Ensure no spaces at the separating comma)| `--proteome "folder/file1.fasta other/file2.fasta"` |
+
+You can find more info on the Globbing operations that are supported by Nextflow in the [Java documentation](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
+
+
 ### Command line parameters
 
 To get a list of all available parameters, use the `--help` argument.
@@ -53,8 +65,21 @@ Important parameters are:
 --proteome <path or glob>
   Path to the fasta formatted protein sequences.
   Multiple files can be specified using globbing patterns in quotes.
+
 --phibase <path>
   Path to the PHI-base fasta dataset.
+
+--pfam_hmm <path>
+  Path to already downloaded gzipped pfam HMM database
+  default: download the hmms
+
+--pfam_dat <path>
+  Path to already downloaded gzipped pfam DAT database
+  default: download the DAT file
+
+--dbcan <path>
+  Path to already downloaded gzipped dbCAN HMM database
+  default: download the hmms
 
 -profile <string>
   Specify a pre-set configuration profile to use.
@@ -183,13 +208,29 @@ In the config files, you can select these tasks by label.
 ### Running different pipeline versions.
 
 We pin the version of the pipeline to run in all of our example commands with the `-r 1.1.0-alpha` parameter.
-These flags are optional, but recommended so that you know which version you ran. Different versions of the pipelines may output different scores, use different parameters look etc. It also re-enforces the link between the pipeline version and the docker container tags.
+These flags are optional, but recommended so that you know which version you ran.
+Different versions of the pipelines may output different scores, use different parameters, different output formats etc.
+It also re-enforces the link between the pipeline version and the docker container tags.
 
-If you have previously run predector and want to update it to use a new version, you can either provide a new version to the `-r` parameter, and add the `-latest` flag to tell nextflow to pull new changes from the github repository.
-Likewise, you can run old versions of the pipeline by simply changing `-r`.
-You can also pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
+If you specify the pipeline to run as `ccdmb/predector`, Nextflow will pull the git repository from GitHub and put it in a local cache.
+Unfortunately, if you change the version number provided to `-r` and that version is not in the local copy of the repository you will get an error (See [Common issues](#common-issues).
+If you have previously run predector and want to update it to use a new version, you can do one of the following:
 
-Note that the software environments (conda, docker, singularity) often will not be entirely compatible between versions. You should probably rebuild the container or conda environment from scratch when changing versions.
+1. Provide the new version to the `-r` parameter, and add the `-latest` flag to tell nextflow to pull new changes from the github repository.
+   Likewise, you can run old versions of the pipeline by simply changing `-r`.
+
+  ```
+  nextflow run -r 1.1.0-alpha -latest ccdmb/predector --proteomes "my_proteins.fasta"
+  ```
+
+2. You can ask nextflow to pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
+
+3. You can ask nextflow to delete the local copy of the repository entirely using `nextflow drop ccdmb/predector`. Nextflow will then pull a fresh copy the next time you run the pipeline.
+
+If you get an error about missing git tags when running either of the first two options, try the third option (`drop`). This might happen if we delete old development tags of the pipeline to clean up the pipeline.
+
+
+**Note that the software environments (conda, docker, singularity) often will not be entirely compatible between versions.** You should generally rebuild the container or conda environment from scratch when changing versions.
 I suggest keeping copies of the proprietary dependencies handy in a folder or archive, and just building and removing the container/environment as you need it.
 
 
@@ -208,7 +249,6 @@ nextflow run \
   --phibase phi-base_current.fas \
   --pfam_hmm downloads/Pfam-A.hmm.gz \
   --pfam_dat downloads/Pfam-A.hmm.dat.gz \
-  --pfam_active_site downloads/active_site.dat.gz \
   --dbcan downloads/dbCAN.txt
 ```
 
