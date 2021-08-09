@@ -317,7 +317,9 @@ def contactMessage() {
 // I don't love it.
 process publish_it {
 
-    label "process_low"
+    label "cpu_low"
+    label "memory_low"
+    label "time_short"
     label "posix"
 
     publishDir "${params.outdir}", saveAs: { name }

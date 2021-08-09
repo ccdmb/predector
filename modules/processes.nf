@@ -425,7 +425,7 @@ process signalp_v6 {
     label 'signalp6'
     label 'cpu_high'
     label 'memory_high'
-    label 'time_medium'
+    label 'time_long'
 
     input:
     val domain
@@ -438,44 +438,23 @@ process signalp_v6 {
     """
     mkdir -p tmpdir
 
-    run () {
-        set -e
-        TMPDIR="\${PWD}/tmp\$\$"
-        mkdir -p "\${TMPDIR}"
+    export OMP_NUM_THREADS="${task.cpus}"
+    signalp6 \
+      --fastafile "in.fasta" \
+      --output_dir "tmpdir" \
+      --format txt \
+      --organism eukarya \
+      --mode fast \
+    1>&2
 
-	export OMP_NUM_THREADS=1
-        signalp6 \
-          --fastafile "\$1" \
-          --output_dir "\${TMPDIR}" \
-          --format txt \
-          --organism eukarya \
-          --mode fast \
-        1>&2
-
-        cat "\${TMPDIR}/prediction_results.txt"
-
-        rm -rf -- "\${TMPDIR}"
-    }
-    export -f run
-
-    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" "100")"
-
-    parallel \
-        --halt now,fail=1 \
-        --joblog log.txt \
-        -j "${task.cpus}" \
-        -N "\${CHUNKSIZE}" \
-        --line-buffer  \
-        --recstart '>' \
-        --cat  \
-        run \
-    < in.fasta \
-    | cat > out.txt
+    mv "tmpdir/prediction_results.txt" out.txt
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
       signalp6 "out.txt" \
     > "out.ldjson"
+
+    rm -rf -- tmpdir
     """
 }
 
@@ -1021,9 +1000,9 @@ process press_pfam_hmmer {
 process pfamscan {
 
     label 'pfamscan'
-    label 'cpu_high'
-    label 'memory_high'
-    label 'time_medium'
+    label 'cpu_medium'
+    label 'memory_medium'
+    label 'time_long'
 
     input:
     path 'pfam_db'
@@ -1044,7 +1023,7 @@ process pfamscan {
         --recstart '>' \
         --line-buffer  \
         --cat  \
-        'pfam_scan.pl -fasta "{}" -dir pfam_db' \
+        'pfam_scan.pl -fasta "{}" -dir pfam_db -cpu 1' \
     < in.fasta \
     | cat > out.txt
 
