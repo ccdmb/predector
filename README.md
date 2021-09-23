@@ -23,17 +23,17 @@ Brief instructions are presented on this page, but extended documentation can be
 
 Quick documentation links:
 
-- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.1.0-beta#quick-install)
-- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.1.0-beta#extended-dependency-install-guide)
-- [Usage](https://github.com/ccdmb/predector/wiki/1.1.0-beta#running-the-pipeline)
-- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.1.0-beta#pipeline-output)
-- [Common issues](https://github.com/ccdmb/predector/wiki/1.1.0-beta#common-issues)
-- [FAQ](https://github.com/ccdmb/predector/wiki/1.1.0-beta#faq)
+- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#quick-install)
+- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#extended-dependency-install-guide)
+- [Usage](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#running-the-pipeline)
+- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#pipeline-output)
+- [Common issues](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#common-issues)
+- [FAQ](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#faq)
 
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
-For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.1.0-beta#quick-install).
+For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#quick-install).
 
 
 ### 1. Install Conda, Docker, or Singularity
@@ -82,7 +82,7 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.1.0-beta/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.1.0-beta.1/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -94,7 +94,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.1.0-beta/install.sh
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.1.0-beta`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.1.0-beta.1`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -125,25 +125,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.1.0-beta ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.1.0-beta.1 ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.1.0-beta ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.1.0-beta.1 ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.1.0-beta ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.1.0-beta.1 ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.1.0-beta ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.1.0-beta.1 ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.1.0-beta ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.1.0-beta.1 ccdmb/predector
 ```
 
 
@@ -153,12 +153,12 @@ Say you have a set of amino-acid sequences in fasta format in the directory `pro
 The following command will run the complete analysis and the results will be available in a `results` folder.
 
 ```bash
-nextflow run -resume -r 1.1.0-beta ccdmb/predector --proteome "proteomes/*"
+nextflow run -resume -r 1.1.0-beta.1 ccdmb/predector --proteome "proteomes/*"
 ```
 
 
 ** Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes. **
-See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.1.0-beta#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.1.0-beta#common-issues).
+See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#common-issues).
 
 
 ## Future plans
