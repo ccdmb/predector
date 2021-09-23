@@ -29,9 +29,20 @@ dependencies:
   - wget=1.20
   - parallel
   ## Fudge to get keras working with deepsig...
-  - h5py<3
+  - h5py=2.10.0  # <3
+  - tensorflow=2.4.3
+  - keras=2.4.3
   ## Bioconda packages
   - emboss=6.6.0
   - hmmer=3.3
   - pfam_scan=1.6
   - mmseqs2=13.45111
+  ## Version pins that aren't necessary but make solving environment faster
+  - python=3.7.10
+  - perl=5.26.2
+  - theano=1.0.4
+  - sqlite=3.36.0
+  - zlib=1.2.11
+  - xz=5.2.5
+  - mkl=2020.2
+  - hdf5=1.10.6
