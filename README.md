@@ -8,8 +8,8 @@ This includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, Deep
 These results are summarised as a table that includes most information that would typically be used for secretome analysis.
 Effector candidates are ranked using a [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
 
-The Predector rank scores offer a useful way of sorting your proteomes or subsets of proteomes to separating the bulk of protiens from those with effector-like characteristics (i.e secreted etc).
-The rank scores lend themselves well to evaluating candidates in a spreadsheet (i.e by sorting by the score column) and offer a logical place to start looking at your "top" candidates, and also guiding where to stop evaluating candidates in the list as they become less relevant.
+The Predector rank score offers a useful way of sorting your proteomes or subsets of proteomes to separate the bulk of proteins from those with effector-like characteristics (e.g. secreted, small etc).
+The rank scores lend themselves well to evaluating candidates in a spreadsheet (i.e by sorting by the score column) and offer a logical place to start looking at your "top" candidates, and guide when to stop evaluating candidates in the list as they become less relevant.
 We recommend that users incorporate these ranked effector candidates with experimental evidence or homology matches, and manually evaluate candidates with regard to the targeted host-pathogen interaction to prioritise other more expensive efforts (e.g. cloning or structural modelling).
 For example, you might take a set of differentially expressed genes from an RNAseq experiment, and evaluate candidates for experimental follow up from this set in descending order of Predector rank.
 
