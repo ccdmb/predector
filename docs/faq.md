@@ -16,7 +16,7 @@ Try the following steps to resolve the issue.
 
 If you're still having problems after this, please either email us or raise an issue on GitHub.
 
-### Running with docker `Unable to find image 'predector/predector:1.1.0-alpha' locally`
+### Running with docker `Unable to find image 'predector/predector:1.1.0-beta.1' locally`
 
 This usually means that you haven't built the docker image locally.
 Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.
@@ -82,6 +82,7 @@ The dependency citations are also listed below.
 - Dyrløv Bendtsen, J., Nielsen, H., von Heijne, G., & Brunak, S. (2004). Improved Prediction of Signal Peptides: SignalP 3.0. Journal of Molecular Biology, 340(4), 783–795. https://doi.org/10.1016/j.jmb.2004.05.028
 - Eddy, S. R. (2011). Accelerated Profile HMM Searches. PLOS Computational Biology, 7(10), e1002195. https://doi.org/10.1371/journal.pcbi.1002195
 - Finn, R. D., Bateman, A., Clements, J., Coggill, P., Eberhardt, R. Y., Eddy, S. R., Heger, A., Hetherington, K., Holm, L., Mistry, J., Sonnhammer, E. L. L., Tate, J., & Punta, M. (2014). Pfam: The protein families database. Nucleic Acids Research, 42(Database issue), D222–D230. https://doi.org/10.1093/nar/gkt1223
+- Teufel, F., Armenteros, J. A. A., Johansen, A. R., Gíslason, M. H., Pihl, S. I., Tsirigos, K. D., Winther, O., Brunak, S., von Heijne, G., & Nielsen, H. (2021). SignalP 6.0 achieves signal peptide prediction across all types using protein language models. bioRxiv. https://doi.org/10.1101/2021.06.09.447770
 - Käll, L., Krogh, A., & Sonnhammer, E. L. L. (2004). A Combined Transmembrane Topology and Signal Peptide Prediction Method. Journal of Molecular Biology, 338(5), 1027–1036. https://doi.org/10.1016/j.jmb.2004.03.016
 - Krogh, A., Larsson, B., von Heijne, G., & Sonnhammer, E. L. (2001). Predicting transmembrane protein topology with a hidden Markov model: Application to complete genomes. Journal of Molecular Biology, 305(3), 567–580. https://doi.org/10.1006/jmbi.2000.4315
 - Petersen, T. N., Brunak, S., Heijne, G. von, & Nielsen, H. (2011). SignalP 4.0: Discriminating signal peptides from transmembrane regions. Nature Methods, 8(10), 785–786. https://doi.org/10.1038/nmeth.1701
@@ -91,6 +92,7 @@ The dependency citations are also listed below.
 - Sperschneider, J., Dodds, P. N., Gardiner, D. M., Singh, K. B., & Taylor, J. M. (2018). Improved prediction of fungal effector proteins from secretomes with EffectorP 2.0. Molecular Plant Pathology, 19(9), 2094–2110. https://doi.org/10.1111/mpp.12682
 - Sperschneider, J., Dodds, P. N., Singh, K. B., & Taylor, J. M. (2018). ApoplastP: Prediction of effectors and plant proteins in the apoplast using machine learning. New Phytologist, 217(4), 1764–1778. https://doi.org/10.1111/nph.14946
 - Sperschneider, J., Gardiner, D. M., Dodds, P. N., Tini, F., Covarelli, L., Singh, K. B., Manners, J. M., & Taylor, J. M. (2016). EffectorP: Predicting fungal effector proteins from secretomes using machine learning. New Phytologist, 210(2), 743–761. https://doi.org/10.1111/nph.13794
+- Sperschneider, J., & Dodds, P. N. (2021). EffectorP 3.0: prediction of apoplastic and cytoplasmic effectors in fungi and oomycetes. bioRxiv. https://doi.org/10.1101/2021.07.28.454080
 - Steinegger, M., & Söding, J. (2017). MMseqs2 enables sensitive protein sequence searching for the analysis of massive data sets. Nature Biotechnology, 35(11), 1026–1028. https://doi.org/10.1038/nbt.3988
 - Tange, O. (2020). GNU Parallel 20200522 ('Kraftwerk'). Zenodo. https://doi.org/10.5281/zenodo.3841377
 - Urban, M., Cuzick, A., Seager, J., Wood, V., Rutherford, K., Venkatesh, S. Y., De Silva, N., Martinez, M. C., Pedro, H., Yates, A. D., Hassani-Pak, K., & Hammond-Kosack, K. E. (2020). PHI-base: The pathogen–host interactions database. Nucleic Acids Research, 48(D1), D613–D620. https://doi.org/10.1093/nar/gkz904

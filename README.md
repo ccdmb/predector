@@ -7,14 +7,25 @@ Predector runs numerous tools for fungal secretome and effector discovery analys
 This includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER and EffectorP 1, 2 and 3.
 These results are summarised as a table that includes most information that would typically be used for secretome analysis.
 Effector candidates are ranked using a [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
+
+The Predector rank scores offer a useful way of sorting your proteomes or subsets of proteomes to separating the bulk of protiens from those with effector-like characteristics (i.e secreted etc).
+The rank scores lend themselves well to evaluating candidates in a spreadsheet (i.e by sorting by the score column) and offer a logical place to start looking at your "top" candidates, and also guiding where to stop evaluating candidates in the list as they become less relevant.
 We recommend that users incorporate these ranked effector candidates with experimental evidence or homology matches, and manually evaluate candidates with regard to the targeted host-pathogen interaction to prioritise other more expensive efforts (e.g. cloning or structural modelling).
+For example, you might take a set of differentially expressed genes from an RNAseq experiment, and evaluate candidates for experimental follow up from this set in descending order of Predector rank.
 
 We hope that this pipeline can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
 
 
-** Checkout our preprint! **
+## Citation and further information
+The Predector pipeline and ranking method is described [here](https://doi.org/10.21203/rs.3.rs-379941/v1):
 
-https://doi.org/10.21203/rs.3.rs-379941/v1
+Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolhuijzen, James K. Hane (2021). Predector: an automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant-pathogens. _Scientific Reports_. DOI: [10.21203/rs.3.rs-379941/v1](https://doi.org/10.21203/rs.3.rs-379941/v1)
+
+If you do use results of Predector in your manuscripts please also cite the dependencies, especially EffectorP and other niche tools.
+Predector ranking does not replace these tools, it is designed to combine information from multiple tools in a useful way.
+We rely heavily on these tools and they should be supported with citations to enable their continued development.
+
+More details on dependencies are available in [the wiki](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#how-should-i-cite-predector) and we provide a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
 
 
 ## Documentation
@@ -29,6 +40,7 @@ Quick documentation links:
 - [Description of outputs](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#pipeline-output)
 - [Common issues](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#common-issues)
 - [FAQ](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#faq)
+
 
 ## Install
 
@@ -157,7 +169,7 @@ nextflow run -resume -r 1.1.0-beta.1 ccdmb/predector --proteome "proteomes/*"
 ```
 
 
-** Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes. **
+**Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes.**
 See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.1.0-beta.1#common-issues).
 
 
@@ -180,9 +192,12 @@ We currently intend to include.
  - [x] CAZyme annotations using HMMER and dbCAN
  - [x] Protein domain annotation using Pfam-scan
  - [x] A classifier and ranking scheme for prioritising effector candidates
- - [ ] A meta-secretion prediction model for better secretome prediction.
- - [ ] Integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting.
- - [ ] Protein structural prediction tools from the RaptorX toolkit, and comparison with structural features of known effectors.
+ - [ ] A tool to predict Kex-2 cut sites, and potentially run effector candidate prediction on the processed proteins
+ - [ ] Searches against the [RemEff](https://doi.org/10.1099/mgen.0.000637) effector HMMs to identify distant homologs
+ - [ ] DeepRedEff - Pending evaluation of performance
+ - [ ] A meta-secretion prediction model for better secretome prediction
+ - [ ] Easier integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting
+ - [ ] Protein structural prediction tools and comparison with structural features of known effectors
 
 
 ## Contributing
