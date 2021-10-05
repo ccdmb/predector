@@ -67,11 +67,13 @@ The first page usually contains something relevant to what you're interested in,
 
 ### How should I cite predector?
 
-Predector isn't published yet though the manuscript is near submission.
-In the mean time, the url to the main GitHub repository will be fine <https://github.com/ccdmb/predector>.
+The Predector pipeline and ranking method is published in [scientific reports](https://doi.org/10.1038/s41598-021-99363-0):
+
+Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolhuijzen, James K. Hane (2021). Predector: an automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant-pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
 
 Please also cite the dependencies that we use whenever possible.
 I understand that citation limits can be an issue, but the continued maintenance development of tools relies on these citations.
+If you absolutely must prioritise, I'd suggest keeping EffectorP, ApoplastP, TargetP, TMHMM, and one of the SignalP papers, as these do most of the heavy lifting in the pipeline.
 There is a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations in the main github repository](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
 The dependency citations are also listed below.
 
