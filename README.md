@@ -19,7 +19,7 @@ We hope that this pipeline can become a platform enabling multiple secretome ana
 ## Citation and further information
 The Predector pipeline and ranking method is described [here](https://doi.org/10.1038/s41598-021-99363-0):
 
-Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolhuijzen, James K. Hane (2021). Predector: an automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant-pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
+Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolhuijzen, James K. Hane (2021). An automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
 
 If you do use results of Predector in your manuscripts please also cite the dependencies, especially EffectorP and other niche tools.
 Predector ranking does not replace these tools, it is designed to combine information from multiple tools in a useful way.
