@@ -41,12 +41,42 @@ This is caused by nextflow trying to launch lots of tasks with the same singular
 Updating singularity to version >= 3.5 _should_ resolve the issue.
 
 
+### `Connecting to XXX... failed: Connection timed out.`
+
+We automatically download Pfam, dbCAN, and PHI-base by default while running the pipeline.
+Sometimes these sources will be unavailable (e.g. for maintenance or they've just crashed),
+and sometimes the URLs to these data will change.
+
+It is possible for you to download these data separately, and provide the files to the pipeline as described [here](https://github.com/ccdmb/predector/wiki#providing-pre-downloaded-pfam-phi-base-and-dbcan-datasets).
+If you find yourself running the pipeline often it might be a good thing to keep a downloaded copy handy.
+
+In the case that the servers are down, unfortunately we can't do much. But if the URL appears to have changed, we would appreciate it if you could please let us know so that we can resolve the issue.
+
+You can also customise the download URL from the command line using the parameters:
+
+```
+--phibase_url <url>
+  URL to download the PHI-base fasta file if --phibase is not provided
+
+--pfam_hmm_url <url>
+  URL to download the pfam HMM database from if --pfam_hmm is not provided
+
+--pfam_dat_url <url>
+  URL to download the pfam DAT database from if --pfam_dat is not provided
+
+--dbcan_url <url>
+  URL to download the dbcan HMM database from if --dbcan is not provided
+```
+
+Probably best to put the URLs in quotes though, in case they have special characters that bash might misinterpret.
+
+
 ## FAQ
 
 We'll update these as we find new issues and get feedback.
 Please raise an issue on GitHub or email us if you have an issue not covered here.
 
-### What do predector "effector scores" actually mean?
+## What do predector "effector scores" actually mean?
 
 It's best to think of the learning to rank scores (and the manually designed ranking scores) as arbitrary numbers that attempt to make effectors appear near the top of a sorted list.
 The scores will not be consistent between different versions of the model, so please be careful if you're trying to compare scores.
