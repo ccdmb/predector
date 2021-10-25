@@ -1,9 +1,9 @@
 bootstrap: docker
-From: predector/predector-base:1.1.0
+From: predector/predector-base:1.1.1-dev
 
 %labels
     Author "darcy.ab.jones@gmail.com"
-    Version "1.1.0"
+    Version "1.1.1-dev"
 
 %help
     A containter will all dependencies for the predector pipeline.
