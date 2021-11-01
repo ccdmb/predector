@@ -35,7 +35,7 @@ process extract_effector_seqs {
     script:
     """
     tail -n+2 effectors.tsv \
-    | awk -F'\t' '{printf(">%s\\n%s\\n", \$4, \$12)}' \
+    | awk -F'\t' '{printf(">%s\\n%s\\n", \$5, \$16)}' \
     > effectors.fasta
     """
 }
