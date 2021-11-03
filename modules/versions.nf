@@ -6,12 +6,14 @@ workflow check_env {
     signalp3 = get_signalp3_version()
     signalp4 = get_signalp4_version()
     signalp5 = get_signalp5_version()
+    signalp6 = get_signalp6_version()
     targetp2 = get_targetp2_version()
     tmhmm2 = get_tmhmm2_version()
     deeploc1 = get_deeploc1_version()
     phobius = get_phobius_version()
     effectorp1 = get_effectorp1_version()
     effectorp2 = get_effectorp2_version()
+    effectorp3 = get_effectorp3_version()
     localizer = get_localizer_version()
     apoplastp = get_apoplastp_version()
     deepsig = get_deepsig_version()
@@ -23,12 +25,14 @@ workflow check_env {
     signalp3
     signalp4
     signalp5
+    signalp6
     targetp2
     tmhmm2
     deeploc1
     phobius
     effectorp1
     effectorp2
+    effectorp3
     localizer
     apoplastp
     deepsig
@@ -120,6 +124,33 @@ process get_signalp5_version {
     # signalp -version returns exitcode 1
     VERSION="\$(signalp5 -version || [ \$? -eq 1 ] )"
     VERSION="\$(echo "\${VERSION}" | sed 's/.*\\([[:digit:]]\\.[0-9a-zA-Z]*\\).*/\\1/')"
+    """
+}
+
+process get_signalp6_version {
+
+    label 'signalp6'
+
+    output:
+    env VERSION
+
+    script:
+    """
+    if ! which signalp6 > /dev/null
+    then
+        echo -e "Could not find the program 'signalp6' in your environment path.\n" 1>&2
+
+        if which signalp > /dev/null
+        then
+            echo "You do have 'signalp' installed, but because we run multiple versions of signalp, we require executables to be available in the format 'signalp3', 'signalp4', 'signalp5', 'signalp6' etc." 1>&2
+        fi
+
+        echo "Please either link signalp to signalp6 or install signalp using the conda environment." 1>&2
+
+        exit 127
+    fi
+
+    VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')
     """
 }
 
@@ -294,6 +325,38 @@ process get_effectorp2_version {
     """
 }
 
+
+process get_effectorp3_version {
+
+    label 'effectorp3'
+
+    output:
+    env VERSION
+
+    script:
+    """
+    if ! which EffectorP3.py > /dev/null
+    then
+        echo -e "Could not find the program 'EffectorP3.py' in your environment path.\n" 1>&2
+
+        if which EffectorP.py > /dev/null
+        then
+            echo "You do have 'EffectorP.py' installed, but because we run multiple versions of EffectorP, we require executables to be available in the format 'EffectorP2.py' and 'EffectorP3.py' etc." 1>&2
+        fi
+
+        echo "Please either link EffectorP.py to EffectorP3.py or install EffectorP3 using the conda environment." 1>&2
+
+        exit 127
+    fi
+
+    if ! which EffectorP3.py
+    then
+        alias EffectorP3.py=EffectorP.py
+    fi
+
+    VERSION=\$(EffectorP3.py -h | grep "^# EffectorP [[:digit:]]" | sed 's/^# EffectorP \\([[:digit:]]*\\.*[^[:space:];:,]*\\).*\$/\\1/')
+    """
+}
 
 process get_localizer_version {
 

@@ -485,26 +485,26 @@ workflow {
     split_proteomes_ch = combined_proteomes_ch.flatten()
 
     // Run the machine-learning/simple statistics analyses.
-    signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, split_proteomes_ch)
-    signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, split_proteomes_ch)
-    signalp_v4_ch = signalp_v4(signalp_domain, split_proteomes_ch)
-    (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, split_proteomes_ch)
-    signalp_v6_ch = signalp_v6(signalp_domain, split_proteomes_ch)
+    signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, versions.signalp3, split_proteomes_ch)
+    signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, versions.signalp3, split_proteomes_ch)
+    signalp_v4_ch = signalp_v4(signalp_domain, versions.signalp4, split_proteomes_ch)
+    (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, versions.signalp5, split_proteomes_ch)
+    signalp_v6_ch = signalp_v6(signalp_domain, versions.signalp6, split_proteomes_ch)
 
-    deepsig_ch = deepsig(params.domain, split_proteomes_ch)
-    phobius_ch = phobius(split_proteomes_ch)
-    tmhmm_ch = tmhmm(split_proteomes_ch)
+    deepsig_ch = deepsig(params.domain, versions.deepsig, split_proteomes_ch)
+    phobius_ch = phobius(versions.phobius, split_proteomes_ch)
+    tmhmm_ch = tmhmm(versions.tmhmm2, split_proteomes_ch)
 
-    targetp_ch = targetp(split_proteomes_ch)
-    deeploc_ch = deeploc(split_proteomes_ch)
+    targetp_ch = targetp(versions.targetp2, split_proteomes_ch)
+    deeploc_ch = deeploc(versions.deeploc1, split_proteomes_ch)
 
-    apoplastp_ch = apoplastp(split_proteomes_ch)
-    localizer_ch = localizer(signalp_v5_mature_ch)
-    effectorp_v1_ch = effectorp_v1(split_proteomes_ch)
-    effectorp_v2_ch = effectorp_v2(split_proteomes_ch)
-    effectorp_v3_ch = effectorp_v3(split_proteomes_ch)
+    apoplastp_ch = apoplastp(versions.apoplastp, split_proteomes_ch)
+    localizer_ch = localizer(versions.localizer, signalp_v5_mature_ch)
+    effectorp_v1_ch = effectorp_v1(versions.effectorp1, split_proteomes_ch)
+    effectorp_v2_ch = effectorp_v2(versions.effectorp2, split_proteomes_ch)
+    effectorp_v3_ch = effectorp_v3(versions.effectorp3, split_proteomes_ch)
 
-    pepstats_ch = pepstats(split_proteomes_ch)
+    pepstats_ch = pepstats(versions.emboss, split_proteomes_ch)
 
     // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
