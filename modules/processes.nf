@@ -35,7 +35,7 @@ process extract_effector_seqs {
     script:
     """
     tail -n+2 effectors.tsv \
-    | awk -F'\t' '{printf(">%s\\n%s\\n", \$4, \$12)}' \
+    | awk -F'\t' '{printf(">%s\\n%s\\n", \$5, \$16)}' \
     > effectors.fasta
     """
 }
@@ -250,6 +250,7 @@ process signalp_v3_hmm {
 
     input:
     val domain
+    val software_version
     path "in.fasta"
 
     output:
@@ -274,6 +275,7 @@ process signalp_v3_hmm {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         signalp3_hmm out.txt
     """
@@ -292,6 +294,7 @@ process signalp_v3_nn {
 
     input:
     val domain
+    val software_version
     path "in.fasta"
 
     output:
@@ -322,6 +325,7 @@ process signalp_v3_nn {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         signalp3_nn \
         out.txt
@@ -341,6 +345,7 @@ process signalp_v4 {
 
     input:
     val domain
+    val software_version
     path "in.fasta"
 
     output:
@@ -364,6 +369,7 @@ process signalp_v4 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         signalp4 out.txt
     """
@@ -382,6 +388,7 @@ process signalp_v5 {
 
     input:
     val domain
+    val software_version
     path "in.fasta"
 
     output:
@@ -407,6 +414,7 @@ process signalp_v5 {
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
       signalp5 "out_summary.signalp5" \
     > "out.ldjson"
 
@@ -429,6 +437,7 @@ process signalp_v6 {
 
     input:
     val domain
+    val software_version
     path "in.fasta"
 
     output:
@@ -451,6 +460,7 @@ process signalp_v6 {
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
+      --software_version "${software_version}" \
       signalp6 "out.txt" \
     > "out.ldjson"
 
@@ -471,6 +481,7 @@ process deepsig {
 
     input:
     val domain
+    val software_version
     path "in.fasta"
 
     output:
@@ -504,6 +515,7 @@ process deepsig {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         deepsig out.txt
     """
@@ -521,6 +533,7 @@ process phobius {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -545,6 +558,7 @@ process phobius {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         phobius out.txt
     """
@@ -562,6 +576,7 @@ process tmhmm {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -586,6 +601,7 @@ process tmhmm {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         tmhmm out.txt
 
@@ -605,6 +621,7 @@ process targetp {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -623,6 +640,7 @@ process targetp {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
       targetp_non_plant "out_summary.targetp2" \
     > "out.ldjson"
 
@@ -644,6 +662,7 @@ process deeploc {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -689,6 +708,7 @@ process deeploc {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         deeploc out.txt
     """
@@ -706,6 +726,7 @@ process apoplastp {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -739,6 +760,7 @@ process apoplastp {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         apoplastp out.txt
     """
@@ -756,6 +778,7 @@ process localizer {
     label 'time_medium'
 
     input:
+    val software_version
     path "mature.fasta"
 
     output:
@@ -789,6 +812,7 @@ process localizer {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         localizer out.txt
     """
@@ -806,6 +830,7 @@ process effectorp_v1 {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -839,6 +864,7 @@ process effectorp_v1 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         effectorp1 out.txt
     """
@@ -856,6 +882,7 @@ process effectorp_v2 {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -889,6 +916,7 @@ process effectorp_v2 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         effectorp2 out.txt
     """
@@ -906,6 +934,7 @@ process effectorp_v3 {
     label 'time_medium'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -939,6 +968,7 @@ process effectorp_v3 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         effectorp3 out.txt
     """
@@ -956,6 +986,7 @@ process pepstats {
     label 'time_short'
 
     input:
+    val software_version
     path "in.fasta"
 
     output:
@@ -966,6 +997,7 @@ process pepstats {
     pepstats -sequence in.fasta -outfile out.txt
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software_version "${software_version}" \
         -o out.ldjson \
         pepstats out.txt
     """
