@@ -945,7 +945,7 @@ process effectorp_v3 {
     run () {
         set -e
         TMPFILE="tmp\$\$"
-        EffectorP3.py -f -i "\$1" -o "\${TMPFILE}" 1>&2
+        EffectorP3.py -i "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPFILE}"
 
         rm -f "\${TMPFILE}"
