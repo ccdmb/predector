@@ -41,7 +41,7 @@ requirements:
     - r-reticulate
     - r-rlang
     - r-seqinr
-    - r-tensorflow >=2.0
+    - r-tensorflow
 
   run:
     - r-base
@@ -55,7 +55,7 @@ requirements:
     - r-reticulate
     - r-rlang
     - r-seqinr
-    - r-tensorflow >=2.0
+    - r-tensorflow
 
 test:
   commands:

@@ -24,6 +24,7 @@ dependencies:
   - signalp6=1.0
   - targetp2=2.0
   - tmhmm=2.0c
+  - deepredeff=0.1.1
   ## Conda-forge packages
   - gawk=5.1
   - wget=1.20
@@ -39,6 +40,7 @@ dependencies:
   - mmseqs2=13.45111
   ## Version pins that aren't necessary but make solving environment faster
   - python=3.7.10
+  - r-base=4.1
   - perl=5.26.2
   - theano=1.0.4
   - sqlite=3.36.0
