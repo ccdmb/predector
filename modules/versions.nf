@@ -511,4 +511,3 @@ process get_deepredeff_version {
     VERSION="\$(deepredeff.R --version)"
     """
 }
-
