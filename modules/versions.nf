@@ -20,6 +20,7 @@ workflow check_env {
     emboss = get_emboss_version()
     mmseqs2 = get_mmseqs2_version()
     hmmer = get_hmmer_version()
+    deepredeff = get_de
 
     emit:
     signalp3

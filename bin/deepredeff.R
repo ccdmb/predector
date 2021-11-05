@@ -21,13 +21,6 @@ option_list <- list(
         help="The output file to write to (default: stdout)."
     ),
     make_option(
-        c("-t", "--taxon"),
-	type="character",
-	action="store",
-	default="fungi",
-	help="The model to use for deepredeff (default: fungi)."
-    ),
-    make_option(
         "--version",
         type="logical",
         action="store_true",
@@ -72,7 +65,9 @@ main <- function(args) {
   validate_file(args$infile)
   validate_file(args$outfile)
 
-  capture.output(pred_result <- predict_effector(input = args$infile, taxon = args$taxon))
+  seqs = fasta_to_df(args$infile)
+
+  capture.output(pred_result <- predict_effector(input = seqs, taxon = args$taxon))
 
   write.table(pred_result[, c("name", "s_score", "prediction")], file = args$outfile, sep = "\t", quote = FALSE, row.names = FALSE)
 }
