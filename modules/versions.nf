@@ -495,3 +495,18 @@ process get_hmmer_version {
     VERSION="\$(hmmsearch -h | grep "# HMMER [[:digit:]]" | sed 's/^# HMMER \\([[:digit:]]*\\.*[^[:space:]]*\\).*\$/\\1/')"
     """
 }
+
+
+process get_deepredeff_version {
+
+    label 'deepredeff'
+
+    output:
+    env VERSION
+
+    script:
+    """
+    VERSION="\$(deepredeff.R --version)"
+    """
+}
+

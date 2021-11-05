@@ -1,10 +1,12 @@
 #!/usr/bin/env Rscript
 
-VERSION = "0.1.1"
 VALID_TAXON = c("bacteria", "fungi", "oomycete")
 
 suppressPackageStartupMessages(library("optparse"))
 suppressPackageStartupMessages(library("deepredeff"))
+
+VERSION = packageVersion("deepredeff")
+
 
 option_list <- list(
     make_option(
