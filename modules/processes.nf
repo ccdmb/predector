@@ -468,26 +468,44 @@ process signalp_v6 {
 
     script:
     """
-    mkdir -p tmpdir
-
     export OMP_NUM_THREADS="${task.cpus}"
-    signalp6 \
-      --fastafile "in.fasta" \
-      --output_dir "tmpdir" \
-      --format txt \
-      --organism eukarya \
-      --mode fast \
-    1>&2
 
-    mv "tmpdir/prediction_results.txt" out.txt
+    run () {
+        set -e
+        TMPDIR="tmpdir\$\$"
+        mkdir "\${TMPDIR}"
+
+        signalp6 \
+          --fastafile "\${1}" \
+          --output_dir "\${TMPDIR}" \
+          --format txt \
+          --organism eukarya \
+          --mode fast \
+          1>&2
+
+        cat "\${TMPDIR}"/prediction_results.txt
+        rm -rf -- "\${TMPDIR}"
+    }
+
+    export -f run
+
+    parallel \
+      --halt now,fail=1 \
+      --joblog log.txt \
+      -j 1 \
+      -N 1000 \
+      --line-buffer \
+      --recstart '>' \
+      --cat \
+      run \
+    < in.fasta \
+    | cat > out.txt
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
       --software_version "${software_version}" \
       signalp6 "out.txt" \
     > "out.ldjson"
-
-    rm -rf -- tmpdir
     """
 }
 
