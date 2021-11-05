@@ -30,6 +30,7 @@ include {
     effectorp_v1;
     effectorp_v2;
     effectorp_v3;
+    deepredeff_v1;
     pepstats;
     press_pfam_hmmer;
     pfamscan;
@@ -503,6 +504,7 @@ workflow {
     effectorp_v1_ch = effectorp_v1(versions.effectorp1, split_proteomes_ch)
     effectorp_v2_ch = effectorp_v2(versions.effectorp2, split_proteomes_ch)
     effectorp_v3_ch = effectorp_v3(versions.effectorp3, split_proteomes_ch)
+    deepredeff_v1_ch = deepredeff_v1(versions.deepredeff1, split_proteomes_ch)
 
     pepstats_ch = pepstats(versions.emboss, split_proteomes_ch)
 
@@ -561,6 +563,7 @@ workflow {
             effectorp_v1_ch,
             effectorp_v2_ch,
             effectorp_v3_ch,
+            deepredeff_v1_ch,
             pepstats_ch,
             pfamscan_ch,
             dbcan_hmmer_ch,
