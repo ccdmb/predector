@@ -397,29 +397,52 @@ process signalp_v5 {
 
     script:
     """
-    mkdir -p tmpdir
+    run () {
+      set -e
 
-    # Signalp5 just uses all available cores afaik.
-    # Although it seems to use omp, i don't seem to be able to force it
-    # to use a specific number of cores.
-    export OMP_NUM_THREADS="${task.cpus}"
+      # Signalp5 just uses all available cores afaik.
+      # Although it seems to use omp, i don't seem to be able to force it
+      # to use a specific number of cores.
 
-    signalp5 \
-      -org "${domain}" \
-      -format short \
-      -tmp tmpdir \
-      -mature \
-      -fasta in.fasta \
-      -prefix "out"
+      export OMP_NUM_THREADS="${task.cpus}"
+      TMPDIR="tmpdir\$\$"
+      mkdir \${TMPDIR}
+
+      OUT="tmp\$\$"
+      signalp5 \
+        -org "${domain}" \
+        -format short \
+        -tmp "\${TMPDIR}" \
+        -fasta "\${1}" \
+        -prefix "\${OUT}" \
+        1>&2
+
+      cat "\${OUT}_summary.signalp5"
+      rm -rf "\${OUT}"* "\${TMPDIR}"
+    }
+
+    export -f run
+
+    parallel \
+      --halt now,fail=1 \
+      --joblog log.txt \
+      -j 1 \
+      -N "1000" \
+      --line-buffer  \
+      --recstart '>' \
+      --cat \
+      run \
+      < in.fasta \
+    | cat > signalp5.txt
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
-      signalp5 "out_summary.signalp5" \
+      --software_version "${software_version}" \
+      signalp5 signalp5.txt \
     > "out.ldjson"
 
-    mv "out_mature.fasta" "out.fasta"
-    rm -f out_summary.signalp5
+    mv "out_mature.fasta" "out.fasta" "log.txt"
+    rm -f signalp5.txt
     rm -rf -- tmpdir
     """
 }
@@ -945,7 +968,7 @@ process effectorp_v3 {
     run () {
         set -e
         TMPFILE="tmp\$\$"
-        EffectorP3.py -f -i "\$1" -o "\${TMPFILE}" 1>&2
+        EffectorP3.py -i "\$1" -o "\${TMPFILE}" 1>&2
         cat "\${TMPFILE}"
 
         rm -f "\${TMPFILE}"
@@ -968,7 +991,7 @@ process effectorp_v3 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         effectorp3 out.txt
     """
@@ -1208,7 +1231,7 @@ process mmseqs_search {
       --format-output 'query,target,qstart,qend,qlen,tstart,tend,tlen,evalue,gapopen,pident,alnlen,raw,bits,cigar,mismatch,qcov,tcov'
 
     predutils r2js \
-        --pipeline-version "${workflow.manifest.version}" \
+      --pipeline-version "${workflow.manifest.version}" \
       "${database}" search.tsv \
     > out.ldjson
 

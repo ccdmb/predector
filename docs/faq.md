@@ -70,6 +70,30 @@ You can also customise the download URL from the command line using the paramete
 
 Probably best to put the URLs in quotes though, in case they have special characters that bash might misinterpret.
 
+### `ERROR ~ unable to resolve class XXX`
+
+You may encounter this error if you are using an old version of Nextflow (pre v21).
+We use the updated DSL2 syntax, which will cause older versions of Nextflow to raise errors looking like this...
+
+```
+ERROR ~ unable to resolve class download_phibase
+@ line 7, column 5.
+       download as download_phibase;
+       ^
+
+_nf_script_9f2a833e: 8: unable to resolve class download_pfam_hmm
+@ line 8, column 5.
+       download as download_pfam_hmm;
+       ^
+
+_nf_script_9f2a833e: 9: unable to resolve class download_pfam_dat
+@ line 9, column 5.
+       download as download_pfam_dat;
+       ^
+```
+
+Please update Nextflow to a more recent version (>21) to resolve this issue.
+
 
 ## FAQ
 
