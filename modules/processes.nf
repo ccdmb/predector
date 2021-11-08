@@ -1096,11 +1096,12 @@ process press_pfam_hmmer {
     label 'time_medium'
 
     input:
+    val version
     path "Pfam-A.hmm.gz"
     path "Pfam-A.hmm.dat.gz"
 
     output:
-    path "pfam_db"
+    tuple val(version), path("pfam_db")
 
     script:
     """
@@ -1121,13 +1122,20 @@ process pfamscan {
     label 'time_long'
 
     input:
-    path 'pfam_db'
+    val software_version
+    tuple val(database_version), path('pfam_db')
     path 'in.fasta'
 
     output:
     path "out.ldjson"
 
     script:
+    if (database_version) {
+        db_version_str = "--database-version ${database_version} "
+    } else {
+        db_version_str = ""
+    }
+
     """
     CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
@@ -1145,6 +1153,8 @@ process pfamscan {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software-version "${software_version}" \
+        "${database_version_str}" \
         -o out.ldjson \
         pfamscan out.txt
     """
@@ -1159,10 +1169,12 @@ process press_hmmer {
     label 'time_short'
 
     input:
+    val database
+    val version
     path "db.txt"
 
     output:
-    path "db"
+    tuple val(database), val(version), path("db")
 
     script:
     """
@@ -1183,14 +1195,21 @@ process hmmscan {
     label 'time_medium'
 
     input:
-    val database
-    path "db"
+    val software_version
+    tuple val(database), val(database_version), path("db")
     path 'in.fasta'
 
     output:
     path "out.ldjson"
 
     script:
+    if (database_version) {
+        db_version_str = "--database-version ${database_version} "
+    } else {
+        db_version_str = ""
+    }
+
+
     """
     run () {
         set -e
@@ -1223,6 +1242,8 @@ process hmmscan {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
+        --software-version "${software_version}" \
+        "${database_version_str}" \
         -o out.ldjson \
         "${database}" out.txt
     """
@@ -1259,13 +1280,20 @@ process mmseqs_search {
     label 'time_medium'
 
     input:
-    tuple val(database), path("target")
+    val software_version
+    tuple val(database), val(database_version), path("target")
     path "query"
 
     output:
     path "out.ldjson"
 
     script:
+    if (database_version) {
+        db_version_str = "--database-version ${database_version} "
+    } else {
+        db_version_str = ""
+    }
+
     """
     mkdir -p tmp matches
 
@@ -1293,6 +1321,8 @@ process mmseqs_search {
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
+      --software-version "${software_version}" \
+      "${database_version_str}" \
       "${database}" search.tsv \
     > out.ldjson
 

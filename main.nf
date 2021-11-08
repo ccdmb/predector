@@ -126,43 +126,19 @@ def helpMessage() {
     ## Additional arguments
       --phibase <path>
           Path to the PHI-base fasta dataset.
-
-      --phibase_url <url>
-          URL to download the PHI-base fasta file if --phibase is not provided
-          default: '${params.phibase_url}'
+          default: download from '${params.private_phibase_url}'
 
       --pfam_hmm <path>
           Path to already downloaded gzipped pfam HMM database
-          default: download the hmms
-
-      --pfam_hmm_url <url>
-          URL to download the pfam HMM database from if --pfam_hmm is not provided
-          default: '${params.pfam_hmm_url}'
+          default: download from '${params.pfam_hmm_url}'
 
       --pfam_dat <path>
           Path to already downloaded gzipped pfam DAT database
-          default: download the DAT file
-
-      --pfam_dat_url <url>
-          URL to download the pfam DAT database from if --pfam_dat is not provided
-          default: '${params.pfam_dat_url}'
+          default: download from '${params.pfam_dat_url}'
 
       --dbcan <path>
           Path to already downloaded gzipped dbCAN HMM database
-          default: download the hmms
-
-      --dbcan_url <url>
-          URL to download the dbcan HMM database from if --dbcan is not provided
-          default: '${params.dbcan_url}'
-
-      --pfam_targets <path>
-          Path to a text file containing PFAM ids considered predictive of effector function.
-          Ids should be separated by newlines.
-          default: '${params.pfam_targets}'
-
-      --effector_table <path>
-          Path to a table containing known effector sequences.
-          default: '${params.effector_table}'
+          default: download from '${params.dbcan_url}'
 
       --secreted_weight <float>
           The weight to give a protein if it is predicted to be secreted.
@@ -389,26 +365,36 @@ workflow validate_input {
     if ( params.pfam_hmm ) {
         pfam_hmm_val = get_file(params.pfam_hmm)
     } else {
-        pfam_hmm_val = download_pfam_hmm("Pfam-A.hmm.gz", params.pfam_hmm_url)
+        pfam_hmm_val = download_pfam_hmm("Pfam-A.hmm.gz", params.private_pfam_hmm_url)
     }
 
     if ( params.pfam_dat ) {
         pfam_dat_val = get_file(params.pfam_dat)
     } else {
-        pfam_dat_val = download_pfam_dat("Pfam-A.hmm.dat.gz", params.pfam_dat_url)
+        pfam_dat_val = download_pfam_dat("Pfam-A.hmm.dat.gz", params.private_pfam_dat_url)
+    }
+
+    if ( params.pfam_dat || params.pfam_hmm ) {
+        pfam_version = false
+    } else {
+        pfam_version = params.private_pfam_version
     }
 
     if ( params.dbcan ) {
         dbcan_val = get_file(params.dbcan)
+        dbcan_version = false
     } else {
-        dbcan_val = download_dbcan("dbCAN.txt", params.dbcan_url)
+        dbcan_val = download_dbcan("dbCAN.txt", params.private_dbcan_url)
+        dbcan_version = params.private_dbcan_version
     }
 
     if ( params.phibase ) {
         phibase_val = get_file(params.phibase)
+        phibase_version = false
     } else {
         // Should this error out?
-        phibase_val = download_phibase("phi-base_current.fas", params.phibase_url)
+        phibase_val = download_phibase("phi-base_current.fas", params.private_phibase_url)
+        phibase_version = params.private_phibase_version
     }
 
     // This has a default value set, so it shouldn't be possible to not specify the parameter.
@@ -424,9 +410,12 @@ workflow validate_input {
 
     emit:
     proteome_ch
+    pfam_version
     pfam_hmm_val
     pfam_dat_val
+    dbcan_version
     dbcan_val
+    phibase_version
     phibase_val
     effector_val
     pfam_targets_val
@@ -510,13 +499,14 @@ workflow {
 
     // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
+        input.pfam_version,
         input.pfam_hmm_val,
         input.pfam_dat_val
     )
-    pfamscan_ch = pfamscan(pressed_pfam_hmmer_val, split_proteomes_ch)
+    pfamscan_ch = pfamscan(versions.pfamscan + ":" + versions.hmmer, pressed_pfam_hmmer_val, split_proteomes_ch)
 
-    pressed_dbcan_hmmer_val = press_dbcan_hmmer(input.dbcan_val)
-    dbcan_hmmer_ch = hmmscan_dbcan("dbcan", pressed_dbcan_hmmer_val, split_proteomes_ch)
+    pressed_dbcan_hmmer_val = press_dbcan_hmmer("dbcan", input.dbcan_version, input.dbcan_val)
+    dbcan_hmmer_ch = hmmscan_dbcan(versions.hmmer, pressed_dbcan_hmmer_val, split_proteomes_ch)
 
     proteome_mmseqs_index_ch = mmseqs_index_proteomes(
         split_proteomes_ch.map { f -> ["chunk", f] }
@@ -525,7 +515,7 @@ workflow {
     phibase_mmseqs_index_val = mmseqs_index_phibase(
         tidied_phibase
         .map { f -> ["phibase", f] }
-    )
+    ).map { v, f -> [v, input.phibase_version, f] }
 
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
         phibase_mmseqs_index_val,
@@ -535,9 +525,11 @@ workflow {
     effectors_mmseqs_index_val = input.effector_val \
         | extract_effector_seqs \
         | map { f -> ["effectorsearch", f] } \
-        | mmseqs_index_effectors
+        | mmseqs_index_effectors \
+        | map { v, f -> [v, workflow.manifest.version, f] }
 
     effectors_mmseqs_matches_ch = mmseqs_search_effectors(
+        versions.mmseqs2,
         effectors_mmseqs_index_val,
         proteome_mmseqs_index_ch
     )

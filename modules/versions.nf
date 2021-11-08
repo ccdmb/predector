@@ -21,6 +21,8 @@ workflow check_env {
     mmseqs2 = get_mmseqs2_version()
     hmmer = get_hmmer_version()
     deepredeff1 = get_deepredeff_version()
+    // This gets hard-coded because doesn't give version and hasn't changed in years.
+    pfamscan = 1.6
 
     emit:
     signalp3
