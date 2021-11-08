@@ -4,7 +4,7 @@ DOCKER=docker
 ANACONDA_USER=predector
 
 RVERSIONS=3.5 3.6 4.1
-RTARGETS=r-deepredeff/0.1.1
+RTARGETS=r-deepredeff/0.1.1 r-effectr/1.0.2
 RTARGETS_VERSIONS=$(foreach rversion,$(RVERSIONS),$(addprefix r-$(rversion)/,$(RTARGETS)))
 
 TARGETS=effectorp1/1.0 effectorp2/2.0 effectorp3/3.0 localizer/1.0.4 apoplastp/1.0.1 deepsig/0f1e1d9 \
