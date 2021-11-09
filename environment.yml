@@ -24,11 +24,12 @@ dependencies:
   - signalp6=1.0
   - targetp2=2.0
   - tmhmm=2.0c
-  - deepredeff=0.1.1
+  - r-deepredeff=0.1.1
   ## Conda-forge packages
   - gawk=5.1
   - wget=1.20
   - parallel
+  - r-optparse
   ## Fudge to get keras working with deepsig...
   - h5py=2.10.0  # <3
   - tensorflow=2.4.3
