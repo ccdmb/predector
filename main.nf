@@ -478,7 +478,7 @@ workflow {
     signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, versions.signalp3, split_proteomes_ch)
     signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, versions.signalp3, split_proteomes_ch)
     signalp_v4_ch = signalp_v4(signalp_domain, versions.signalp4, split_proteomes_ch)
-    (signalp_v5_ch, signalp_v5_mature_ch) = signalp_v5(signalp_domain, versions.signalp5, split_proteomes_ch)
+    signalp_v5_ch = signalp_v5(signalp_domain, versions.signalp5, split_proteomes_ch)
     signalp_v6_ch = signalp_v6(signalp_domain, versions.signalp6, split_proteomes_ch)
 
     deepsig_ch = deepsig(params.domain, versions.deepsig, split_proteomes_ch)
@@ -489,7 +489,7 @@ workflow {
     deeploc_ch = deeploc(versions.deeploc1, split_proteomes_ch)
 
     apoplastp_ch = apoplastp(versions.apoplastp, split_proteomes_ch)
-    localizer_ch = localizer(versions.localizer, signalp_v5_mature_ch)
+    localizer_ch = localizer(versions.localizer, split_proteomes_ch)
     effectorp_v1_ch = effectorp_v1(versions.effectorp1, split_proteomes_ch)
     effectorp_v2_ch = effectorp_v2(versions.effectorp2, split_proteomes_ch)
     effectorp_v3_ch = effectorp_v3(versions.effectorp3, split_proteomes_ch)
@@ -515,7 +515,8 @@ workflow {
     phibase_mmseqs_index_val = mmseqs_index_phibase(
         tidied_phibase
         .map { f -> ["phibase", f] }
-    ).map { v, f -> [v, input.phibase_version, f] }
+    ).combine(input.phibase_version)
+     .map { d, f, v -> [d, v, f] }
 
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
         versions.mmseqs2,

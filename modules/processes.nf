@@ -275,7 +275,7 @@ process signalp_v3_hmm {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         signalp3_hmm out.txt in.fasta
     """
@@ -325,7 +325,7 @@ process signalp_v3_nn {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         signalp3_nn \
         out.txt in.fasta
@@ -369,7 +369,7 @@ process signalp_v4 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         signalp4 out.txt in.fasta
     """
@@ -393,7 +393,6 @@ process signalp_v5 {
 
     output:
     path "out.ldjson"
-    path "out.fasta"
 
     script:
     """
@@ -437,11 +436,10 @@ process signalp_v5 {
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
-      --software_version "${software_version}" \
+      --software-version "${software_version}" \
       signalp5 signalp5.txt in.fasta \
     > "out.ldjson"
 
-    mv "out_mature.fasta" "out.fasta" "log.txt"
     rm -f signalp5.txt
     rm -rf -- tmpdir
     """
@@ -503,7 +501,7 @@ process signalp_v6 {
 
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
-      --software_version "${software_version}" \
+      --software-version "${software_version}" \
       signalp6 "out.txt" in.fasta \
     > "out.ldjson"
     """
@@ -556,7 +554,7 @@ process deepsig {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         deepsig out.txt in.fasta
     """
@@ -599,7 +597,7 @@ process phobius {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         phobius out.txt in.fasta
     """
@@ -642,7 +640,7 @@ process tmhmm {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         tmhmm out.txt in.fasta
 
@@ -681,7 +679,7 @@ process targetp {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
       targetp_non_plant "out_summary.targetp2" in.fasta \
     > "out.ldjson"
 
@@ -749,7 +747,7 @@ process deeploc {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         deeploc out.txt in.fasta
     """
@@ -801,7 +799,7 @@ process apoplastp {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         apoplastp out.txt in.fasta
     """
@@ -820,7 +818,7 @@ process localizer {
 
     input:
     val software_version
-    path "mature.fasta"
+    path "in.fasta"
 
     output:
     path "out.ldjson"
@@ -830,14 +828,14 @@ process localizer {
     run () {
         set -e
         TMP="tmp\$\$"
-        LOCALIZER.py -e -M -i "\$1" -o "\${TMP}" 1>&2
+        LOCALIZER.py -e -i "\$1" -o "\${TMP}" 1>&2
         cat "\${TMP}/Results.txt"
 
         rm -rf -- "\${TMP}"
     }
     export -f run
 
-    CHUNKSIZE="\$(decide_task_chunksize.sh mature.fasta "${task.cpus}" 100)"
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 100)"
 
     parallel \
         --halt now,fail=1 \
@@ -848,12 +846,12 @@ process localizer {
         --recstart '>' \
         --cat  \
         run \
-    < mature.fasta \
+    < in.fasta \
     | cat > out.txt
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         localizer out.txt in.fasta
     """
@@ -905,7 +903,7 @@ process effectorp_v1 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         effectorp1 out.txt in.fasta
     """
@@ -957,7 +955,7 @@ process effectorp_v2 {
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         effectorp2 out.txt in.fasta
     """
@@ -1054,7 +1052,7 @@ process deepredeff_v1 {
         --pipeline-version "${workflow.manifest.version}" \
         --software-version "${software_version}" \
         -o out.ldjson \
-        deepredeff out.txt in.fasta
+        deepredeff_fungi out.txt in.fasta
     """
 }
 
@@ -1081,7 +1079,7 @@ process pepstats {
     pepstats -sequence in.fasta -outfile out.txt
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
-        --software_version "${software_version}" \
+        --software-version "${software_version}" \
         -o out.ldjson \
         pepstats out.txt in.fasta
     """
@@ -1131,7 +1129,7 @@ process pfamscan {
 
     script:
     if (database_version) {
-        db_version_str = "--database-version ${database_version} "
+        db_version_str = "--database-version '${database_version}' "
     } else {
         db_version_str = ""
     }
@@ -1154,7 +1152,7 @@ process pfamscan {
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         --software-version "${software_version}" \
-        "${database_version_str}" \
+        ${db_version_str} \
         -o out.ldjson \
         pfamscan out.txt in.fasta
     """
@@ -1204,7 +1202,7 @@ process hmmscan {
 
     script:
     if (database_version) {
-        db_version_str = "--database-version ${database_version} "
+        db_version_str = "--database-version '${database_version}' "
     } else {
         db_version_str = ""
     }
@@ -1243,7 +1241,7 @@ process hmmscan {
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         --software-version "${software_version}" \
-        "${database_version_str}" \
+        ${db_version_str} \
         -o out.ldjson \
         "${database}" out.txt in.fasta
     """
@@ -1267,6 +1265,7 @@ process mmseqs_index {
     """
     mkdir -p db
     mmseqs createdb db.fasta db/db
+    cp -L db.fasta db/db.fasta
     """
 }
 
@@ -1289,7 +1288,7 @@ process mmseqs_search {
 
     script:
     if (database_version) {
-        db_version_str = "--database-version ${database_version} "
+        db_version_str = "--database-version '${database_version}' "
     } else {
         db_version_str = ""
     }
@@ -1322,8 +1321,8 @@ process mmseqs_search {
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
       --software-version "${software_version}" \
-      "${database_version_str}" \
-      "${database}" search.tsv in.fasta \
+      ${db_version_str} \
+      "${database}" search.tsv query/db.fasta \
     > out.ldjson
 
     rm -rf -- tmp matches search.tsv

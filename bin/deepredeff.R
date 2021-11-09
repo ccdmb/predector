@@ -5,8 +5,7 @@ VALID_TAXON = c("bacteria", "fungi", "oomycete")
 suppressPackageStartupMessages(library("optparse"))
 suppressPackageStartupMessages(library("deepredeff"))
 
-VERSION = packageVersion("deepredeff")
-
+VERSION = as.character(packageVersion("deepredeff"))
 
 option_list <- list(
   make_option(
@@ -22,6 +21,13 @@ option_list <- list(
     default="",
     help="The output file to write to (default: stdout)."
     ),
+  make_option(
+    c("-t", "--taxon"),
+    type="character",
+    action="store",
+    default="fungi",
+    help="The taxon to run. must be either 'fungi' (Default), 'oomycete' or 'bacteria'."
+  ),
   make_option(
     "--version",
     type="logical",
