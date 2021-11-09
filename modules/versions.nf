@@ -23,6 +23,7 @@ workflow check_env {
     deepredeff1 = get_deepredeff_version()
     // This gets hard-coded because doesn't give version and hasn't changed in years.
     pfamscan = 1.6
+    predutils = get_predutils_version()
 
     emit:
     signalp3
@@ -44,6 +45,7 @@ workflow check_env {
     hmmer
     deepredeff1
     pfamscan
+    predutils
 }
 
 
@@ -512,5 +514,19 @@ process get_deepredeff_version {
     script:
     """
     VERSION="\$(deepredeff.R --version)"
+    """
+}
+
+
+process get_predutils_version {
+
+    label "predectorutils"
+
+    output:
+    env VERSION
+
+    script:
+    """
+    VERSION="\$(predutils --version)"
     """
 }
