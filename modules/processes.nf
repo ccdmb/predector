@@ -277,7 +277,7 @@ process signalp_v3_hmm {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        signalp3_hmm out.txt
+        signalp3_hmm out.txt in.fasta
     """
 }
 
@@ -328,7 +328,7 @@ process signalp_v3_nn {
         --software_version "${software_version}" \
         -o out.ldjson \
         signalp3_nn \
-        out.txt
+        out.txt in.fasta
     """
 }
 
@@ -371,7 +371,7 @@ process signalp_v4 {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        signalp4 out.txt
+        signalp4 out.txt in.fasta
     """
 }
 
@@ -438,7 +438,7 @@ process signalp_v5 {
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
       --software_version "${software_version}" \
-      signalp5 signalp5.txt \
+      signalp5 signalp5.txt in.fasta \
     > "out.ldjson"
 
     mv "out_mature.fasta" "out.fasta" "log.txt"
@@ -504,7 +504,7 @@ process signalp_v6 {
     predutils r2js \
       --pipeline-version "${workflow.manifest.version}" \
       --software_version "${software_version}" \
-      signalp6 "out.txt" \
+      signalp6 "out.txt" in.fasta \
     > "out.ldjson"
     """
 }
@@ -558,7 +558,7 @@ process deepsig {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        deepsig out.txt
+        deepsig out.txt in.fasta
     """
 }
 
@@ -601,7 +601,7 @@ process phobius {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        phobius out.txt
+        phobius out.txt in.fasta
     """
 }
 
@@ -644,7 +644,7 @@ process tmhmm {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        tmhmm out.txt
+        tmhmm out.txt in.fasta
 
     rm -rf -- TMHMM_*
     """
@@ -682,7 +682,7 @@ process targetp {
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
-      targetp_non_plant "out_summary.targetp2" \
+      targetp_non_plant "out_summary.targetp2" in.fasta \
     > "out.ldjson"
 
     rm -f "out_summary.targetp2"
@@ -751,7 +751,7 @@ process deeploc {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        deeploc out.txt
+        deeploc out.txt in.fasta
     """
 }
 
@@ -803,7 +803,7 @@ process apoplastp {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        apoplastp out.txt
+        apoplastp out.txt in.fasta
     """
 }
 
@@ -855,7 +855,7 @@ process localizer {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        localizer out.txt
+        localizer out.txt in.fasta
     """
 }
 
@@ -907,7 +907,7 @@ process effectorp_v1 {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        effectorp1 out.txt
+        effectorp1 out.txt in.fasta
     """
 }
 
@@ -959,7 +959,7 @@ process effectorp_v2 {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        effectorp2 out.txt
+        effectorp2 out.txt in.fasta
     """
 }
 
@@ -1011,7 +1011,7 @@ process effectorp_v3 {
         --pipeline-version "${workflow.manifest.version}" \
         --software-version "${software_version}" \
         -o out.ldjson \
-        effectorp3 out.txt
+        effectorp3 out.txt in.fasta
     """
 }
 
@@ -1054,7 +1054,7 @@ process deepredeff_v1 {
         --pipeline-version "${workflow.manifest.version}" \
         --software-version "${software_version}" \
         -o out.ldjson \
-        deepredeff out.txt
+        deepredeff out.txt in.fasta
     """
 }
 
@@ -1083,7 +1083,7 @@ process pepstats {
         --pipeline-version "${workflow.manifest.version}" \
         --software_version "${software_version}" \
         -o out.ldjson \
-        pepstats out.txt
+        pepstats out.txt in.fasta
     """
 }
 
@@ -1156,7 +1156,7 @@ process pfamscan {
         --software-version "${software_version}" \
         "${database_version_str}" \
         -o out.ldjson \
-        pfamscan out.txt
+        pfamscan out.txt in.fasta
     """
 }
 
@@ -1245,7 +1245,7 @@ process hmmscan {
         --software-version "${software_version}" \
         "${database_version_str}" \
         -o out.ldjson \
-        "${database}" out.txt
+        "${database}" out.txt in.fasta
     """
 }
 
@@ -1323,7 +1323,7 @@ process mmseqs_search {
       --pipeline-version "${workflow.manifest.version}" \
       --software-version "${software_version}" \
       "${database_version_str}" \
-      "${database}" search.tsv \
+      "${database}" search.tsv in.fasta \
     > out.ldjson
 
     rm -rf -- tmp matches search.tsv

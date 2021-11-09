@@ -157,7 +157,7 @@ process get_signalp6_version {
         exit 127
     fi
 
-    VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')
+    VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
     """
 }
 

@@ -518,6 +518,7 @@ workflow {
     ).map { v, f -> [v, input.phibase_version, f] }
 
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
+        versions.mmseqs2,
         phibase_mmseqs_index_val,
         proteome_mmseqs_index_ch
     )
