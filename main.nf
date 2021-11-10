@@ -8,7 +8,7 @@ include {
     download as download_pfam_hmm;
     download as download_pfam_dat;
     download as download_dbcan;
-    extract_effector_seqs;
+    download as download_effectordb;
     encode_seqs;
     decode_seqs;
     sanitise_phibase;
@@ -35,12 +35,12 @@ include {
     press_pfam_hmmer;
     pfamscan;
     press_hmmer as press_dbcan_hmmer;
+    press_hmmer as press_effectordb_hmmer;
     hmmscan as hmmscan_dbcan;
+    hmmscan as hmmscan_effectordb;
     mmseqs_index as mmseqs_index_proteomes;
     mmseqs_index as mmseqs_index_phibase;
-    mmseqs_index as mmseqs_index_effectors;
     mmseqs_search as mmseqs_search_phibase;
-    mmseqs_search as mmseqs_search_effectors;
 } from './modules/processes'
 
 
@@ -397,8 +397,15 @@ workflow validate_input {
         phibase_version = params.private_phibase_version
     }
 
+    if ( params.effectordb ) {
+        effectordb_val = get_file(params.effectordb)
+        effectordb_version = false
+    } else {
+        effectordb_val = download_effectordb("effectordb.hmm.gz", params.private_effectordb_url)
+        effectordb_version = params.private_effectordb_version
+    }
+
     // This has a default value set, so it shouldn't be possible to not specify the parameter.
-    effector_val = get_file(params.effector_table)
     pfam_targets_val = get_file(params.pfam_targets)
     dbcan_targets_val = get_file(params.dbcan_targets)
 
@@ -417,7 +424,8 @@ workflow validate_input {
     dbcan_val
     phibase_version
     phibase_val
-    effector_val
+    effectordb_version
+    effectordb_val
     pfam_targets_val
     dbcan_targets_val
 }
@@ -508,6 +516,9 @@ workflow {
     pressed_dbcan_hmmer_val = press_dbcan_hmmer("dbcan", input.dbcan_version, input.dbcan_val)
     dbcan_hmmer_ch = hmmscan_dbcan(versions.hmmer, pressed_dbcan_hmmer_val, split_proteomes_ch)
 
+    pressed_effectordb_hmmer_val = press_effectordb_hmmer("effectordb", input.effectordb_version, input.effectordb_val)
+    effectordb_hmmer_ch = hmmscan_effectordb(versions.hmmer, pressed_effectordb_hmmer_val, split_proteomes_ch)
+
     proteome_mmseqs_index_ch = mmseqs_index_proteomes(
         split_proteomes_ch.map { f -> ["chunk", f] }
     ).map { v, f -> f }
@@ -521,18 +532,6 @@ workflow {
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
         versions.mmseqs2,
         phibase_mmseqs_index_val,
-        proteome_mmseqs_index_ch
-    )
-
-    effectors_mmseqs_index_val = input.effector_val \
-        | extract_effector_seqs \
-        | map { f -> ["effectorsearch", f] } \
-        | mmseqs_index_effectors \
-        | map { v, f -> [v, workflow.manifest.version, f] }
-
-    effectors_mmseqs_matches_ch = mmseqs_search_effectors(
-        versions.mmseqs2,
-        effectors_mmseqs_index_val,
         proteome_mmseqs_index_ch
     )
 
@@ -562,7 +561,7 @@ workflow {
             pfamscan_ch,
             dbcan_hmmer_ch,
             phibase_mmseqs_matches_ch,
-            effectors_mmseqs_matches_ch
+            effectordb_hmmer_ch
         )
         .collect()
     )

@@ -19,28 +19,6 @@ process download {
 }
 
 
-process extract_effector_seqs {
-
-    label 'posix'
-    label 'cpu_low'
-    label 'memory_low'
-    label 'time_short'
-
-    input:
-    path "effectors.tsv"
-
-    output:
-    path "effectors.fasta"
-
-    script:
-    """
-    tail -n+2 effectors.tsv \
-    | awk -F'\t' '{printf(">%s\\n%s\\n", \$5, \$16)}' \
-    > effectors.fasta
-    """
-}
-
-
 // Here we remove duplicate sequences and split them into chunks for
 // parallel processing.
 // Eventually, we should also take precomputed results and filter them
@@ -1169,15 +1147,24 @@ process press_hmmer {
     input:
     val database
     val version
-    path "db.txt"
+    path db
 
     output:
     tuple val(database), val(version), path("db")
 
     script:
+    gzipped = db.getExtension() == "gz" ? "true" : "false"
+
     """
     mkdir -p db
-    cp -L db.txt db/db.hmm
+    if [ "${gzipped}" = "true" ]
+    then
+      cp -L "${db}" db/db.hmm.gz
+      gunzip db/db.hmm.gz
+    else
+      cp -L "${db}" db/db.hmm
+    fi
+
     hmmpress db/db.hmm
     """
 }
