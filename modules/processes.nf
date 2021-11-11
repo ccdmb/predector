@@ -38,7 +38,7 @@ process encode_seqs {
 
 
     output:
-    path "combined/*"
+    path "combined.fasta"
     path "combined.tsv"
 
     script:
@@ -50,10 +50,101 @@ process encode_seqs {
       combined.tsv \
       in/*
 
+    """
+}
+
+
+process split_fasta {
+    label 'predectorutils'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
+
+    input:
+    val chunk_size
+    tuple val(analysis), path("in.fasta")
+
+    output:
+    tuple val(analysis), path("split/*.fasta")
+
+    script:
+    """
     predutils split_fasta \
       --size "${chunk_size}" \
-      --template "combined/chunk{index:0>4}.fasta" \
-      combined.fasta
+      --template "split/chunk{index:0>4}.fasta" \
+      in.fasta
+    """
+}
+
+
+process gen_target_table {
+
+    label "posix"
+    label "cpu_low"
+    label "memory_low"
+    label "time_short"
+
+    input:
+    val signalp3
+    val signalp4
+    val signalp5
+    val signalp6
+    val targetp2
+    val tmhmm2
+    val deeploc1
+    val phobius
+    val effectorp1
+    val effectorp2
+    val effectorp3
+    val localizer
+    val apoplastp
+    val deepsig
+    val emboss
+    val mmseqs2
+    val hmmer
+    val deepredeff1
+    val pfamscan
+    val predutils
+    val pfam
+    val dbcan
+    val phibase
+    val effectordb
+
+    output:
+    path "versions.tsv"
+
+    script:
+    pfam_version = pfam ? pfam : ""
+    dbcan_version = dbcan ? dbcan : ""
+    phibase_version = phibase ? phibase : ""
+    effectordb_version = effectordb ? effectordb : ""
+
+    """
+    cat <<EOF > versions.tsv
+    signalp3_nn	${signalp3}	
+    signalp3_hmm	${signalp3}	
+    signalp4	${signalp4}	
+    signalp5	${signalp5}	
+    signalp6	${signalp6}	
+    deepsig	${deepsig}	
+    phobius	${phobius}	
+    tmhmm	${tmhmm2}	
+    deeploc	${deeploc1}	
+    targetp_non_plant	${targetp2}	
+    effectorp1	${effectorp1}	
+    effectorp2	${effectorp2}	
+    effectorp3	${effectorp3}	
+    apoplastp	${apoplastp}	
+    localizer	${localizer}	
+    pepstats	${emboss}	
+    dbcan	${hmmer}	${dbcan_version}
+    pfamscan	${pfamscan}	${pfam_version}
+    phibase	${mmseqs2}	${phibase_version}
+    effectorsearch	${hmmer}	${effectordb_version}
+    deepredeff_fungi	${deepredeff_fungi}	
+    kex2_cutsites	${predutils}	
+    rxlr_like_motif	${predutils}	
+    EOF
     """
 }
 
@@ -66,12 +157,33 @@ process filter_precomputed {
 
     input:
     path "in.fasta"
-    path "precomputed.db"
-    path "precomputed.ldjson"
+    path "targets.tsv"
+    path precomputed_ldjson
+    path precomputed
 
     output:
     path "matched.ldjson"
-    path "split/*.fasta"
+    path "remaining/*.fasta"
+
+    script:
+    if (precomputed_ldjson.fileName != "DOESNT_EXIST_LDJSON") {
+        precomputed_arg = "--precomputed '${precomputed_ldjson}' "
+    }
+
+    """
+    if [ "${precomputed}"!="DOESNT_EXIST_DB" ]
+    then
+        cp -L "${precomputed}" tmp_precomputed.db
+    fi
+
+    predutils precomputed \
+      --db tmp_precomputed.db \
+      ${precomputed_arg} \
+      --template "remaining/{analysis}.fasta" \
+      --outfile matched.ldjson \
+      targets.tsv \
+      in.fasta
+    """
 }
 
 

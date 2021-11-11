@@ -11,6 +11,8 @@ include {
     download as download_effectordb;
     encode_seqs;
     decode_seqs;
+    filter_precomputed;
+    split_fasta;
     sanitise_phibase;
     gff_results;
     tabular_results;
@@ -43,6 +45,7 @@ include {
     mmseqs_search as mmseqs_search_phibase;
     run_regex as kex2_regex;
     run_regex as rxlrlike_regex;
+    gen_target_table;
 } from './modules/processes'
 
 
@@ -407,6 +410,18 @@ workflow validate_input {
         effectordb_version = params.private_effectordb_version
     }
 
+    if ( params.precomputed ) {
+        precomputed_val = get_file(params.precomputed)
+    } else {
+        precomputed_val = file("DOESNT_EXIST_DB")
+    }
+
+    if ( params.precomputed_ldjson ) {
+        precomputed_ldjson_val = get_file(params.precomputed_ldjson)
+    } else {
+        precomputed_ldjson_val = file("DOESNT_EXIST_LDJSON")
+    }
+
     // This has a default value set, so it shouldn't be possible to not specify the parameter.
     pfam_targets_val = get_file(params.pfam_targets)
     dbcan_targets_val = get_file(params.dbcan_targets)
@@ -430,6 +445,8 @@ workflow validate_input {
     effectordb_val
     pfam_targets_val
     dbcan_targets_val
+    precomputed_val
+    precomputed_ldjson_val
 }
 
 
@@ -473,16 +490,55 @@ workflow {
     // info where it can.
     versions = check_env()
 
-    tidied_phibase = sanitise_phibase(input.phibase_val)
+    target_table_val = gen_target_table(
+        versions.signalp3,
+        versions.signalp4,
+        versions.signalp5,
+        versions.signalp6,
+        versions.targetp2,
+        versions.tmhmm2,
+        versions.deeploc1,
+        versions.phobius,
+        versions.effectorp1,
+        versions.effectorp2,
+        versions.effectorp3,
+        versions.localizer,
+        versions.apoplastp,
+        versions.deepsig,
+        versions.emboss,
+        versions.mmseqs2,
+        versions.hmmer,
+        versions.deepredeff1,
+        versions.pfamscan,
+        versions.predutils,
+        input.pfam_version,
+        input.dbcan_version,
+        input.phibase_version,
+        input.effectordb_version
+    )
+
+    tidied_phibase_val = sanitise_phibase(input.phibase_val)
 
     // Remove duplicates and split fasta(s) into chunks to run in parallel.
     // Maybe download precomputed results?
-    (combined_proteomes_ch, combined_proteomes_tsv_ch) = encode_seqs(
-        params.chunk_size,
+    (combined_proteomes_val, combined_proteomes_tsv_val) = encode_seqs(
         input.proteome_ch.collect()
     )
 
-    split_proteomes_ch = combined_proteomes_ch.flatten()
+    (precomputed_results_val, remaining_proteomes_val) = filter_precomputed(
+        combined_proteomes_val,
+        target_table_val,
+        input.precomputed_ldjson,
+        input.precomputed
+    )
+
+    split_proteomes_ch = split_fasta(
+        params.chunk_size,
+        remaining_proteomes_val
+          .flatten()
+          .map { f -> [f.baseName, f] }
+          .view()
+    ).flatMap { a, fs -> fs.collect { f -> [a, f]} }.view()
 
     // Run the machine-learning/simple statistics analyses.
     signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, versions.signalp3, split_proteomes_ch)
@@ -529,7 +585,7 @@ workflow {
     ).map { v, f -> f }
 
     phibase_mmseqs_index_val = mmseqs_index_phibase(
-        tidied_phibase
+        tidied_phibase_val
         .map { f -> ["phibase", f] }
     ).combine(input.phibase_version)
      .map { d, f, v -> [d, v, f] }
