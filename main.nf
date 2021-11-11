@@ -41,6 +41,8 @@ include {
     mmseqs_index as mmseqs_index_proteomes;
     mmseqs_index as mmseqs_index_phibase;
     mmseqs_search as mmseqs_search_phibase;
+    run_regex as kex2_regex;
+    run_regex as rxlrlike_regex;
 } from './modules/processes'
 
 
@@ -503,6 +505,9 @@ workflow {
     effectorp_v3_ch = effectorp_v3(versions.effectorp3, split_proteomes_ch)
     deepredeff_v1_ch = deepredeff_v1(versions.deepredeff1, split_proteomes_ch)
 
+    kex2_regex_ch = kex2_regex("kex2_cutsite", versions.predutils, split_proteomes_ch)
+    rxlrlike_regex_ch = rxlrlike_regex("rxlr_like_motif", versions.predutils, split_proteomes_ch)
+
     pepstats_ch = pepstats(versions.emboss, split_proteomes_ch)
 
     // Run the domain and database searches
@@ -557,6 +562,8 @@ workflow {
             effectorp_v2_ch,
             effectorp_v3_ch,
             deepredeff_v1_ch,
+            kex2_regex_ch,
+            rxlrlike_regex_ch,
             pepstats_ch,
             pfamscan_ch,
             dbcan_hmmer_ch,

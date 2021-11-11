@@ -58,6 +58,23 @@ process encode_seqs {
 }
 
 
+process filter_precomputed {
+    label 'predectorutils'
+    label 'cpu_low'
+    label 'memory_medium'
+    label 'time_medium'
+
+    input:
+    path "in.fasta"
+    path "precomputed.db"
+    path "precomputed.ldjson"
+
+    output:
+    path "matched.ldjson"
+    path "split/*.fasta"
+}
+
+
 process decode_seqs {
 
     label 'predectorutils'
@@ -86,6 +103,34 @@ process decode_seqs {
       --template '${templ}' \
       combined.tsv \
       -
+    """
+}
+
+
+process run_regex {
+
+    label "predectorutils"
+    label "cpu_low"
+    label "memory_low"
+    label "time_medium"
+
+    input:
+    val analysis
+    val software_version
+    path "in.fasta"
+
+    output:
+    path "out.ldjson"
+
+    script:
+    """
+    predutils regex -o out.txt --kind "${analysis}" in.fasta
+
+    predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        --software-version "${software_version}" \
+        -o out.ldjson \
+        "${analysis}" out.txt in.fasta
     """
 }
 
