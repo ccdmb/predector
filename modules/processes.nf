@@ -33,7 +33,6 @@ process encode_seqs {
     label 'time_medium'
 
     input:
-    val chunk_size
     path "in/*"
 
 
@@ -138,11 +137,11 @@ process gen_target_table {
     localizer	${localizer}	
     pepstats	${emboss}	
     dbcan	${hmmer}	${dbcan_version}
-    pfamscan	${pfamscan}	${pfam_version}
+    pfamscan	${pfamscan}-${hmmer}	${pfam_version}
     phibase	${mmseqs2}	${phibase_version}
-    effectorsearch	${hmmer}	${effectordb_version}
-    deepredeff_fungi	${deepredeff_fungi}	
-    kex2_cutsites	${predutils}	
+    effectordb	${hmmer}	${effectordb_version}
+    deepredeff_fungi	${deepredeff1}	
+    kex2_cutsite	${predutils}	
     rxlr_like_motif	${predutils}	
     EOF
     """
@@ -166,19 +165,22 @@ process filter_precomputed {
     path "remaining/*.fasta"
 
     script:
-    if (precomputed_ldjson.fileName != "DOESNT_EXIST_LDJSON") {
-        precomputed_arg = "--precomputed '${precomputed_ldjson}' "
-    }
-
     """
-    if [ "${precomputed}"!="DOESNT_EXIST_DB" ]
+    if [ "${precomputed}" != "DOESNT_EXIST_DB" ]
     then
         cp -L "${precomputed}" tmp_precomputed.db
     fi
 
+    if [ "${precomputed_ldjson}" != "DOESNT_EXIST_LDJSON" ]
+    then
+        export PRECOMPUTED_ARG="--precomputed ${precomputed_ldjson}"
+    else
+        export PRECOMPUTED_ARG=""
+    fi
+
     predutils precomputed \
       --db tmp_precomputed.db \
-      ${precomputed_arg} \
+      \${PRECOMPUTED_ARG:-} \
       --template "remaining/{analysis}.fasta" \
       --outfile matched.ldjson \
       targets.tsv \
@@ -200,6 +202,7 @@ process decode_seqs {
     path "results/*.ldjson"
 
     output:
+    path "combined.ldjson"
     path "decoded/*.ldjson"
 
     script:
@@ -210,11 +213,14 @@ process decode_seqs {
     }
 
     """
-    cat results/* \
-    | predutils decode \
+    cat results/* > combined.ldjson
+    predutils decode \
       --template '${templ}' \
+      --db tmp_db.db \
       combined.tsv \
-      -
+      combined.ldjson
+
+    rm -f tmp_db.db
     """
 }
 
@@ -309,7 +315,10 @@ process tabular_results {
     """
     predutils tables \
       --template "${name}-{analysis}.tsv" \
+      --db tmp_db.db \
       results.ldjson
+
+    rm -f tmp_db.db
     """
 }
 

@@ -45,7 +45,7 @@ include {
     mmseqs_search as mmseqs_search_phibase;
     run_regex as kex2_regex;
     run_regex as rxlrlike_regex;
-    gen_target_table;
+    gen_target_table
 } from './modules/processes'
 
 
@@ -258,7 +258,6 @@ def helpMessage() {
     """.stripIndent()
     log.info ""
 }
-
 
 def licenseMessage() {
     log.info"""
@@ -528,8 +527,8 @@ workflow {
     (precomputed_results_val, remaining_proteomes_val) = filter_precomputed(
         combined_proteomes_val,
         target_table_val,
-        input.precomputed_ldjson,
-        input.precomputed
+        input.precomputed_ldjson_val,
+        input.precomputed_val
     )
 
     split_proteomes_ch = split_fasta(
@@ -537,34 +536,103 @@ workflow {
         remaining_proteomes_val
           .flatten()
           .map { f -> [f.baseName, f] }
-          .view()
-    ).flatMap { a, fs -> fs.collect { f -> [a, f]} }.view()
+    ).flatMap { a, fs -> fs instanceof List ? fs.collect { f -> [a, f]} : [[a, fs]] }
 
     // Run the machine-learning/simple statistics analyses.
-    signalp_v3_hmm_ch = signalp_v3_hmm(signalp_domain, versions.signalp3, split_proteomes_ch)
-    signalp_v3_nn_ch = signalp_v3_nn(signalp_domain, versions.signalp3, split_proteomes_ch)
-    signalp_v4_ch = signalp_v4(signalp_domain, versions.signalp4, split_proteomes_ch)
-    signalp_v5_ch = signalp_v5(signalp_domain, versions.signalp5, split_proteomes_ch)
-    signalp_v6_ch = signalp_v6(signalp_domain, versions.signalp6, split_proteomes_ch)
+    signalp_v3_hmm_ch = signalp_v3_hmm(
+        signalp_domain,
+        versions.signalp3,
+        split_proteomes_ch.filter { a, f -> a == "signalp3_hmm" }.map { a, f -> f }
+    )
+    signalp_v3_nn_ch = signalp_v3_nn(
+        signalp_domain,
+        versions.signalp3,
+        split_proteomes_ch.filter { a, f -> a == "signalp3_nn" }.map { a, f -> f }
+    )
+    signalp_v4_ch = signalp_v4(
+        signalp_domain,
+        versions.signalp4,
+        split_proteomes_ch.filter { a, f -> a == "signalp4" }.map { a, f -> f }
+    )
+    signalp_v5_ch = signalp_v5(
+        signalp_domain,
+        versions.signalp5,
+        split_proteomes_ch.filter { a, f -> a == "signalp5" }.map { a, f -> f }
+    )
+    signalp_v6_ch = signalp_v6(
+        signalp_domain,
+        versions.signalp6,
+        split_proteomes_ch.filter { a, f -> a == "signalp6" }.map { a, f -> f }
+    )
 
-    deepsig_ch = deepsig(params.domain, versions.deepsig, split_proteomes_ch)
-    phobius_ch = phobius(versions.phobius, split_proteomes_ch)
-    tmhmm_ch = tmhmm(versions.tmhmm2, split_proteomes_ch)
+    deepsig_ch = deepsig(
+        params.domain,
+        versions.deepsig,
+        split_proteomes_ch.filter { a, f -> a == "deepsig" }.map { a, f -> f }
+    )
 
-    targetp_ch = targetp(versions.targetp2, split_proteomes_ch)
-    deeploc_ch = deeploc(versions.deeploc1, split_proteomes_ch)
+    phobius_ch = phobius(
+        versions.phobius,
+        split_proteomes_ch.filter { a, f -> a == "phobius" }.map { a, f -> f }
+    )
 
-    apoplastp_ch = apoplastp(versions.apoplastp, split_proteomes_ch)
-    localizer_ch = localizer(versions.localizer, split_proteomes_ch)
-    effectorp_v1_ch = effectorp_v1(versions.effectorp1, split_proteomes_ch)
-    effectorp_v2_ch = effectorp_v2(versions.effectorp2, split_proteomes_ch)
-    effectorp_v3_ch = effectorp_v3(versions.effectorp3, split_proteomes_ch)
-    deepredeff_v1_ch = deepredeff_v1(versions.deepredeff1, split_proteomes_ch)
+    tmhmm_ch = tmhmm(
+        versions.tmhmm2,
+        split_proteomes_ch.filter { a, f -> a == "tmhmm" }.map { a, f -> f }
+    )
 
-    kex2_regex_ch = kex2_regex("kex2_cutsite", versions.predutils, split_proteomes_ch)
-    rxlrlike_regex_ch = rxlrlike_regex("rxlr_like_motif", versions.predutils, split_proteomes_ch)
+    targetp_ch = targetp(
+        versions.targetp2,
+        split_proteomes_ch.filter { a, f -> a == "targetp_non_plant" }.map { a, f -> f }
+    )
 
-    pepstats_ch = pepstats(versions.emboss, split_proteomes_ch)
+    deeploc_ch = deeploc(
+        versions.deeploc1,
+        split_proteomes_ch.filter { a, f -> a == "deeploc" }.map { a, f -> f }
+    )
+
+    apoplastp_ch = apoplastp(
+        versions.apoplastp,
+        split_proteomes_ch.filter { a, f -> a == "apoplastp" }.map { a, f -> f }
+    )
+
+    localizer_ch = localizer(
+        versions.localizer,
+        split_proteomes_ch.filter { a, f -> a == "localizer" }.map { a, f -> f }
+    )
+
+    effectorp_v1_ch = effectorp_v1(
+        versions.effectorp1,
+        split_proteomes_ch.filter { a, f -> a == "effectorp1" }.map { a, f -> f }
+    )
+    effectorp_v2_ch = effectorp_v2(
+        versions.effectorp2,
+        split_proteomes_ch.filter { a, f -> a == "effectorp2" }.map { a, f -> f }
+    )
+    effectorp_v3_ch = effectorp_v3(
+        versions.effectorp3,
+        split_proteomes_ch.filter { a, f -> a == "effectorp3" }.map { a, f -> f }
+    )
+    deepredeff_v1_ch = deepredeff_v1(
+        versions.deepredeff1,
+        split_proteomes_ch.filter { a, f -> a == "deepredeff_fungi" }.map { a, f -> f }
+    )
+
+    kex2_regex_ch = kex2_regex(
+        "kex2_cutsite",
+        versions.predutils,
+        split_proteomes_ch.filter { a, f -> a == "kex2_cutsite" }.map { a, f -> f }
+    )
+    rxlrlike_regex_ch = rxlrlike_regex(
+        "rxlr_like_motif",
+        versions.predutils,
+        split_proteomes_ch.filter { a, f -> a == "rxlr_like_motif" }.map { a, f -> f }
+    )
+
+    pepstats_ch = pepstats(
+        versions.emboss,
+        split_proteomes_ch.filter { a, f -> a == "pepstats" }.map { a, f -> f }
+    )
 
     // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
@@ -572,17 +640,37 @@ workflow {
         input.pfam_hmm_val,
         input.pfam_dat_val
     )
-    pfamscan_ch = pfamscan(versions.pfamscan + ":" + versions.hmmer, pressed_pfam_hmmer_val, split_proteomes_ch)
+    pfamscan_ch = pfamscan(
+        versions.pfamscan + "-" + versions.hmmer,
+        pressed_pfam_hmmer_val,
+        split_proteomes_ch.filter { a, f -> a == "pfamscan" }.map { a, f -> f }
+    )
 
-    pressed_dbcan_hmmer_val = press_dbcan_hmmer("dbcan", input.dbcan_version, input.dbcan_val)
-    dbcan_hmmer_ch = hmmscan_dbcan(versions.hmmer, pressed_dbcan_hmmer_val, split_proteomes_ch)
+    pressed_dbcan_hmmer_val = press_dbcan_hmmer(
+        "dbcan",
+        input.dbcan_version,
+        input.dbcan_val
+    )
+    dbcan_hmmer_ch = hmmscan_dbcan(
+        versions.hmmer,
+        pressed_dbcan_hmmer_val,
+        split_proteomes_ch.filter { a, f -> a == "dbcan" }.map { a, f -> f }
+    )
 
-    pressed_effectordb_hmmer_val = press_effectordb_hmmer("effectordb", input.effectordb_version, input.effectordb_val)
-    effectordb_hmmer_ch = hmmscan_effectordb(versions.hmmer, pressed_effectordb_hmmer_val, split_proteomes_ch)
+    pressed_effectordb_hmmer_val = press_effectordb_hmmer(
+        "effectordb",
+        input.effectordb_version,
+        input.effectordb_val
+    )
+    effectordb_hmmer_ch = hmmscan_effectordb(
+        versions.hmmer,
+        pressed_effectordb_hmmer_val,
+        split_proteomes_ch.filter { a, f -> a == "effectordb" }.map { a, f -> f }
+    )
 
     proteome_mmseqs_index_ch = mmseqs_index_proteomes(
-        split_proteomes_ch.map { f -> ["chunk", f] }
-    ).map { v, f -> f }
+        split_proteomes_ch.filter { a, f -> a == "phibase" }
+    )
 
     phibase_mmseqs_index_val = mmseqs_index_phibase(
         tidied_phibase_val
@@ -594,15 +682,18 @@ workflow {
         versions.mmseqs2,
         phibase_mmseqs_index_val,
         proteome_mmseqs_index_ch
+          .filter { a, f -> a == "phibase" }
+          .map { a, f -> f }
     )
 
     // At this point, all of the analyses have their own ldjson files.
     // Here we just merge that all into one big file.
-    decoded_ch = decode_seqs(
+    (combined_ldjson_ch, decoded_ch) = decode_seqs(
         !params.nostrip,
-        combined_proteomes_tsv_ch,
-        signalp_v3_hmm_ch
+        combined_proteomes_tsv_val,
+        precomputed_results_val
         .mix(
+            signalp_v3_hmm_ch,
             signalp_v3_nn_ch,
             signalp_v4_ch,
             signalp_v5_ch,
@@ -665,8 +756,10 @@ workflow {
             input.pfam_dat_val.map { ["downloads/${it.name}", it] },
             input.dbcan_val.map { ["downloads/${it.name}", it] },
             input.phibase_val.map { ["downloads/${it.name}", it] },
-            combined_proteomes_ch.flatten().map { ["deduplicated/${it.name}", it] },
-            combined_proteomes_tsv_ch.map { ["deduplicated/${it.name}", it] },
+            target_table_val.map { ["analysis_software_versions.tsv", it] },
+            combined_proteomes_val.map { ["deduplicated/${it.name}", it] },
+            combined_proteomes_tsv_val.map { ["deduplicated/${it.name}", it] },
+            combined_ldjson_ch.map { ["deduplicated/${it.name}", it] },
             decoded_with_names_ch.map { n, f -> ["${n}/${n}.ldjson", f] },
             gff_ch.map { n, f -> ["${n}/${f.name}", f] },
             ranked_ch.map { n, f -> ["${n}/${f.name}", f] },
