@@ -833,7 +833,6 @@ process targetp {
 }
 
 
-
 /*
  * Subcellular location using DeepLoc
  */

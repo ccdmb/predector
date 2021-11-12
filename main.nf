@@ -605,14 +605,17 @@ workflow {
         versions.effectorp1,
         split_proteomes_ch.filter { a, f -> a == "effectorp1" }.map { a, f -> f }
     )
+
     effectorp_v2_ch = effectorp_v2(
         versions.effectorp2,
         split_proteomes_ch.filter { a, f -> a == "effectorp2" }.map { a, f -> f }
     )
+
     effectorp_v3_ch = effectorp_v3(
         versions.effectorp3,
         split_proteomes_ch.filter { a, f -> a == "effectorp3" }.map { a, f -> f }
     )
+
     deepredeff_v1_ch = deepredeff_v1(
         versions.deepredeff1,
         split_proteomes_ch.filter { a, f -> a == "deepredeff_fungi" }.map { a, f -> f }
@@ -623,6 +626,7 @@ workflow {
         versions.predutils,
         split_proteomes_ch.filter { a, f -> a == "kex2_cutsite" }.map { a, f -> f }
     )
+
     rxlrlike_regex_ch = rxlrlike_regex(
         "rxlr_like_motif",
         versions.predutils,
@@ -640,6 +644,7 @@ workflow {
         input.pfam_hmm_val,
         input.pfam_dat_val
     )
+
     pfamscan_ch = pfamscan(
         versions.pfamscan + "-" + versions.hmmer,
         pressed_pfam_hmmer_val,
@@ -651,6 +656,7 @@ workflow {
         input.dbcan_version,
         input.dbcan_val
     )
+
     dbcan_hmmer_ch = hmmscan_dbcan(
         versions.hmmer,
         pressed_dbcan_hmmer_val,
