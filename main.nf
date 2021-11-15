@@ -32,7 +32,8 @@ include {
     effectorp_v1;
     effectorp_v2;
     effectorp_v3;
-    deepredeff_v1;
+    deepredeff_fungi_v1;
+    deepredeff_oomycete_v1;
     pepstats;
     press_pfam_hmmer;
     pfamscan;
@@ -616,9 +617,14 @@ workflow {
         split_proteomes_ch.filter { a, f -> a == "effectorp3" }.map { a, f -> f }
     )
 
-    deepredeff_v1_ch = deepredeff_v1(
+    deepredeff_fungi_v1_ch = deepredeff_fungi_v1(
         versions.deepredeff1,
         split_proteomes_ch.filter { a, f -> a == "deepredeff_fungi" }.map { a, f -> f }
+    )
+
+    deepredeff_oomycete_v1_ch = deepredeff_oomycete_v1(
+        versions.deepredeff1,
+        split_proteomes_ch.filter { a, f -> a == "deepredeff_oomycete" }.map { a, f -> f }
     )
 
     kex2_regex_ch = kex2_regex(
@@ -714,7 +720,8 @@ workflow {
             effectorp_v1_ch,
             effectorp_v2_ch,
             effectorp_v3_ch,
-            deepredeff_v1_ch,
+            deepredeff_fungi_v1_ch,
+            deepredeff_oomycete_v1_ch,
             kex2_regex_ch,
             rxlrlike_regex_ch,
             pepstats_ch,

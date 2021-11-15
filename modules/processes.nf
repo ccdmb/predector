@@ -141,6 +141,7 @@ process gen_target_table {
     phibase	${mmseqs2}	${phibase_version}
     effectordb	${hmmer}	${effectordb_version}
     deepredeff_fungi	${deepredeff1}	
+    deepredeff_oomycete	${deepredeff1}	
     kex2_cutsite	${predutils}	
     rxlr_like_motif	${predutils}	
     EOF
@@ -1160,7 +1161,7 @@ process effectorp_v3 {
 /*
  * Effector ML using Deepredeff v0.1.1
  */
-process deepredeff_v1 {
+process deepredeff_fungi_v1 {
 
     label 'deepredeff'
     label 'cpu_high'
@@ -1196,6 +1197,46 @@ process deepredeff_v1 {
         --software-version "${software_version}" \
         -o out.ldjson \
         deepredeff_fungi out.txt in.fasta
+    """
+}
+
+
+process deepredeff_oomycete_v1 {
+
+    label 'deepredeff'
+    label 'cpu_high'
+    label 'memory_high'
+    label 'time_medium'
+
+    input:
+    val software_version
+    path "in.fasta"
+
+    output:
+    path "out.ldjson"
+
+    script:
+    """
+    export OMP_NUM_THREADS="${task.cpus}"
+    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 1000)"
+
+    parallel \
+        --halt now,fail=1 \
+        --joblog log.txt \
+        -j "${task.cpus}" \
+        -N "\${CHUNKSIZE}" \
+        --line-buffer  \
+        --recstart '>' \
+        --cat  \
+        'deepredeff.R -i "{}" --taxon fungi | tail -n+2' \
+    < in.fasta \
+    | cat > out.txt
+
+    predutils r2js \
+        --pipeline-version "${workflow.manifest.version}" \
+        --software-version "${software_version}" \
+        -o out.ldjson \
+        deepredeff_oomycete out.txt in.fasta
     """
 }
 
