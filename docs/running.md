@@ -85,6 +85,9 @@ Important parameters are:
   Path to already downloaded gzipped HMMs of effectors.
   default: download from <https://doi.org/10.6084/m9.figshare.16973665>
 
+-params-file <path>
+  Load command line parameters from this JSON or YAML file rather.
+
 -profile <string>
   Specify a pre-set configuration profile to use.
   Multiple profiles can be specified by separating them with a comma.
@@ -118,7 +121,20 @@ Important parameters are:
 --nostrip
   Don't strip the proteome filename extension when creating the output filenames
   default: false
+
+-ansi-log=<true|false>
+  The default Nextflow feedback prints and deletes the screen so that it appears as an updating block of text.
+  Predector runs a lot of steps so this view usually takes up more than the full screen.
+  Additionally this default mode doesn't play well if you re-direct the output to a file (e.g. using nohup or on a slurm cluster).
+  Nextflow is supposed to switch when in a non-interactive shell, but I find that it often doesn't.
+  If you would like to explicitly disable this nextflow single screen colourful output, please specify `-ansi-log=false`.
 ```
+
+*Note*. The difference in parameters starting with `-` and `--` are deliberate and shouln't be mixed up.
+Those starting with a single hyphen `-` are Nextflow runtime parameters, which are described here <https://www.nextflow.io/docs/latest/cli.html#run>.
+Those starting with two hyphens `--` are Predector defined parameters.
+
+If you're confused about either I'm happy to help. 
 
 
 ### Manual ranking scores
@@ -171,7 +187,7 @@ has_effector_match = has_phibase_effector_match
 | secretion | `deeploc_lysosome` | -2 | `--deeploc_intracellular_weight` |
 | secretion | `deeploc_peroxisome` | -2 | `--deeploc_intracellular_weight` |
 | secretion | `deeploc_membrane` | -2 | `--deeploc_membrane_weight` |
-| secretion | `targetp_mitochondrial_prob | -2 | `--targetp_mitochondrial_weight` |
+| secretion | `targetp_mitochondrial_prob` | -2 | `--targetp_mitochondrial_weight` |
 | effector | `2 * (effectorp1 - 0.5)` | 3 | `--effectorp1_weight` |
 | effector | `2 * (effectorp2 - 0.5)` | 3 | `--effectorp2_weight` |
 | effector | `effectorp3_apoplastic` | 3 | `--effectorp3_apoplastic_weight` |
