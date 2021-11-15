@@ -169,7 +169,7 @@ process filter_precomputed {
     """
     if [ "${precomputed}" != "DOESNT_EXIST_DB" ]
     then
-        cp -L "${precomputed}" tmp_precomputed.db
+        cp -L "${precomputed}" tmp.db
     fi
 
     if [ "${precomputed_ldjson}" != "DOESNT_EXIST_LDJSON" ]
@@ -180,12 +180,14 @@ process filter_precomputed {
     fi
 
     predutils precomputed \
-      --db tmp_precomputed.db \
+      --db tmp.db \
       \${PRECOMPUTED_ARG:-} \
       --template "remaining/{analysis}.fasta" \
       --outfile matched.ldjson \
       targets.tsv \
       in.fasta
+
+    rm -f tmp.db
     """
 }
 
@@ -217,11 +219,11 @@ process decode_seqs {
     cat results/* > combined.ldjson
     predutils decode \
       --template '${templ}' \
-      --db tmp_db.db \
+      --db tmp.db \
       combined.tsv \
       combined.ldjson
 
-    rm -f tmp_db.db
+    rm -f tmp.db
     """
 }
 
@@ -316,10 +318,10 @@ process tabular_results {
     """
     predutils tables \
       --template "${name}-{analysis}.tsv" \
-      --db tmp_db.db \
+      --db tmp.db \
       results.ldjson
 
-    rm -f tmp_db.db
+    rm -f tmp.db
     """
 }
 
@@ -364,6 +366,7 @@ process rank_results {
     script:
     """
     predutils rank \
+      --db tmp.db \
       --dbcan dbcan.txt \
       --pfam pfam.txt \
       --outfile "${name}-ranked.tsv" \
@@ -388,6 +391,8 @@ process rank_results {
       --lethal-homology-weight "${lethal_homology_weight}" \
       --tmhmm-first-60-threshold "${tmhmm_first60_threshold}" \
       results.ldjson
+
+    rm -f tmp.db
     """
 }
 
