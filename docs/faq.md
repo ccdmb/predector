@@ -50,25 +50,9 @@ and sometimes the URLs to these data will change.
 It is possible for you to download these data separately, and provide the files to the pipeline as described [here](https://github.com/ccdmb/predector/wiki#providing-pre-downloaded-pfam-phi-base-and-dbcan-datasets).
 If you find yourself running the pipeline often it might be a good thing to keep a downloaded copy handy.
 
-In the case that the servers are down, unfortunately we can't do much. But if the URL appears to have changed, we would appreciate it if you could please let us know so that we can resolve the issue.
+In the case that the servers are down, unfortunately we can't do much.
+But if the URL appears to have changed, we would appreciate it if you could please let us know so that we can resolve the issue.
 
-You can also customise the download URL from the command line using the parameters:
-
-```
---phibase_url <url>
-  URL to download the PHI-base fasta file if --phibase is not provided
-
---pfam_hmm_url <url>
-  URL to download the pfam HMM database from if --pfam_hmm is not provided
-
---pfam_dat_url <url>
-  URL to download the pfam DAT database from if --pfam_dat is not provided
-
---dbcan_url <url>
-  URL to download the dbcan HMM database from if --dbcan is not provided
-```
-
-Probably best to put the URLs in quotes though, in case they have special characters that bash might misinterpret.
 
 ### `ERROR ~ unable to resolve class XXX`
 
@@ -107,7 +91,7 @@ The scores will not be consistent between different versions of the model, so pl
 Similarly, like with EffectorP the scores should not be treated as a 'likelihood'.
 Although the you can generally say that proteins with higher scores will be more like known effectors, the difference in "effector-ness" between 0 and 1 is not necessarily the same as it is between 1 and 2 (and so on).
 
-In the upcoming paper for version 1 we present some comparisons with EffectorP classification using a score threshold of 0, but this is not how we suggest you use these scores and the threshold may not be applicable in the future if we change how the model is trained.
+In the paper for version 1 we present some comparisons with EffectorP classification using a score threshold of 0, but this is not how we suggest you use these scores and the threshold may not be applicable in the future if we change how the model is trained.
 In general, it's best to look at some additional evidence (e.g. homologues or presence-absence) and manually evaluate candidates in descending order of score (i.e. using predector as a decision support system) until you have enough to work with.
 
 In the first version of the model, the predictions between 0 and 1 can contain some odd effector predictions (e.g. NRPS genes).
@@ -119,6 +103,7 @@ Ranking separates the bulk of good proteins from bad ones, so a it's easier to d
 Think of it like searching for papers on the web.
 The first page usually contains something relevant to what you're interested in, but sometimes there are some gems in the 2nd and 3rd pages.
 
+
 ### How should I cite predector?
 
 The Predector pipeline and ranking method is published in [scientific reports](https://doi.org/10.1038/s41598-021-99363-0):
@@ -127,7 +112,7 @@ Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolh
 
 Please also cite the dependencies that we use whenever possible.
 I understand that citation limits can be an issue, but the continued maintenance development of tools relies on these citations.
-If you absolutely must prioritise, I'd suggest keeping EffectorP, ApoplastP, TargetP, TMHMM, and one of the SignalP papers, as these do most of the heavy lifting in the pipeline.
+If you absolutely must prioritise, I'd suggest keeping EffectorP, ApoplastP, Deepredeff, TargetP, TMHMM, and one of the SignalP papers, as these do most of the heavy lifting in the pipeline.
 There is a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations in the main github repository](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
 The dependency citations are also listed below.
 

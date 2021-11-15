@@ -193,8 +193,10 @@ We currently intend to include.
  - [x] CAZyme annotations using HMMER and dbCAN
  - [x] Protein domain annotation using Pfam-scan
  - [x] A classifier and ranking scheme for prioritising effector candidates
+ - [x] Searches against the [RemEff](https://doi.org/10.1099/mgen.0.000637) effector HMMs to identify distant homologs
+       **NOTE**. I decided to use new HMMER based HMMs, one per effector, rather than the families.
+       These seem to be a bit more usable and the sensitivity is comparable.
  - [ ] A tool to predict Kex-2 cut sites, and potentially run effector candidate prediction on the processed proteins
- - [ ] Searches against the [RemEff](https://doi.org/10.1099/mgen.0.000637) effector HMMs to identify distant homologs
  - [ ] A meta-secretion prediction model for better secretome prediction
  - [ ] Easier integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting
  - [ ] Protein structural prediction tools and comparison with structural features of known effectors

@@ -81,6 +81,10 @@ Important parameters are:
   Path to already downloaded gzipped dbCAN HMM database
   default: download the hmms
 
+--effectordb <path>
+  Path to already downloaded gzipped HMMs of effectors.
+  default: download from <https://doi.org/10.6084/m9.figshare.16973665>
+
 -profile <string>
   Specify a pre-set configuration profile to use.
   Multiple profiles can be specified by separating them with a comma.
@@ -115,6 +119,79 @@ Important parameters are:
   Don't strip the proteome filename extension when creating the output filenames
   default: false
 ```
+
+
+### Manual ranking scores
+
+In the pipeline ranking output tables we also provide a manual (i.e. not machine learning) ranking score for both effectors `manual_effector_score` and secretion `manual_secretion_score`.
+This was provided so that you could customise the ranking if the ML ranker isn't what you want.
+
+These scores are computed by a relatively simple linear function weighting features in the ranking table.
+You can customise the weights applied to the features from the command line.
+
+In the following tables, the sum of all `feature` * `weight` pairs will compute the overall score.
+The `feature` names match those in the [`*-ranked.tsv`](#-rankedtsv) file.
+The effector score includes all of the secretion scores. It is built on-top of it with additional effector-relevant features.
+
+Note that for some tools we subtract 0.5 and multiply by 2.
+This is done for some classifiers so that scores the value is between 1 and -1. So it can both penalise and increase scores.
+
+I've added a special column in here "has_effector_match" which is not in the ranking table.
+It is composed of four other columns like this:
+
+```
+has_effector_match = has_phibase_effector_match
+                  or (effector_matches != '.')
+                  or has_dbcan_virulence_match
+                  or has_pfam_virulence_match
+```
+
+
+| score | feature | default weight | command line option |
+|-------|---------|----------------|---------------------|
+| secretion | `is_secreted` | 3.0 | `--secreted_weight` |
+| secretion | `signalp3_hmm` | 0.25 | `--sigpep_ok_weight` |
+| secretion | `signalp3_nn` | 0.25 | `--sigpep_ok_weight` |
+| secretion | `phobius` | 0.25 | `--sigpep_ok_weight` |
+| secretion | `deepsig` | 0.25 | `--sigpep_ok_weight` |
+| secretion | `signalp4` | 0.5 | `--sigpep_good_weight` |
+| secretion | `signalp5` | 0.5 | `--sigpep_good_weight` |
+| secretion | `signalp6` | 0.5 | `--sigpep_good_weight` |
+| secretion | `targetp_secreted` | 0.5 | `--sigpep_good_weight` |
+| secretion | `multiple_transmembrane` | -10 | `--multiple_transmembrane_weight` |
+| secretion | `single_transmembrane` | -1 | `--single_transmembrane_weight` |
+| secretion | `deeploc_extracellular` | 1 | `--deeploc_extracellular_weight` |
+| secretion | `deeploc_nucleus` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_cytoplasm` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_mitochondrion` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_cell_membrane` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_endoplasmic_reticulum` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_plastid` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_golgi` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_lysosome` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_peroxisome` | -2 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_membrane` | -2 | `--deeploc_membrane_weight` |
+| secretion | `targetp_mitochondrial_prob | -2 | `--targetp_mitochondrial_weight` |
+| effector | `2 * (effectorp1 - 0.5)` | 3 | `--effectorp1_weight` |
+| effector | `2 * (effectorp2 - 0.5)` | 3 | `--effectorp2_weight` |
+| effector | `effectorp3_apoplastic` | 3 | `--effectorp3_apoplastic_weight` |
+| effector | `effectorp3_cytoplasmic` | 3 | `--effectorp3_cytoplastmic_weight` |
+| effector | `effectorp3_noneffector` | -3 | `--effectorp3_noneffector_weight` |
+| effector | `2 * (deepredeff_fungi - 0.5)` | 2 | `--deepredeff_fungi_weight` |
+| effector | `2 * (deepredeff_oomycete - 0.5)` | 2 | `--deepredeff_oomycete_weight` |
+| effector | `has_effector_match` | 5 | `--effector_homology_weight` |
+| effector | `(!has_effector_match) and has_phibase_virulence_match` | 2 | `--virulence_homology_weight` |
+| effector | `has_phibase_lethal_match` | -5 | `--lethal_homology_weight` |
+
+
+Note that all deeploc probability values except `deeploc_membrane` will sum to 1 because they result from
+a single multi-class classifier (see the common [Softmax function](https://en.wikipedia.org/wiki/Softmax_function) for details on how this happens). So the total penalty for deeploc "intracellular" localisation can
+only ever be a maximum of `--deeploc_intracellular_weight` which requires that `deeploc_extracellular` is 0.
+And the increase from extracellular localisation can only ever be a maximum of `--deeploc_extracellular_weight`, which will happen if `deeploc_extracellular` is 1 (so all others must be 0).
+
+The high weight assigned to `is_secreted` and relatively low weights assigned to individual classifiers is
+intended to give a general bump to things that have signal peptides and no TM domains etc, but then a slight boost for proteins
+that are positively predicted by multiple tools.
 
 
 ### Profiles and configuration
@@ -198,11 +275,11 @@ In the config files, you can select these tasks by label.
 | software | `effectorp1`     |                                                                                                                      |
 | software | `effectorp2`     |                                                                                                                      |
 | software | `effectorp3`     |                                                                                                                      |
+| software | `deepredeff`     |                                                                                                                      |
 | software | `emboss`         |                                                                                                                      |
 | software | `hmmer3`         |                                                                                                                      |
 | software | `pfamscan`       |                                                                                                                      |
 | software | `mmseqs`         |                                                                                                                      |
-
 
 
 ### Running different pipeline versions.
@@ -241,6 +318,12 @@ You may want to keep the downloaded databases to reuse them (or pre-download the
 
 If you've already run the pipeline once, they'll be in the `results` folder (unless you specified `--outdir`) so you can do:
 
+You can download the files from:
+- http://ftp.ebi.ac.uk/pub/databases/Pfam/current\_release/ `Pfam-A.hmm.gz` `Pfam-A.hmm.dat.gz`
+- https://bcb.unl.edu/dbCAN2/download/ `dbCAN-HMMdb-V10.txt`
+- http://www.phi-base.org/downloadLink.htm OR https://github.com/PHI-base/data/tree/master/releases (only need the `.fas` fasta file).
+- https://doi.org/10.6084/m9.figshare.16973665 `effectordb.hmm.gz`
+
 ```bash
 cp -rL results/downloads ./downloads
 nextflow run \
@@ -249,8 +332,8 @@ nextflow run \
   --phibase phi-base_current.fas \
   --pfam_hmm downloads/Pfam-A.hmm.gz \
   --pfam_dat downloads/Pfam-A.hmm.dat.gz \
-  --dbcan downloads/dbCAN.txt
+  --dbcan downloads/dbCAN.txt \
+  --effectordb downloads/effectordb.hmm.gz
 ```
 
 This will skip the download step at the beginning and just use those files, which saves a few minutes.
-

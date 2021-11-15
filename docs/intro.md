@@ -1,7 +1,7 @@
 Predector is a pipeline to run numerous secretome and fungal effector prediction tools, and to combine them in usable
 and informative ways.
 
-The pipeline currently includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER and EffectorP 1, 2, and 3.
+The pipeline currently includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER, Deepredeff and EffectorP 1, 2, and 3.
 These results are summarised as a table that includes most information that would typically be used for secretome analysis.
 Effector candidates are ranked using a [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
 We recommend that users incorporate these ranked effector scores with experimental evidence or homology matches to prioritise other more expensive efforts (e.g. cloning or structural modelling).

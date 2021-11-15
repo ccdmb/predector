@@ -794,6 +794,41 @@ workflow {
         decoded_with_names_ch
     )
 
+    signalp_v3_hmm_ch
+    .mix(
+        signalp_v3_nn_ch,
+        signalp_v4_ch,
+        signalp_v5_ch,
+        signalp_v6_ch,
+        deepsig_ch,
+        phobius_ch,
+        tmhmm_ch,
+        targetp_ch,
+        deeploc_ch,
+        apoplastp_ch,
+        localizer_ch,
+        effectorp_v1_ch,
+        effectorp_v2_ch,
+        effectorp_v3_ch,
+        deepredeff_fungi_v1_ch,
+        deepredeff_oomycete_v1_ch,
+        kex2_regex_ch,
+        rxlrlike_regex_ch,
+        pepstats_ch,
+        pfamscan_ch,
+        dbcan_hmmer_ch,
+        phibase_mmseqs_matches_ch,
+        effectordb_hmmer_ch
+    )
+    .collectFile(
+        name: "new_results.ldjson",
+        storeDir: "${params.outdir}/deduplicated",
+        newLine: true,
+        sort: true,
+        keepHeader: false
+    )
+        
+
     // Publish the results to an output folder.
     // This is a temporary workaround for the publish workflow section being depreciated.
     // Make sure you flatten channels if necessary, one file per publish call.

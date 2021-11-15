@@ -16,27 +16,33 @@ There are a lot of columns, though generally you'll only be interested in a few 
 
 1. seqid -- The protein name in the fasta you provided.
 2. effector_score -- Float. The predector machine learning effector score for this protein.
-3. manual_effector_score -- Float. The manually created effector score, which is the sum of the products of several values in this spreadsheet. Consult the paper for details.
+3. manual_effector_score -- Float. The manually created effector score, which is the sum of the products of several values in this spreadsheet. See [manual ranking scores](#manual-ranking-scores) for details.
 4. manual_secretion_score -- Float. The manually created secretion score, which is the sum of the products of several values in this spreadsheet.
-5. phibase_effector -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the phibase phenotypes: Effector, Hypervirulence, or loss of pathogenicity.
-6. phibase_virulence -- Boolean \[0, 1\] indicating whether the protein had a significant hit with the phenotype "reduced virulence".
-7. phibase_lethal -- Boolean \[0, 1\] indicating whether the protein had a significant hit with the phenotype "lethal".
+3. effector_matches -- A comma separated list of the significant matches to the curated set of fungal effector HMMs.
+      If you are interested in knowing more about matches, see https://doi.org/10.6084/m9.figshare.16973665 under `effectordb.tsv` for details and links to papers describing functions.
+4. phibase_genes -- A comma separated list of PHI-base gene names that were significant hits to this sequence.
 8. phibase_phenotypes -- A comma separated list of the PHI-base phenotypes in the significant hits to PHI-base.
-9. phibase_matches -- A comma separated list of the PHI-base entries that were significant hits.
-10. effector_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit in the predector curated set of fungal effectors. 
-11. effector_matches -- A comma separated list of the matches to the curated set of fungal effectors.
-12. pfam_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the selected Pfam HMMs associated with virulence function.
-13. pfam_matches -- A comma separated list of all Pfam HMMs matched.
-14. dbcan_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the dbCAN domains associated with virulence function. 
-15. dbcan_matches -- A comma separated lst of all dbCAN matches.
+9. phibase_ids -- A comma separated list of the PHI-base entries that were significant hits.
+5. has_phibase_effector_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the phibase phenotypes: Effector, Hypervirulence, or loss of pathogenicity.
+6. has_phibase_virulence_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit with the phenotype "reduced virulence".
+7. has_phibase_lethal_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit with the phenotype "lethal".
+13. pfam_ids -- A comma separated list of all Pfam HMM ids matched.
+13. pfam_names -- A comma separated list of all Pfam HMM names matched.
+12. has_pfam_virulence_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the selected Pfam HMMs associated with virulence function.
+       A list of virulence associated Pfam entries is here: https://github.com/ccdmb/predector/blob/master/data/pfam_targets.txt .
+15. dbcan_matches -- A comma separated list of all dbCAN matches.
+14. has_dbcan_virulence_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the dbCAN domains associated with virulence function.
+       A list of virulence associated dbCAN entries is here: https://github.com/ccdmb/predector/blob/master/data/dbcan_targets.txt .
 16. effectorp1 -- Float. The raw EffectorP v1 prediction pseudo-probability. Values above 0.5 are considered to be effector predictions.
 17. effectorp2 -- Float. The raw EffectorP v2 prediction pseudo-probability. Values above 0.5 are considered to be effector predictions. Values below 0.6 are annotated in the raw EffectorP output as "unlikely effectors".
 18. effectorp3_cytoplasmic -- Float or None '.'. The EffectorP v3 prediction pseudo-probability for cytoplasmic effectors. EffectorP only reports probabilities for classifiers over 0.5. '.' indicates where the value is not reported by EffectorP v3.
 19. effectorp3_apoplastic -- Float or None '.'. As for `effectorp3_cytoplasmic` but for apoplastic effector probability.
 20. effectorp3_noneffector -- Float or None '.'. As for `effectorp3_cytoplasmic` but for non-effector probability.
+21. deepredeff_fungi -- Float. The deepredeff fungal effector classifier pseudo probability. Values above 0.5 are considered to be effector predictions.
+21. deepredeff_oomycete -- Float. The deepredeff oomycete effector classifier pseudo probability. Values above 0.5 are considered to be effector predictions.
+23. apoplastp -- Float. The raw ApoplastP "apoplast" localised prediction pseudo probability. Values above 0.5 are considered to be apoplastically localised.
 21. is_secreted -- Boolean \[0, 1\] indicating whether the protein had a signal peptide predicted by any method, and does not have >=2 transmembrane domains predicted by either TMHMM or Phobius.
 22. any_signal_peptide -- Boolean \[0, 1\] indicating whether any of the signal peptide prediction methods predict the protein to have a signal peptide.
-23. apoplastp -- Float. The raw ApoplastP "apoplast" localised prediction pseudo probability. Values above 0.5 are considered to be apoplastically localised.
 24. single_transmembrane -- Boolean \[0, 1\] indicating whether the protein is predicted to have 1 transmembrane domain by TMHMM or Phobius (and not >1 for either), and in the case of TMHMM the predicted number of TM AAs in the first 60 residues is less than 10.
 25. multiple_transmembrane -- Boolean \[0, 1\] indicating whether a protein is predicted to have more than 1 transmembrane domain by either Phobius or TMHMM.
 26. molecular_weight -- Float. The predicted molecular weight (Daltons) of the protein.
@@ -53,9 +59,12 @@ There are a lot of columns, though generally you'll only be interested in a few 
 37. aa_basic_number -- Integer. The number of basic residues (H, K, or R) in the protein.
 38. aa_acidic_number -- Integer. The number of acidic residues (B, D, E or Z) in the protein.
 39. fykin_gap -- Float. The number of FYKIN residues + 1 divided by the number of GAP residues + 1. [Testa et al. 2016](https://doi.org/10.1093/gbe/evw121) describe RIP affected regions as being enriched for FYKIN residues, and depleted in GAP residues.
-40. localizer_nuclear -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal nuclear localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
-41. localizer_chloro -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal chloroplast localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
-42. localizer_mito -- Boolean \[0, 1\] or None '.' indicating whether localiser predicted an internal mitochondrial localisation peptide. These predictions are run on mature peptides predicted by SignalP 5. Any entry with '.' indicates where the program was not run.
+40. kex2_cutsites -- A comma separated list of potential matches to Kex2 motifs. These each take the form of `<pattern>:<start>-<end>`. Where pattern is one of `[LIJVAP][A-Z][KRTPEI]R`, `L[A-Z][A-Z]R`, `[KR]R`. See Outram et al 2021 <https://doi.org/10.1371/journal.ppat.1010000> for a recent brief review. Note that these are simple regular expression matches and there has been no processing. Use with some caution.
+41. rxlr_like_motifs -- A comma separated list of potential RxLR-like motifs (`[RKH][A-Z][LMIFYW][A-Z]`) as described by Kale et al 2010 <https://doi.org/10.1016/j.cell.2010.06.008>. Each take the form of `<start>-<end>`. Note that this is a simple regular expression match, it tends to be quite non-specific, and the function of these motifs remains controversial. Use with some caution.
+40. localizer_nucleus -- Boolean \[0, 1\] indicating whether localiser predicted an internal nuclear localisation peptide. These predictions are run on all proteins with the first 20 AAs trimmed from the start to remove any potential signal peptides.
+41. localizer_chloro -- Boolean \[0, 1\] indicating whether localiser predicted an internal chloroplast localisation peptide.
+42. localizer_mito -- Boolean \[0, 1\] indicating whether localiser predicted an internal mitochondrial localisation peptide.
+43. signal_peptide_cutsites -- A comma separated list of predicted signal-peptide cleavage sites. Each will take the form `<program_name>:<last_base_in_sp>`. So the mature peptide is expected to begin after the number.
 43. signalp3_nn -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by the neural network model in SignalP 3.
 44. signalp3_hmm -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by the HMM model in SignalP 3.
 45. signalp4 -- Boolean \[0, 1\] indicating whether the protein is predicted to have a signal peptide by SignalP 4.

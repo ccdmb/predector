@@ -823,23 +823,48 @@ process targetp {
 
     script:
     """
-    mkdir -p tmpdir
-
     # targetp2 just uses all available cores afaik.
     # Although it seems to use omp, i don't seem to be able to force it
     # to use a specific number of cores.
     export OMP_NUM_THREADS="${task.cpus}"
 
-    targetp -fasta in.fasta -org non-pl -format short -prefix "out"
+    run () {
+        set -e
+        export TMPDIR="tmpdir\$\$"
+        mkdir "\${TMPDIR}"
+
+        OUT="out\$\$"
+
+    	targetp \
+          -fasta "\${1}" \
+          -org non-pl \
+          -format short \
+          -prefix "\${OUT}" \
+        1>&2
+
+        cat "\${OUT}_summary.targetp2"
+        rm -rf -- "\${TMPDIR}" "\${OUT}"*
+    }
+
+    export -f run
+
+    parallel \
+      --halt now,fail=1 \
+      --joblog log.txt \
+      -j 1 \
+      -N 1000 \
+      --line-buffer \
+      --recstart '>' \
+      --cat \
+      run \
+    < in.fasta \
+    | cat > out.txt
 
     predutils r2js \
         --pipeline-version "${workflow.manifest.version}" \
         --software-version "${software_version}" \
-      targetp_non_plant "out_summary.targetp2" in.fasta \
+      targetp_non_plant "out.txt" in.fasta \
     > "out.ldjson"
-
-    rm -f "out_summary.targetp2"
-    rm -rf -- tmpdir
     """
 }
 
@@ -1188,13 +1213,12 @@ process deepredeff_fungi_v1 {
     script:
     """
     export OMP_NUM_THREADS="${task.cpus}"
-    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 1000)"
 
     parallel \
         --halt now,fail=1 \
         --joblog log.txt \
-        -j "${task.cpus}" \
-        -N "\${CHUNKSIZE}" \
+        -j 1 \
+        -N 1000 \
         --line-buffer  \
         --recstart '>' \
         --cat  \
@@ -1228,13 +1252,12 @@ process deepredeff_oomycete_v1 {
     script:
     """
     export OMP_NUM_THREADS="${task.cpus}"
-    CHUNKSIZE="\$(decide_task_chunksize.sh in.fasta "${task.cpus}" 1000)"
 
     parallel \
         --halt now,fail=1 \
         --joblog log.txt \
-        -j "${task.cpus}" \
-        -N "\${CHUNKSIZE}" \
+        -j 1 \
+        -N 1000 \
         --line-buffer  \
         --recstart '>' \
         --cat  \
