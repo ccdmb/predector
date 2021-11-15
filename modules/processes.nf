@@ -344,6 +344,11 @@ process rank_results {
     val targetp_mitochondrial_weight
     val effectorp1_weight
     val effectorp2_weight
+    val effectorp3_apoplastic_weight
+    val effectorp3_cytoplastmic_weight
+    val effectorp3_noneffector_weight
+    val deepredeff_fungi_weight
+    val deepredeff_oomycete_weight
     val effector_homology_weight
     val virulence_homology_weight
     val lethal_homology_weight
@@ -372,6 +377,11 @@ process rank_results {
       --targetp-mitochondrial-weight "${targetp_mitochondrial_weight}" \
       --effectorp1-weight "${effectorp1_weight}" \
       --effectorp2-weight "${effectorp2_weight}" \
+      --effectorp3-apoplastic-weight "${effectorp3_apoplastic_weight}" \
+      --effectorp3-cytoplasmic-weight "${effectorp3_cytoplastmic_weight}" \
+      --effectorp3-noneffector-weight "${effectorp3_noneffector_weight}" \
+      --deepredeff-fungi-weight "${deepredeff_fungi_weight}" \
+      --deepredeff-oomycete-weight "${deepredeff_oomycete_weight}" \
       --effector-homology-weight "${effector_homology_weight}" \
       --virulence-homology-weight "${virulence_homology_weight}" \
       --lethal-homology-weight "${lethal_homology_weight}" \

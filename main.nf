@@ -135,15 +135,19 @@ def helpMessage() {
 
       --pfam_hmm <path>
           Path to already downloaded gzipped pfam HMM database
-          default: download from '${params.pfam_hmm_url}'
+          default: download from '${params.private_pfam_hmm_url}'
 
       --pfam_dat <path>
           Path to already downloaded gzipped pfam DAT database
-          default: download from '${params.pfam_dat_url}'
+          default: download from '${params.private_pfam_dat_url}'
 
       --dbcan <path>
-          Path to already downloaded gzipped dbCAN HMM database
-          default: download from '${params.dbcan_url}'
+          Path to already downloaded dbCAN HMM database
+          default: download from '${params.private_dbcan_url}'
+
+      --effectordb <path>
+          Path to already downloaded gzipped effectordb HMM database.
+          default: download from '${params.private_effectordb_url}'
 
       --secreted_weight <float>
           The weight to give a protein if it is predicted to be secreted.
@@ -168,7 +172,6 @@ def helpMessage() {
           The weight to give a protein if it is predicted to have multiple
           transmembrane domains. Use negative numbers to penalise.
           default: ${params.multiple_transmembrane_weight}
-
 
       --deeploc_extracellular_weight <float>
           The weight to give a protein if it is predicted to be
@@ -205,6 +208,31 @@ def helpMessage() {
           an effector by effectorp2.
           default: ${params.effectorp2_weight}
 
+      --effectorp3_apoplastic_weight <float>
+          The weight given to a protein if it has an apoplastic prediction
+          from effectorp3.
+          default: ${params.effectorp3_apoplastic_weight}
+
+      --effectorp3_cytoplastmic_weight <float>
+          The weight given to a protein if it has a cytoplasmic prediction
+          from effectorp3.
+          default: ${params.effectorp3_cytoplasmic_weight}
+
+      --effectorp3_noneffector_weight <float>
+          The weight given to a protein if it has a non-effector prediction
+          from effectorp3.
+          default: ${params.effectorp3_noneffector_weight}
+
+      --deepredeff_fungi_weight <float>
+          The weight given to a protein if it has an effector prediction
+          given by the deepredeff fungal model.
+          default: ${params.deepredeff_fungi_weight}
+
+      --deepredeff_oomycete_weight <float>
+          The weight given to a protein if it has an effector prediction
+          given by the deepredeff oomycete model.
+          default: ${params.deepredeff_oomycete_weight}
+
       --effector_homology_weight <float>
           The weight to give a protein if it is similar to a known
           effector or effector domain.
@@ -229,7 +257,7 @@ def helpMessage() {
 
     ## Output
 
-      - `downloads` Contains the downloaded Pfam and dbCAN databases.
+      - `downloads` Contains the downloaded databases.
 
       - `deduplicated/`
         Contains the deduplicated sequences that we run through the pipeline.
@@ -745,6 +773,11 @@ workflow {
         params.targetp_mitochondrial_weight,
         params.effectorp1_weight,
         params.effectorp2_weight,
+        params.effectorp3_apoplastic_weight,
+        params.effectorp3_cytoplastmic_weight,
+        params.effectorp3_noneffector_weight,
+        params.deepredeff_fungi_weight,
+        params.deepredeff_oomycete_weight,
         params.effector_homology_weight,
         params.virulence_homology_weight,
         params.lethal_homology_weight,
@@ -762,6 +795,7 @@ workflow {
             input.pfam_dat_val.map { ["downloads/${it.name}", it] },
             input.dbcan_val.map { ["downloads/${it.name}", it] },
             input.phibase_val.map { ["downloads/${it.name}", it] },
+            input.effectordb_val.map { ["downloads/${it.name}", it] },
             target_table_val.map { ["analysis_software_versions.tsv", it] },
             combined_proteomes_val.map { ["deduplicated/${it.name}", it] },
             combined_proteomes_tsv_val.map { ["deduplicated/${it.name}", it] },

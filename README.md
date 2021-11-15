@@ -4,7 +4,7 @@ Predict effectors in your proteomes using the Predector!
 
 Predector runs numerous tools for fungal secretome and effector discovery analysis, and outputs a list of ranked candidates.
 
-This includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER and EffectorP 1, 2 and 3.
+This includes: SignalP (3, 4, 5, 6), TargetP (v2), DeepLoc, TMHMM, Phobius, DeepSig, CAZyme finding (with dbCAN), Pfamscan, searches against PHI-base, Pepstats, ApoplastP, LOCALIZER, Deepredeff, and EffectorP 1, 2 and 3.
 These results are summarised as a table that includes most information that would typically be used for secretome analysis.
 Effector candidates are ranked using a [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
 
@@ -186,6 +186,7 @@ We currently intend to include.
  - [x] DeepLoc
  - [x] TargetP
  - [x] EffectorP 1, 2, and 3
+ - [x] DeepRedEff 
  - [x] ApoplastP
  - [x] LOCALIZER
  - [x] Protein similarity searches against PHIbase using MMSeqs2
@@ -194,7 +195,6 @@ We currently intend to include.
  - [x] A classifier and ranking scheme for prioritising effector candidates
  - [ ] A tool to predict Kex-2 cut sites, and potentially run effector candidate prediction on the processed proteins
  - [ ] Searches against the [RemEff](https://doi.org/10.1099/mgen.0.000637) effector HMMs to identify distant homologs
- - [ ] DeepRedEff - Pending evaluation of performance
  - [ ] A meta-secretion prediction model for better secretome prediction
  - [ ] Easier integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting
  - [ ] Protein structural prediction tools and comparison with structural features of known effectors
