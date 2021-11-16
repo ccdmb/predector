@@ -520,7 +520,7 @@ setup_conda() {
         echo "  '-with-conda \"${CONDA_PREFIX}\"'"
         echo
         echo "You can test the pipeline on this computer now with:"
-        echo "  'nextflow run -profile test -with-conda \"${CONDA_PREFIX}\" -resume -r 1.1.1 ccdmb/predector'"
+        echo "  'nextflow run -profile test -with-conda \"${CONDA_PREFIX}\" -resume -r ${VERSION} ccdmb/predector'"
     fi
 }
 
@@ -615,13 +615,13 @@ setup_docker() {
             echo "Please use the 'docker_sudo' profile if you're running on this computer."
 	    echo
 	    echo "You can test the pipeline now with:"
-	    echo "  'nextflow run -profile test,docker_sudo -resume -r 1.1.1 ccdmb/predector'"
+	    echo "  'nextflow run -profile test,docker_sudo -resume -r ${VERSION} ccdmb/predector'"
         else
             echo "Your installation of docker doesn't seem to require sudo to run."
             echo "Please use the 'docker' profile if you're running on this computer."
 	    echo
 	    echo "You can test the pipeline now with:"
-	    echo "  'nextflow run -profile test,docker -resume -r 1.1.1 ccdmb/predector'"
+	    echo "  'nextflow run -profile test,docker -resume -r ${VERSION} ccdmb/predector'"
         fi
 
     else
@@ -636,7 +636,7 @@ setup_docker() {
             echo "  '-profile docker_sudo'"
 	    echo
 	    echo "You can test the pipeline now with:"
-	    echo "  'nextflow run -profile test,docker_sudo -with-docker \"${NAME}\" -resume -r 1.1.1 ccdmb/predector'"
+	    echo "  'nextflow run -profile test,docker_sudo -with-docker \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
         else
             echo "Your installation of docker doesn't seem to require sudo to run."
 	    echo ""
@@ -645,7 +645,7 @@ setup_docker() {
             echo "  '-profile docker_sudo'"
 	    echo
 	    echo "You can test the pipeline on this computer now with:"
-	    echo "  'nextflow run -profile test -with-docker \"${NAME}\" -resume -r 1.1.1 ccdmb/predector'"
+	    echo "  'nextflow run -profile test -with-docker \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
         fi
     fi
 }
@@ -706,7 +706,7 @@ setup_singularity() {
     echo "  '-with-singularity \"${NAME}\"'"
     echo
     echo "You can test the pipeline now with:"
-    echo "  'nextflow run -profile test -with-singularity \"${NAME}\" -resume -r 1.1.1 ccdmb/predector'"
+    echo "  'nextflow run -profile test -with-singularity \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
 }
 
 
