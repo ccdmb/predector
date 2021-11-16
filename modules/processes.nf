@@ -59,6 +59,8 @@ process split_fasta {
     label 'memory_medium'
     label 'time_medium'
 
+    tag "${analysis}"
+
     input:
     val chunk_size
     tuple val(analysis), path("in.fasta")

@@ -22,15 +22,16 @@ There are a lot of columns, though generally you'll only be interested in a few 
       If you are interested in knowing more about matches, see https://doi.org/10.6084/m9.figshare.16973665 under `effectordb.tsv` for details and links to papers describing functions.
 4. phibase_genes -- A comma separated list of PHI-base gene names that were significant hits to this sequence.
 8. phibase_phenotypes -- A comma separated list of the PHI-base phenotypes in the significant hits to PHI-base.
-9. phibase_ids -- A comma separated list of the PHI-base entries that were significant hits.
+9. phibase_ids -- A comma separated list of the PHI-base entries that were significant hits. You can find out more details about PHI-base matches here <http://www.phi-base.org/>, which will include links to literature describing experimental results.
+                  If you do publish relevant experiments on virulence factors or effectors or know of entries not in PHI-base, please do consider helping them curate <https://canto.phi-base.org/>.
 5. has_phibase_effector_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the phibase phenotypes: Effector, Hypervirulence, or loss of pathogenicity.
 6. has_phibase_virulence_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit with the phenotype "reduced virulence".
 7. has_phibase_lethal_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit with the phenotype "lethal".
-13. pfam_ids -- A comma separated list of all Pfam HMM ids matched.
+13. pfam_ids -- A comma separated list of all Pfam HMM ids matched. You can find details on Pfam match entries at <http://pfam.xfam.org> (use the "Jump to" search boxes with this ID).
 13. pfam_names -- A comma separated list of all Pfam HMM names matched.
 12. has_pfam_virulence_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the selected Pfam HMMs associated with virulence function.
        A list of virulence associated Pfam entries is here: https://github.com/ccdmb/predector/blob/master/data/pfam_targets.txt .
-15. dbcan_matches -- A comma separated list of all dbCAN matches.
+15. dbcan_matches -- A comma separated list of all dbCAN matches. You can find details on CAZYme families at <http://www.cazy.org/>. For more on dbCAN specifically see here <https://bcb.unl.edu/dbCAN2/>.
 14. has_dbcan_virulence_match -- Boolean \[0, 1\] indicating whether the protein had a significant hit to one of the dbCAN domains associated with virulence function.
        A list of virulence associated dbCAN entries is here: https://github.com/ccdmb/predector/blob/master/data/dbcan_targets.txt .
 16. effectorp1 -- Float. The raw EffectorP v1 prediction pseudo-probability. Values above 0.5 are considered to be effector predictions.

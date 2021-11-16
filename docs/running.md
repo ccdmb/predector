@@ -85,6 +85,13 @@ Important parameters are:
   Path to already downloaded gzipped HMMs of effectors.
   default: download from <https://doi.org/10.6084/m9.figshare.16973665>
 
+--precomputed_ldjson <path>
+  Path to an ldjson formatted file from previous Predector runs.
+  These records will be skipped when re-running the pipeline
+  where the sequence is identical and the versions of software
+  and databases (where applicable) are the same.
+  default: don't use any precomputed results.
+
 -params-file <path>
   Load command line parameters from this JSON or YAML file rather.
 
@@ -353,3 +360,45 @@ nextflow run \
 ```
 
 This will skip the download step at the beginning and just use those files, which saves a few minutes.
+
+
+### Providing pre-computed results to skip already processed proteins
+
+Predector can now take results of previous predector runs to skip re-running individual analyses of identical proteins.
+This is decided based on a checksum of the processed sequence, the version of the software, and the version of the database (when applicable).
+If all three match, we will skip that analysis for that protein.
+
+In the `deduplicated` folder is a file called `deduplicated.ldjson`.
+This contains all of the results from the current run of predector.
+Just hold on to this file, and provide it to the `--precomputed_ldjson` argument the next time you run the pipeline.
+You can concatenate multiple of these files together without issue (e.g. `cat dedup1.ldjson dedup2.ldjson > my_precomputed.ldjson`) to continue a set of precomputed results in the long term.
+
+Note that the results file `deduplicated.ldjson` will not contain any of the results that you provide to the `--precomputed_ldjson` argument. This is to avoid adding too many duplicate entries when you concatenate the files. It isn't a problem if there are duplicate entries in there, we internally deal with it, but it does slow things down and make the files bigger.
+
+Here's a basic workflow using precomputed results.
+
+
+```
+nextflow run -profile docker -resume -r 1.1.1 ccdmb/predector \
+  --proteome my_old_proteome.fasta
+
+cp -L results/deduplicated/deduplicated.ldjson ./precomputed.ldjson
+
+nextflow run -profile docker -resume -r 1.1.1 ccdmb/predector \
+  --proteome my_new_proteome.fasta --precomputed_ldjson ./precomputed.ldjson
+
+cat results/deduplicated/deduplicated.ldjson >> ./precomputed.ldjson
+```
+
+Any proteins in the first proteome will be skipped when you run the new one.
+I imagine this should speed up running new proteomes or re-running a newer version of the pipeline, as the actual versions of the software behind it don't change often.
+
+Note that database searches are only assigned versions if the pipeline downloads the actual files.
+If you provide pre-downloaded copies, the pipeline won't skip these searches.
+This is just because we can't figure out what version a database is from the filename, and it ensures consistency.
+The database searches are not a particularly time-consuming part of the pipeline anyway, so I don't expect this to be a big issue.
+Please let us know if you feel otherwise.
+
+
+Future versions may be able to download precomputed results from a server.
+It's something we're working on.

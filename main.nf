@@ -150,6 +150,19 @@ def helpMessage() {
           Path to already downloaded gzipped effectordb HMM database.
           default: download from '${params.private_effectordb_url}'
 
+      --precomputed_ldjson <path>
+          Path to an ldjson formatted file from previous Predector runs.
+          These records will be skipped when re-running the pipeline
+          where the sequence is identical and the versions of software
+          and databases (where applicable) are the same.
+          default: don't use any precomputed results.
+
+      --precomputed <path>
+          Path to an SQlite formatted database of precomputed results.
+          Currently this is mostly a placeholder for future versions of the pipeline.
+          The `--precomputed_ldjson` option is more convenient for now.
+          default: don't use any precomputed results.
+
       --secreted_weight <float>
           The weight to give a protein if it is predicted to be secreted.
           default: ${params.secreted_weight}
@@ -332,6 +345,8 @@ process publish_it {
     label "time_short"
     label "posix"
 
+    tag "${name}"
+
     publishDir "${params.outdir}", saveAs: { name }
 
     input:
@@ -438,13 +453,17 @@ workflow validate_input {
         effectordb_version = params.private_effectordb_version
     }
 
+    use_precomputed = false
+
     if ( params.precomputed ) {
+        use_precomputed = true
         precomputed_val = get_file(params.precomputed)
     } else {
         precomputed_val = file("DOESNT_EXIST_DB")
     }
 
     if ( params.precomputed_ldjson ) {
+        use_precomputed = true
         precomputed_ldjson_val = get_file(params.precomputed_ldjson)
     } else {
         precomputed_ldjson_val = file("DOESNT_EXIST_LDJSON")
@@ -473,6 +492,7 @@ workflow validate_input {
     effectordb_val
     pfam_targets_val
     dbcan_targets_val
+    use_precomputed
     precomputed_val
     precomputed_ldjson_val
 }
@@ -553,19 +573,40 @@ workflow {
         input.proteome_ch.collect()
     )
 
-    (precomputed_results_val, remaining_proteomes_val) = filter_precomputed(
-        combined_proteomes_val,
-        target_table_val,
-        input.precomputed_ldjson_val,
-        input.precomputed_val
-    )
+    // The precomputed splitting thing creates a lot more files and takes longer.
+    // If not using it, we can just skip it.
+    if ( params.precomputed || params.precomputed_ldjson ) {
+        (precomputed_results_val, remaining_proteomes_val) = filter_precomputed(
+            combined_proteomes_val,
+            target_table_val,
+            input.precomputed_ldjson_val,
+            input.precomputed_val
+        )
 
-    split_proteomes_ch = split_fasta(
-        params.chunk_size,
-        remaining_proteomes_val
-          .flatten()
-          .map { f -> [f.baseName, f] }
-    ).flatMap { a, fs -> fs instanceof List ? fs.collect { f -> [a, f]} : [[a, fs]] }
+        split_proteomes_ch = split_fasta(
+            params.chunk_size,
+            remaining_proteomes_val
+              .flatten()
+              .map { f -> [f.baseName, f] }
+        ).flatMap { a, fs -> fs instanceof List ? fs.collect { f -> [a, f]} : [[a, fs]] }
+
+    } else {
+        target_table_split_ch = target_table_val
+            .splitText()
+            .splitCsv(sep: '\t', header: ['analysis', 'software_version', 'database_version'])
+            .map { it.analysis } 
+
+        tmp_split_proteomes_ch = split_fasta(
+                params.chunk_size,
+                combined_proteomes_val
+                  .map { f -> ["deduplicated", f] }
+            ).map { a, fs -> fs }
+            .flatten()
+
+        split_proteomes_ch = target_table_split_ch.combine(tmp_split_proteomes_ch)
+        precomputed_results_val = Channel.empty()
+    }
+
 
     // Run the machine-learning/simple statistics analyses.
     signalp_v3_hmm_ch = signalp_v3_hmm(
