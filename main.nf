@@ -868,7 +868,6 @@ workflow {
         sort: true,
         keepHeader: false
     )
-        
 
     // Publish the results to an output folder.
     // This is a temporary workaround for the publish workflow section being depreciated.

@@ -17,7 +17,7 @@ dependencies:
   - effectorp3=3.0
   - localizer=1.0.4
   - phobius=1.01
-  - predectorutils=0.6.0
+  - predectorutils=0.7.0
   - signalp3=3.0b
   - signalp4=4.1g
   - signalp5=5.0b
