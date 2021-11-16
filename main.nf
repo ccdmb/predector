@@ -594,7 +594,7 @@ workflow {
         target_table_split_ch = target_table_val
             .splitText()
             .splitCsv(sep: '\t', header: ['analysis', 'software_version', 'database_version'])
-            .map { it.analysis } 
+            .map { it.analysis }
 
         tmp_split_proteomes_ch = split_fasta(
                 params.chunk_size,
@@ -835,33 +835,51 @@ workflow {
         decoded_with_names_ch
     )
 
-    signalp_v3_hmm_ch
-    .mix(
-        signalp_v3_nn_ch,
-        signalp_v4_ch,
-        signalp_v5_ch,
-        signalp_v6_ch,
-        deepsig_ch,
-        phobius_ch,
-        tmhmm_ch,
-        targetp_ch,
-        deeploc_ch,
-        apoplastp_ch,
-        localizer_ch,
-        effectorp_v1_ch,
-        effectorp_v2_ch,
-        effectorp_v3_ch,
-        deepredeff_fungi_v1_ch,
-        deepredeff_oomycete_v1_ch,
-        kex2_regex_ch,
-        rxlrlike_regex_ch,
-        pepstats_ch,
-        pfamscan_ch,
-        dbcan_hmmer_ch,
-        phibase_mmseqs_matches_ch,
-        effectordb_hmmer_ch
-    )
-    .collectFile(
+    new_results_ch = signalp_v3_hmm_ch
+        .mix(
+            signalp_v3_nn_ch,
+            signalp_v4_ch,
+            signalp_v5_ch,
+            signalp_v6_ch,
+            deepsig_ch,
+            phobius_ch,
+            tmhmm_ch,
+            targetp_ch,
+            deeploc_ch,
+            apoplastp_ch,
+            localizer_ch,
+            effectorp_v1_ch,
+            effectorp_v2_ch,
+            effectorp_v3_ch,
+            deepredeff_fungi_v1_ch,
+            deepredeff_oomycete_v1_ch,
+            kex2_regex_ch,
+            rxlrlike_regex_ch,
+            pepstats_ch
+        )
+
+    // We don't want to write the database matches out if
+    // they don't have versions.
+    // This says if the user didn't provide a parameter
+    // (i.e. we downloaded the database)
+    // we can include them in the output because we know the version.
+    if ( !(params.pfam_hmm || params.pfam_hmm) ) {
+        new_results_ch = new_results_ch.mix(pfamscan_ch)
+    }
+
+    if ( !params.dbcan ) {
+        new_results_ch = new_results_ch.mix(dbcan_hmmer_ch)
+    }
+
+    if ( !params.phibase ) {
+        new_results_ch = new_results_ch.mix(phibase_mmseqs_matches_ch)
+    }
+
+    if ( !params.effectordb ) {
+        new_results_ch = new_results_ch.mix(effectordb_hmmer_ch)
+    }
+
+    new_results_ch.collectFile(
         name: "new_results.ldjson",
         storeDir: "${params.outdir}/deduplicated",
         newLine: true,

@@ -92,6 +92,18 @@ Important parameters are:
   and databases (where applicable) are the same.
   default: don't use any precomputed results.
 
+-r <version>
+  Use a specific version of the pipeline. This version must match one of the
+  tags on github <https://github.com/ccdmb/predector/tags>.
+  In general it is best to specify a version, and all example commands
+  in the documentation include this flag.
+
+-latest
+  Pull the pipeline again from github. If you have previously run
+  Predector, and are specifying a new version to -r, you will need to use
+  this parameter.
+  See <https://github.com/ccdmb/predector/wiki#running-different-pipeline-versions>
+
 -params-file <path>
   Load command line parameters from this JSON or YAML file rather.
 
@@ -137,7 +149,7 @@ Important parameters are:
   If you would like to explicitly disable this nextflow single screen colourful output, please specify `-ansi-log=false`.
 ```
 
-*Note*. The difference in parameters starting with `-` and `--` are deliberate and shouln't be mixed up.
+*Note*. The difference in parameters starting with `-` and `--` are deliberate and shouldn't be mixed up.
 Those starting with a single hyphen `-` are Nextflow runtime parameters, which are described here <https://www.nextflow.io/docs/latest/cli.html#run>.
 Those starting with two hyphens `--` are Predector defined parameters.
 

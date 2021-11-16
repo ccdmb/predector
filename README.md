@@ -47,6 +47,13 @@ Quick documentation links:
 This is a quick install guide that unfortunately isn't terribly quick.
 For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.0-beta#quick-install).
 
+### Requirements
+
+- 4 CPUs
+- 8 GB RAM
+- About 20-30 GB of free disk space (~15 GB for all of the software).
+- A bash terminal in a unix-type environment, we primarily test on the current ubuntu LTS.
+
 
 ### 1. Install Conda, Docker, or Singularity
 
@@ -60,7 +67,10 @@ Please follow the instructions at one of the following links to install:
 
 
 NB. We cannot support conda environments on Mac or Windows.
-Please use a Linux virtual machine or one of the containerised options.
+This is because some older software in e.g. SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
+Even windows WSL2 does not seem play well with SignalP 4.
+
+Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
 
 ### 2. Download the proprietary software dependencies
@@ -81,6 +91,8 @@ Where you have a choice between versions for different operating systems, you sh
 Note that DTU (SignalP etc) don't keep older patches and minor versions available.
 If the specified version isn't available to download, another version with the same major number _should_ be fine.
 
+I suggest storing these all in a folder and just copying the whole lot around.
+If you use Predector often, you'll likely re-build the environment fairly often.
 
 ### 3. Build the conda environment or container
 

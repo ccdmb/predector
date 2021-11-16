@@ -1,5 +1,16 @@
 ## Quick install
 
+### Requirements
+
+- 4 CPUs
+- 8 GB RAM
+- About 20-30 GB of free disk space (~15 GB for all of the software, the rest depends on what you're running).
+- A bash terminal in a unix-type environment, we primarily test on the current ubuntu LTS.
+
+Only the last two are really hard requirements.
+You might get away with running smaller genomes on a smaller computer, but I would say
+most modern laptops meet these criteria.
+
 ### 1. Install Conda, Docker, or Singularity
 
 We provide automated ways of installing dependencies using [conda](https://docs.conda.io/en/latest/) environments (linux OS only), or [docker](https://www.docker.com/why-docker) or [singularity](https://sylabs.io/singularity/) containers.
@@ -12,7 +23,10 @@ Please follow the instructions at one of the following links to install:
 
 
 NB. We cannot support conda environments on Mac or Windows.
-Please use a Linux virtual machine or one of the containerised options.
+This is because some older software included in SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
+Even windows WSL2 does not seem play well with SignalP 4.
+
+Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
 
 ### 2. Download the proprietary software dependencies
@@ -62,8 +76,29 @@ This will create the conda environment (named `predector`), or the docker (tagge
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
-If you have issues during installation or want to customise where things are built, please consult the extended documentation.
-Or save the install script locally and run `install.sh --help`.
+
+The install script has some minor options that allow you to customise how and where things are built.
+You can also save the install script locally and run `install.sh --help` to find more information.
+
+```
+-n|--name      -- For conda, sets the environment name (default: 'predector').
+                  For docker, sets the image tag (default: 'predector/predector:1.2.0-beta').
+                  For singularity, sets the output image filename (default: './predector.sif').
+-c|--conda-prefix -- If set, use this as the location to store the built conda
+                     environment instead of setting a name and using the default
+                     prefix. This is useful if the location that conda is installed in is restricted somehow,
+                     or if it isn't available as a shared drive if on a cluster.
+--conda-template -- Use this conda environment.yml file instead of downloading it from github.
+                    Only affects conda installs.
+-v|--version   -- The version of the pipeline that you want to
+                  setup dependencies for. Note that this may not work in
+                  general, and you're recommended to use the install.sh
+                  script for the targeted version.
+```
+
+Note that the `-s` in `bash -s` is a bash flag rather than for our install script.
+It is only necessary if the script is coming into bash from stdin (as in the `curl -s URL | bash` command), and it tells bash that any [further arguments should go to the script rather than the bash runtime itself](https://linux.die.net/man/1/bash).
+If you are running like `bash ./install.sh ...` you don't need the `-s`.
 
 
 ### 4. Install NextFlow

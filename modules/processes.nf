@@ -1268,7 +1268,7 @@ process deepredeff_oomycete_v1 {
         --line-buffer  \
         --recstart '>' \
         --cat  \
-        'deepredeff.R -i "{}" --taxon fungi | tail -n+2' \
+        'deepredeff.R -i "{}" --taxon oomycete | tail -n+2' \
     < in.fasta \
     | cat > out.txt
 
