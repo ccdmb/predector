@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ARG VERSION=1.2.1-alpha
+=======
+ARG VERSION=ARG VERSION=1.2.0-beta
+>>>>>>> 4541dd5a5e94a84b2b6ecc3c3939536ce1a3883b
 FROM "predector/predector-base:${VERSION}"
 
 LABEL description="Docker image containing all requirements for the predector pipeline"
