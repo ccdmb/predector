@@ -6,46 +6,51 @@ channels:
   - darcyabjones
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   ## Custom packages
-  - apoplastp=1.0.1
-  - deeploc=1.0
-  - deepsig=0f1e1d9
-  - effectorp1=1.0
-  - effectorp2=2.0
-  - effectorp3=3.0
-  - localizer=1.0.4
-  - phobius=1.01
-  - predectorutils=0.7.0
-  - signalp3=3.0b
-  - signalp4=4.1g
-  - signalp5=5.0b
-  - signalp6=1.0
-  - targetp2=2.0
-  - tmhmm=2.0c
-  - r-deepredeff=0.1.1
+  - predector::apoplastp=1.0.1
+  - predector::deeploc=1.0
+  - predector::deepsig=0f1e1d9
+  - predector::effectorp1=1.0
+  - predector::effectorp2=2.0
+  - predector::effectorp3=3.0=py_2
+  - predector::localizer=1.0.4
+  - predector::phobius=1.01
+  - predector::predectorutils=0.7.1
+  - predector::signalp3=3.0b
+  - predector::signalp4=4.1g
+  - predector::signalp5=5.0b
+  - predector::signalp6=1.0
+  - predector::targetp2=2.0
+  - predector::tmhmm=2.0c
+  - predector::r-deepredeff=0.1.1
   ## Conda-forge packages
-  - gawk=5.1
-  - wget=1.20
-  - parallel
-  - r-optparse
+  - conda-forge::gawk
+  - conda-forge::wget
+  - conda-forge::parallel
+  - conda-forge::r-optparse
   ## Fudge to get keras working with deepsig...
-  - h5py=2.10.0  # <3
-  - tensorflow=2.4.3
-  - keras=2.4.3
+  - h5py=2.10.0=nompi_*  # <3
+  - tensorflow=2.2.0=mkl_*
+  - conda-forge::keras=2.4.3
+  ## Fudge to keep deepredeff working. Otherwise get error about converting symbolic tensor
+  - conda-forge::numpy=1.19.5
   ## Bioconda packages
-  - emboss=6.6.0
-  - hmmer=3.3
-  - pfam_scan=1.6
-  - mmseqs2=13.45111
+  - bioconda::emboss=6.6.0
+  - bioconda::hmmer=3.3.2
+  - bioconda::pfam_scan=1.6
+  - bioconda::mmseqs2=13.45111
   ## Version pins that aren't necessary but make solving environment faster
-  - python=3.7.10
-  - r-base=4.1
-  - perl=5.26.2
-  - theano=1.0.4
-  - sqlite=3.36.0
-  - zlib=1.2.11
-  - xz=5.2.5
-  - mkl=2020.2
-  - hdf5=1.10.6
+  - conda-forge::pytorch-cpu=1.9.0
+  - conda-forge::python=3.6.13
+  - conda-forge::r-base=4.1.1
+  - conda-forge::sqlite=3.36.0
+  - conda-forge::openjdk=11.0.1 
+  - conda-forge::perl=5.32.1
+  - conda-forge::theano=1.0.5
+  - conda-forge::xz=5.2.5
+  - conda-forge::zlib=1.2.11
+  - conda-forge::bzip2=1.0.8
+  - pip
+  - pip:
+    - importlib-resources

@@ -3,7 +3,7 @@
 VALID_TAXON = c("bacteria", "fungi", "oomycete")
 
 suppressPackageStartupMessages(library("optparse"))
-suppressPackageStartupMessages(library("deepredeff"))
+#suppressPackageStartupMessages(library("deepredeff"))
 
 VERSION = as.character(packageVersion("deepredeff"))
 
@@ -76,10 +76,12 @@ main <- function(args) {
   validate_file(args$infile)
   validate_file(args$outfile)
 
-  seqs = fasta_to_df(args$infile)
+  py = Sys.which("python3")
+  reticulate::use_python(py, required = TRUE)
+  seqs = deepredeff::fasta_to_df(args$infile)
 
   capture.output(
-    pred_result <- predict_effector(input = seqs, taxon = args$taxon)
+    pred_result <- deepredeff::predict_effector(input = seqs, taxon = args$taxon)
   )
 
   write.table(

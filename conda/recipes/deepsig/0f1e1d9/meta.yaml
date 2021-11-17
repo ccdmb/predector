@@ -9,14 +9,16 @@ source:
   sha256: 34cb94361069c0fed9a3aef076ab6e8f0c973b7e4acb2423c6838f9b1801f24c
 
 build:
-  number: 0
+  number: 1
   noarch: generic
 
 requirements:
   run:
-    - python {{ python }}
-    - keras
+    - python >=3.5,<3.8
+    - keras =2.4.3
+    - tensorflow
     - biopython
+    - h5py >2,<3
 
 test:
   commands:
