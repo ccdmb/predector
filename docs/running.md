@@ -10,7 +10,7 @@ Conda:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.0-beta \
+  -r -r 1.2.0-beta \
   -with-conda /path/to/conda/env \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -21,7 +21,7 @@ Docker:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.0-beta \
+  -r -r 1.2.0-beta \
   -profile docker \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -32,7 +32,7 @@ Singularity:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.0-beta \
+  -r -r 1.2.0-beta \
   -with-singularity ./path/to/singularity.sif \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -319,7 +319,7 @@ In the config files, you can select these tasks by label.
 
 ### Running different pipeline versions.
 
-We pin the version of the pipeline to run in all of our example commands with the `-r 1.2.0-beta` parameter.
+We pin the version of the pipeline to run in all of our example commands with the `-r -r 1.2.0-beta` parameter.
 These flags are optional, but recommended so that you know which version you ran.
 Different versions of the pipelines may output different scores, use different parameters, different output formats etc.
 It also re-enforces the link between the pipeline version and the docker container tags.
@@ -332,7 +332,7 @@ If you have previously run predector and want to update it to use a new version,
    Likewise, you can run old versions of the pipeline by simply changing `-r`.
 
   ```
-  nextflow run -r 1.2.0-beta -latest ccdmb/predector --proteomes "my_proteins.fasta"
+  nextflow run -r -r 1.2.0-beta -latest ccdmb/predector --proteomes "my_proteins.fasta"
   ```
 
 2. You can ask nextflow to pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
@@ -391,12 +391,12 @@ Here's a basic workflow using precomputed results.
 
 
 ```
-nextflow run -profile docker -resume -r 1.2.0-beta ccdmb/predector \
+nextflow run -profile docker -resume -r -r 1.2.0-beta ccdmb/predector \
   --proteome my_old_proteome.fasta
 
 cp -L results/deduplicated/deduplicated.ldjson ./precomputed.ldjson
 
-nextflow run -profile docker -resume -r 1.2.0-beta ccdmb/predector \
+nextflow run -profile docker -resume -r -r 1.2.0-beta ccdmb/predector \
   --proteome my_new_proteome.fasta --precomputed_ldjson ./precomputed.ldjson
 
 cat results/deduplicated/deduplicated.ldjson >> ./precomputed.ldjson
