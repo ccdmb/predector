@@ -176,16 +176,16 @@ process filter_precomputed {
 
     if [ "${precomputed_ldjson}" != "DOESNT_EXIST_LDJSON" ]
     then
-	predutils load_db \
+        predutils load_db \
           --replace-name \
           --drop-null-dbversion \
-          --mem ${task.memory.getGiga() / 2} \
+          --mem "${task.memory.getGiga() / 2}" \
           tmp.db \
-          ${precomputed_ldjson}
+          "${precomputed_ldjson}"
     fi
 
     predutils precomputed \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       --template "remaining/{analysis}.fasta" \
       --outfile matched.ldjson \
       tmp.db \
@@ -223,13 +223,13 @@ process decode_seqs {
     """
     cat results/* > combined.ldjson
     predutils load_db \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       tmp.db \
       combined.ldjson
 
     predutils decode \
       --template '${templ}' \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       tmp.db \
       combined.tsv
 
@@ -327,13 +327,13 @@ process tabular_results {
     script:
     """
     predutils load_db \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       tmp.db \
       results.ldjson
 
     predutils tables \
       --template "${name}-{analysis}.tsv" \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       tmp.db
 
     rm -f tmp.db
@@ -381,12 +381,12 @@ process rank_results {
     script:
     """
     predutils load_db \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       tmp.db \
       results.ldjson
 
     predutils rank \
-      --mem ${task.memory.getGiga() / 2} \
+      --mem "${task.memory.getGiga() / 2}" \
       --dbcan dbcan.txt \
       --pfam pfam.txt \
       --outfile "${name}-ranked.tsv" \
@@ -659,7 +659,7 @@ process signalp_v6 {
           --format txt \
           --organism eukarya \
           --mode fast \
-          --bsize 64 \ 
+          --bsize 64 \
           1>&2
 
         cat "\${TMPDIR}"/prediction_results.txt
@@ -861,7 +861,7 @@ process targetp {
 
         OUT="out\$\$"
 
-    	targetp \
+        targetp \
           -fasta "\${1}" \
           -org non-pl \
           -format short \
