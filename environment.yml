@@ -35,6 +35,11 @@ dependencies:
   - conda-forge::keras=2.4.3
   ## Fudge to keep deepredeff working. Otherwise get error about converting symbolic tensor
   - conda-forge::numpy=1.19.5
+  ## some versions of moose install for different versions of perl than the one you're targeting
+  ## make sure you pin the versions and check
+  ## moose needed for pfamscan
+  - bioconda::perl-moose=2.2011
+  - conda-forge::perl=5.26.2
   ## Bioconda packages
   - bioconda::emboss=6.6.0
   - bioconda::hmmer=3.3.2
@@ -46,7 +51,6 @@ dependencies:
   - conda-forge::r-base=4.1.1
   - conda-forge::sqlite=3.36.0
   - conda-forge::openjdk=11.0.1 
-  - conda-forge::perl=5.32.1
   - conda-forge::theano=1.0.5
   - conda-forge::xz=5.2.5
   - conda-forge::zlib=1.2.11

@@ -176,16 +176,19 @@ process filter_precomputed {
 
     if [ "${precomputed_ldjson}" != "DOESNT_EXIST_LDJSON" ]
     then
-        export PRECOMPUTED_ARG="--precomputed ${precomputed_ldjson}"
-    else
-        export PRECOMPUTED_ARG=""
+	predutils load_db \
+          --replace-name \
+          --drop-null-dbversion \
+          --mem ${task.memory.getGiga() / 2} \
+          tmp.db \
+          ${precomputed_ldjson}
     fi
 
     predutils precomputed \
-      --db tmp.db \
-      \${PRECOMPUTED_ARG:-} \
+      --mem ${task.memory.getGiga() / 2} \
       --template "remaining/{analysis}.fasta" \
       --outfile matched.ldjson \
+      tmp.db \
       targets.tsv \
       in.fasta
 
@@ -219,11 +222,16 @@ process decode_seqs {
 
     """
     cat results/* > combined.ldjson
+    predutils load_db \
+      --mem ${task.memory.getGiga() / 2} \
+      tmp.db \
+      combined.ldjson
+
     predutils decode \
       --template '${templ}' \
-      --db tmp.db \
-      combined.tsv \
-      combined.ldjson
+      --mem ${task.memory.getGiga() / 2} \
+      tmp.db \
+      combined.tsv
 
     rm -f tmp.db
     """
@@ -318,10 +326,15 @@ process tabular_results {
 
     script:
     """
+    predutils load_db \
+      --mem ${task.memory.getGiga() / 2} \
+      tmp.db \
+      results.ldjson
+
     predutils tables \
       --template "${name}-{analysis}.tsv" \
-      --db tmp.db \
-      results.ldjson
+      --mem ${task.memory.getGiga() / 2} \
+      tmp.db
 
     rm -f tmp.db
     """
@@ -367,8 +380,13 @@ process rank_results {
 
     script:
     """
+    predutils load_db \
+      --mem ${task.memory.getGiga() / 2} \
+      tmp.db \
+      results.ldjson
+
     predutils rank \
-      --db tmp.db \
+      --mem ${task.memory.getGiga() / 2} \
       --dbcan dbcan.txt \
       --pfam pfam.txt \
       --outfile "${name}-ranked.tsv" \
@@ -392,7 +410,7 @@ process rank_results {
       --virulence-homology-weight "${virulence_homology_weight}" \
       --lethal-homology-weight "${lethal_homology_weight}" \
       --tmhmm-first-60-threshold "${tmhmm_first60_threshold}" \
-      results.ldjson
+      tmp.db
 
     rm -f tmp.db
     """
@@ -641,6 +659,7 @@ process signalp_v6 {
           --format txt \
           --organism eukarya \
           --mode fast \
+          --bsize 64 \ 
           1>&2
 
         cat "\${TMPDIR}"/prediction_results.txt

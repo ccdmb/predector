@@ -852,10 +852,7 @@ workflow {
             effectorp_v2_ch,
             effectorp_v3_ch,
             deepredeff_fungi_v1_ch,
-            deepredeff_oomycete_v1_ch,
-            kex2_regex_ch,
-            rxlrlike_regex_ch,
-            pepstats_ch
+            deepredeff_oomycete_v1_ch
         )
 
     // We don't want to write the database matches out if
