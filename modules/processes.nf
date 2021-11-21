@@ -1,3 +1,23 @@
+process collect_file {
+
+    label 'posix'
+    label 'cpu_low'
+    label 'memory_low'
+    label 'time_short'
+
+    input:
+    tuple val(name), path("input/*.txt")
+
+    output:
+    tuple val(name), path("${name}.ldjson")
+
+    script:
+    """
+    cat input/*.txt > "${name}.ldjson"
+    """
+}
+
+
 process download {
 
     label 'download'

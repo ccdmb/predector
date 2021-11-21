@@ -9,6 +9,7 @@ include {
     download as download_pfam_dat;
     download as download_dbcan;
     download as download_effectordb;
+    collect_file;
     encode_seqs;
     decode_seqs;
     filter_precomputed;
@@ -799,11 +800,24 @@ workflow {
             phibase_mmseqs_matches_ch,
             effectordb_hmmer_ch
         )
-        .collect()
+        .collate( 10 )
+    )
+
+    combined_ldjson_ch.collectFile(
+        name: "combined.ldjson",
+        storeDir: "${params.outdir}/deduplicated",
+        newLine: true,
+        sort: true,
+        keepHeader: false
     )
 
     // Get the original protein names and input filename back
-    decoded_with_names_ch = decoded_ch.flatten().map { f -> [f.baseName, f] }
+    decoded_with_names_ch = collect_file(
+        decoded_ch
+          .flatten()
+          .map { f -> [f.baseName, f] }
+          .groupTuple(by: 0)
+    )
 
     // Get the summarised results
     gff_ch = gff_results(decoded_with_names_ch)
@@ -896,7 +910,6 @@ workflow {
             target_table_val.map { ["analysis_software_versions.tsv", it] },
             combined_proteomes_val.map { ["deduplicated/${it.name}", it] },
             combined_proteomes_tsv_val.map { ["deduplicated/${it.name}", it] },
-            combined_ldjson_ch.map { ["deduplicated/${it.name}", it] },
             decoded_with_names_ch.map { n, f -> ["${n}/${n}.ldjson", f] },
             gff_ch.map { n, f -> ["${n}/${f.name}", f] },
             ranked_ch.map { n, f -> ["${n}/${f.name}", f] },
