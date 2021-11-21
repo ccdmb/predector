@@ -5,9 +5,41 @@ Predector output several files for each input file that you provide, and some ad
 Results will always be placed under the directory specified by the parameter `--outdir` (`./results` by default).
 
 Downloaded databases (i.e. Pfam and dbCAN) are stored in the `downloads` subdirectory.
-Deduplicated sequences and a tab-separated values file mapping the deduplicated sequence ids to their filenames and original ids is in the `deduplicated` subdirectory.
+Predector internally removes duplicate sequences at the start to avoid redundant computation and reduplicates them at the end.
+The `deduplicated` folder contains the deduplicated sequences, results, and a mapping file of the old ids to new ones.
 
 Other directories will be named after the input filenames and each contain several tables.
+
+### `deduplicated/`
+
+The deduplicated folder contains deduplicated sequences and a tab-separated values file mapping the deduplicated sequence ids to their filenames and original ids is in the `deduplicated` subdirectory.
+Deduplicated sequences may not be the same as the input sequences, as we do some "cleaning" before running the pipeline to avoid some common issues causing software crashes.
+Basically sequences are all uppercased, `*` characters are removed from the ends, `-` characters are removed, and any remaining `*JBZUO` characters are replaced with `X`.
+
+The `deduplicated.tsv` file has four columns:
+
+| Column | Type | Description |
+|:-------|:-----|:------------|
+| deduplicated_id | str | The ID of the unique sequence in the deduplicated results |
+| input_file | str | The input filename that the sequence came from |
+| original_id | str | The ID of the protein in the input file |
+| checksum | str | This is a hashed verison of the input amino-acid sequence that we use to detect duplicate sequences. The checksums are created with the [`seguid` function in BioPython](https://biopython.org/docs/1.75/api/Bio.SeqUtils.CheckSum.html#Bio.SeqUtils.CheckSum.seguid) |
+
+
+This folder also contains two `.ldjson` files.
+`deduplicated.ldjson` contains all results of analyses on the deduplicated sequences.
+`new_results.ldjson` contains a subset of the results in `deduplicated.ldjson` suitable for input as pre-computed input to the pipeline.
+
+
+### `analysis_software_versions.tsv`
+
+This is a table containing the software and database (where relevant) versions
+of the analyses that predector has run.
+
+It has a simple 3 column structure. `analysis`, `software_version`, `database_version`.
+If the analysis doesn't use a database or we cannot determine which version of the database you're using
+(because you provided it yourself rather than letting the pipeline download it), then the `database_version` column will be an empty string.
+
 
 ### `*-ranked.tsv`
 
@@ -72,10 +104,12 @@ There are a lot of columns, though generally you'll only be interested in a few 
 | `deepsig` | Boolean | Boolean [0, 1] indicating whether the protein is predicted to have a signal peptide by DeepSig |
 | `phobius_sp` | Boolean [0, 1] | Indicates whether the protein is predicted to have a signal peptide by Phobius |
 | `phobius_tmcount` | Integer | The number of transmembrane domains predicted by Phobius |
+| `phobius_tm_domains` | List | A comma separated list of transmembrane domain predictions from Phobius. Each will have the format `<start>-<end>` |
 | `tmhmm_tmcount` | Integer | The number of transmembrane domains predicted by TMHMM |
 | `tmhmm_first_60` | Float | The predicted number of transmembrane AAs in the first 60 residues of the protein by TMHMM |
 | `tmhmm_exp_aa` | Float | The predicted number of transmembrane AAs in the protein by TMHMM |
 | `tmhmm_first_tm_sp_coverage` | Float | The proportion of the first predicted TM domain that overlaps with the median predicted signal-peptide cut site | Where no signal peptide or no TM domains are predicted, this will always be 0 |
+| `tmhmm_domains` | List | A comma separated list of transmembrane domains predicted by TMHMM. Each will have the format `<start>-<end>` |
 | `targetp_secreted` | Boolean [0, 1] | Indicates whether TargetP 2 predicts the protein to be secreted |
 | `targetp_secreted_prob` | Float | The TargetP pseudo-probability of secretion |
 | `targetp_mitochondrial_prob` | Float | The TargetP pseudo-probability of mitochondrial localisation |
@@ -95,6 +129,9 @@ There are a lot of columns, though generally you'll only be interested in a few 
 | `signalp4_d` | Float | The raw D-score for SignalP 4 | See discussion of choosing multiple thresholds in the [SignalP FAQs](https://services.healthtech.dtu.dk/service.php?SignalP-4.1) |
 | `signalp5_prob` | Float | The SignalP 5 signal peptide pseudo-probability |
 | `signalp6_prob` | Float | The SignalP 6 signal peptide pseudo-probability |
+| `deepsig_signal_prob` | Float or None `.` | The deepsig signal peptide pseudo-probability. Note that deepsig only outputs the probability of the main prediction, so any proteins with a Transmembrane or Other prediction will be None (`.`) here. |
+| `deepsig_transmembrane_prob` | Float or None `.` | The deepsig transmembrane pseudo-probability. |
+| `deepsig_other_prob` | Float or None `.` | The deepsig "other" (i.e. not signal peptide or transmembrane) pseudo-probability.
 
 
 ### `*.gff3`
@@ -102,15 +139,17 @@ There are a lot of columns, though generally you'll only be interested in a few 
 This file contains gff3 versions of results from analyses that have some positional information (e.g. signal/target peptides or alignments).
 The columns are:
 
-1. The protein seqid in your input fasta file.
-2. The analysis that gave this result. Note that for database matches, both the software and database are listed, separated by a colon (`:`).
-3. The closest [Sequence Ontology](http://www.sequenceontology.org/browser/obob.cgi) term that could be used to describe the region.
-4. The start of the region being described (1-based).
-5. The end of the region being described (1-based inclusive).
-6. The score of the match if available. For MMSeqs2 and HMMER matches, this is the e-value. For SignalP 3-nn and 4 this will be the D-score, for SignalP 3-hmm this is the S-probability, and for SignalP5, DeepSig, TargetP and LOCALIZER mitochondrial or chloroplast predictions this will be the probability score.
-7. The strand. This will always be unstranded (`.`), since proteins don't have direction in the same way nucleotides do.
-8. The phase, this will always be `.` because it is only valid for CDS features.
-9. The GFF attributes. In here the remaining raw results and scores will be present. Of particular interest are the [`Gap` and `Target` attributes](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#the-gap-attribute), which define what database match an alignment found and the bounds in the matched sequence, and match/mismatch positions.
+| Column | Type | Description |
+|:-------|:-----|:------------|
+| `seqid` | str | The protein seqid in your input fasta file. |
+| `source` | str | The analysis that gave this result. Note that for database matches, both the software and database are listed, separated by a colon (`:`). |
+| `type` | str | The closest [Sequence Ontology](http://www.sequenceontology.org/browser/obob.cgi) term that could be used to describe the region. |
+| `start` | int | The start of the region being described (1-based). |
+| `end` | int | The end of the region being described (1-based inclusive). |
+| `score` | float | The score of the match if available. For MMSeqs2 and HMMER matches, this is the e-value. For SignalP 3-nn and 4 this will be the D-score, for SignalP 3-hmm this is the S-probability, and for SignalP5, DeepSig, TargetP and LOCALIZER mitochondrial or chloroplast predictions this will be the probability score. |
+| `strand` | `+`, `-`, or `.` | This will always be unstranded (`.`), since proteins don't have direction in the same way nucleotides do. |
+| `phase` | `0`, `1`, `2`, or `.` | This will always be `.` because it is only valid for CDS features. |
+| `attrubutes` | A semi-colon delimited list of `key=value` pairs | In here the remaining raw results and scores will be present. Of particular interest are the [`Gap` and `Target` attributes](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#the-gap-attribute), which define what database match an alignment found and the bounds in the matched sequence, and match/mismatch positions. Some punctuation characters will be escaped using [URL escape rules](https://en.wikipedia.org/wiki/Percent-encoding#Reserved_characters). For example, commas `,` will be escaped as `%2C`. |
 
 
 ### Individual results tables
@@ -121,8 +160,8 @@ We've done our best to retain all of the information in the original formats as 
 
 The original formats are described in:
 
-- https://services.healthtech.dtu.dk/service.php?SignalP-6.0 
-- https://services.healthtech.dtu.dk/service.php?SignalP-5.0 
+- https://services.healthtech.dtu.dk/service.php?SignalP-6.0
+- https://services.healthtech.dtu.dk/service.php?SignalP-5.0
 - https://services.healthtech.dtu.dk/service.php?SignalP-4.1
 - https://services.healthtech.dtu.dk/service.php?SignalP-3.0
 - https://services.healthtech.dtu.dk/service.php?TargetP-2.0
@@ -139,3 +178,42 @@ The original formats are described in:
 
 DeepLoc doesn't have any output format documentation that I can find, but hopefully it's pretty self explanatory for you.
 Note that all DeepLoc values other than "membrane" are from the same classifier, so the sum of all of the pseudo-probabilities will be 1.
+
+
+### `*.ldjson`
+
+[LDJSON](https://jsonlines.org/) (aka. JSONL or [NDJSON](http://ndjson.org/)) is the common format file type that we use to store results.
+It is a plain text file, where each line is a valid [JSON](https://www.json.org/) format.
+
+The basic structure of each line is as follows (indentation and newlines added for clarity).
+
+```
+{
+    "analysis": str,
+    "checksum": str,
+    "software": str,
+    "software_version": str,
+    "database": Optional[str],
+    "database_version": Optional[str],
+    "pipeline_version": str,
+    "data": analysis specific object,
+}
+```
+
+The `data` field contains the actual results from the analysis, which will be specific to each analysis type.
+The fields in `data` will represent parsed elements from the original software output.
+
+Line delimited JSON can be parsed in most programming languages fairly easily.
+E.g. in python3
+
+```
+import json
+results = []
+with open("results.ldjson", "r") as handle:
+    for line in handle:
+        sline = line.strip()
+        if sline == "":
+            continue
+        result = json.loads(sline)
+        results.append(result)
+```
