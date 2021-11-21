@@ -51,6 +51,24 @@ See below for some ways you can typically provide files to the `--proteome` para
 You can find more info on the Globbing operations that are supported by Nextflow in the [Java documentation](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
 
 
+### Accessing and copying the results
+
+By default the results of the pipeline are stored in the `results` folder. You can change this directory using the `--outdir` parameter to the pipeline.
+You can find more details on the outputs in the [pipeline output](#pipeline-output) section.
+
+It's important to note that nextflow [symbolically links](https://en.wikipedia.org/wiki/Symbolic_link) results files from the `work` directory, to the specified output directory.
+This saves some space, but requires a bit of extra care when copying and deleting files.
+If you delete the `work` folder you will also be deleting the actual contents of the results, and you'll be left with a pointer to a non-existent file.
+**Make sure you copy any files that you want to keep before deleting anything**.
+
+If you use the linux [`cp`](https://linux.die.net/man/1/cp) command to copy results, please **make sure to use the `-L` flag**.
+This ensures that you copy the contents of the file rather than just copying another link to the file.
+[`rsync`](https://linux.die.net/man/1/rsync) also requires using an `-L` flag to copy the contents rather than a link.
+[`scp`](https://linux.die.net/man/1/scp) will always follow links to copy the contents, so no special care is necessary.
+
+If you use a different tool, please make sure that it copies the contents.
+
+
 ### Command line parameters
 
 To get a list of all available parameters, use the `--help` argument.
@@ -421,3 +439,19 @@ Please let us know if you feel otherwise.
 
 Future versions may be able to download precomputed results from a server.
 It's something we're working on.
+
+
+### Cleaning up
+
+Nextflow will dump a bunch of things in the directory that you run it in, and if you've run a lot of
+datasets it might be taking up a lot of space or the many files might slow down your filesystem.
+Note that the results will only be [symbolically linked](https://en.wikipedia.org/wiki/Symbolic_link) from the `work` directory.
+If you need to copy files from the results folder, make sure you use the `-L` flag to `cp`.
+
+Once you've got what you need from the `results` folder:
+
+```
+rm -rf -- work results .nextflow*
+```
+
+Will clean up what's in your working directory.
