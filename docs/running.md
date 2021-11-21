@@ -268,6 +268,11 @@ You can mix and match these profiles, using the `-profile` parameter.
 By default, the pipeline will behave as if you ran the pipeline with `-profile c4,r8` (4 CPUs, and 8 Gb memory) which should be compatible with most modern laptop computers and smaller cloud instances.
 But you can increase the number of CPUs available e.g. to make up to 16 CPUs available with `-profile c16` which will have 16 cores available and 8 GB of memory. To make more memory available, specify one of the `r*` profiles e.g. `-profile c16,r32`.
 
+**In general for best performance I suggest specifying the profiles with the largest number of CPUs that you have available on the computer you're running on.**
+For example if you are running on a computer with 8 CPUs and 32 GB of RAM specify `-profile c8,r32`.
+This will allow the pipeline to make the best use of your available resources.
+
+
 The time profiles (`t*`) are useful for limiting running times of tasks. By default the times are not limited, but these can be useful to use if you are running on a supercomputing cluster (specifying the times can get you through the queue faster) or on commercial cloud computing services (so you don't rack up an unexpected bill if something stalls somehow).
 
 So to use combine all of these things; to use docker containers, extra ram and CPUs etc you can provide the profile `-profile c16,r32,t2,docker`.
@@ -278,6 +283,8 @@ So to use combine all of these things; to use docker containers, extra ram and C
 If the preset profiles don't meet your needs you can provide a custom config file. Extended documentation can be found here: <https://www.nextflow.io/docs/latest/config.html>.
 
 I'll detail some pipeline specific configuration below but I suggest you start by copying the file <https://github.com/ccdmb/predector/tree/master/conf/template_single_node.config> and modify as necessary.
+
+If you have questions about this, or want to suggest a configuration for us to officially distribute with the pipeline please file an [issue](https://github.com/ccdmb/predector/issues) or start a [discussion](https://github.com/ccdmb/predector/discussions).
 
 Each nextflow task is labelled with the software name, cpu, ram, and time requirements for each task.
 In the config files, you can select these tasks by label.

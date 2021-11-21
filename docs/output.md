@@ -217,3 +217,9 @@ with open("results.ldjson", "r") as handle:
         result = json.loads(sline)
         results.append(result)
 ```
+
+
+### `pipeline_info/`
+
+Contains details of how the pipeline ran.
+Each file shows run-times, memory and CPU usage etc.

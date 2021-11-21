@@ -16,6 +16,10 @@ For example, you might take a set of differentially expressed genes from an RNAs
 We hope that this pipeline can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
 
 
+We would welcome any feedback, suggestions, questions, issue reports or even just you letting us know if you're using the pipeline. You can create an [issue](https://github.com/ccdmb/predector/issues) or [discussion](https://github.com/ccdmb/predector/discussions) on GitHub.
+Alternatively you can find more contact details at the [bottom of this page](#contact-us).
+
+
 ## Citation and further information
 The Predector pipeline and ranking method is described [here](https://doi.org/10.1038/s41598-021-99363-0):
 
@@ -42,6 +46,9 @@ Quick documentation links:
 - [FAQ](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#faq)
 
 
+If you have any questions, think that some documentation is missing, or have any other suggestions or issues to report, please feel free to create an [issue](https://github.com/ccdmb/predector/issues) or start a [discussion](https://github.com/ccdmb/predector/discussions).
+
+
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
@@ -52,7 +59,7 @@ the software environment, as the dependencies may have changed.
 Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
 
 
-### Requirements
+### Minimal requirements
 
 - 4 CPUs
 - 8 GB RAM
@@ -185,38 +192,12 @@ The following command will run the complete analysis and the results will be ava
 nextflow run -resume -r 1.2.1-alpha ccdmb/predector --proteome "proteomes/*"
 ```
 
+To improve performance I strongly recommend specifying an appropriate profile for the computer you're running the pipeline on.
+You can information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#profiles-and-configuration).
+
 
 **Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes.**
 See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#common-issues).
-
-
-## Future plans
-
-The pipeline will run several common tools (and some less common ones) for effector candidate prediction based on protein properties.
-
-We currently intend to include.
-
- - [x] SignalP 3, 4, 5, and 6
- - [x] TMHMM
- - [x] Phobius
- - [x] Deepsig
- - [x] DeepLoc
- - [x] TargetP
- - [x] EffectorP 1, 2, and 3
- - [x] DeepRedEff 
- - [x] ApoplastP
- - [x] LOCALIZER
- - [x] Protein similarity searches against PHIbase using MMSeqs2
- - [x] CAZyme annotations using HMMER and dbCAN
- - [x] Protein domain annotation using Pfam-scan
- - [x] A classifier and ranking scheme for prioritising effector candidates
- - [x] Searches against the [RemEff](https://doi.org/10.1099/mgen.0.000637) effector HMMs to identify distant homologs
-       **NOTE**. I decided to use new HMMER based HMMs, one per effector, rather than the families.
-       These seem to be a bit more usable and the sensitivity is comparable.
- - [ ] A tool to predict Kex-2 cut sites, and potentially run effector candidate prediction on the processed proteins
- - [ ] A meta-secretion prediction model for better secretome prediction
- - [ ] Easier integration of existing experimental custom scores (e.g. RNAseq, Proteomics, Dn/Ds) to inform candidate weighting
- - [ ] Protein structural prediction tools and comparison with structural features of known effectors
 
 
 ## Contributing
