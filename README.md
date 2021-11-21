@@ -49,7 +49,7 @@ For extended documentation and troubleshooting advice, see the [Wiki install doc
 
 Note that if you have run a previous version of the pipeline, you will need to re-build
 the software environment, as the dependencies may have changed.
-Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#quick-install) for more details.
+Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
 
 
 ### Requirements
