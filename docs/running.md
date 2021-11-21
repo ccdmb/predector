@@ -380,12 +380,12 @@ Predector can now take results of previous predector runs to skip re-running ind
 This is decided based on a checksum of the processed sequence, the version of the software, and the version of the database (when applicable).
 If all three match, we will skip that analysis for that protein.
 
-In the `deduplicated` folder is a file called `deduplicated.ldjson`.
+In the `deduplicated` folder is a file called `new_results.ldjson`.
 This contains all of the results from the current run of predector.
 Just hold on to this file, and provide it to the `--precomputed_ldjson` argument the next time you run the pipeline.
 You can concatenate multiple of these files together without issue (e.g. `cat dedup1.ldjson dedup2.ldjson > my_precomputed.ldjson`) to continue a set of precomputed results in the long term.
 
-Note that the results file `deduplicated.ldjson` will not contain any of the results that you provide to the `--precomputed_ldjson` argument. This is to avoid adding too many duplicate entries when you concatenate the files. It isn't a problem if there are duplicate entries in there, we internally deal with it, but it does slow things down and make the files bigger.
+Note that the results file `new_results.ldjson` will not contain any of the results that you provide to the `--precomputed_ldjson` argument. This is to avoid adding too many duplicate entries when you concatenate the files. It isn't a problem if there are duplicate entries in there, we internally deal with it, but it does slow things down and make the files bigger.
 
 Here's a basic workflow using precomputed results.
 
@@ -394,12 +394,12 @@ Here's a basic workflow using precomputed results.
 nextflow run -profile docker -resume -r 1.2.1-alpha ccdmb/predector \
   --proteome my_old_proteome.fasta
 
-cp -L results/deduplicated/deduplicated.ldjson ./precomputed.ldjson
+cp -L results/deduplicated/new_results.ldjson ./precomputed.ldjson
 
 nextflow run -profile docker -resume -r 1.2.1-alpha ccdmb/predector \
   --proteome my_new_proteome.fasta --precomputed_ldjson ./precomputed.ldjson
 
-cat results/deduplicated/deduplicated.ldjson >> ./precomputed.ldjson
+cat results/deduplicated/new_results.ldjson >> ./precomputed.ldjson
 ```
 
 Any proteins in the first proteome will be skipped when you run the new one.

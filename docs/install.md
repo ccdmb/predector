@@ -11,6 +11,28 @@ Only the last two are really hard requirements.
 You might get away with running smaller genomes on a smaller computer, but I would say
 most modern laptops meet these criteria.
 
+### Optional - Remove previous software environments for old versions of the pipeline
+
+The software environments that we provide are quite specific to different versions of the pipeline. If you are updating to use a new version of the pipeline, you should also re-build the software environment for the new version.
+
+To remove old versions of the software environment:
+
+```
+# conda
+conda env remove -n predector
+# or if you installed to a directory
+conda env remove -p /path/to/conda/env
+
+# docker
+OLD_VERSION=1.1.1
+docker rmi -f predector/predector-base:${OLD_VERSION}
+docker rmi -f predector/predector:${OLD_VERSION}
+```
+
+Singularity container files can simply be deleted if you like.
+Docker commands may require sudo depending on how your computer is set up.
+
+
 ### 1. Install Conda, Docker, or Singularity
 
 We provide automated ways of installing dependencies using [conda](https://docs.conda.io/en/latest/) environments (linux OS only), or [docker](https://www.docker.com/why-docker) or [singularity](https://sylabs.io/singularity/) containers.
@@ -47,6 +69,8 @@ Where you have a choice between versions for different operating systems, you sh
 Note that DTU (SignalP etc) don't keep older patches and minor versions available.
 If the specified version isn't available to download, another version with the same major number _should_ be fine.
 
+I suggest storing these all in a folder and just copying the whole lot around.
+If you use Predector often, you'll likely re-build the environment fairly often.
 
 ### 3. Build the conda environment or container
 

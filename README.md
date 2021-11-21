@@ -47,6 +47,11 @@ Quick documentation links:
 This is a quick install guide that unfortunately isn't terribly quick.
 For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#quick-install).
 
+Note that if you have run a previous version of the pipeline, you will need to re-build
+the software environment, as the dependencies may have changed.
+Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1-alpha#quick-install) for more details.
+
+
 ### Requirements
 
 - 4 CPUs
