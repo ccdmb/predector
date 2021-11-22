@@ -46,7 +46,7 @@ Please follow the instructions at one of the following links to install:
 
 NB. We cannot support conda environments on Mac or Windows.
 This is because some older software included in SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
-Even windows WSL2 does not seem play well with SignalP 4.
+Even windows WSL2 does not seem to play well with SignalP 4.
 
 Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
@@ -98,26 +98,26 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.1/install.sh" \
 
 This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.1`) or singularity (file `./predector.sif`) containers.
 
-**Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
+**Take note of the message given upon completion**, which will tell you how to use the container or environment with Predector.
 
 
 The install script has some minor options that allow you to customise how and where things are built.
 You can also save the install script locally and run `install.sh --help` to find more information.
 
 ```
--n|--name      -- For conda, sets the environment name (default: 'predector').
-                  For docker, sets the image tag (default: 'predector/predector:1.2.1').
-                  For singularity, sets the output image filename (default: './predector.sif').
+-n|--name         -- For conda, sets the environment name (default: 'predector').
+                     For docker, sets the image tag (default: 'predector/predector:1.2.1').
+                     For singularity, sets the output image filename (default: './predector.sif').
 -c|--conda-prefix -- If set, use this as the location to store the built conda
                      environment instead of setting a name and using the default
                      prefix. This is useful if the location that conda is installed in is restricted somehow,
                      or if it isn't available as a shared drive if on a cluster.
---conda-template -- Use this conda environment.yml file instead of downloading it from github.
-                    Only affects conda installs.
--v|--version   -- The version of the pipeline that you want to
-                  setup dependencies for. Note that this may not work in
-                  general, and you're recommended to use the install.sh
-                  script for the targeted version.
+--conda-template  -- Use this conda environment.yml file instead of downloading it from github.
+                     Only affects conda installs.
+-v|--version      -- The version of the pipeline that you want to
+                     setup dependencies for. Note that this may not work in
+                     general, and you're recommended to use the install.sh
+                     script for the targeted version.
 ```
 
 Note that the `-s` in `bash -s` is a bash flag rather than for our install script.
@@ -175,7 +175,7 @@ nextflow run -profile test,singularity -resume -r 1.2.1 ccdmb/predector
 If the quick install method doesn't work for you, you might need to run the environment build steps manually.
 It would be great if you could also contact us to report the issue, so that we can get the quick install instructions working for more people.
 
-The following guides assume that you have successfully followed the steps 1, 2, and 4, and aim to teplace step 3.
+The following guides assume that you have successfully followed the steps 1, 2, and 4, and aim to replace step 3.
 
 ### Building the conda environment the long way
 
@@ -312,14 +312,14 @@ Docker containers can be saved as a tarball and copied wherever you like.
 docker save predector/predector:1.2.1 > predector.tar
 ```
 
-And the on the other end
+And on the other end
 
 ```bash
 docker load -i predector.tar
 ```
 
 
-Conda environment should be able to be built anywhere, since they don't require root user permission.
+Conda environments should be able to be built anywhere, since they don't require root user permission.
 You should just be able to follow the instructions described earlier.
 Just make sure that you install the environment on a shared filesystem (i.e. one that all nodes in your cluster can access).
 
