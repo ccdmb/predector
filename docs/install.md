@@ -84,7 +84,7 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.1-beta/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.1/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -96,7 +96,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.1-beta/install.sh
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.1-beta`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.1`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -106,7 +106,7 @@ You can also save the install script locally and run `install.sh --help` to find
 
 ```
 -n|--name      -- For conda, sets the environment name (default: 'predector').
-                  For docker, sets the image tag (default: 'predector/predector:1.2.1-beta').
+                  For docker, sets the image tag (default: 'predector/predector:1.2.1').
                   For singularity, sets the output image filename (default: './predector.sif').
 -c|--conda-prefix -- If set, use this as the location to store the built conda
                      environment instead of setting a name and using the default
@@ -149,25 +149,25 @@ Use one of the commands below using information given upon completion of depende
 Using conda:
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.1-beta ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.1 ccdmb/predector
 ```
 
 Using docker:
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.2.1-beta ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.2.1 ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.2.1-beta ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.2.1 ccdmb/predector
 ```
 
 Using singularity:
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.1-beta ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.1 ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.2.1-beta ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.2.1 ccdmb/predector
 ```
 
 ## Extended dependency install guide
@@ -190,7 +190,7 @@ First we create the conda environment, which includes the non-proprietary depend
 
 ```bash
 # Download the environment config file.
-curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/1.2.1-beta/environment.yml
+curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/1.2.1/environment.yml
 
 # Create the environment
 conda env create -f environment.yml
@@ -224,7 +224,7 @@ Modify the source `.tar` archive filenames in the command if necessary.
 Depending on how you installed docker you may need to use `sudo docker` in place of `docker`.
 
 ```bash
-curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.1-beta/Dockerfile \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.1/Dockerfile \
 | docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
@@ -234,12 +234,12 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.1-beta/Dockerfile 
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:1.2.1-beta \
+  -t predector/predector:1.2.1 \
   -f - \
   .
 ```
 
-Your container should now be available as `predector/predector:1.2.1-beta` in your docker registry `docker images`.
+Your container should now be available as `predector/predector:1.2.1` in your docker registry `docker images`.
 
 
 ### Building the Singularity container the long way
@@ -265,7 +265,7 @@ export TMHMM=tmhmm-2.0c.Linux.tar.gz
 export DEEPLOC=deeploc-1.0.All.tar.gz
 
 # Download the .def file
-curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/1.2.1-beta/singularity.def
+curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/1.2.1/singularity.def
 
 # Build the .sif singularity image.
 # Note that `sudo -E` is important, it tells sudo to keep the environment variables
@@ -279,7 +279,7 @@ If you've already built the container using docker, you can convert them to sing
 You don't need to use `sudo` even if your docker installation usually requires it.
 
 ```bash
-singularity build predector.sif docker-daemon://predector/predector:1.2.1-beta
+singularity build predector.sif docker-daemon://predector/predector:1.2.1
 ```
 
 
@@ -309,7 +309,7 @@ Docker containers can be saved as a tarball and copied wherever you like.
 
 ```bash
 # You could pipe this through gzip if you wanted.
-docker save predector/predector:1.2.1-beta > predector.tar
+docker save predector/predector:1.2.1 > predector.tar
 ```
 
 And the on the other end
