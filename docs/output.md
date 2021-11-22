@@ -9,6 +9,7 @@ Predector internally removes duplicate sequences at the start to avoid redundant
 The `deduplicated` folder contains the deduplicated sequences, results, and a mapping file of the old ids to new ones.
 
 Other directories will be named after the input filenames and each contain several tables.
+An example set of these results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.1-beta/test/test_set_results).
 
 ### `deduplicated/`
 
