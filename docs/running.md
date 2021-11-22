@@ -376,12 +376,6 @@ You may want to keep the downloaded databases to reuse them (or pre-download the
 
 If you've already run the pipeline once, they'll be in the `results` folder (unless you specified `--outdir`) so you can do:
 
-You can download the files from:
-- http://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/ `Pfam-A.hmm.gz` and `Pfam-A.hmm.dat.gz`
-- https://bcb.unl.edu/dbCAN2/download/ `dbCAN-HMMdb-V10.txt`
-- http://www.phi-base.org/downloadLink.htm OR https://github.com/PHI-base/data/tree/master/releases (only need the `.fas` fasta file).
-- https://doi.org/10.6084/m9.figshare.16973665 `effectordb.hmm.gz`
-
 ```bash
 cp -rL results/downloads ./downloads
 nextflow run \
@@ -395,6 +389,12 @@ nextflow run \
 ```
 
 This will skip the download step at the beginning and just use those files, which saves a few minutes.
+
+You can also download the files from:
+- http://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/ `Pfam-A.hmm.gz` and `Pfam-A.hmm.dat.gz`
+- https://bcb.unl.edu/dbCAN2/download/ `dbCAN-HMMdb-V10.txt`
+- http://www.phi-base.org/downloadLink.htm OR https://github.com/PHI-base/data/tree/master/releases (only need the `.fas` fasta file).
+- https://doi.org/10.6084/m9.figshare.16973665 `effectordb.hmm.gz`
 
 
 ### Providing pre-computed results to skip already processed proteins
