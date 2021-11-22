@@ -167,7 +167,7 @@ nextflow run -profile test -with-conda /home/username/path/to/environment -resum
 #### Using docker
 
 ```bash
-nextfldockeker -resume -r 1.2.1-beta ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.2.1-beta ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
 nextflow run -profile test,docker_sudo -resume -r 1.2.1-beta ccdmb/predector
