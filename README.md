@@ -23,7 +23,7 @@ Alternatively you can find more contact details at the [bottom of this page](#co
 ## Citation and further information
 The Predector pipeline and ranking method is described [here](https://doi.org/10.1038/s41598-021-99363-0):
 
-Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolhuijzen, James K. Hane (2021). An automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
+Darcy A. B. Jones, Lina Rozano, Johannes W. Debler, Ricardo L. Mancera, Paula M. Moolhuijzen, James K. Hane (2021). An automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
 
 If you do use results of Predector in your manuscripts please also cite the dependencies, especially EffectorP and other niche tools.
 Predector ranking does not replace these tools, it is designed to combine information from multiple tools in a useful way.
@@ -80,7 +80,7 @@ Please follow the instructions at one of the following links to install:
 
 NB. We cannot support conda environments on Mac or Windows.
 This is because some older software in e.g. SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
-Even windows WSL2 does not seem play well with SignalP 4.
+Even windows WSL2 does not seem to play well with SignalP 4.
 
 Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
@@ -167,7 +167,7 @@ nextflow run -profile test -with-conda /home/username/path/to/environment -resum
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.2.1-beta ccdmb/predector
+nextfldockeker -resume -r 1.2.1-beta ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
 nextflow run -profile test,docker_sudo -resume -r 1.2.1-beta ccdmb/predector
