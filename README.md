@@ -192,7 +192,7 @@ nextflow run -resume -r 1.2.1-beta ccdmb/predector --proteome "proteomes/*"
 ```
 
 To improve performance I strongly recommend specifying an appropriate profile for the computer you're running the pipeline on.
-You can information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.1-beta#profiles-and-configuration).
+You can find information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.1-beta#profiles-and-configuration).
 
 
 **Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes.**
