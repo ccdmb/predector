@@ -182,7 +182,6 @@ nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.
 nextflow run -profile test,singularity -resume -r 1.2.1-beta ccdmb/predector
 ```
 
-
 ## Quickstart
 
 Say you have a set of amino-acid sequences in fasta format in the directory `proteomes`.
@@ -198,6 +197,14 @@ You can information on available profiles in the [wiki documentation](https://gi
 
 **Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes.**
 See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.2.1-beta#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.2.1-beta#common-issues).
+
+
+## Outputs
+
+The main output of Predector is a file with the suffix `-ranked.tsv` which is a tab separated values file that can be opened in excel.
+This contains a summarised version of all of the information that you would typically need for evaluating effector protein candidates.
+
+You can find a description of all of the results in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.1-beta#pipeline-output).
 
 
 ## Contributing

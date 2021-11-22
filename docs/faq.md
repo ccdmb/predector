@@ -16,7 +16,7 @@ Try the following steps to resolve the issue.
 
 If you're still having problems after this, please either email us or raise an issue on GitHub.
 
-### Running with docker `Unable to find image 'predector/predector:1.1.0-beta.1' locally`
+### Running with docker `Unable to find image 'predector/predector:X.X.X' locally`
 
 This usually means that you haven't built the docker image locally.
 Remember that we cannot distribute some of the dependencies, so you need to build the container image and move it to where you'll be running.
@@ -108,7 +108,7 @@ The first page usually contains something relevant to what you're interested in,
 
 The Predector pipeline and ranking method is published in [scientific reports](https://doi.org/10.1038/s41598-021-99363-0):
 
-Darcy A. B. Jones, Lina Rozano, Johannes Debler, Ricardo L. Mancera, Paula Moolhuijzen, James K. Hane (2021). Predector: an automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant-pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
+Darcy A. B. Jones, Lina Rozano, Johannes W. Debler, Ricardo L. Mancera, Paula M. Moolhuijzen, James K. Hane (2021). An automated and combinative method for the predictive ranking of candidate effector proteins of fungal plant-pathogens. _Scientific Reports_. 11, 19731, DOI: [10.1038/s41598-021-99363-0](https://doi.org/10.1038/s41598-021-99363-0)
 
 Please also cite the dependencies that we use whenever possible.
 I understand that citation limits can be an issue, but the continued maintenance development of tools relies on these citations.

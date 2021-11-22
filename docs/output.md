@@ -104,12 +104,12 @@ There are a lot of columns, though generally you'll only be interested in a few 
 | `deepsig` | Boolean | Boolean [0, 1] indicating whether the protein is predicted to have a signal peptide by DeepSig |
 | `phobius_sp` | Boolean [0, 1] | Indicates whether the protein is predicted to have a signal peptide by Phobius |
 | `phobius_tmcount` | Integer | The number of transmembrane domains predicted by Phobius |
-| `phobius_tm_domains` | List | A comma separated list of transmembrane domain predictions from Phobius. Each will have the format `<start>-<end>` |
+| `phobius_tm_domains` | List | A comma separated list of transmembrane domain predictions from Phobius. Each will have the format `<start>-<end>` | We also add the prefix `tm:` to this column. This is to prevent excel from interpreting these entries as dates.  |
 | `tmhmm_tmcount` | Integer | The number of transmembrane domains predicted by TMHMM |
 | `tmhmm_first_60` | Float | The predicted number of transmembrane AAs in the first 60 residues of the protein by TMHMM |
 | `tmhmm_exp_aa` | Float | The predicted number of transmembrane AAs in the protein by TMHMM |
 | `tmhmm_first_tm_sp_coverage` | Float | The proportion of the first predicted TM domain that overlaps with the median predicted signal-peptide cut site | Where no signal peptide or no TM domains are predicted, this will always be 0 |
-| `tmhmm_domains` | List | A comma separated list of transmembrane domains predicted by TMHMM. Each will have the format `<start>-<end>` |
+| `tmhmm_domains` | List | A comma separated list of transmembrane domains predicted by TMHMM. Each will have the format `<start>-<end>` | We also add the prefix `tm:` to this column. This is to prevent excel from interpreting these entries as dates. |
 | `targetp_secreted` | Boolean [0, 1] | Indicates whether TargetP 2 predicts the protein to be secreted |
 | `targetp_secreted_prob` | Float | The TargetP pseudo-probability of secretion |
 | `targetp_mitochondrial_prob` | Float | The TargetP pseudo-probability of mitochondrial localisation |
