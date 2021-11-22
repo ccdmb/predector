@@ -92,9 +92,9 @@ Similarly, like with EffectorP the scores should not be treated as a 'likelihood
 Although the you can generally say that proteins with higher scores will be more like known effectors, the difference in "effector-ness" between 0 and 1 is not necessarily the same as it is between 1 and 2 (and so on).
 
 In the paper for version 1 we present some comparisons with EffectorP classification using a score threshold of 0, but this is not how we suggest you use these scores and the threshold may not be applicable in the future if we change how the model is trained.
-In general, it's best to look at some additional evidence (e.g. homologues or presence-absence) and manually evaluate candidates in descending order of score (i.e. using predector as a decision support system) until you have enough to work with.
+In general, it's best to look at some additional evidence (e.g. homologues, expression, or presence-absence) and manually evaluate candidates in descending order of score (i.e. using Predector as a decision support system) until you have enough to work with.
 
-In the first version of the model, the predictions between 0 and 1 can contain some odd effector predictions (e.g. NRPS genes).
+In the first version of the model, the predictions between 0 and 1 can contain some odd effector predictions.
 This is because the model has tried to accomodate some unusual effectors, but the decision tree rules (with discontinuous boundaries) can let some things through that obviously aren't effectors.
 If you delve into the proteins with lower scores we recommended that you manually evaluate the protein properties in the ranking sheet yourself to select candidates.
 

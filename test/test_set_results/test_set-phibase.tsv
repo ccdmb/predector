@@ -1,0 +1,16 @@
+query	target	qstart	qend	qlen	tstart	tend	tlen	evalue	gapopen	pident	alnlen	raw	bits	cigar	mismatch	qcov	tcov
+CCE26799.1	W9ZT25#PHI:5067#AVRFOM2#5507#Fusarium_oxysporum#effector_(plant_avirulence_determinant)	3	164	167	7	164	167	8.97e-08	5	27.5	167	115.0	50.0	16M5I16M3I18M1I51M1I36M6D14M	105	0.964	0.94
+PsHopAB1	Q4ZMD6#PHI:999#HopAB1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant)	0	553	553	0	515	516	1.893e-135	13	52.2	559	1101.0	439.0	45M10I7M1I25M13I14M5I6M2I73M3D13M2I48M1D20M2D68M4I18M4I82M2I6M1I84M	217	1.0	0.998
+PsHopAB1	Q8RSY1#PHI:990__PHI:2743#HopAB2__AvrPtoB#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant)	0	553	553	0	553	553	0.0	0	100.0	553	2677.0	1061.0	553M	0	1.0	1.0
+PsHopAB1	Q9RBW3#PHI:989#HopAB1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant)	0	553	553	0	539	539	3.988e-147	10	52.3	581	1187.0	473.0	42M7I7M2I22M5I7M8I15M12I75M6I168M25D4M3D59M1I28M1I84M	207	1.0	1.0
+BgtE_5846	N1JJ94#PHI:2903__PHI:8918#BEC1054__DH14#34373__230439#Blumeria_graminis__Peronospora_tabacina#reduced_virulence__effector_(plant_avirulence_determinant)	0	118	118	0	118	118	3.758e-30	0	46.6	118	275.0	113.0	118M	63	1.0	1.0
+BgtE_5846	N1JJH4#PHI:6351__PHI:6356#CSEP0081#34373#Blumeria_graminis#effector_(plant_avirulence_determinant)	4	93	118	7	99	126	0.0001965	2	24.7	93	85.0	38.0	15M4D42M1I31M	65	0.754	0.73
+BgtE_5846	N1JJX4#PHI:2898#BEC1011#34373#Blumeria_graminis#reduced_virulence	0	113	118	0	113	118	2.855e-20	0	39.8	113	201.0	84.0	113M	68	0.958	0.958
+PsHopAA1	G3XDB9#PHI:987#HopAA1-1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant)	0	486	486	0	486	486	1.195e-301	0	100.0	486	2312.0	917.0	486M	0	1.0	1.0
+PsHopAA1	Q4ZX85#PHI:997#HopAA1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant)	0	486	486	0	483	483	5.612e-212	3	74.1	487	1656.0	658.0	22M1I430M3I18M1D12M	121	1.0	1.0
+PsHopAA1	Q87W48#PHI:988#HopAA1-2#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant)	0	482	486	0	483	487	2.055e-227	1	78.6	483	1767.0	702.0	474M1D8M	102	0.992	0.992
+Fom_2	M2URZ2#PHI:4924#ToxA#5016#Bipolaris_maydis#reduced_virulence	25	144	167	25	154	161	0.0005682	6	28.5	133	85.0	38.0	32M2D35M3D5M7D5M1D12M1D13M4I13M	77	0.713	0.801
+Fom_2	P78737#PHI:534__PHI:8380#TOXA__ToxA_(AAB61464)#45151#Pyrenophora_tritici-repentis#increased_virulence_(hypervirulence)__effector_(plant_avirulence_determinant)	26	134	167	37	164	178	2.663e-10	6	24.8	129	133.0	57.0	11M4D21M2D19M2D7M12D5M2I11M1D32M	74	0.647	0.713
+Fom_2	Q0TVA4#PHI:1081#ToxA#13684#Parastagonospora_nodorum#loss_of_pathogenicity	26	167	167	37	178	178	1.058e-10	7	23.7	160	138.0	59.0	11M4D21M2D19M2D8M10D17M1D32M4I6M15I8M	84	0.844	0.792
+Fom_2	W9ZT25#PHI:5067#AVRFOM2#5507#Fusarium_oxysporum#effector_(plant_avirulence_determinant)	0	167	167	0	167	167	1.764e-110	0	100.0	167	868.0	347.0	167M	0	1.0	1.0
+CgDN3	O43115#PHI:164#CgDN3#474922#Colletotrichum_gloeosporioides#loss_of_pathogenicity	0	74	74	0	74	74	2.052e-47	0	100.0	74	394.0	160.0	74M	0	1.0	1.0

@@ -1,0 +1,21 @@
+name	prediction	cytoplasmic_prob	apoplastic_prob	noneffector_prob
+PiAvrVnt1	Cytoplasmic effector	0.939	.	.
+CCE26799.1	Non-effector	.	.	0.527
+RsNIP1	Apoplastic effector	.	0.983	.
+PsHopAB1	Non-effector	.	.	0.766
+PiAvr3b	Cytoplasmic effector	0.846	.	.
+HpATR13_2	Cytoplasmic effector	0.96	.	.
+XP003298007.1	Apoplastic/cytoplasmic effector	0.66	0.667	.
+BgtE_5846	Non-effector	.	.	0.528
+M.TH16.EuGene_00027411	Cytoplasmic effector	0.601	.	.
+MoBas3	Apoplastic/cytoplasmic effector	0.846	0.955	.
+HpATR13_3	Cytoplasmic effector	0.965	.	.
+XP_014077357.1	Apoplastic effector	.	0.746	.
+PcF	Apoplastic/cytoplasmic effector	0.703	0.988	.
+PsHopAA1	Non-effector	.	.	0.838
+PGTG_16791	Non-effector	.	.	0.796
+XopR1	Cytoplasmic effector	0.671	.	.
+Fom_2	Cytoplasmic effector	0.636	.	.
+CgDN3	Apoplastic effector	.	0.782	.
+MoAvr1_CO39	Cytoplasmic/apoplastic effector	0.945	0.667	.
+MlpCTP1	Apoplastic effector	.	0.757	.

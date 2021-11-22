@@ -171,8 +171,6 @@ Important parameters are:
 Those starting with a single hyphen `-` are Nextflow runtime parameters, which are described here <https://www.nextflow.io/docs/latest/cli.html#run>.
 Those starting with two hyphens `--` are Predector defined parameters.
 
-If you're confused about either I'm happy to help. 
-
 
 ### Manual ranking scores
 

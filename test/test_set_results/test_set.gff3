@@ -1,0 +1,477 @@
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	231	234	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LASR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	457	460	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LRQR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	197	198	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	315	316	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	5	6	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	313	316	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=AGKR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	82	85	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=IETR
+PsHopAA1	predutils:0.7.3	propeptide_cleavage_site	3	6	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=INRR
+PsHopAA1	predutils:0.7.3	polypeptide_motif	57	60	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HKLP
+PsHopAA1	predutils:0.7.3	polypeptide_motif	52	55	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HVFA
+PsHopAA1	predutils:0.7.3	polypeptide_motif	179	182	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HYLS
+PsHopAA1	predutils:0.7.3	polypeptide_motif	299	302	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KAIK
+PsHopAA1	predutils:0.7.3	polypeptide_motif	436	439	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KDMG
+PsHopAA1	predutils:0.7.3	polypeptide_motif	169	172	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KMMD
+PsHopAA1	predutils:0.7.3	polypeptide_motif	364	367	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KNIT
+PsHopAA1	predutils:0.7.3	polypeptide_motif	149	152	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KPLT
+PsHopAA1	predutils:0.7.3	polypeptide_motif	315	318	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KRMA
+PsHopAA1	predutils:0.7.3	polypeptide_motif	40	43	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=REIN
+PsHopAA1	predutils:0.7.3	polypeptide_motif	260	263	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RLLS
+PsHopAA1	predutils:0.7.3	polypeptide_motif	482	485	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RPMR
+PsHopAA1	predutils:0.7.3	polypeptide_motif	333	336	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSLV
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	230	233	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LFGR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	352	355	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LGLR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	109	110	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	122	123	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	196	197	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	375	376	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	92	93	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	302	305	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ALER
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	194	197	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ALRR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	432	435	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ANIR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	120	123	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=APRR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	373	376	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ASRR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	102	105	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ATPR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	533	536	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PMTR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	42	45	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=VQPR
+PsHopAB1	predutils:0.7.3	propeptide_cleavage_site	91	94	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=VRRR
+PsHopAB1	predutils:0.7.3	polypeptide_motif	476	479	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HCLF
+PsHopAB1	predutils:0.7.3	polypeptide_motif	179	182	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HGIS
+PsHopAB1	predutils:0.7.3	polypeptide_motif	339	342	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HPLL
+PsHopAB1	predutils:0.7.3	polypeptide_motif	532	535	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HPMT
+PsHopAB1	predutils:0.7.3	polypeptide_motif	306	309	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HVMQ
+PsHopAB1	predutils:0.7.3	polypeptide_motif	512	515	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KDLA
+PsHopAB1	predutils:0.7.3	polypeptide_motif	520	523	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KKLA
+PsHopAB1	predutils:0.7.3	polypeptide_motif	76	79	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=REWL
+PsHopAB1	predutils:0.7.3	polypeptide_motif	287	290	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RGLV
+PsHopAB1	predutils:0.7.3	polypeptide_motif	403	406	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RLLN
+PsHopAB1	predutils:0.7.3	polypeptide_motif	236	239	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RLMA
+PsHopAB1	predutils:0.7.3	polypeptide_motif	350	353	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RMLG
+PsHopAB1	predutils:0.7.3	polypeptide_motif	147	150	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RNML
+PsHopAB1	predutils:0.7.3	polypeptide_motif	265	268	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RPIR
+PsHopAB1	predutils:0.7.3	polypeptide_motif	228	231	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSLF
+PsHopAB1	predutils:0.7.3	polypeptide_motif	449	452	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RTIS
+PsHopAB1	predutils:0.7.3	polypeptide_motif	386	389	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RVMP
+XopR1	predutils:0.7.3	propeptide_cleavage_site	304	307	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LAVR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	360	361	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	172	173	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	206	207	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	230	231	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	236	237	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	300	301	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	324	325	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	340	341	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	279	282	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=AAPR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	322	325	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=AQRR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	148	151	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ASER
+XopR1	predutils:0.7.3	propeptide_cleavage_site	254	257	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=IAER
+XopR1	predutils:0.7.3	propeptide_cleavage_site	228	231	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=IGRR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	241	244	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PQER
+XopR1	predutils:0.7.3	propeptide_cleavage_site	382	385	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PQER
+XopR1	predutils:0.7.3	propeptide_cleavage_site	125	128	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PQPR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	204	207	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PSRR
+XopR1	predutils:0.7.3	propeptide_cleavage_site	170	173	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=VARR
+XopR1	predutils:0.7.3	polypeptide_motif	36	39	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HLLS
+XopR1	predutils:0.7.3	polypeptide_motif	367	370	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HRMG
+XopR1	predutils:0.7.3	polypeptide_motif	226	229	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HYIG
+XopR1	predutils:0.7.3	polypeptide_motif	70	73	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KQLP
+XopR1	predutils:0.7.3	polypeptide_motif	63	66	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KSLA
+XopR1	predutils:0.7.3	polypeptide_motif	301	304	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RALL
+XopR1	predutils:0.7.3	polypeptide_motif	385	388	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RALS
+XopR1	predutils:0.7.3	polypeptide_motif	373	376	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RLMD
+XopR1	predutils:0.7.3	polypeptide_motif	344	347	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RMMQ
+XopR1	predutils:0.7.3	polypeptide_motif	212	215	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RNMN
+XopR1	predutils:0.7.3	polypeptide_motif	263	266	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RQLD
+XopR1	predutils:0.7.3	polypeptide_motif	340	343	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRLE
+XopR1	predutils:0.7.3	polypeptide_motif	324	327	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRLQ
+XopR1	predutils:0.7.3	polypeptide_motif	206	209	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRLR
+XopR1	predutils:0.7.3	polypeptide_motif	230	233	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRLY
+XopR1	predutils:0.7.3	polypeptide_motif	317	320	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RYYA
+XP_014077357.1	SignalP:3.0b	signal_peptide	1	17	0.897	+	.	cmax=0.896;cmax_pos=18;cmax_decision=true;ymax=0.821;ymax_pos=18;ymax_decision=true;smax=0.997;smax_pos=13;smax_decision=true;smean=0.972;smean_decision=true;d=0.897;d_decision=true
+XP_014077357.1	SignalP:3.0b	signal_peptide	1	17	0.999	+	.	is_secreted=true;cmax=0.537;cmax_pos=18;cmax_decision=true;sprob=0.999;sprob_decision=true
+XP_014077357.1	predutils:0.7.3	polypeptide_motif	77	80	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HTYN
+XP_014077357.1	predutils:0.7.3	polypeptide_motif	113	116	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RVIF
+BgtE_5846	SignalP:3.0b	signal_peptide	1	21	0.583	+	.	cmax=0.39;cmax_pos=22;cmax_decision=true;ymax=0.468;ymax_pos=22;ymax_decision=true;smax=0.942;smax_pos=12;smax_decision=true;smean=0.697;smean_decision=true;d=0.583;d_decision=true
+BgtE_5846	SignalP:3.0b	signal_peptide	1	21	0.937	+	.	is_secreted=true;cmax=0.752;cmax_pos=22;cmax_decision=true;sprob=0.937;sprob_decision=true
+BgtE_5846	predutils:0.7.3	propeptide_cleavage_site	109	112	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LGYR
+BgtE_5846	predutils:0.7.3	polypeptide_motif	2	5	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RPFQ
+BgtE_5846	predutils:0.7.3	polypeptide_motif	72	75	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RQFP
+CCE26799.1	SignalP:3.0b	signal_peptide	1	17	0.809	+	.	cmax=0.585;cmax_pos=18;cmax_decision=true;ymax=0.658;ymax_pos=18;ymax_decision=true;smax=0.991;smax_pos=13;smax_decision=true;smean=0.961;smean_decision=true;d=0.809;d_decision=true
+CCE26799.1	SignalP:3.0b	signal_peptide	1	17	1.0	+	.	is_secreted=true;cmax=0.762;cmax_pos=18;cmax_decision=true;sprob=1.0;sprob_decision=true
+CCE26799.1	predutils:0.7.3	propeptide_cleavage_site	35	38	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LMER
+CCE26799.1	predutils:0.7.3	propeptide_cleavage_site	46	49	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LYRR
+CCE26799.1	predutils:0.7.3	propeptide_cleavage_site	48	49	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+CCE26799.1	predutils:0.7.3	propeptide_cleavage_site	35	38	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=LMER
+CCE26799.1	predutils:0.7.3	propeptide_cleavage_site	46	49	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=LYRR
+CCE26799.1	predutils:0.7.3	propeptide_cleavage_site	115	118	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=VPIR
+CCE26799.1	predutils:0.7.3	polypeptide_motif	2	5	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RGLG
+CCE26799.1	predutils:0.7.3	polypeptide_motif	103	106	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RHIG
+CCE26799.1	predutils:0.7.3	polypeptide_motif	112	115	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RNIV
+CgDN3	SignalP:3.0b	signal_peptide	1	18	0.909	+	.	cmax=0.925;cmax_pos=19;cmax_decision=true;ymax=0.848;ymax_pos=19;ymax_decision=true;smax=0.99;smax_pos=13;smax_decision=true;smean=0.969;smean_decision=true;d=0.909;d_decision=true
+CgDN3	SignalP:3.0b	signal_peptide	1	18	1.0	+	.	is_secreted=true;cmax=0.901;cmax_pos=19;cmax_decision=true;sprob=1.0;sprob_decision=true
+CgDN3	predutils:0.7.3	polypeptide_motif	29	32	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KPIH
+CgDN3	predutils:0.7.3	polypeptide_motif	4	7	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSLL
+Fom_2	SignalP:3.0b	signal_peptide	1	20	0.821	+	.	cmax=0.607;cmax_pos=21;cmax_decision=true;ymax=0.693;ymax_pos=21;ymax_decision=true;smax=0.988;smax_pos=6;smax_decision=true;smean=0.949;smean_decision=true;d=0.821;d_decision=true
+Fom_2	SignalP:3.0b	signal_peptide	1	22	0.997	+	.	is_secreted=true;cmax=0.492;cmax_pos=23;cmax_decision=false;sprob=0.997;sprob_decision=true
+Fom_2	predutils:0.7.3	propeptide_cleavage_site	29	32	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LDTR
+Fom_2	predutils:0.7.3	propeptide_cleavage_site	44	45	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+Fom_2	predutils:0.7.3	propeptide_cleavage_site	57	58	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+Fom_2	predutils:0.7.3	propeptide_cleavage_site	42	45	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=IARR
+Fom_2	predutils:0.7.3	propeptide_cleavage_site	54	57	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=IVPR
+Fom_2	predutils:0.7.3	propeptide_cleavage_site	29	32	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=LDTR
+Fom_2	predutils:0.7.3	polypeptide_motif	6	9	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HILG
+Fom_2	predutils:0.7.3	polypeptide_motif	98	101	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HRLT
+Fom_2	predutils:0.7.3	polypeptide_motif	86	89	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HVLI
+Fom_2	predutils:0.7.3	polypeptide_motif	2	5	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KSFT
+Fom_2	predutils:0.7.3	polypeptide_motif	150	153	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RCIR
+Fom_2	predutils:0.7.3	polypeptide_motif	32	35	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RTIT
+MlpCTP1	SignalP:3.0b	signal_peptide	1	27	0.76	+	.	cmax=0.514;cmax_pos=28;cmax_decision=true;ymax=0.626;ymax_pos=28;ymax_decision=true;smax=0.992;smax_pos=10;smax_decision=true;smean=0.893;smean_decision=true;d=0.76;d_decision=true
+MlpCTP1	SignalP:3.0b	signal_peptide	1	27	0.982	+	.	is_secreted=true;cmax=0.84;cmax_pos=28;cmax_decision=true;sprob=0.982;sprob_decision=true
+MlpCTP1	predutils:0.7.3	polypeptide_motif	68	71	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KAFA
+MlpCTP1	predutils:0.7.3	polypeptide_motif	115	118	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KGYV
+MlpCTP1	predutils:0.7.3	polypeptide_motif	39	42	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KGYV
+MlpCTP1	predutils:0.7.3	polypeptide_motif	8	11	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KNLV
+MlpCTP1	predutils:0.7.3	polypeptide_motif	30	33	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RAIC
+MlpCTP1	predutils:0.7.3	polypeptide_motif	123	126	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RLLP
+MlpCTP1	predutils:0.7.3	polypeptide_motif	47	50	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RLLP
+MlpCTP1	predutils:0.7.3	polypeptide_motif	91	94	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RTYC
+MoAvr1_CO39	SignalP:3.0b	signal_peptide	1	22	0.809	+	.	cmax=0.866;cmax_pos=23;cmax_decision=true;ymax=0.795;ymax_pos=23;ymax_decision=true;smax=0.986;smax_pos=13;smax_decision=true;smean=0.823;smean_decision=true;d=0.809;d_decision=true
+MoAvr1_CO39	SignalP:3.0b	signal_peptide	1	22	0.999	+	.	is_secreted=true;cmax=0.994;cmax_pos=23;cmax_decision=true;sprob=0.999;sprob_decision=true
+MoAvr1_CO39	predutils:0.7.3	propeptide_cleavage_site	68	71	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LPDR
+MoAvr1_CO39	predutils:0.7.3	polypeptide_motif	62	65	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HPYP
+MoAvr1_CO39	predutils:0.7.3	polypeptide_motif	54	57	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KVFV
+MoBas3	SignalP:3.0b	signal_peptide	1	20	0.868	+	.	cmax=0.761;cmax_pos=21;cmax_decision=true;ymax=0.784;ymax_pos=21;ymax_decision=true;smax=0.986;smax_pos=12;smax_decision=true;smean=0.952;smean_decision=true;d=0.868;d_decision=true
+MoBas3	SignalP:3.0b	signal_peptide	1	20	0.998	+	.	is_secreted=true;cmax=0.668;cmax_pos=21;cmax_decision=true;sprob=0.998;sprob_decision=true
+MoBas3	predutils:0.7.3	propeptide_cleavage_site	56	57	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+MoBas3	predutils:0.7.3	polypeptide_motif	57	60	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RCLQ
+M.TH16.EuGene_00027411	SignalP:3.0b	signal_peptide	1	22	0.591	+	.	cmax=0.768;cmax_pos=23;cmax_decision=true;ymax=0.513;ymax_pos=23;ymax_decision=true;smax=0.976;smax_pos=13;smax_decision=true;smean=0.669;smean_decision=true;d=0.591;d_decision=true
+M.TH16.EuGene_00027411	SignalP:3.0b	signal_peptide	1	22	0.983	+	.	is_secreted=true;cmax=0.854;cmax_pos=23;cmax_decision=true;sprob=0.983;sprob_decision=true
+M.TH16.EuGene_00027411	predutils:0.7.3	propeptide_cleavage_site	42	43	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+M.TH16.EuGene_00027411	predutils:0.7.3	polypeptide_motif	24	27	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KCLI
+M.TH16.EuGene_00027411	predutils:0.7.3	polypeptide_motif	92	95	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSIE
+XP003298007.1	SignalP:3.0b	signal_peptide	1	27	0.75	+	.	cmax=0.799;cmax_pos=28;cmax_decision=true;ymax=0.708;ymax_pos=28;ymax_decision=true;smax=0.993;smax_pos=13;smax_decision=true;smean=0.792;smean_decision=true;d=0.75;d_decision=true
+XP003298007.1	SignalP:3.0b	signal_peptide	1	27	0.998	+	.	is_secreted=true;cmax=0.418;cmax_pos=28;cmax_decision=false;sprob=0.998;sprob_decision=true
+XP003298007.1	predutils:0.7.3	propeptide_cleavage_site	55	58	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LDNR
+XP003298007.1	predutils:0.7.3	propeptide_cleavage_site	45	48	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LQVR
+XP003298007.1	predutils:0.7.3	propeptide_cleavage_site	88	89	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XP003298007.1	predutils:0.7.3	propeptide_cleavage_site	93	94	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+XP003298007.1	predutils:0.7.3	propeptide_cleavage_site	146	149	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ATIR
+XP003298007.1	predutils:0.7.3	propeptide_cleavage_site	86	89	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=INRR
+XP003298007.1	predutils:0.7.3	polypeptide_motif	43	46	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KSLQ
+XP003298007.1	predutils:0.7.3	polypeptide_motif	94	97	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RDFN
+XP003298007.1	predutils:0.7.3	polypeptide_motif	28	31	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RDIS
+XP003298007.1	predutils:0.7.3	polypeptide_motif	114	117	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RFLR
+XP003298007.1	predutils:0.7.3	polypeptide_motif	58	61	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RGIP
+RsNIP1	SignalP:3.0b	signal_peptide	1	20	0.849	+	.	cmax=0.814;cmax_pos=21;cmax_decision=true;ymax=0.779;ymax_pos=21;ymax_decision=true;smax=0.983;smax_pos=6;smax_decision=true;smean=0.918;smean_decision=true;d=0.849;d_decision=true
+RsNIP1	SignalP:3.0b	signal_peptide	1	20	0.999	+	.	is_secreted=true;cmax=0.988;cmax_pos=21;cmax_decision=true;sprob=0.999;sprob_decision=true
+RsNIP1	predutils:0.7.3	polypeptide_motif	2	5	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KFLV
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	85	88	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LFRR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	103	106	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LLSR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	193	196	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LSSR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	352	355	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LTDR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	159	160	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	254	255	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	699	700	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	609	610	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	624	625	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	628	629	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	686	687	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	693	694	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	87	88	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	157	160	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ALKR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	697	700	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=ALKR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	74	77	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=INTR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	85	88	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=LFRR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	622	625	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PNRR
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	602	605	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=PTER
+PGTG_16791	predutils:0.7.3	propeptide_cleavage_site	206	209	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=VPPR
+PGTG_16791	predutils:0.7.3	polypeptide_motif	191	194	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HELS
+PGTG_16791	predutils:0.7.3	polypeptide_motif	735	738	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KAID
+PGTG_16791	predutils:0.7.3	polypeptide_motif	250	253	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KEFT
+PGTG_16791	predutils:0.7.3	polypeptide_motif	389	392	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KMIC
+PGTG_16791	predutils:0.7.3	polypeptide_motif	581	584	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KPLN
+PGTG_16791	predutils:0.7.3	polypeptide_motif	431	434	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KTLI
+PGTG_16791	predutils:0.7.3	polypeptide_motif	398	401	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KVIF
+PGTG_16791	predutils:0.7.3	polypeptide_motif	243	246	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KYLR
+PGTG_16791	predutils:0.7.3	polypeptide_motif	284	287	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=REIP
+PGTG_16791	predutils:0.7.3	polypeptide_motif	405	408	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RHID
+PGTG_16791	predutils:0.7.3	polypeptide_motif	355	358	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RHLD
+PGTG_16791	predutils:0.7.3	polypeptide_motif	662	665	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RKLS
+PGTG_16791	predutils:0.7.3	polypeptide_motif	160	163	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RPLN
+PGTG_16791	predutils:0.7.3	polypeptide_motif	632	635	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RPWS
+PGTG_16791	predutils:0.7.3	polypeptide_motif	693	696	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRIE
+PGTG_16791	predutils:0.7.3	polypeptide_motif	686	689	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRLD
+PGTG_16791	predutils:0.7.3	polypeptide_motif	564	567	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSWL
+PGTG_16791	predutils:0.7.3	polypeptide_motif	315	318	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RVWH
+HpATR13_2	SignalP:3.0b	signal_peptide	1	19	0.624	+	.	cmax=0.361;cmax_pos=20;cmax_decision=true;ymax=0.473;ymax_pos=20;ymax_decision=true;smax=0.953;smax_pos=13;smax_decision=true;smean=0.775;smean_decision=true;d=0.624;d_decision=true
+HpATR13_2	SignalP:3.0b	signal_peptide	1	24	0.954	+	.	is_secreted=true;cmax=0.517;cmax_pos=25;cmax_decision=true;sprob=0.954;sprob_decision=true
+HpATR13_2	predutils:0.7.3	polypeptide_motif	25	28	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HALH
+HpATR13_2	predutils:0.7.3	polypeptide_motif	95	98	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HDLH
+HpATR13_2	predutils:0.7.3	polypeptide_motif	141	144	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KDLG
+HpATR13_2	predutils:0.7.3	polypeptide_motif	66	69	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KFFS
+HpATR13_2	predutils:0.7.3	polypeptide_motif	85	88	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KGIH
+HpATR13_2	predutils:0.7.3	polypeptide_motif	90	93	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KIIE
+HpATR13_2	predutils:0.7.3	polypeptide_motif	70	73	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KIIF
+HpATR13_2	predutils:0.7.3	polypeptide_motif	76	79	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KPIE
+HpATR13_2	predutils:0.7.3	polypeptide_motif	118	121	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KTYP
+HpATR13_2	predutils:0.7.3	polypeptide_motif	38	41	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RQLR
+HpATR13_3	SignalP:3.0b	signal_peptide	1	19	0.618	+	.	cmax=0.361;cmax_pos=20;cmax_decision=true;ymax=0.471;ymax_pos=20;ymax_decision=true;smax=0.946;smax_pos=13;smax_decision=true;smean=0.765;smean_decision=true;d=0.618;d_decision=true
+HpATR13_3	SignalP:3.0b	signal_peptide	1	24	0.939	+	.	is_secreted=true;cmax=0.509;cmax_pos=25;cmax_decision=true;sprob=0.939;sprob_decision=true
+HpATR13_3	predutils:0.7.3	propeptide_cleavage_site	166	167	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+HpATR13_3	predutils:0.7.3	polypeptide_motif	25	28	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HALH
+HpATR13_3	predutils:0.7.3	polypeptide_motif	98	101	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=HVFE
+HpATR13_3	predutils:0.7.3	polypeptide_motif	174	177	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KDLG
+HpATR13_3	predutils:0.7.3	polypeptide_motif	66	69	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KFFR
+HpATR13_3	predutils:0.7.3	polypeptide_motif	85	88	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KGIH
+HpATR13_3	predutils:0.7.3	polypeptide_motif	90	93	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KIIK
+HpATR13_3	predutils:0.7.3	polypeptide_motif	70	73	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KIIN
+HpATR13_3	predutils:0.7.3	polypeptide_motif	150	153	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KKIY
+HpATR13_3	predutils:0.7.3	polypeptide_motif	76	79	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KPIE
+HpATR13_3	predutils:0.7.3	polypeptide_motif	38	41	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RQLR
+PcF	SignalP:3.0b	signal_peptide	1	21	0.806	+	.	cmax=0.695;cmax_pos=22;cmax_decision=true;ymax=0.739;ymax_pos=22;ymax_decision=true;smax=0.96;smax_pos=12;smax_decision=true;smean=0.873;smean_decision=true;d=0.806;d_decision=true
+PcF	SignalP:3.0b	signal_peptide	1	21	0.996	+	.	is_secreted=true;cmax=0.817;cmax_pos=22;cmax_decision=true;sprob=0.996;sprob_decision=true
+PiAvr3b	SignalP:3.0b	signal_peptide	1	22	0.756	+	.	cmax=0.573;cmax_pos=23;cmax_decision=true;ymax=0.661;ymax_pos=23;ymax_decision=true;smax=0.994;smax_pos=13;smax_decision=true;smean=0.851;smean_decision=true;d=0.756;d_decision=true
+PiAvr3b	SignalP:3.0b	signal_peptide	1	22	0.999	+	.	is_secreted=true;cmax=0.678;cmax_pos=23;cmax_decision=true;sprob=0.999;sprob_decision=true
+PiAvr3b	predutils:0.7.3	propeptide_cleavage_site	78	81	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LMPR
+PiAvr3b	predutils:0.7.3	propeptide_cleavage_site	78	81	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=LMPR
+PiAvr3b	predutils:0.7.3	polypeptide_motif	130	133	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KSMA
+PiAvr3b	predutils:0.7.3	polypeptide_motif	114	117	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KYLK
+PiAvr3b	predutils:0.7.3	polypeptide_motif	2	5	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RAYF
+PiAvr3b	predutils:0.7.3	polypeptide_motif	75	78	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RDWL
+PiAvr3b	predutils:0.7.3	polypeptide_motif	93	96	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=REMG
+PiAvr3b	predutils:0.7.3	polypeptide_motif	44	47	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSLR
+PiAvr3b	predutils:0.7.3	polypeptide_motif	58	61	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RSWS
+PiAvrVnt1	SignalP:3.0b	signal_peptide	1	23	0.833	+	.	cmax=0.689;cmax_pos=24;cmax_decision=true;ymax=0.737;ymax_pos=24;ymax_decision=true;smax=0.997;smax_pos=13;smax_decision=true;smean=0.929;smean_decision=true;d=0.833;d_decision=true
+PiAvrVnt1	SignalP:3.0b	signal_peptide	1	23	1.0	+	.	is_secreted=true;cmax=0.843;cmax_pos=24;cmax_decision=true;sprob=1.0;sprob_decision=true
+PiAvrVnt1	predutils:0.7.3	propeptide_cleavage_site	88	91	.	+	.	kind=kex2_cutsite;pattern=L[A-Z][A-Z]R;match=LFKR
+PiAvrVnt1	predutils:0.7.3	propeptide_cleavage_site	90	91	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=KR
+PiAvrVnt1	predutils:0.7.3	propeptide_cleavage_site	46	47	.	+	.	kind=kex2_cutsite;pattern=[KR]R;match=RR
+PiAvrVnt1	predutils:0.7.3	propeptide_cleavage_site	88	91	.	+	.	kind=kex2_cutsite;pattern=[LIJVAP][A-Z][KRTPEI]R;match=LFKR
+PiAvrVnt1	predutils:0.7.3	polypeptide_motif	115	118	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=KKLR
+PiAvrVnt1	predutils:0.7.3	polypeptide_motif	143	146	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RIYG
+PiAvrVnt1	predutils:0.7.3	polypeptide_motif	82	85	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RKYY
+PiAvrVnt1	predutils:0.7.3	polypeptide_motif	46	49	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RRLL
+PiAvrVnt1	predutils:0.7.3	polypeptide_motif	74	77	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RVFS
+PiAvrVnt1	predutils:0.7.3	polypeptide_motif	2	5	.	+	.	kind=rxlr_like_motif;pattern=[RKH][A-Z][LMIFYW][A-Z];match=RVYA
+PsHopAB1	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	266	356	9.9e-60	.	.	Target=PF16847.7 1 91;env_start=265;env_end=356;hmm_name=AvrPtoB_bdg;hmm_type=Domain;hmm_len=91;bitscore=199.1;evalue=9.9e-60;is_significant=true
+PsHopAB1	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	428	553	7.5e-87	.	.	Target=PF09046.12 1 126;env_start=427;env_end=553;hmm_name=AvrPtoB-E3_ubiq;hmm_type=Domain;hmm_len=126;bitscore=288.1;evalue=7.5e-87;is_significant=true
+XP_014077357.1	SignalP:4.1g	signal_peptide	1	17	0.847	+	.	cmax=0.574;cmax_pos=18;ymax=0.735;ymax_pos=18;smax=0.964;smax_pos=12;smean=0.942;d=0.847;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+XP_014077357.1	DeepSig:0f1e1d9	signal_peptide	1	17	1.0	.	.	prediction=SignalPeptide;prob=1.0;cs_pos=17
+XP_014077357.1	Phobius:1.01	signal_peptide	1	26	.	.	.	ID=signal_peptide4
+XP_014077357.1	Phobius:1.01	n_terminal_region	1	5	.	.	.	Parent=signal_peptide4
+XP_014077357.1	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	6	18	.	.	.	Parent=signal_peptide4
+XP_014077357.1	Phobius:1.01	c_terminal_region	19	26	.	.	.	Parent=signal_peptide4
+XP_014077357.1	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	60	137	3.1e-08	.	.	Target=PF00545.22 8 85;env_start=53;env_end=138;hmm_name=Ribonuclease;hmm_type=Domain;hmm_len=86;bitscore=34.4;evalue=3.1e-08;is_significant=true
+BgtE_5846	SignalP:4.1g	signal_peptide	1	21	0.539	+	.	cmax=0.33;cmax_pos=22;ymax=0.45;ymax_pos=22;smax=0.72;smax_pos=20;smean=0.615;d=0.539;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+BgtE_5846	Phobius:1.01	signal_peptide	1	21	.	.	.	ID=signal_peptide5
+BgtE_5846	Phobius:1.01	n_terminal_region	1	3	.	.	.	Parent=signal_peptide5
+BgtE_5846	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	4	13	.	.	.	Parent=signal_peptide5
+BgtE_5846	Phobius:1.01	c_terminal_region	14	21	.	.	.	Parent=signal_peptide5
+CCE26799.1	SignalP:4.1g	signal_peptide	1	17	0.779	+	.	cmax=0.348;cmax_pos=18;ymax=0.575;ymax_pos=18;smax=0.978;smax_pos=11;smean=0.952;d=0.779;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+CCE26799.1	DeepSig:0f1e1d9	signal_peptide	1	17	1.0	.	.	prediction=SignalPeptide;prob=1.0;cs_pos=17
+CCE26799.1	Phobius:1.01	signal_peptide	1	17	.	.	.	ID=signal_peptide6
+CCE26799.1	Phobius:1.01	n_terminal_region	1	3	.	.	.	Parent=signal_peptide6
+CCE26799.1	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	4	12	.	.	.	Parent=signal_peptide6
+CCE26799.1	Phobius:1.01	c_terminal_region	13	17	.	.	.	Parent=signal_peptide6
+CgDN3	SignalP:4.1g	signal_peptide	1	18	0.901	+	.	cmax=0.793;cmax_pos=19;ymax=0.861;ymax_pos=19;smax=0.964;smax_pos=3;smean=0.935;d=0.901;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+CgDN3	DeepSig:0f1e1d9	signal_peptide	1	18	1.0	.	.	prediction=SignalPeptide;prob=1.0;cs_pos=18
+CgDN3	Phobius:1.01	signal_peptide	1	18	.	.	.	ID=signal_peptide7
+CgDN3	Phobius:1.01	n_terminal_region	1	4	.	.	.	Parent=signal_peptide7
+CgDN3	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	5	13	.	.	.	Parent=signal_peptide7
+CgDN3	Phobius:1.01	c_terminal_region	14	18	.	.	.	Parent=signal_peptide7
+Fom_2	SignalP:4.1g	signal_peptide	1	20	0.885	+	.	cmax=0.709;cmax_pos=21;ymax=0.817;ymax_pos=21;smax=0.969;smax_pos=5;smean=0.943;d=0.885;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+Fom_2	DeepSig:0f1e1d9	signal_peptide	1	20	1.0	.	.	prediction=SignalPeptide;prob=1.0;cs_pos=20
+Fom_2	Phobius:1.01	signal_peptide	1	24	.	.	.	ID=signal_peptide8
+Fom_2	Phobius:1.01	n_terminal_region	1	7	.	.	.	Parent=signal_peptide8
+Fom_2	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	8	19	.	.	.	Parent=signal_peptide8
+Fom_2	Phobius:1.01	c_terminal_region	20	24	.	.	.	Parent=signal_peptide8
+Fom_2	TMHMM:2.0c	transmembrane_polypeptide_region	7	24	.	.	.	.
+MlpCTP1	SignalP:4.1g	signal_peptide	1	27	0.76	+	.	cmax=0.503;cmax_pos=28;ymax=0.653;ymax_pos=28;smax=0.951;smax_pos=16;smean=0.851;d=0.76;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+MlpCTP1	Phobius:1.01	signal_peptide	1	27	.	.	.	ID=signal_peptide9
+MlpCTP1	Phobius:1.01	n_terminal_region	1	9	.	.	.	Parent=signal_peptide9
+MlpCTP1	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	10	22	.	.	.	Parent=signal_peptide9
+MlpCTP1	Phobius:1.01	c_terminal_region	23	27	.	.	.	Parent=signal_peptide9
+MoAvr1_CO39	SignalP:4.1g	signal_peptide	1	22	0.754	+	.	cmax=0.731;cmax_pos=23;ymax=0.746;ymax_pos=23;smax=0.871;smax_pos=12;smean=0.761;d=0.754;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+MoAvr1_CO39	DeepSig:0f1e1d9	signal_peptide	1	22	0.99	.	.	prediction=SignalPeptide;prob=0.99;cs_pos=22
+MoAvr1_CO39	Phobius:1.01	signal_peptide	1	22	.	.	.	ID=signal_peptide10
+MoAvr1_CO39	Phobius:1.01	n_terminal_region	1	5	.	.	.	Parent=signal_peptide10
+MoAvr1_CO39	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	6	17	.	.	.	Parent=signal_peptide10
+MoAvr1_CO39	Phobius:1.01	c_terminal_region	18	22	.	.	.	Parent=signal_peptide10
+MoAvr1_CO39	TMHMM:2.0c	transmembrane_polypeptide_region	4	23	.	.	.	.
+MoBas3	SignalP:4.1g	signal_peptide	1	20	0.809	+	.	cmax=0.55;cmax_pos=21;ymax=0.703;ymax_pos=21;smax=0.934;smax_pos=18;smean=0.899;d=0.809;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+MoBas3	DeepSig:0f1e1d9	signal_peptide	1	20	0.99	.	.	prediction=SignalPeptide;prob=0.99;cs_pos=20
+MoBas3	Phobius:1.01	signal_peptide	1	20	.	.	.	ID=signal_peptide11
+MoBas3	Phobius:1.01	n_terminal_region	1	2	.	.	.	Parent=signal_peptide11
+MoBas3	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	3	14	.	.	.	Parent=signal_peptide11
+MoBas3	Phobius:1.01	c_terminal_region	15	20	.	.	.	Parent=signal_peptide11
+M.TH16.EuGene_00027411	SignalP:4.1g	signal_peptide	1	22	0.552	+	.	cmax=0.425;cmax_pos=23;ymax=0.503;ymax_pos=23;smax=0.782;smax_pos=12;smean=0.594;d=0.552;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+M.TH16.EuGene_00027411	Phobius:1.01	signal_peptide	1	22	.	.	.	ID=signal_peptide12
+M.TH16.EuGene_00027411	Phobius:1.01	n_terminal_region	1	3	.	.	.	Parent=signal_peptide12
+M.TH16.EuGene_00027411	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	4	15	.	.	.	Parent=signal_peptide12
+M.TH16.EuGene_00027411	Phobius:1.01	c_terminal_region	16	22	.	.	.	Parent=signal_peptide12
+XP003298007.1	SignalP:4.1g	signal_peptide	1	27	0.71	+	.	cmax=0.605;cmax_pos=28;ymax=0.658;ymax_pos=28;smax=0.96;smax_pos=5;smean=0.755;d=0.71;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+XP003298007.1	DeepSig:0f1e1d9	signal_peptide	1	19	0.95	.	.	prediction=SignalPeptide;prob=0.95;cs_pos=19
+XP003298007.1	Phobius:1.01	signal_peptide	1	20	.	.	.	ID=signal_peptide13
+XP003298007.1	Phobius:1.01	n_terminal_region	1	3	.	.	.	Parent=signal_peptide13
+XP003298007.1	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	4	15	.	.	.	Parent=signal_peptide13
+XP003298007.1	Phobius:1.01	c_terminal_region	16	20	.	.	.	Parent=signal_peptide13
+RsNIP1	SignalP:4.1g	signal_peptide	1	20	0.823	+	.	cmax=0.62;cmax_pos=21;ymax=0.745;ymax_pos=21;smax=0.973;smax_pos=11;smean=0.889;d=0.823;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+RsNIP1	DeepSig:0f1e1d9	signal_peptide	1	20	1.0	.	.	prediction=SignalPeptide;prob=1.0;cs_pos=20
+RsNIP1	Phobius:1.01	signal_peptide	1	20	.	.	.	ID=signal_peptide14
+RsNIP1	Phobius:1.01	n_terminal_region	1	2	.	.	.	Parent=signal_peptide14
+RsNIP1	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	3	13	.	.	.	Parent=signal_peptide14
+RsNIP1	Phobius:1.01	c_terminal_region	14	20	.	.	.	Parent=signal_peptide14
+RsNIP1	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	1	82	4.4e-57	.	.	Target=PF08995.12 1 82;env_start=0;env_end=82;hmm_name=NIP_1;hmm_type=Domain;hmm_len=82;bitscore=190.5;evalue=4.4e-57;is_significant=true
+PGTG_16791	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	243	317	1.9e-09	.	.	Target=PF18151.3 1 65;env_start=242;env_end=317;hmm_name=DUF5601;hmm_type=Domain;hmm_len=65;bitscore=37.6;evalue=1.9e-09;is_significant=true
+PGTG_16791	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	372	471	4.4e-31	.	.	Target=PF02204.20 3 103;env_start=369;env_end=472;hmm_name=VPS9;hmm_type=Family;hmm_len=104;bitscore=107.3;evalue=4.4e-31;is_significant=true
+PGTG_16791	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	706	744	5.1e-06	.	.	Target=PF02845.18 4 42;env_start=702;env_end=744;hmm_name=CUE;hmm_type=Domain;hmm_len=42;bitscore=26.2;evalue=5.1e-06;is_significant=true;clan=CL0214
+HpATR13_2	SignalP:4.1g	signal_peptide	1	19	0.561	+	.	cmax=0.373;cmax_pos=20;ymax=0.486;ymax_pos=20;smax=0.712;smax_pos=2;smean=0.625;d=0.561;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+HpATR13_2	DeepSig:0f1e1d9	signal_peptide	1	26	0.96	.	.	prediction=SignalPeptide;prob=0.96;cs_pos=26
+HpATR13_2	Phobius:1.01	signal_peptide	1	24	.	.	.	ID=signal_peptide16
+HpATR13_2	Phobius:1.01	n_terminal_region	1	2	.	.	.	Parent=signal_peptide16
+HpATR13_2	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	3	16	.	.	.	Parent=signal_peptide16
+HpATR13_2	Phobius:1.01	c_terminal_region	17	24	.	.	.	Parent=signal_peptide16
+HpATR13_2	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	54	154	1.6e-62	.	.	Target=PF16829.7 1 101;env_start=53;env_end=154;hmm_name=ATR13;hmm_type=Family;hmm_len=101;bitscore=208.2;evalue=1.6e-62;is_significant=true
+HpATR13_3	SignalP:4.1g	signal_peptide	1	19	0.559	+	.	cmax=0.374;cmax_pos=20;ymax=0.485;ymax_pos=20;smax=0.709;smax_pos=14;smean=0.623;d=0.559;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+HpATR13_3	DeepSig:0f1e1d9	signal_peptide	1	26	0.97	.	.	prediction=SignalPeptide;prob=0.97;cs_pos=26
+HpATR13_3	Phobius:1.01	signal_peptide	1	24	.	.	.	ID=signal_peptide17
+HpATR13_3	Phobius:1.01	n_terminal_region	1	2	.	.	.	Parent=signal_peptide17
+HpATR13_3	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	3	16	.	.	.	Parent=signal_peptide17
+HpATR13_3	Phobius:1.01	c_terminal_region	17	24	.	.	.	Parent=signal_peptide17
+HpATR13_3	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	123	184	1.1e-26	.	.	Target=PF16829.7 37 98;env_start=115;env_end=187;hmm_name=ATR13;hmm_type=Family;hmm_len=101;bitscore=93.2;evalue=1.1e-26;is_significant=true
+HpATR13_3	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	54	105	3.5e-23	.	.	Target=PF16829.7 1 52;env_start=53;env_end=106;hmm_name=ATR13;hmm_type=Family;hmm_len=101;bitscore=81.9;evalue=3.5e-23;is_significant=true
+PcF	SignalP:4.1g	signal_peptide	1	21	0.774	+	.	cmax=0.667;cmax_pos=22;ymax=0.735;ymax_pos=22;smax=0.88;smax_pos=13;smean=0.807;d=0.774;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+PcF	DeepSig:0f1e1d9	signal_peptide	1	21	1.0	.	.	prediction=SignalPeptide;prob=1.0;cs_pos=21
+PcF	Phobius:1.01	signal_peptide	1	21	.	.	.	ID=signal_peptide18
+PcF	Phobius:1.01	n_terminal_region	1	4	.	.	.	Parent=signal_peptide18
+PcF	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	5	16	.	.	.	Parent=signal_peptide18
+PcF	Phobius:1.01	c_terminal_region	17	21	.	.	.	Parent=signal_peptide18
+PcF	Pfam-scan:1.6-3.3.2:Pfam	protein_hmm_match	24	68	4.4e-22	.	.	Target=PF09461.12 1 45;env_start=23;env_end=68;hmm_name=PcF;hmm_type=Domain;hmm_len=45;bitscore=78.3;evalue=4.4e-22;is_significant=true
+PiAvr3b	SignalP:4.1g	signal_peptide	1	22	0.773	+	.	cmax=0.564;cmax_pos=23;ymax=0.69;ymax_pos=23;smax=0.953;smax_pos=10;smean=0.844;d=0.773;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+PiAvr3b	DeepSig:0f1e1d9	signal_peptide	1	22	0.94	.	.	prediction=SignalPeptide;prob=0.94;cs_pos=22
+PiAvr3b	Phobius:1.01	signal_peptide	1	20	.	.	.	ID=signal_peptide19
+PiAvr3b	Phobius:1.01	n_terminal_region	1	4	.	.	.	Parent=signal_peptide19
+PiAvr3b	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	5	15	.	.	.	Parent=signal_peptide19
+PiAvr3b	Phobius:1.01	c_terminal_region	16	20	.	.	.	Parent=signal_peptide19
+PiAvr3b	TMHMM:2.0c	transmembrane_polypeptide_region	5	27	.	.	.	.
+PiAvrVnt1	SignalP:4.1g	signal_peptide	1	23	0.827	+	.	cmax=0.625;cmax_pos=24;ymax=0.748;ymax_pos=24;smax=0.962;smax_pos=14;smean=0.894;d=0.827;decision=true;dmax_cut=0.45;networks_used=SignalP-noTM
+PiAvrVnt1	DeepSig:0f1e1d9	signal_peptide	1	23	0.96	.	.	prediction=SignalPeptide;prob=0.96;cs_pos=23
+PiAvrVnt1	Phobius:1.01	signal_peptide	1	23	.	.	.	ID=signal_peptide20
+PiAvrVnt1	Phobius:1.01	n_terminal_region	1	4	.	.	.	Parent=signal_peptide20
+PiAvrVnt1	Phobius:1.01	central_hydrophobic_region_of_signal_peptide	5	16	.	.	.	Parent=signal_peptide20
+PiAvrVnt1	Phobius:1.01	c_terminal_region	17	23	.	.	.	Parent=signal_peptide20
+PiAvrVnt1	TMHMM:2.0c	transmembrane_polypeptide_region	7	26	.	.	.	.
+PsHopAA1	MMSeqs2:13.45111:PHIBase	protein_match	1	486	1.195e-301	.	.	Target=G3XDB9#PHI:987#HopAA1-1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant) 1 486;Gap=M486;tlen=486;evalue=1.195e-301;gapopen=0;pident=100.0;alnlen=486;raw=2312.0;bits=917.0;mismatch=0;qcov=1.0;tcov=1.0
+PsHopAA1	MMSeqs2:13.45111:PHIBase	protein_match	1	486	5.612e-212	.	.	Target=Q4ZX85#PHI:997#HopAA1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant) 1 483;Gap=M22 I1 M430 I3 M18 D1 M12;tlen=483;evalue=5.612e-212;gapopen=3;pident=74.1;alnlen=487;raw=1656.0;bits=658.0;mismatch=121;qcov=1.0;tcov=1.0
+PsHopAA1	MMSeqs2:13.45111:PHIBase	protein_match	1	482	2.055e-227	.	.	Target=Q87W48#PHI:988#HopAA1-2#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant) 1 483;Gap=M474 D1 M8;tlen=487;evalue=2.055e-227;gapopen=1;pident=78.6;alnlen=483;raw=1767.0;bits=702.0;mismatch=102;qcov=0.992;tcov=0.992
+PsHopAB1	MMSeqs2:13.45111:PHIBase	protein_match	1	553	1.893e-135	.	.	Target=Q4ZMD6#PHI:999#HopAB1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant) 1 515;Gap=M45 I10 M7 I1 M25 I13 M14 I5 M6 I2 M73 D3 M13 I2 M48 D1 M20 D2 M68 I4 M18 I4 M82 I2 M6 I1 M84;tlen=516;evalue=1.893e-135;gapopen=13;pident=52.2;alnlen=559;raw=1101.0;bits=439.0;mismatch=217;qcov=1.0;tcov=0.998
+PsHopAB1	MMSeqs2:13.45111:PHIBase	protein_match	1	553	0.0	.	.	Target=Q8RSY1#PHI:990__PHI:2743#HopAB2__AvrPtoB#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant) 1 553;Gap=M553;tlen=553;evalue=0.0;gapopen=0;pident=100.0;alnlen=553;raw=2677.0;bits=1061.0;mismatch=0;qcov=1.0;tcov=1.0
+PsHopAB1	MMSeqs2:13.45111:PHIBase	protein_match	1	553	3.988e-147	.	.	Target=Q9RBW3#PHI:989#HopAB1#317#Pseudomonas_syringae#effector_(plant_avirulence_determinant) 1 539;Gap=M42 I7 M7 I2 M22 I5 M7 I8 M15 I12 M75 I6 M168 D25 M4 D3 M59 I1 M28 I1 M84;tlen=539;evalue=3.988e-147;gapopen=10;pident=52.3;alnlen=581;raw=1187.0;bits=473.0;mismatch=207;qcov=1.0;tcov=1.0
+BgtE_5846	MMSeqs2:13.45111:PHIBase	protein_match	1	118	3.758e-30	.	.	Target=N1JJ94#PHI:2903__PHI:8918#BEC1054__DH14#34373__230439#Blumeria_graminis__Peronospora_tabacina#reduced_virulence__effector_(plant_avirulence_determinant) 1 118;Gap=M118;tlen=118;evalue=3.758e-30;gapopen=0;pident=46.6;alnlen=118;raw=275.0;bits=113.0;mismatch=63;qcov=1.0;tcov=1.0
+BgtE_5846	MMSeqs2:13.45111:PHIBase	protein_match	1	113	2.855e-20	.	.	Target=N1JJX4#PHI:2898#BEC1011#34373#Blumeria_graminis#reduced_virulence 1 113;Gap=M113;tlen=118;evalue=2.855e-20;gapopen=0;pident=39.8;alnlen=113;raw=201.0;bits=84.0;mismatch=68;qcov=0.958;tcov=0.958
+CCE26799.1	MMSeqs2:13.45111:PHIBase	protein_match	4	164	8.97e-08	.	.	Target=W9ZT25#PHI:5067#AVRFOM2#5507#Fusarium_oxysporum#effector_(plant_avirulence_determinant) 8 164;Gap=M16 I5 M16 I3 M18 I1 M51 I1 M36 D6 M14;tlen=167;evalue=8.97e-08;gapopen=5;pident=27.5;alnlen=167;raw=115.0;bits=50.0;mismatch=105;qcov=0.964;tcov=0.94
+CgDN3	MMSeqs2:13.45111:PHIBase	protein_match	1	74	2.052e-47	.	.	Target=O43115#PHI:164#CgDN3#474922#Colletotrichum_gloeosporioides#loss_of_pathogenicity 1 74;Gap=M74;tlen=74;evalue=2.052e-47;gapopen=0;pident=100.0;alnlen=74;raw=394.0;bits=160.0;mismatch=0;qcov=1.0;tcov=1.0
+Fom_2	MMSeqs2:13.45111:PHIBase	protein_match	27	134	2.663e-10	.	.	Target=P78737#PHI:534__PHI:8380#TOXA__ToxA_(AAB61464)#45151#Pyrenophora_tritici-repentis#increased_virulence_(hypervirulence)__effector_(plant_avirulence_determinant) 38 164;Gap=M11 D4 M21 D2 M19 D2 M7 D12 M5 I2 M11 D1 M32;tlen=178;evalue=2.663e-10;gapopen=6;pident=24.8;alnlen=129;raw=133.0;bits=57.0;mismatch=74;qcov=0.647;tcov=0.713
+Fom_2	MMSeqs2:13.45111:PHIBase	protein_match	27	167	1.058e-10	.	.	Target=Q0TVA4#PHI:1081#ToxA#13684#Parastagonospora_nodorum#loss_of_pathogenicity 38 178;Gap=M11 D4 M21 D2 M19 D2 M8 D10 M17 D1 M32 I4 M6 I15 M8;tlen=178;evalue=1.058e-10;gapopen=7;pident=23.7;alnlen=160;raw=138.0;bits=59.0;mismatch=84;qcov=0.844;tcov=0.792
+Fom_2	MMSeqs2:13.45111:PHIBase	protein_match	1	167	1.764e-110	.	.	Target=W9ZT25#PHI:5067#AVRFOM2#5507#Fusarium_oxysporum#effector_(plant_avirulence_determinant) 1 167;Gap=M167;tlen=167;evalue=1.764e-110;gapopen=0;pident=100.0;alnlen=167;raw=868.0;bits=347.0;mismatch=0;qcov=1.0;tcov=1.0
+MoBas3	HMMER:3.3.2:effectordb:1	protein_hmm_match	21	113	2.2e-37	.	.	Target=MoBas3 1 93;hmm_len=93;query_len=113;full_evalue=1.9e-37;full_score=121.7;full_bias=12.5;nmatches=1;domain_c_evalue=7.2e-40;domain_i_evalue=2.2e-37;domain_score=121.5;domain_bias=12.5;acc=0.99;description=None
+XP003298007.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	44	186	3.4e-37	.	.	Target=ChToxA 16 143;hmm_len=144;query_len=187;full_evalue=2.8e-37;full_score=122.1;full_bias=0.0;nmatches=1;domain_c_evalue=4.5e-39;domain_i_evalue=3.4e-37;domain_score=121.8;domain_bias=0.0;acc=0.92;description=None
+XP003298007.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	40	186	5.1e-50	.	.	Target=Fom_2 5 144;hmm_len=145;query_len=187;full_evalue=4.1e-50;full_score=163.6;full_bias=0.0;nmatches=1;domain_c_evalue=6.8e-52;domain_i_evalue=5.1e-50;domain_score=163.3;domain_bias=0.0;acc=0.97;description=None
+XP003298007.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	73	140	0.00021	.	.	Target=PnToxA 59 122;hmm_len=162;query_len=187;full_evalue=0.00016;full_score=15.4;full_bias=0.4;nmatches=1;domain_c_evalue=2.7e-06;domain_i_evalue=0.00021;domain_score=15.1;domain_bias=0.4;acc=0.83;description=None
+XP003298007.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	43	186	6.6e-39	.	.	Target=PtrToxA 27 161;hmm_len=162;query_len=187;full_evalue=5.4e-39;full_score=127.6;full_bias=0.0;nmatches=1;domain_c_evalue=8.6e-41;domain_i_evalue=6.6e-39;domain_score=127.4;domain_bias=0.0;acc=0.92;description=None
+RsNIP1	HMMER:3.3.2:effectordb:1	protein_hmm_match	21	82	6.8e-48	.	.	Target=RsNIP1 1 62;hmm_len=62;query_len=82;full_evalue=5.9e-48;full_score=155.3;full_bias=15.6;nmatches=1;domain_c_evalue=2.2e-50;domain_i_evalue=6.8e-48;domain_score=155.1;domain_bias=15.6;acc=1.0;description=None
+PGTG_16791	HMMER:3.3.2:effectordb:1	protein_hmm_match	1	744	6e-221	.	.	Target=PGTG_16791 1 744;hmm_len=744;query_len=744;full_evalue=5.4e-221;full_score=730.1;full_bias=44.4;nmatches=1;domain_c_evalue=2e-223;domain_i_evalue=6e-221;domain_score=729.9;domain_bias=44.4;acc=1.0;description=None
+HpATR13_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	94	154	1.7e-28	.	.	Target=HpATR13_1 108 168;hmm_len=168;query_len=154;full_evalue=1.7e-83;full_score=272.9;full_bias=2.9;nmatches=2;domain_c_evalue=2.8e-30;domain_i_evalue=1.7e-28;domain_score=93.9;domain_bias=0.1;acc=0.98;description=None
+HpATR13_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	105	1.2e-56	.	.	Target=HpATR13_1 1 86;hmm_len=168;query_len=154;full_evalue=1.7e-83;full_score=272.9;full_bias=2.9;nmatches=2;domain_c_evalue=2e-58;domain_i_evalue=1.2e-56;domain_score=185.5;domain_bias=0.7;acc=0.99;description=None
+HpATR13_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	154	6.4e-87	.	.	Target=HpATR13_2 1 135;hmm_len=135;query_len=154;full_evalue=5.6e-87;full_score=283.0;full_bias=0.3;nmatches=1;domain_c_evalue=1e-88;domain_i_evalue=6.4e-87;domain_score=282.8;domain_bias=0.3;acc=1.0;description=None
+HpATR13_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	105	9e-54	.	.	Target=HpATR13_3 1 86;hmm_len=168;query_len=154;full_evalue=3.2e-84;full_score=275.0;full_bias=2.7;nmatches=2;domain_c_evalue=1.5e-55;domain_i_evalue=9e-54;domain_score=175.9;domain_bias=0.6;acc=0.99;description=None
+HpATR13_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	93	154	3.7e-32	.	.	Target=HpATR13_3 107 168;hmm_len=168;query_len=154;full_evalue=3.2e-84;full_score=275.0;full_bias=2.7;nmatches=2;domain_c_evalue=6.1e-34;domain_i_evalue=3.7e-32;domain_score=105.6;domain_bias=0.1;acc=0.98;description=None
+HpATR13_3	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	187	9e-101	.	.	Target=HpATR13_1 1 168;hmm_len=168;query_len=187;full_evalue=8e-101;full_score=329.3;full_bias=6.0;nmatches=1;domain_c_evalue=1.5e-102;domain_i_evalue=9e-101;domain_score=329.1;domain_bias=6.0;acc=1.0;description=None
+HpATR13_3	HMMER:3.3.2:effectordb:1	protein_hmm_match	111	186	1.7e-37	.	.	Target=HpATR13_2 60 134;hmm_len=135;query_len=187;full_evalue=5.5e-94;full_score=305.7;full_bias=11.9;nmatches=2;domain_c_evalue=2.8e-39;domain_i_evalue=1.7e-37;domain_score=122.8;domain_bias=3.3;acc=0.97;description=None
+HpATR13_3	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	111	3.7e-58	.	.	Target=HpATR13_2 1 92;hmm_len=135;query_len=187;full_evalue=5.5e-94;full_score=305.7;full_bias=11.9;nmatches=2;domain_c_evalue=6e-60;domain_i_evalue=3.7e-58;domain_score=189.7;domain_bias=1.7;acc=0.99;description=None
+HpATR13_3	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	187	1.2e-102	.	.	Target=HpATR13_3 1 168;hmm_len=168;query_len=187;full_evalue=1.1e-102;full_score=335.1;full_bias=7.0;nmatches=1;domain_c_evalue=2e-104;domain_i_evalue=1.2e-102;domain_score=334.9;domain_bias=7.0;acc=1.0;description=None
+PcF	HMMER:3.3.2:effectordb:1	protein_hmm_match	22	73	7.2e-27	.	.	Target=PcF 1 52;hmm_len=52;query_len=73;full_evalue=7.2e-27;full_score=87.6;full_bias=4.7;nmatches=2;domain_c_evalue=2.4e-29;domain_i_evalue=7.2e-27;domain_score=87.6;domain_bias=4.7;acc=0.97;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	1	120	2.3e-10	.	.	Target=HaATR5 1 119;hmm_len=367;query_len=148;full_evalue=3.3e-11;full_score=37.3;full_bias=0.2;nmatches=1;domain_c_evalue=9.2e-12;domain_i_evalue=2.3e-10;domain_score=34.5;domain_bias=0.2;acc=0.63;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	32	124	3.5e-06	.	.	Target=HxATR1NdWsB_1 18 106;hmm_len=293;query_len=148;full_evalue=2.8e-06;full_score=21.3;full_bias=0.0;nmatches=1;domain_c_evalue=1.4e-07;domain_i_evalue=3.5e-06;domain_score=21.1;domain_bias=0.0;acc=0.8;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	33	127	2.6e-06	.	.	Target=PiAvr1 8 89;hmm_len=186;query_len=148;full_evalue=2.1e-06;full_score=22.0;full_bias=0.1;nmatches=1;domain_c_evalue=1e-07;domain_i_evalue=2.6e-06;domain_score=21.6;domain_bias=0.1;acc=0.73;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	23	148	6.3e-20	.	.	Target=PiAvr3b 1 126;hmm_len=126;query_len=148;full_evalue=5.4e-20;full_score=66.0;full_bias=0.2;nmatches=1;domain_c_evalue=2.5e-21;domain_i_evalue=6.3e-20;domain_score=65.7;domain_bias=0.2;acc=0.98;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	35	129	1.1e-07	.	.	Target=PiAvr4 9 106;hmm_len=263;query_len=148;full_evalue=9.4e-08;full_score=26.1;full_bias=0.1;nmatches=1;domain_c_evalue=4.5e-09;domain_i_evalue=1.1e-07;domain_score=25.8;domain_bias=0.1;acc=0.81;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	20	133	8.1e-09	.	.	Target=PiPexRD54 14 141;hmm_len=362;query_len=148;full_evalue=7e-09;full_score=29.3;full_bias=0.0;nmatches=1;domain_c_evalue=3.2e-10;domain_i_evalue=8.1e-09;domain_score=29.1;domain_bias=0.0;acc=0.82;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	33	131	1.8e-06	.	.	Target=PsAvh241 9 121;hmm_len=165;query_len=148;full_evalue=1.4e-06;full_score=22.6;full_bias=0.0;nmatches=1;domain_c_evalue=6.9e-08;domain_i_evalue=1.8e-06;domain_score=22.2;domain_bias=0.0;acc=0.78;description=None
+PiAvr3b	HMMER:3.3.2:effectordb:1	protein_hmm_match	2	129	2.6e-08	.	.	Target=PsAvr1k 41 182;hmm_len=279;query_len=148;full_evalue=2.4e-08;full_score=28.0;full_bias=0.1;nmatches=1;domain_c_evalue=1e-09;domain_i_evalue=2.6e-08;domain_score=27.8;domain_bias=0.1;acc=0.74;description=None
+PiAvrVnt1	HMMER:3.3.2:effectordb:1	protein_hmm_match	1	126	6e-14	.	.	Target=HaATR5 1 124;hmm_len=367;query_len=153;full_evalue=4.4e-14;full_score=46.8;full_bias=1.0;nmatches=1;domain_c_evalue=2.8e-15;domain_i_evalue=6e-14;domain_score=46.3;domain_bias=1.0;acc=0.67;description=None
+PiAvrVnt1	HMMER:3.3.2:effectordb:1	protein_hmm_match	25	145	8.2e-06	.	.	Target=PcAvr3a4 11 99;hmm_len=108;query_len=153;full_evalue=5.6e-06;full_score=21.0;full_bias=1.8;nmatches=1;domain_c_evalue=3.8e-07;domain_i_evalue=8.2e-06;domain_score=20.5;domain_bias=1.8;acc=0.66;description=None
+PiAvrVnt1	HMMER:3.3.2:effectordb:1	protein_hmm_match	28	145	1.5e-06	.	.	Target=PiAvr3A 4 114;hmm_len=126;query_len=153;full_evalue=9.7e-07;full_score=23.6;full_bias=2.8;nmatches=1;domain_c_evalue=6.9e-08;domain_i_evalue=1.5e-06;domain_score=23.0;domain_bias=2.8;acc=0.77;description=None
+PiAvrVnt1	HMMER:3.3.2:effectordb:1	protein_hmm_match	25	153	4e-48	.	.	Target=PiAvrVnt1 2 130;hmm_len=130;query_len=153;full_evalue=3.5e-48;full_score=157.8;full_bias=1.9;nmatches=1;domain_c_evalue=1.8e-49;domain_i_evalue=4e-48;domain_score=157.6;domain_bias=1.9;acc=0.99;description=None
+PiAvrVnt1	HMMER:3.3.2:effectordb:1	protein_hmm_match	1	105	2.6e-08	.	.	Target=PsAvr1k 40 153;hmm_len=279;query_len=153;full_evalue=2.1e-08;full_score=28.1;full_bias=0.5;nmatches=1;domain_c_evalue=1.2e-09;domain_i_evalue=2.6e-08;domain_score=27.8;domain_bias=0.5;acc=0.78;description=None
+XopR1	LOCALIZER:1.0.3	peptide_localization_signal	47	77	0.997	+	.	Note=Putative internal chloroplast localization peptide;prob=0.997
+XopR1	LOCALIZER:1.0.3	mitochondrial_targeting_signal	73	73	0.997	.	.	Note=Putative internal mitochondrial localization peptide;prob=0.997
+XP_014077357.1	TargetP:2.0	signal_peptide	1	17	0.99998	.	.	prediction=SP;prob_signal=0.99998;prob_mitochondrial=0.0;prob_other=2e-05;prob_cut_site=0.6513
+XP_014077357.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	40	130	9.2e-07	.	.	Target=BgAVRA13 4 88;hmm_len=100;query_len=142;full_evalue=6.8e-07;full_score=23.8;full_bias=0.1;nmatches=1;domain_c_evalue=1.8e-08;domain_i_evalue=9.2e-07;domain_score=23.4;domain_bias=0.1;acc=0.76;description=None
+XP_014077357.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	41	140	9.3e-29	.	.	Target=BghBEC1011 2 91;hmm_len=95;query_len=142;full_evalue=7.5e-29;full_score=94.8;full_bias=0.3;nmatches=1;domain_c_evalue=1.8e-30;domain_i_evalue=9.3e-29;domain_score=94.6;domain_bias=0.3;acc=0.96;description=None
+XP_014077357.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	42	140	5.9e-15	.	.	Target=BghCSEP0055 5 89;hmm_len=102;query_len=142;full_evalue=4.2e-15;full_score=50.6;full_bias=0.0;nmatches=1;domain_c_evalue=1.2e-16;domain_i_evalue=5.9e-15;domain_score=50.1;domain_bias=0.0;acc=0.95;description=None
+XP_014077357.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	42	140	4e-27	.	.	Target=BgtAvrPm2 5 93;hmm_len=98;query_len=142;full_evalue=3.1e-27;full_score=89.7;full_bias=0.2;nmatches=1;domain_c_evalue=7.9e-29;domain_i_evalue=4e-27;domain_score=89.3;domain_bias=0.2;acc=0.93;description=None
+XP_014077357.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	41	140	5.2e-09	.	.	Target=BgtSvrPm3a1f1 25 115;hmm_len=128;query_len=142;full_evalue=4e-09;full_score=31.2;full_bias=0.2;nmatches=1;domain_c_evalue=1e-10;domain_i_evalue=5.2e-09;domain_score=30.8;domain_bias=0.2;acc=0.87;description=None
+XP_014077357.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	33	141	1.4e-42	.	.	Target=Zt6 8 117;hmm_len=119;query_len=142;full_evalue=1.1e-42;full_score=139.5;full_bias=1.5;nmatches=1;domain_c_evalue=2.7e-44;domain_i_evalue=1.4e-42;domain_score=139.2;domain_bias=1.5;acc=0.97;description=None
+BgtE_5846	TargetP:2.0	signal_peptide	1	21	0.995625	.	.	prediction=SP;prob_signal=0.995625;prob_mitochondrial=0.000628;prob_other=0.003747;prob_cut_site=0.7979
+BgtE_5846	HMMER:3.3.2:effectordb:1	protein_hmm_match	21	115	2.8e-21	.	.	Target=BgAVRA13 1 96;hmm_len=100;query_len=118;full_evalue=2.2e-21;full_score=70.3;full_bias=0.0;nmatches=1;domain_c_evalue=3.6e-23;domain_i_evalue=2.8e-21;domain_score=70.0;domain_bias=0.0;acc=0.94;description=None
+BgtE_5846	HMMER:3.3.2:effectordb:1	protein_hmm_match	24	114	1.5e-11	.	.	Target=BghBEC1011 1 91;hmm_len=95;query_len=118;full_evalue=1.1e-11;full_score=39.8;full_bias=0.0;nmatches=1;domain_c_evalue=1.9e-13;domain_i_evalue=1.5e-11;domain_score=39.4;domain_bias=0.0;acc=0.96;description=None
+BgtE_5846	HMMER:3.3.2:effectordb:1	protein_hmm_match	22	115	6.1e-12	.	.	Target=BgtAvrPm2 1 94;hmm_len=98;query_len=118;full_evalue=5.3e-12;full_score=40.8;full_bias=0.0;nmatches=1;domain_c_evalue=8e-14;domain_i_evalue=6.1e-12;domain_score=40.6;domain_bias=0.0;acc=0.96;description=None
+CCE26799.1	TargetP:2.0	signal_peptide	1	17	0.999604	.	.	prediction=SP;prob_signal=0.999604;prob_mitochondrial=9.1e-05;prob_other=0.000305;prob_cut_site=0.6133
+CCE26799.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	41	164	1.1e-37	.	.	Target=ChToxA 20 141;hmm_len=144;query_len=167;full_evalue=9.6e-38;full_score=123.6;full_bias=1.2;nmatches=1;domain_c_evalue=1.1e-39;domain_i_evalue=1.1e-37;domain_score=123.4;domain_bias=1.2;acc=0.91;description=None
+CCE26799.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	36	164	1.6e-42	.	.	Target=Fom_2 10 142;hmm_len=145;query_len=167;full_evalue=1.3e-42;full_score=139.3;full_bias=1.0;nmatches=1;domain_c_evalue=1.5e-44;domain_i_evalue=1.6e-42;domain_score=139.0;domain_bias=1.0;acc=0.95;description=None
+CCE26799.1	HMMER:3.3.2:effectordb:1	protein_hmm_match	34	164	3.3e-37	.	.	Target=PtrToxA 28 159;hmm_len=162;query_len=167;full_evalue=2.8e-37;full_score=122.1;full_bias=0.4;nmatches=1;domain_c_evalue=3.2e-39;domain_i_evalue=3.3e-37;domain_score=121.8;domain_bias=0.4;acc=0.91;description=None
+CgDN3	TargetP:2.0	signal_peptide	1	18	0.999963	.	.	prediction=SP;prob_signal=0.999963;prob_mitochondrial=3e-06;prob_other=3.3e-05;prob_cut_site=0.8037
+CgDN3	HMMER:3.3.2:effectordb:1	protein_hmm_match	19	74	1.3e-37	.	.	Target=CgDN3 1 56;hmm_len=56;query_len=74;full_evalue=1.2e-37;full_score=122.1;full_bias=13.6;nmatches=1;domain_c_evalue=8.7e-40;domain_i_evalue=1.3e-37;domain_score=121.9;domain_bias=13.6;acc=0.99;description=None
+CgDN3	HMMER:3.3.2:effectordb:1	protein_hmm_match	19	72	8.7e-36	.	.	Target=CoDN3 1 54;hmm_len=55;query_len=74;full_evalue=7.4e-36;full_score=116.3;full_bias=12.7;nmatches=1;domain_c_evalue=5.7e-38;domain_i_evalue=8.7e-36;domain_score=116.1;domain_bias=12.7;acc=0.99;description=None
+Fom_2	TargetP:2.0	signal_peptide	1	20	0.999193	.	.	prediction=SP;prob_signal=0.999193;prob_mitochondrial=4.1e-05;prob_other=0.000766;prob_cut_site=0.4553
+Fom_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	26	166	2.7e-45	.	.	Target=ChToxA 9 143;hmm_len=144;query_len=167;full_evalue=2.2e-45;full_score=148.4;full_bias=2.2;nmatches=1;domain_c_evalue=3.5e-47;domain_i_evalue=2.7e-45;domain_score=148.1;domain_bias=2.2;acc=0.98;description=None
+Fom_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	23	167	3.2e-60	.	.	Target=Fom_2 1 145;hmm_len=145;query_len=167;full_evalue=2.8e-60;full_score=196.6;full_bias=1.4;nmatches=1;domain_c_evalue=4.1e-62;domain_i_evalue=3.2e-60;domain_score=196.4;domain_bias=1.4;acc=0.99;description=None
+Fom_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	32	167	5.1e-06	.	.	Target=PnToxA 27 162;hmm_len=162;query_len=167;full_evalue=4.2e-06;full_score=20.6;full_bias=0.2;nmatches=1;domain_c_evalue=6.7e-08;domain_i_evalue=5.1e-06;domain_score=20.3;domain_bias=0.2;acc=0.68;description=None
+Fom_2	HMMER:3.3.2:effectordb:1	protein_hmm_match	25	167	2.7e-45	.	.	Target=PtrToxA 20 162;hmm_len=162;query_len=167;full_evalue=2.3e-45;full_score=148.3;full_bias=0.8;nmatches=1;domain_c_evalue=3.5e-47;domain_i_evalue=2.7e-45;domain_score=148.1;domain_bias=0.8;acc=0.95;description=None
+MlpCTP1	TargetP:2.0	signal_peptide	1	27	0.994882	.	.	prediction=SP;prob_signal=0.994882;prob_mitochondrial=0.000118;prob_other=0.004999;prob_cut_site=0.7986
+MlpCTP1	LOCALIZER:1.0.3	peptide_localization_signal	68	69	0.966	+	.	Note=Putative internal chloroplast localization peptide;prob=0.966
+MlpCTP1	HMMER:3.3.2:effectordb:1	protein_hmm_match	28	171	2.5e-53	.	.	Target=MlpCTP1 1 144;hmm_len=144;query_len=171;full_evalue=2.1e-53;full_score=174.6;full_bias=1.6;nmatches=1;domain_c_evalue=8.1e-56;domain_i_evalue=2.5e-53;domain_score=174.4;domain_bias=1.6;acc=1.0;description=None
+MoAvr1_CO39	TargetP:2.0	signal_peptide	1	22	0.999971	.	.	prediction=SP;prob_signal=0.999971;prob_mitochondrial=1e-06;prob_other=2.8e-05;prob_cut_site=0.9759
+MoAvr1_CO39	HMMER:3.3.2:effectordb:1	protein_hmm_match	23	89	1.4e-53	.	.	Target=MoAvr1_CO39 1 67;hmm_len=67;query_len=89;full_evalue=1.1e-53;full_score=173.4;full_bias=2.5;nmatches=1;domain_c_evalue=4.5e-56;domain_i_evalue=1.4e-53;domain_score=173.1;domain_bias=2.5;acc=1.0;description=None
+MoBas3	SignalP:6.0	signal_peptide	1	20	0.999767	+	.	prediction=SP;prob_signal=0.999767;prob_other=0.000205;prob_cut_site=0.9841
+XP003298007.1	SignalP:6.0	signal_peptide	1	27	0.999583	+	.	prediction=SP;prob_signal=0.999583;prob_other=0.000391;prob_cut_site=0.9487
+RsNIP1	SignalP:6.0	signal_peptide	1	20	0.999796	+	.	prediction=SP;prob_signal=0.999796;prob_other=0.000189;prob_cut_site=0.9802
+PGTG_16791	LOCALIZER:1.0.3	mitochondrial_targeting_signal	94	94	0.997	.	.	Note=Putative internal mitochondrial localization peptide;prob=0.997
+HpATR13_2	SignalP:6.0	signal_peptide	1	24	0.693293	+	.	prediction=SP;prob_signal=0.693293;prob_other=0.306694;prob_cut_site=0.5782
+HpATR13_3	SignalP:6.0	signal_peptide	1	24	0.692087	+	.	prediction=SP;prob_signal=0.692087;prob_other=0.307879;prob_cut_site=0.5741
+PcF	SignalP:6.0	signal_peptide	1	21	0.999829	+	.	prediction=SP;prob_signal=0.999829;prob_other=0.0002;prob_cut_site=0.9793
+PiAvr3b	SignalP:6.0	signal_peptide	1	20	0.999411	+	.	prediction=SP;prob_signal=0.999411;prob_other=0.000546;prob_cut_site=0.7057
+PiAvrVnt1	SignalP:6.0	signal_peptide	1	23	0.999764	+	.	prediction=SP;prob_signal=0.999764;prob_other=0.000219;prob_cut_site=0.9721
+XP_014077357.1	SignalP:5.0b	signal_peptide	1	17	0.998258	+	.	prediction=SP(Sec/SPI);prob_signal=0.998258;prob_other=0.001742;prob_cut_site=0.3615
+XP_014077357.1	SignalP:6.0	signal_peptide	1	17	0.999718	+	.	prediction=SP;prob_signal=0.999718;prob_other=0.000231;prob_cut_site=0.9617
+BgtE_5846	SignalP:5.0b	signal_peptide	1	21	0.958628	+	.	prediction=SP(Sec/SPI);prob_signal=0.958628;prob_other=0.041372;prob_cut_site=0.5624
+BgtE_5846	SignalP:6.0	signal_peptide	1	21	0.969608	+	.	prediction=SP;prob_signal=0.969608;prob_other=0.030388;prob_cut_site=0.9210
+CCE26799.1	SignalP:5.0b	signal_peptide	1	17	0.995929	+	.	prediction=SP(Sec/SPI);prob_signal=0.995929;prob_other=0.004071;prob_cut_site=0.5487
+CCE26799.1	SignalP:6.0	signal_peptide	1	17	0.999666	+	.	prediction=SP;prob_signal=0.999666;prob_other=0.000282;prob_cut_site=0.9701
+CgDN3	SignalP:5.0b	signal_peptide	1	18	0.998504	+	.	prediction=SP(Sec/SPI);prob_signal=0.998504;prob_other=0.001496;prob_cut_site=0.6878
+CgDN3	SignalP:6.0	signal_peptide	1	18	0.999737	+	.	prediction=SP;prob_signal=0.999737;prob_other=0.000217;prob_cut_site=0.9765
+Fom_2	SignalP:5.0b	signal_peptide	1	22	0.984236	+	.	prediction=SP(Sec/SPI);prob_signal=0.984236;prob_other=0.015764;prob_cut_site=0.4009
+Fom_2	SignalP:6.0	signal_peptide	1	24	0.999215	+	.	prediction=SP;prob_signal=0.999215;prob_other=0.000743;prob_cut_site=0.5026
+MlpCTP1	SignalP:5.0b	signal_peptide	1	27	0.892386	+	.	prediction=SP(Sec/SPI);prob_signal=0.892386;prob_other=0.107614;prob_cut_site=0.6319
+MlpCTP1	SignalP:6.0	signal_peptide	1	27	0.999741	+	.	prediction=SP;prob_signal=0.999741;prob_other=0.000244;prob_cut_site=0.9810
+MoAvr1_CO39	SignalP:5.0b	signal_peptide	1	22	0.993269	+	.	prediction=SP(Sec/SPI);prob_signal=0.993269;prob_other=0.006731;prob_cut_site=0.9387
+MoAvr1_CO39	SignalP:6.0	signal_peptide	1	22	0.999768	+	.	prediction=SP;prob_signal=0.999768;prob_other=0.000195;prob_cut_site=0.9793
+MoBas3	SignalP:5.0b	signal_peptide	1	20	0.994825	+	.	prediction=SP(Sec/SPI);prob_signal=0.994825;prob_other=0.005175;prob_cut_site=0.6715
+MoBas3	TargetP:2.0	signal_peptide	1	20	0.999998	.	.	prediction=SP;prob_signal=0.999998;prob_mitochondrial=0.0;prob_other=2e-06;prob_cut_site=0.6853
+M.TH16.EuGene_00027411	SignalP:5.0b	signal_peptide	1	22	0.670653	+	.	prediction=SP(Sec/SPI);prob_signal=0.670653;prob_other=0.329347;prob_cut_site=0.3736
+M.TH16.EuGene_00027411	TargetP:2.0	signal_peptide	1	22	0.954605	.	.	prediction=SP;prob_signal=0.954605;prob_mitochondrial=0.008283;prob_other=0.037112;prob_cut_site=0.8013
+XP003298007.1	SignalP:5.0b	signal_peptide	1	27	0.980287	+	.	prediction=SP(Sec/SPI);prob_signal=0.980287;prob_other=0.019713;prob_cut_site=0.3288
+XP003298007.1	TargetP:2.0	signal_peptide	1	19	0.995791	.	.	prediction=SP;prob_signal=0.995791;prob_mitochondrial=0.000739;prob_other=0.00347;prob_cut_site=0.2285
+RsNIP1	SignalP:5.0b	signal_peptide	1	20	0.999489	+	.	prediction=SP(Sec/SPI);prob_signal=0.999489;prob_other=0.000511;prob_cut_site=0.9015
+RsNIP1	TargetP:2.0	signal_peptide	1	20	0.999993	.	.	prediction=SP;prob_signal=0.999993;prob_mitochondrial=0.0;prob_other=7e-06;prob_cut_site=0.9368
+HpATR13_2	SignalP:5.0b	signal_peptide	1	19	0.644928	+	.	prediction=SP(Sec/SPI);prob_signal=0.644928;prob_other=0.355072;prob_cut_site=0.2970
+HpATR13_2	TargetP:2.0	signal_peptide	1	24	0.926129	.	.	prediction=SP;prob_signal=0.926129;prob_mitochondrial=0.009358;prob_other=0.064514;prob_cut_site=0.3109
+HpATR13_3	SignalP:5.0b	signal_peptide	1	19	0.639026	+	.	prediction=SP(Sec/SPI);prob_signal=0.639026;prob_other=0.360974;prob_cut_site=0.2909
+HpATR13_3	TargetP:2.0	signal_peptide	1	24	0.850751	.	.	prediction=SP;prob_signal=0.850751;prob_mitochondrial=0.014558;prob_other=0.134691;prob_cut_site=0.3110
+PcF	SignalP:5.0b	signal_peptide	1	21	0.999186	+	.	prediction=SP(Sec/SPI);prob_signal=0.999186;prob_other=0.000814;prob_cut_site=0.9026
+PcF	TargetP:2.0	signal_peptide	1	21	0.999999	.	.	prediction=SP;prob_signal=0.999999;prob_mitochondrial=0.0;prob_other=1e-06;prob_cut_site=0.7605
+PiAvr3b	SignalP:5.0b	signal_peptide	1	22	0.985941	+	.	prediction=SP(Sec/SPI);prob_signal=0.985941;prob_other=0.014059;prob_cut_site=0.4690
+PiAvr3b	TargetP:2.0	signal_peptide	1	22	0.999754	.	.	prediction=SP;prob_signal=0.999754;prob_mitochondrial=9.4e-05;prob_other=0.000152;prob_cut_site=0.4149
+PiAvrVnt1	SignalP:5.0b	signal_peptide	1	23	0.982085	+	.	prediction=SP(Sec/SPI);prob_signal=0.982085;prob_other=0.017915;prob_cut_site=0.6813
+PiAvrVnt1	TargetP:2.0	signal_peptide	1	23	0.995671	.	.	prediction=SP;prob_signal=0.995671;prob_mitochondrial=0.001738;prob_other=0.00259;prob_cut_site=0.6430

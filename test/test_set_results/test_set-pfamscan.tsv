@@ -1,0 +1,12 @@
+name	ali_start	ali_end	env_start	env_end	hmm	hmm_name	hmm_type	hmm_start	hmm_end	hmm_len	bitscore	evalue	is_significant	clan	active_sites
+RsNIP1	0	82	0	82	PF08995.12	NIP_1	Domain	0	82	82	190.5	4.4e-57	True	.	.
+PsHopAB1	265	356	265	356	PF16847.7	AvrPtoB_bdg	Domain	0	91	91	199.1	9.9e-60	True	.	.
+PsHopAB1	427	553	427	553	PF09046.12	AvrPtoB-E3_ubiq	Domain	0	126	126	288.1	7.5e-87	True	.	.
+HpATR13_2	53	154	53	154	PF16829.7	ATR13	Family	0	101	101	208.2	1.6e-62	True	.	.
+HpATR13_3	122	184	115	187	PF16829.7	ATR13	Family	36	98	101	93.2	1.1e-26	True	.	.
+HpATR13_3	53	105	53	106	PF16829.7	ATR13	Family	0	52	101	81.9	3.5e-23	True	.	.
+XP_014077357.1	59	137	53	138	PF00545.22	Ribonuclease	Domain	7	85	86	34.4	3.1e-08	True	.	.
+PcF	23	68	23	68	PF09461.12	PcF	Domain	0	45	45	78.3	4.4e-22	True	.	.
+PGTG_16791	242	317	242	317	PF18151.3	DUF5601	Domain	0	65	65	37.6	1.9e-09	True	.	.
+PGTG_16791	371	471	369	472	PF02204.20	VPS9	Family	2	103	104	107.3	4.4e-31	True	.	.
+PGTG_16791	705	744	702	744	PF02845.18	CUE	Domain	3	42	42	26.2	5.1e-06	True	CL0214	.
