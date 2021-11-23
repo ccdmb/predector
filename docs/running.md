@@ -134,7 +134,7 @@ Important parameters are:
   Provide a custom configuration file.
   If you want to customise things like how many CPUs different tasks
   can use, whether to use the SLURM scheduler etc, this is the way
-  to do it. See the predector or nextflow documentation for details
+  to do it. See the Predector or Nextflow documentation for details
   on how to write these.
 
 -with-conda <path>
@@ -164,7 +164,7 @@ Important parameters are:
   Predector runs a lot of steps so this view usually takes up more than the full screen.
   Additionally this default mode doesn't play well if you re-direct the output to a file (e.g. using nohup or on a slurm cluster).
   Nextflow is supposed to switch when in a non-interactive shell, but I find that it often doesn't.
-  If you would like to explicitly disable this nextflow single screen colourful output, please specify `-ansi-log=false`.
+  If you would like to explicitly disable this Nextflow single screen colourful output, please specify `-ansi-log=false`.
 ```
 
 *Note*. The difference in parameters starting with `-` and `--` are deliberate and shouldn't be mixed up.
@@ -185,7 +185,7 @@ The `feature` names match those in the [`*-ranked.tsv`](#-rankedtsv) file.
 The effector score includes all of the secretion scores. It is built on-top of it with additional effector-relevant features.
 
 Note that for some tools we subtract 0.5 and multiply by 2.
-This is done for some classifiers so that scores the value is between 1 and -1. So it can both penalise and increase scores.
+This is done for some classifiers so that the value is between 1 and -1. So it can both penalise and increase scores.
 
 I've added a special column in here "has_effector_match" which is not in the ranking table.
 It is composed of four other columns like this:
@@ -235,8 +235,8 @@ has_effector_match = has_phibase_effector_match
 | effector | `has_phibase_lethal_match` | -5 | `--lethal_homology_weight` |
 
 
-Note that all deeploc probability values except `deeploc_membrane` will sum to 1 because they result from
-a single multi-class classifier (see the common [Softmax function](https://en.wikipedia.org/wiki/Softmax_function) for details on how this happens). So the total penalty for deeploc "intracellular" localisation can
+Note that all DeepLoc probability values except `deeploc_membrane` will sum to 1 because they result from
+a single multi-class classifier (see the common [Softmax function](https://en.wikipedia.org/wiki/Softmax_function) for details on how this happens). So the total penalty for DeepLoc "intracellular" localisation can
 only ever be a maximum of `--deeploc_intracellular_weight` which requires that `deeploc_extracellular` is 0.
 And the increase from extracellular localisation can only ever be a maximum of `--deeploc_extracellular_weight`, which will happen if `deeploc_extracellular` is 1 (so all others must be 0).
 
@@ -247,18 +247,18 @@ that are positively predicted by multiple tools.
 
 ### Profiles and configuration
 
-Nextflow uses configuration files to specify how many cpus or RAM a task can use, or whether to use
+Nextflow uses configuration files to specify how many CPUs or RAM a task can use, or whether to use
 a SLURM scheduler on a supercomputing cluster etc.
 You can also use these config files to provide parameters.
 
 To select different configurations, you can either use one of the preset "profiles", or you can provide your own
-nextflow config files to the `-config` parameter <https://www.nextflow.io/docs/latest/config.html>.
+Nextflow config files to the `-config` parameter <https://www.nextflow.io/docs/latest/config.html>.
 This enables you to tune the number of CPUs used per task etc to your own computing system.
 
 
 #### Profiles
 
-We have several available profiles that configure where to find software, cpu, memory etc.
+We have several available profiles that configure where to find software, CPU, memory etc.
 
 | type     | profile     | description                                                                                                                                                                |
 |----------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -291,7 +291,7 @@ This will allow the pipeline to make the best use of your available resources.
 
 The time profiles (`t*`) are useful for limiting running times of tasks. By default the times are not limited, but these can be useful to use if you are running on a supercomputing cluster (specifying the times can get you through the queue faster) or on commercial cloud computing services (so you don't rack up an unexpected bill if something stalls somehow).
 
-So to use combine all of these things; to use docker containers, extra ram and CPUs etc you can provide the profile `-profile c16,r32,t2,docker`.
+So to combine all of these things; to use docker containers, extra ram and CPUs etc you can provide the profile `-profile c16,r32,t2,docker`.
 
 
 #### Custom configuration
@@ -302,7 +302,7 @@ I'll detail some pipeline specific configuration below but I suggest you start b
 
 If you have questions about this, or want to suggest a configuration for us to officially distribute with the pipeline please file an [issue](https://github.com/ccdmb/predector/issues) or start a [discussion](https://github.com/ccdmb/predector/discussions).
 
-Each nextflow task is labelled with the software name, cpu, ram, and time requirements for each task.
+Each Nextflow task is labelled with the software name, CPU, RAM, and time requirements for each task.
 In the config files, you can select these tasks by label.
 
 
@@ -319,7 +319,7 @@ In the config files, you can select these tasks by label.
 | time     | `time_long`      | Used for potentially long running tasks or tasks with times that depends on external factors e.g. downloads.         |
 | software | `download`       | Software environment for downloading things. (i.e. contains wget)                                                    |
 | software | `posix`          | " for using general posix/GNU tools                                                                                  |
-| software | `predectorutils` | " Tasks that use the predector-utils scripts.                                                                        |
+| software | `predectorutils` | " Tasks that use the Predector-utils scripts.                                                                        |
 | software | `signalp3`       |                                                                                                                      |
 | software | `signalp4`       |                                                                                                                      |
 | software | `signalp5`       |                                                                                                                      |
@@ -349,18 +349,18 @@ It also re-enforces the link between the pipeline version and the docker contain
 
 If you specify the pipeline to run as `ccdmb/predector`, Nextflow will pull the git repository from GitHub and put it in a local cache.
 Unfortunately, if you change the version number provided to `-r` and that version is not in the local copy of the repository you will get an error (See [Common issues](#common-issues).
-If you have previously run predector and want to update it to use a new version, you can do one of the following:
+If you have previously run Predector and want to update it to use a new version, you can do one of the following:
 
-1. Provide the new version to the `-r` parameter, and add the `-latest` flag to tell nextflow to pull new changes from the github repository.
+1. Provide the new version to the `-r` parameter, and add the `-latest` flag to tell Nextflow to pull new changes from the GitHub repository.
    Likewise, you can run old versions of the pipeline by simply changing `-r`.
 
   ```
   nextflow run -r 1.2.1 -latest ccdmb/predector --proteomes "my_proteins.fasta"
   ```
 
-2. You can ask nextflow to pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
+2. You can ask Nextflow to pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
 
-3. You can ask nextflow to delete the local copy of the repository entirely using `nextflow drop ccdmb/predector`. Nextflow will then pull a fresh copy the next time you run the pipeline.
+3. You can ask Nextflow to delete the local copy of the repository entirely using `nextflow drop ccdmb/predector`. Nextflow will then pull a fresh copy the next time you run the pipeline.
 
 If you get an error about missing git tags when running either of the first two options, try the third option (`drop`). This might happen if we delete old development tags of the pipeline to clean up the pipeline.
 
@@ -399,12 +399,12 @@ You can also download the files from:
 
 ### Providing pre-computed results to skip already processed proteins
 
-Predector can now take results of previous predector runs to skip re-running individual analyses of identical proteins.
+Predector can now take results of previous Predector runs to skip re-running individual analyses of identical proteins.
 This is decided based on a checksum of the processed sequence, the version of the software, and the version of the database (when applicable).
 If all three match, we will skip that analysis for that protein.
 
 In the `deduplicated` folder is a file called `new_results.ldjson`.
-This contains all of the results from the current run of predector.
+This contains all of the results from the current run of Predector.
 Just hold on to this file, and provide it to the `--precomputed_ldjson` argument the next time you run the pipeline.
 You can concatenate multiple of these files together without issue (e.g. `cat dedup1.ldjson dedup2.ldjson > my_precomputed.ldjson`) to continue a set of precomputed results in the long term.
 
