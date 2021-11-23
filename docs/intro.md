@@ -6,7 +6,7 @@ These results are summarised as a table that includes most information that woul
 Effector candidates are ranked using a [learning-to-rank](https://en.wikipedia.org/wiki/Learning_to_rank) machine learning method, which balances the tradeoff between secretion prediction and effector property prediction, with higher-sensitivity, comparable specificity, and better ordering than naive combinations of these features.
 We recommend that users incorporate these ranked effector scores with experimental evidence or homology matches to prioritise other more expensive efforts (e.g. cloning or structural modelling).
 
-We hope that predector can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
+We hope that Predector can become a platform enabling multiple secretome analyses, with a special focus on eukaryotic (currently only Fungal) effector discovery.
 We also seek to establish data informed best practises for secretome analysis tasks, where previously there was only a loose consensus, and to make it easy to follow them.
 
 Predector is designed to be run on complete predicted proteomes, as you would get after gene prediction or from databases like uniprot.
