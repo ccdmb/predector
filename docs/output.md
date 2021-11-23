@@ -1,6 +1,6 @@
 ## Pipeline output
 
-Predector output several files for each input file that you provide, and some additional ones that can be useful for debugging results.
+Predector outputs several files for each input file that you provide, and some additional ones that can be useful for debugging results.
 
 Results will always be placed under the directory specified by the parameter `--outdir` (`./results` by default).
 
@@ -8,12 +8,12 @@ Downloaded databases (i.e. Pfam and dbCAN) are stored in the `downloads` subdire
 Predector internally removes duplicate sequences at the start to avoid redundant computation and reduplicates them at the end.
 The `deduplicated` folder contains the deduplicated sequences, results, and a mapping file of the old ids to new ones.
 
-Other directories will be named after the input filenames and each contain several tables.
+Other directories will be named after the input filenames and each contains several tables.
 An example set of these results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.1-beta/test/test_set_results).
 
 ### `deduplicated/`
 
-The deduplicated folder contains deduplicated sequences and a tab-separated values file mapping the deduplicated sequence ids to their filenames and original ids is in the `deduplicated` subdirectory.
+The deduplicated folder contains deduplicated sequences and a tab-separated values file mapping the deduplicated sequence ids to their filenames and original ids in the `deduplicated` subdirectory.
 Deduplicated sequences may not be the same as the input sequences, as we do some "cleaning" before running the pipeline to avoid some common issues causing software crashes.
 Basically sequences are all uppercased, `*` characters are removed from the ends, `-` characters are removed, and any remaining `*JBZUO` characters are replaced with `X`.
 
@@ -35,7 +35,7 @@ This folder also contains two `.ldjson` files.
 ### `analysis_software_versions.tsv`
 
 This is a table containing the software and database (where relevant) versions
-of the analyses that predector has run.
+of the analyses that Predector has run.
 
 It has a simple 3 column structure. `analysis`, `software_version`, `database_version`.
 If the analysis doesn't use a database or we cannot determine which version of the database you're using
@@ -50,7 +50,7 @@ There are a lot of columns, though generally you'll only be interested in a few 
 | Column | Data type | Description | Notes |
 |:--------- |:-----------|:------------------------|:-----------|
 | `seqid` | String | The protein name in the fasta input you provided |
-| `effector_score` | Float | The predector machine learning effector score for this protein |
+| `effector_score` | Float | The Predector machine learning effector score for this protein |
 | `manual_effector_score` | Float | The manually created effector score, which is the sum of the products of several values in this spreadsheet | See [manual ranking scores](#manual-ranking-scores) for details |
 | `manual_secretion_score` | Float | The manually created secretion score, which is the sum of the products of several values in this spreadsheet |
 | `effector_matches` | String | A comma separated list of the significant matches to the curated set of fungal effector HMMs | If you are interested in knowing more about matches, see https://doi.org/10.6084/m9.figshare.16973665 under `effectordb.tsv` for details and links to papers describing functions. Matches are sorted by evalue, so the first hit is the best. |
@@ -105,12 +105,12 @@ There are a lot of columns, though generally you'll only be interested in a few 
 | `deepsig` | Boolean | Boolean [0, 1] indicating whether the protein is predicted to have a signal peptide by DeepSig |
 | `phobius_sp` | Boolean [0, 1] | Indicates whether the protein is predicted to have a signal peptide by Phobius |
 | `phobius_tmcount` | Integer | The number of transmembrane domains predicted by Phobius |
-| `phobius_tm_domains` | List | A comma separated list of transmembrane domain predictions from Phobius. Each will have the format `<start>-<end>` | Positions are start and end inclusive (like GFF3). We also add the prefix `tm:` to this column. This is to prevent excel from interpreting these entries as dates.  |
+| `phobius_tm_domains` | List | A comma separated list of transmembrane domain predictions from Phobius. Each will have the format `<start>-<end>` | Positions are start and end inclusive (like GFF3). We also add the prefix `tm:` to this column. This is to prevent Excel from interpreting these entries as dates.  |
 | `tmhmm_tmcount` | Integer | The number of transmembrane domains predicted by TMHMM |
 | `tmhmm_first_60` | Float | The predicted number of transmembrane AAs in the first 60 residues of the protein by TMHMM |
 | `tmhmm_exp_aa` | Float | The predicted number of transmembrane AAs in the protein by TMHMM |
 | `tmhmm_first_tm_sp_coverage` | Float | The proportion of the first predicted TM domain that overlaps with the median predicted signal-peptide cut site | Where no signal peptide or no TM domains are predicted, this will always be 0 |
-| `tmhmm_domains` | List | A comma separated list of transmembrane domains predicted by TMHMM. Each will have the format `<start>-<end>` | Positions are start and end inclusive (like GFF3). We also add the prefix `tm:` to this column. This is to prevent excel from interpreting these entries as dates. |
+| `tmhmm_domains` | List | A comma separated list of transmembrane domains predicted by TMHMM. Each will have the format `<start>-<end>` | Positions are start and end inclusive (like GFF3). We also add the prefix `tm:` to this column. This is to prevent Excel from interpreting these entries as dates. |
 | `targetp_secreted` | Boolean [0, 1] | Indicates whether TargetP 2 predicts the protein to be secreted |
 | `targetp_secreted_prob` | Float | The TargetP pseudo-probability of secretion |
 | `targetp_mitochondrial_prob` | Float | The TargetP pseudo-probability of mitochondrial localisation |
@@ -130,9 +130,9 @@ There are a lot of columns, though generally you'll only be interested in a few 
 | `signalp4_d` | Float | The raw D-score for SignalP 4 | See discussion of choosing multiple thresholds in the [SignalP FAQs](https://services.healthtech.dtu.dk/service.php?SignalP-4.1) |
 | `signalp5_prob` | Float | The SignalP 5 signal peptide pseudo-probability |
 | `signalp6_prob` | Float | The SignalP 6 signal peptide pseudo-probability |
-| `deepsig_signal_prob` | Float or None `.` | The deepsig signal peptide pseudo-probability. Note that deepsig only outputs the probability of the main prediction, so any proteins with a Transmembrane or Other prediction will be None (`.`) here. |
-| `deepsig_transmembrane_prob` | Float or None `.` | The deepsig transmembrane pseudo-probability. |
-| `deepsig_other_prob` | Float or None `.` | The deepsig "other" (i.e. not signal peptide or transmembrane) pseudo-probability.
+| `deepsig_signal_prob` | Float or None `.` | The DeepSig signal peptide pseudo-probability. Note that DeepSig only outputs the probability of the main prediction, so any proteins with a Transmembrane or Other prediction will be None (`.`) here. |
+| `deepsig_transmembrane_prob` | Float or None `.` | The DeepSig transmembrane pseudo-probability. |
+| `deepsig_other_prob` | Float or None `.` | The DeepSig "other" (i.e. not signal peptide or transmembrane) pseudo-probability.
 
 
 ### `*.gff3`
@@ -150,7 +150,7 @@ The columns are:
 | `score` | float | The score of the match if available. For MMSeqs2 and HMMER matches, this is the e-value. For SignalP 3-nn and 4 this will be the D-score, for SignalP 3-hmm this is the S-probability, and for SignalP5, DeepSig, TargetP and LOCALIZER mitochondrial or chloroplast predictions this will be the probability score. |
 | `strand` | `+`, `-`, or `.` | This will always be unstranded (`.`), since proteins don't have direction in the same way nucleotides do. |
 | `phase` | `0`, `1`, `2`, or `.` | This will always be `.` because it is only valid for CDS features. |
-| `attrubutes` | A semi-colon delimited list of `key=value` pairs | In here the remaining raw results and scores will be present. Of particular interest are the [`Gap` and `Target` attributes](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#the-gap-attribute), which define what database match an alignment found and the bounds in the matched sequence, and match/mismatch positions. Some punctuation characters will be escaped using [URL escape rules](https://en.wikipedia.org/wiki/Percent-encoding#Reserved_characters). For example, commas `,` will be escaped as `%2C`. |
+| `attributes` | A semi-colon delimited list of `key=value` pairs | In here the remaining raw results and scores will be present. Of particular interest are the [`Gap` and `Target` attributes](https://github.com/The-Sequence-Ontology/Specifications/blob/master/gff3.md#the-gap-attribute), which define what database match an alignment found and the bounds in the matched sequence, and match/mismatch positions. Some punctuation characters will be escaped using [URL escape rules](https://en.wikipedia.org/wiki/Percent-encoding#Reserved_characters). For example, commas `,` will be escaped as `%2C`. |
 
 
 ### Individual results tables
