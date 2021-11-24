@@ -94,7 +94,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
-- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0b "fast"
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0c "fast"
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -124,7 +124,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.1/install.sh" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
     -5 signalp-5.0b.Linux.tar.gz \
-    -6 signalp-6.0b.fast.tar.gz \
+    -6 signalp-6.0c.fast.tar.gz \
     -t targetp-2.0.Linux.tar.gz \
     -d deeploc-1.0.All.tar.gz \
     -m tmhmm-2.0c.Linux.tar.gz \

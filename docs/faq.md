@@ -84,7 +84,7 @@ Please update Nextflow to a more recent version (>21) to resolve this issue.
 We'll update these as we find new issues and get feedback.
 Please raise an issue on GitHub or email us if you have an issue not covered here.
 
-## What do Predector "effector scores" actually mean?
+### What do Predector "effector scores" actually mean?
 
 It's best to think of the learning to rank scores (and the manually designed ranking scores) as arbitrary numbers that attempt to make effectors appear near the top of a sorted list.
 The scores will not be consistent between different versions of the model, so please be careful if you're trying to compare scores.
