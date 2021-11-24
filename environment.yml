@@ -20,7 +20,7 @@ dependencies:
   - predector::signalp3=3.0b
   - predector::signalp4=4.1g
   - predector::signalp5=5.0b
-  - predector::signalp6=6.0b
+  - predector::signalp6=6.0c
   - predector::targetp2=2.0
   - predector::tmhmm=2.0c
   - predector::r-deepredeff=0.1.1
