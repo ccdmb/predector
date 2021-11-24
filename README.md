@@ -29,7 +29,7 @@ If you do use results of Predector in your manuscripts please also cite the depe
 Predector ranking does not replace these tools, it is designed to combine information from multiple tools in a useful way.
 We rely heavily on these tools and they should be supported with citations to enable their continued development.
 
-More details on dependencies are available in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.1#how-should-i-cite-predector) and we provide a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
+More details on dependencies are available in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.2#how-should-i-cite-predector) and we provide a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
 
 
 ## Documentation
@@ -38,12 +38,12 @@ Brief instructions are presented on this page, but extended documentation can be
 
 Quick documentation links:
 
-- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.2.1#quick-install)
-- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.2.1#extended-dependency-install-guide)
-- [Usage](https://github.com/ccdmb/predector/wiki/1.2.1#running-the-pipeline)
-- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.2.1#pipeline-output)
-- [Common issues](https://github.com/ccdmb/predector/wiki/1.2.1#common-issues)
-- [FAQ](https://github.com/ccdmb/predector/wiki/1.2.1#faq)
+- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.2.2#quick-install)
+- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.2.2#extended-dependency-install-guide)
+- [Usage](https://github.com/ccdmb/predector/wiki/1.2.2#running-the-pipeline)
+- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.2.2#pipeline-output)
+- [Common issues](https://github.com/ccdmb/predector/wiki/1.2.2#common-issues)
+- [FAQ](https://github.com/ccdmb/predector/wiki/1.2.2#faq)
 
 
 If you have any questions, think that some documentation is missing, or have any other suggestions or issues to report, please feel free to create an [issue](https://github.com/ccdmb/predector/issues) or start a [discussion](https://github.com/ccdmb/predector/discussions).
@@ -52,11 +52,11 @@ If you have any questions, think that some documentation is missing, or have any
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
-For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1#quick-install).
+For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.2#quick-install).
 
 Note that if you have run a previous version of the pipeline, you will need to re-build
 the software environment, as the dependencies may have changed.
-Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.1#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
+Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.2#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
 
 
 ### Minimal requirements
@@ -94,7 +94,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
-- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6 "fast"
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0b "fast"
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -102,6 +102,7 @@ Where you have a choice between versions for different operating systems, you sh
 
 Note that DTU (SignalP etc) don't keep older patches and minor versions available.
 If the specified version isn't available to download, another version with the same major number _should_ be fine.
+But please also let us know that the change has happened, so that we can update documentation and make sure our installers handle them correctly.
 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
@@ -118,19 +119,19 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.1/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.2/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
     -5 signalp-5.0b.Linux.tar.gz \
-    -6 signalp-6.0.fast.tar.gz \
+    -6 signalp-6.0b.fast.tar.gz \
     -t targetp-2.0.Linux.tar.gz \
     -d deeploc-1.0.All.tar.gz \
     -m tmhmm-2.0c.Linux.tar.gz \
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.1`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.2`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -161,25 +162,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.1 ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.2 ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.2.1 ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.2.2 ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.2.1 ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.2.2 ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.1 ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.2 ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.2.1 ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.2.2 ccdmb/predector
 ```
 
 ## Quickstart
@@ -188,15 +189,15 @@ Say you have a set of amino-acid sequences in fasta format in the directory `pro
 The following command will run the complete analysis and the results will be available in a `results` folder.
 
 ```bash
-nextflow run -resume -r 1.2.1 ccdmb/predector --proteome "proteomes/*"
+nextflow run -resume -r 1.2.2 ccdmb/predector --proteome "proteomes/*"
 ```
 
 To improve performance I strongly recommend specifying an appropriate profile for the computer you're running the pipeline on.
-You can find information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.1#profiles-and-configuration).
+You can find information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.2#profiles-and-configuration).
 
 
 **Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes.**
-See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.2.1#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.2.1#common-issues).
+See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.2.2#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.2.2#common-issues).
 
 
 ## Outputs
@@ -204,7 +205,7 @@ See how to do this in the [extended documentation](https://github.com/ccdmb/pred
 The main output of Predector is a file with the suffix `-ranked.tsv` which is a tab separated values file that can be opened in excel.
 This contains a summarised version of all of the information that you would typically need for evaluating effector protein candidates.
 
-You can find a description of all of the results in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.1#pipeline-output).
+You can find a description of all of the results in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.2#pipeline-output).
 
 An example set of results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.1-beta/test/test_set_results).
 
