@@ -207,7 +207,7 @@ This contains a summarised version of all of the information that you would typi
 
 You can find a description of all of the results in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.3#pipeline-output).
 
-An example set of results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.1-beta/test/test_set_results).
+An example set of results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.3/test/test_set_results).
 
 
 ## Contributing
