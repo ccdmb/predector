@@ -79,6 +79,56 @@ _nf_script_9f2a833e: 9: unable to resolve class download_pfam_dat
 Please update Nextflow to a more recent version (>21) to resolve this issue.
 
 
+### Running/setting up conda environment: `loadable library and perl binaries are mismatched (got handshake key 0xdb80080, needed 0xde00080)`
+
+This will usually happen if the operating system you're running on has some perl libraries in the search path for a different version of perl.
+Unfortunately because conda environments are not isolated from the host operating system like containers are, there isn't much we can do to avoid this.
+The good news is that it's usually an easy fix.
+
+Search your bash environment for `PERL5LIB` or `PERLLIB`. e.g.
+
+```
+env | grep -i "perl"
+```
+
+If either of these are set, it's likely that this is how perl is finding these incompatible options.
+Try `unset`-ing these paths and try running again. e.g.
+
+```
+unset PERL5LIB
+unset PERLLIB
+```
+
+
+If you are on a computer that uses `module`s to import software (e.g. many HPC clusters), check for any loaded perl modules
+as these will usually set the above variables.
+
+```
+# Check for and loaded perl modules
+module list
+
+# unload any relevant perl modules e.g.
+module unload perl
+```
+
+**Note** you will need to unset these environment variables anytime you restart
+a new terminal session and want to use the conda environment.
+Alternatively you can remove the default imports and environment variable settings e.g. in your `~/.bashrc` file to make changes permanent.
+
+If unsetting the variables/unloading modules doesn't work, please let us know and we'll try to resolve the issue.
+We'll need info about any set environment variables before and after loading the conda environment, and the specific conda packages installed.
+
+e.g.
+```
+env > env_before_load.txt
+conda activate predector
+env > env_after_load.txt
+
+conda list > conda_environment.txt
+```
+
+
+
 ## FAQ
 
 We'll update these as we find new issues and get feedback.
