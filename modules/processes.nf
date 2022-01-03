@@ -197,7 +197,7 @@ process filter_precomputed {
     if [ "${precomputed_ldjson}" != "DOESNT_EXIST_LDJSON" ]
     then
         predutils load_db \
-          --replace-name \
+          --drop-name \
           --drop-null-dbversion \
           --mem "${task.memory.getGiga() / 2}" \
           tmp.db \
@@ -244,6 +244,7 @@ process decode_seqs {
     cat results/* > combined.ldjson
     predutils load_db \
       --mem "${task.memory.getGiga() / 2}" \
+      --drop-name \
       tmp.db \
       combined.ldjson
 
