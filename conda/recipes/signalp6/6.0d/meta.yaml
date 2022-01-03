@@ -1,0 +1,36 @@
+{% set version = "6.0d" %}
+
+package:
+  name: signalp6
+  version: {{ version }}
+
+build:
+  number: 1
+  skip: True  # [win]
+  noarch: python
+
+requirements:
+  run:
+    - python >=3.6
+    - matplotlib>3.3.2
+    - numpy>1.19.2
+    - pytorch>1.7.0
+    - tqdm>4.46.1
+    - pip
+    - setuptools
+    - wheel
+
+test:
+  commands:
+    - 'signalp -h || [ $? == 1 ]'
+    - 'signalp6 -h || [ $? == 1 ]'
+    - 'signalp6-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/services/signalp-6.0#
+  summary: "a placeholder library to install signalp versions 6."
+  license: proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones
