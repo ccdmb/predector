@@ -47,7 +47,7 @@ $ install.sh [conda|docker|singularity] \\
     -3 signalp-3.0.Linux.tar.Z \\
     -4 signalp-4.1g.Linux.tar.gz \\
     -5 signalp-5.0b.Linux.tar.gz \\
-    -6 signalp-6.0.fast.tar.gz \\
+    -6 signalp-6.0d.fast.tar.gz \\
     -t targetp-2.0.Linux.tar.gz \\
     -d deeploc-1.0.All.tar.gz \\
     -m tmhmm-2.0c.Linux.tar.gz \\

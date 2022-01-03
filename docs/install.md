@@ -60,7 +60,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
-- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0c "fast"
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0d "fast"
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -90,7 +90,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.3/install.sh" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
     -5 signalp-5.0b.Linux.tar.gz \
-    -6 signalp-6.0c.fast.tar.gz \
+    -6 signalp-6.0d.fast.tar.gz \
     -t targetp-2.0.Linux.tar.gz \
     -d deeploc-1.0.All.tar.gz \
     -m tmhmm-2.0c.Linux.tar.gz \
@@ -206,7 +206,7 @@ Modify the source tar archive filenames in the commands if necessary.
 signalp3-register signalp-3.0.Linux.tar.Z \
 && signalp4-register signalp-4.1g.Linux.tar.gz \
 && signalp5-register signalp-5.0b.Linux.tar.gz \
-&& signalp6-register signalp-6.0c.fast.tar.gz \
+&& signalp6-register signalp-6.0d.fast.tar.gz \
 && targetp2-register targetp-2.0.Linux.tar.gz \
 && deeploc-register deeploc-1.0.All.tar.gz \
 && phobius-register phobius101_linux.tar.gz \
@@ -230,7 +230,7 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.3/Dockerfile \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
   --build-arg SIGNALP5=signalp-5.0b.Linux.tar.gz \
-  --build-arg SIGNALP6=signalp-6.0c.fast.tar.gz \
+  --build-arg SIGNALP6=signalp-6.0d.fast.tar.gz \
   --build-arg TARGETP2=targetp-2.0.Linux.tar.gz \
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
@@ -259,7 +259,7 @@ Modify the source tar archive filenames if necessary.
 export SIGNALP3=signalp-3.0.Linux.tar.Z
 export SIGNALP4=signalp-4.1g.Linux.tar.gz
 export SIGNALP5=signalp-5.0b.Linux.tar.gz
-export SIGNALP6=signalp-6.0c.fast.tar.gz
+export SIGNALP6=signalp-6.0d.fast.tar.gz
 export TARGETP2=targetp-2.0.Linux.tar.gz
 export PHOBIUS=phobius101_linux.tar.gz
 export TMHMM=tmhmm-2.0c.Linux.tar.gz
