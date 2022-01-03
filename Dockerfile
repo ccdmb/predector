@@ -1,4 +1,4 @@
-ARG VERSION=1.2.3
+ARG VERSION=1.2.4-alpha
 FROM "predector/predector-base:${VERSION}"
 
 LABEL description="Docker image containing all requirements for the predector pipeline"

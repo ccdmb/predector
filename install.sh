@@ -8,7 +8,7 @@ REPOBASE="https://raw.githubusercontent.com/ccdmb/predector"
 DOCUMENTATION_URL="https://github.com/ccdmb/predector/wiki"
 
 ### DEFAULT PARAMETERS
-VERSION=1.2.3
+VERSION=1.2.4-alpha
 
 SIGNALP3= #signalp-3.0.Linux.tar.Z
 SIGNALP4= #signalp-4.1g.Linux.tar.gz
