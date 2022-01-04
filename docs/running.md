@@ -110,6 +110,36 @@ Important parameters are:
   and databases (where applicable) are the same.
   default: don't use any precomputed results.
 
+--chunk_size <int>
+  The number of proteins to run as a single chunk in the pipeline.
+  The input fasta files are split into chunks for checkpointing
+  and parallelism. Reduce this if you are running into RAM errors,
+  but note that nextflow can create a lot of files so this may slow
+  your filesystem down. Increase this to produce fewer files,
+  but note that the runtime of each task will be longer so increase
+  resources accordingly. For a typical fungal proteome (~15k proteins), setting
+  to 1000 is suitable. If running >100k proteins, increasing
+  chunk size to ~10000 may be appropriate.
+  default: 5000
+
+--signalp6_bsize <int>
+  This sets the batch size used by the SignalP6 neural network.
+  SP6 can use a lot of RAM, and reducing the batch size reduces the memory use
+  at the cost of slower speeds. For computers with lots of RAM (e.g. >16GB),
+  increasing this to 64 or higher will speed up.
+  For smaller computers try reducing to 10.
+  default: 32
+
+--no_localizer
+  Don't run LOCALIZER, which can take a long time and isn't strictly needed
+  for prediction of effectors (it's more useful for evaluation).
+
+--no_signalp6
+  Don't run SignalP v6. We've had several issues running and installing
+  SignalP6. This option is primarily here to give users experiencing issues
+  to finish the pipeline without it. THIS OPTION WILL BE REMOVED IN A FUTURE
+  RELEASE.
+
 -r <version>
   Use a specific version of the pipeline. This version must match one of the
   tags on github <https://github.com/ccdmb/predector/tags>.
@@ -150,10 +180,6 @@ Important parameters are:
 --tracedir <path>
   Directory to store pipeline runtime information
   default: 'results/pipeline_info'
-
---chunk_size <int>
-  The number of proteins to run as a single chunk in the pipeline
-  default: 5000
 
 --nostrip
   Don't strip the proteome filename extension when creating the output filenames
@@ -200,39 +226,39 @@ has_effector_match = has_phibase_effector_match
 
 | score | feature | default weight | command line option |
 |-------|---------|----------------|---------------------|
-| secretion | `is_secreted` | 3.0 | `--secreted_weight` |
-| secretion | `signalp3_hmm` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `signalp3_nn` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `phobius` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `deepsig` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `signalp4` | 0.5 | `--sigpep_good_weight` |
-| secretion | `signalp5` | 0.5 | `--sigpep_good_weight` |
-| secretion | `signalp6` | 0.5 | `--sigpep_good_weight` |
-| secretion | `targetp_secreted` | 0.5 | `--sigpep_good_weight` |
-| secretion | `multiple_transmembrane` | -10 | `--multiple_transmembrane_weight` |
-| secretion | `single_transmembrane` | -1 | `--single_transmembrane_weight` |
-| secretion | `deeploc_extracellular` | 1 | `--deeploc_extracellular_weight` |
-| secretion | `deeploc_nucleus` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_cytoplasm` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_mitochondrion` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_cell_membrane` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_endoplasmic_reticulum` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_plastid` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_golgi` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_lysosome` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_peroxisome` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_membrane` | -2 | `--deeploc_membrane_weight` |
-| secretion | `targetp_mitochondrial_prob` | -2 | `--targetp_mitochondrial_weight` |
-| effector | `2 * (effectorp1 - 0.5)` | 3 | `--effectorp1_weight` |
-| effector | `2 * (effectorp2 - 0.5)` | 3 | `--effectorp2_weight` |
-| effector | `effectorp3_apoplastic` | 3 | `--effectorp3_apoplastic_weight` |
-| effector | `effectorp3_cytoplasmic` | 3 | `--effectorp3_cytoplastmic_weight` |
-| effector | `effectorp3_noneffector` | -3 | `--effectorp3_noneffector_weight` |
-| effector | `2 * (deepredeff_fungi - 0.5)` | 2 | `--deepredeff_fungi_weight` |
-| effector | `2 * (deepredeff_oomycete - 0.5)` | 2 | `--deepredeff_oomycete_weight` |
-| effector | `has_effector_match` | 5 | `--effector_homology_weight` |
-| effector | `(!has_effector_match) and has_phibase_virulence_match` | 2 | `--virulence_homology_weight` |
-| effector | `has_phibase_lethal_match` | -5 | `--lethal_homology_weight` |
+| secretion | `is_secreted` | 2.0 | `--secreted_weight` |
+| secretion | `signalp3_hmm` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `signalp3_nn` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `phobius` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `deepsig` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `signalp4` | 0.003 | `--sigpep_good_weight` |
+| secretion | `signalp5` | 0.003 | `--sigpep_good_weight` |
+| secretion | `signalp6` | 0.003 | `--sigpep_good_weight` |
+| secretion | `targetp_secreted` | 0.003 | `--sigpep_good_weight` |
+| secretion | `multiple_transmembrane` | -1 | `--multiple_transmembrane_weight` |
+| secretion | `single_transmembrane` | -0.7 | `--single_transmembrane_weight` |
+| secretion | `deeploc_extracellular` | 1.3 | `--deeploc_extracellular_weight` |
+| secretion | `deeploc_nucleus` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_cytoplasm` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_mitochondrion` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_cell_membrane` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_endoplasmic_reticulum` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_plastid` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_golgi` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_lysosome` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_peroxisome` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_membrane` | -1.3 | `--deeploc_membrane_weight` |
+| secretion | `targetp_mitochondrial_prob` | -0.5 | `--targetp_mitochondrial_weight` |
+| effector | `2 * (effectorp1 - 0.5)` | 0.5 | `--effectorp1_weight` |
+| effector | `2 * (effectorp2 - 0.5)` | 2.5 | `--effectorp2_weight` |
+| effector | `effectorp3_apoplastic` | 0.5 | `--effectorp3_apoplastic_weight` |
+| effector | `effectorp3_cytoplasmic` | 0.5 | `--effectorp3_cytoplastmic_weight` |
+| effector | `effectorp3_noneffector` | -2.5 | `--effectorp3_noneffector_weight` |
+| effector | `2 * (deepredeff_fungi - 0.5)` | 0.1 | `--deepredeff_fungi_weight` |
+| effector | `2 * (deepredeff_oomycete - 0.5)` | 0.0 | `--deepredeff_oomycete_weight` |
+| effector | `has_effector_match` | 2.0 | `--effector_homology_weight` |
+| effector | `(!has_effector_match) and has_phibase_virulence_match` | 0.5 | `--virulence_homology_weight` |
+| effector | `has_phibase_lethal_match` | -2 | `--lethal_homology_weight` |
 
 
 Note that all DeepLoc probability values except `deeploc_membrane` will sum to 1 because they result from
@@ -269,6 +295,8 @@ We have several available profiles that configure where to find software, CPU, m
 | cpu    | c4          | Use up to 4 CPUs/cores per computer/node.                                                                                                                                  |
 | cpu    | c8          | Use up to 8 CPUs/cores ...                                                                                                                                                 |
 | cpu    | c16         | Use up to 16 CPUs/cores ...                                                                                                                                                |
+| memory   | r4          | Use up to 4Gb RAM per computer/node.                                                                                                                                       |
+| memory   | r6          | Use up to 6Gb RAM per computer/node.                                                                                                                                       |
 | memory   | r8          | Use up to 8Gb RAM per computer/node.                                                                                                                                       |
 | memory   | r16         | Use up to 16Gb RAM                                                                                                                                                         |
 | memory   | r32         | Use up to 32Gb RAM                                                                                                                                                         |

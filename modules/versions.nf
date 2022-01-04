@@ -6,7 +6,11 @@ workflow check_env {
     signalp3 = get_signalp3_version()
     signalp4 = get_signalp4_version()
     signalp5 = get_signalp5_version()
-    signalp6 = get_signalp6_version()
+    if ( params.no_signalp6 ) {
+        signalp6 = false
+    } else {
+        signalp6 = get_signalp6_version()
+    }
     targetp2 = get_targetp2_version()
     tmhmm2 = get_tmhmm2_version()
     deeploc1 = get_deeploc1_version()

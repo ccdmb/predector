@@ -164,6 +164,24 @@ def helpMessage() {
           The `--precomputed_ldjson` option is more convenient for now.
           default: don't use any precomputed results.
 
+      --signalp6_bsize <int>
+          This sets the batch size used by the SignalP6 neural network.
+          SP6 can use a lot of RAM, and reducing the batch size reduces the memory use
+          at the cost of slower speeds. For computers with lots of RAM (e.g. >16GB),
+          increasing this to 64 or higher will speed up.
+          For smaller computers try reducing to 10.
+          default: ${params.signalp6_bsize}
+
+      --no_localizer
+          Don't run LOCALIZER, which can take a long time and isn't strictly needed
+          for prediction of effectors (it's more useful for evaluation).
+
+      --no_signalp6
+          Don't run SignalP v6. We've had several issues running and installing
+          SignalP6. This option is primarily here to give users experiencing issues
+          to finish the pipeline without it. THIS OPTION WILL BE REMOVED IN A FUTURE
+          RELEASE.
+
       --secreted_weight <float>
           The weight to give a protein if it is predicted to be secreted.
           default: ${params.secreted_weight}
@@ -633,7 +651,11 @@ workflow {
     signalp_v6_ch = signalp_v6(
         signalp_domain,
         versions.signalp6,
-        split_proteomes_ch.filter { a, f -> a == "signalp6" }.map { a, f -> f }
+        params.signalp6_bsize,
+        split_proteomes_ch
+            .filter { a, f -> a == "signalp6" }
+            .filter { a, f -> ! params.no_signalp6 }
+            .map { a, f -> f }
     )
 
     deepsig_ch = deepsig(
@@ -669,7 +691,10 @@ workflow {
 
     localizer_ch = localizer(
         versions.localizer,
-        split_proteomes_ch.filter { a, f -> a == "localizer" }.map { a, f -> f }
+        split_proteomes_ch
+            .filter { a, f -> a == "localizer" }
+            .filter { a, f -> ! params.no_localizer }
+            .map { a, f -> f }
     )
 
     effectorp_v1_ch = effectorp_v1(

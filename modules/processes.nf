@@ -660,6 +660,7 @@ process signalp_v6 {
     input:
     val domain
     val software_version
+    val bsize
     path "in.fasta"
 
     output:
@@ -677,10 +678,11 @@ process signalp_v6 {
         signalp6 \
           --fastafile "\${1}" \
           --output_dir "\${TMPDIR}" \
-          --format txt \
+          --format none \
           --organism eukarya \
           --mode fast \
-          --bsize 64 \
+          --bsize "${bsize}" \
+          --write_procs 1 \
           1>&2
 
         cat "\${TMPDIR}"/prediction_results.txt
