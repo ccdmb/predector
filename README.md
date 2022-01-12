@@ -94,7 +94,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
-- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0e "fast"
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0e "fast" **\*currently optional**
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -106,6 +106,9 @@ But please also let us know that the change has happened, so that we can update 
 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
+
+> * We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
+> You don't absolutely have to install SignalP6, though I recommend you try to.
 
 ### 3. Build the conda environment or container
 
@@ -134,6 +137,8 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.4-alpha/install.s
 This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.4-alpha`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
+
+If you don't want to install SignalP 6 you can exclude the `-6 filename.tar.gz` argument.
 
 If you have issues during installation or want to customise where things are built, please consult the extended documentation.
 Or save the install script locally and run `install.sh --help`.

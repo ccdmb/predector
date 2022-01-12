@@ -50,6 +50,9 @@ Even windows WSL2 does not seem to play well with SignalP 4.
 
 Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
+If you are running conda, we can also build the environment using [Mamba](https://mamba.readthedocs.io/en/latest/).
+Functionally there is no difference between mamba and conda environments, but mamba is faster at building the environment.
+Just install mamba into your base `conda` environment (or install [mambaforge](https://github.com/conda-forge/miniforge#mambaforge) instead of miniconda) and select the `mamba` option later.
 
 ### 2. Download the proprietary software dependencies
 
@@ -60,7 +63,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-3.0/9-Downloads.php#) version 3.0
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-4.1/9-Downloads.php#) version 4.1g
 - [SignalP](https://services.healthtech.dtu.dk/services/SignalP-5.0/9-Downloads.php#) version 5.0b
-- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0e "fast"
+- [SignalP](https://services.healthtech.dtu.dk/services/SignalP-6.0/9-Downloads.php#) version 6.0e "fast" **\*currently optional**
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
@@ -73,11 +76,14 @@ But please also let us know that the change has happened, so that we can update 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
 
+> * We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
+> You don't absolutely have to install SignalP6, though I recommend you try to.
+
 ### 3. Build the conda environment or container
 
 We provide an install script that should install the dependencies for the majority of users.
 
-In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `docker`, or `singularity` as suitable.
+In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `mamba`, `docker`, or `singularity` as suitable.
 Make sure you're in the same directory as the proprietary source archives.
 If the names below don't match the filenames you have exactly, adjust the command accordingly.
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
@@ -101,6 +107,7 @@ This will create the conda environment (named `predector`), or the docker (tagge
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with Predector.
 
+If you don't want to install SignalP 6 you can exclude the `-6 filename.tar.gz` argument.
 
 The install script has some minor options that allow you to customise how and where things are built.
 You can also save the install script locally and run `install.sh --help` to find more information.

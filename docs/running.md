@@ -135,10 +135,31 @@ Important parameters are:
   for prediction of effectors (it's more useful for evaluation).
 
 --no_signalp6
-  Don't run SignalP v6. We've had several issues running and installing
-  SignalP6. This option is primarily here to give users experiencing issues
-  to finish the pipeline without it. THIS OPTION WILL BE REMOVED IN A FUTURE
-  RELEASE.
+  Don't run SignalP v6. We've had several issues running SignalP6. 
+  This option is primarily here to give users experiencing issues
+  to finish the pipeline without it.
+  If you didn't install SignalP6 in the Predector environment,
+  the pipeline will automatically detect this and skip running SignalP6.
+  In that case this flag isn't strictly necessary, but potentially useful
+  for documenting what was run.
+  THIS OPTION WILL BE REMOVED IN A FUTURE RELEASE.
+
+--no_pfam
+  Don't download and/or run Pfam and Pfamscan. Downloading Pfam is quite slow,
+  even though it isn't particularly big. Sometimes the servers are down too.
+  You might also run your proteomes through something like interproscan, in which
+  case you might not need these results. This means you can keep going without it.
+
+--no_dbcan
+  Don't download and/or run searches against the dbCAN CAZyme dataset.
+  If you're doing this analysis elsewhere, the dbCAN2 servers are down,
+  or just don't need it, this lets to go without it.
+
+--no_phibase
+  Don't download and/or run searches against PHI-base.
+
+--no_effectordb
+  Don't download and/or run searches against Effector HMMs.
 
 -r <version>
   Use a specific version of the pipeline. This version must match one of the
