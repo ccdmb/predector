@@ -40,6 +40,23 @@ cd "${EXTRACTED_DIR_CALLED}"
 
 #### Add your code to install here.
 
+if [ "$(basename ${ARCHIVE})" == "${TAR_FILE}" ]
+then
+    VERSION_TO_INSERT="${PKG_VERSION}"
+else
+    VERSION_TO_INSERT="$(basename ${ARCHIVE} | sed 's/signalp-\([[:digit:]]*\.*[[:digit:]][^\.]*\).fast.tar.gz/\1/')"
+fi
+
+if [ "$(basename ${ARCHIVE})" != "${VERSION_TO_INSERT}" ]
+then
+    sed -i "/__version__/s/=[[:space:]]*\"[^\"][^\"]*\"/= '${VERSION_TO_INSERT}'/" \
+        ./signalp-6-package/signalp/__init__.py
+
+    #sed -i "/version\s*/s/=\s*'[^'][^']*'/= '${VERSION_TO_INSERT}'/" ./signalp-6-package/setup.py
+fi
+
+patch signalp-6-package/signalp/predict.py "${TARGET_DIR}/patch-6.0e.patch"
+
 python3 -m pip install ./signalp-6-package/ -vv --no-deps --compile
 SIGNALP_DIR=$(python3 -c "import signalp; import os; print(os.path.dirname(signalp.__file__))" )
 

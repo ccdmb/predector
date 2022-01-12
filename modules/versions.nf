@@ -162,7 +162,13 @@ process get_signalp6_version {
     then
         VERSION="false"
     else
-        VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
+        VERSION="\$(python3 -c 'import signalp; print(signalp.__version__)' 2> /dev/null || :)"
+
+        # This shouldn't happen but I might as well
+        if [ -z "\${VERSION:-}" ]
+        then
+            VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
+        fi
     fi
     """
 }
