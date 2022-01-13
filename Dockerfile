@@ -1,4 +1,4 @@
-ARG VERSION=1.2.3
+ARG VERSION=1.2.4
 FROM "predector/predector-base:${VERSION}"
 
 LABEL description="Docker image containing all requirements for the predector pipeline"
@@ -14,14 +14,16 @@ ARG TMHMM
 
 RUN mkdir -p /tmp/onbuild
 
-COPY "${SIGNALP3}" /tmp/onbuild/
-COPY "${SIGNALP4}" /tmp/onbuild/
-COPY "${SIGNALP5}" /tmp/onbuild/
-COPY "${SIGNALP6}" /tmp/onbuild/
-COPY "${TARGETP2}" /tmp/onbuild/
-COPY "${DEEPLOC}" /tmp/onbuild/
-COPY "${PHOBIUS}" /tmp/onbuild/
-COPY "${TMHMM}" /tmp/onbuild/
+# Anything with ":-" here should be able to handle not being installed
+COPY "${SIGNALP3}" \
+  "${SIGNALP4}" \
+  "${SIGNALP5}" \
+  "${SIGNALP6:-}" \
+  "${TARGETP2}" \
+  "${DEEPLOC}" \
+  "${PHOBIUS}" \
+  "${TMHMM}" \
+  /tmp/onbuild/
 
 # CONDA_PREFIX should be set by the base container.
 RUN echo \
@@ -31,8 +33,6 @@ RUN echo \
  && echo \
  && signalp5-register "/tmp/onbuild/$(basename "${SIGNALP5}")" \
  && echo \
- && signalp6-register "/tmp/onbuild/$(basename "${SIGNALP6}")" \
- && echo \
  && targetp2-register "/tmp/onbuild/$(basename "${TARGETP2}")" \
  && echo \
  && deeploc-register "/tmp/onbuild/$(basename "${DEEPLOC}")" \
@@ -41,4 +41,5 @@ RUN echo \
  && echo \
  && tmhmm2-register "/tmp/onbuild/$(basename "${TMHMM}")" \
  && echo \
+ && if [ ! -z "${SIGNALP6:-}" ]; then signalp6-register "/tmp/onbuild/$(basename "${SIGNALP6}")"; echo; fi \
  && rm -rf -- /tmp/onbuild

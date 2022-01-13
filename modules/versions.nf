@@ -6,7 +6,11 @@ workflow check_env {
     signalp3 = get_signalp3_version()
     signalp4 = get_signalp4_version()
     signalp5 = get_signalp5_version()
-    signalp6 = get_signalp6_version()
+    if ( params.no_signalp6 ) {
+        signalp6 = false
+    } else {
+        signalp6 = get_signalp6_version()
+    }
     targetp2 = get_targetp2_version()
     tmhmm2 = get_tmhmm2_version()
     deeploc1 = get_deeploc1_version()
@@ -153,11 +157,19 @@ process get_signalp6_version {
         fi
 
         echo "Please either link signalp to signalp6 or install signalp using the conda environment." 1>&2
+        VERSION="false"
+    elif grep -qL "Due to license restrictions, this recipe cannot distribute signalp6 directly" <(signalp6 || :)
+    then
+        VERSION="false"
+    else
+        VERSION="\$(python3 -c 'import signalp; print(signalp.__version__)' 2> /dev/null || :)"
 
-        exit 127
+        # This shouldn't happen but I might as well
+        if [ -z "\${VERSION:-}" ]
+        then
+            VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
+        fi
     fi
-
-    VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
     """
 }
 

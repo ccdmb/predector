@@ -10,7 +10,7 @@ Conda:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.3 \
+  -r 1.2.4 \
   -with-conda /path/to/conda/env \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -21,7 +21,7 @@ Docker:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.3 \
+  -r 1.2.4 \
   -profile docker \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -32,7 +32,7 @@ Singularity:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.3 \
+  -r 1.2.4 \
   -with-singularity ./path/to/singularity.sif \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -49,6 +49,13 @@ See below for some ways you can typically provide files to the `--proteome` para
 | Directly specify two files | `--proteome "{folder/file1.fasta,other/file2.fasta}"` (Ensure no spaces at the separating comma)| `--proteome "folder/file1.fasta other/file2.fasta"` |
 
 You can find more info on the Globbing operations that are supported by Nextflow in the [Java documentation](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
+
+
+Predector is designed to run with typical proteomes, e.g. with an average of ~15000 proteins.
+Internally we de-duplicate sequences and split the fasta files into smaller chunks to reduce redundant computation, enhance parallelism, and control peak memory usage.
+You do not need to concatenate your proteomes together, instead you should keep them separate and use the globbing patterns above.
+Inputting a single very large fasta file will potentially cause the pipeline to fail in the final steps producing the final ranking and analysis tables, as the "re-duplicated" results can be extremely large.
+If you are running a task that doesn't naturally separate (e.g. a multi-species dataset downloaded from a UniProtKB query), it's best to chunk the fasta into sets of roughly 20000 (e.g. using [seqkit](https://bioinf.shenwei.me/seqkit/usage/#split)) and use the globbing pattern on those split fastas.
 
 
 ### Accessing and copying the results
@@ -110,6 +117,57 @@ Important parameters are:
   and databases (where applicable) are the same.
   default: don't use any precomputed results.
 
+--chunk_size <int>
+  The number of proteins to run as a single chunk in the pipeline.
+  The input fasta files are split into chunks for checkpointing
+  and parallelism. Reduce this if you are running into RAM errors,
+  but note that nextflow can create a lot of files so this may slow
+  your filesystem down. Increase this to produce fewer files,
+  but note that the runtime of each task will be longer so increase
+  resources accordingly. For a typical fungal proteome (~15k proteins), setting
+  to 1000 is suitable. If running >100k proteins, increasing
+  chunk size to ~10000 may be appropriate.
+  default: 5000
+
+--signalp6_bsize <int>
+  This sets the batch size used by the SignalP6 neural network.
+  SP6 can use a lot of RAM, and reducing the batch size reduces the memory use
+  at the cost of slower speeds. For computers with lots of RAM (e.g. >16GB),
+  increasing this to 64 or higher will speed up.
+  For smaller computers try reducing to 10.
+  default: 32
+
+--no_localizer
+  Don't run LOCALIZER, which can take a long time and isn't strictly needed
+  for prediction of effectors (it's more useful for evaluation).
+
+--no_signalp6
+  Don't run SignalP v6. We've had several issues running SignalP6. 
+  This option is primarily here to give users experiencing issues
+  to finish the pipeline without it.
+  If you didn't install SignalP6 in the Predector environment,
+  the pipeline will automatically detect this and skip running SignalP6.
+  In that case this flag isn't strictly necessary, but potentially useful
+  for documenting what was run.
+  THIS OPTION WILL BE REMOVED IN A FUTURE RELEASE.
+
+--no_pfam
+  Don't download and/or run Pfam and Pfamscan. Downloading Pfam is quite slow,
+  even though it isn't particularly big. Sometimes the servers are down too.
+  You might also run your proteomes through something like interproscan, in which
+  case you might not need these results. This means you can keep going without it.
+
+--no_dbcan
+  Don't download and/or run searches against the dbCAN CAZyme dataset.
+  If you're doing this analysis elsewhere, the dbCAN2 servers are down,
+  or just don't need it, this lets to go without it.
+
+--no_phibase
+  Don't download and/or run searches against PHI-base.
+
+--no_effectordb
+  Don't download and/or run searches against Effector HMMs.
+
 -r <version>
   Use a specific version of the pipeline. This version must match one of the
   tags on github <https://github.com/ccdmb/predector/tags>.
@@ -151,10 +209,6 @@ Important parameters are:
   Directory to store pipeline runtime information
   default: 'results/pipeline_info'
 
---chunk_size <int>
-  The number of proteins to run as a single chunk in the pipeline
-  default: 5000
-
 --nostrip
   Don't strip the proteome filename extension when creating the output filenames
   default: false
@@ -176,6 +230,8 @@ Those starting with two hyphens `--` are Predector defined parameters.
 
 In the pipeline ranking output tables we also provide a manual (i.e. not machine learning) ranking score for both effectors `manual_effector_score` and secretion `manual_secretion_score`.
 This was provided so that you could customise the ranking if the ML ranker isn't what you want.
+
+> NOTE: If you decide not to run specific analyses (e.g. signalp6 or Pfam), this may affect comparability between different runs of the pipeline.
 
 These scores are computed by a relatively simple linear function weighting features in the ranking table.
 You can customise the weights applied to the features from the command line.
@@ -200,39 +256,39 @@ has_effector_match = has_phibase_effector_match
 
 | score | feature | default weight | command line option |
 |-------|---------|----------------|---------------------|
-| secretion | `is_secreted` | 3.0 | `--secreted_weight` |
-| secretion | `signalp3_hmm` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `signalp3_nn` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `phobius` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `deepsig` | 0.25 | `--sigpep_ok_weight` |
-| secretion | `signalp4` | 0.5 | `--sigpep_good_weight` |
-| secretion | `signalp5` | 0.5 | `--sigpep_good_weight` |
-| secretion | `signalp6` | 0.5 | `--sigpep_good_weight` |
-| secretion | `targetp_secreted` | 0.5 | `--sigpep_good_weight` |
-| secretion | `multiple_transmembrane` | -10 | `--multiple_transmembrane_weight` |
-| secretion | `single_transmembrane` | -1 | `--single_transmembrane_weight` |
-| secretion | `deeploc_extracellular` | 1 | `--deeploc_extracellular_weight` |
-| secretion | `deeploc_nucleus` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_cytoplasm` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_mitochondrion` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_cell_membrane` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_endoplasmic_reticulum` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_plastid` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_golgi` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_lysosome` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_peroxisome` | -2 | `--deeploc_intracellular_weight` |
-| secretion | `deeploc_membrane` | -2 | `--deeploc_membrane_weight` |
-| secretion | `targetp_mitochondrial_prob` | -2 | `--targetp_mitochondrial_weight` |
-| effector | `2 * (effectorp1 - 0.5)` | 3 | `--effectorp1_weight` |
-| effector | `2 * (effectorp2 - 0.5)` | 3 | `--effectorp2_weight` |
-| effector | `effectorp3_apoplastic` | 3 | `--effectorp3_apoplastic_weight` |
-| effector | `effectorp3_cytoplasmic` | 3 | `--effectorp3_cytoplastmic_weight` |
-| effector | `effectorp3_noneffector` | -3 | `--effectorp3_noneffector_weight` |
-| effector | `2 * (deepredeff_fungi - 0.5)` | 2 | `--deepredeff_fungi_weight` |
-| effector | `2 * (deepredeff_oomycete - 0.5)` | 2 | `--deepredeff_oomycete_weight` |
-| effector | `has_effector_match` | 5 | `--effector_homology_weight` |
-| effector | `(!has_effector_match) and has_phibase_virulence_match` | 2 | `--virulence_homology_weight` |
-| effector | `has_phibase_lethal_match` | -5 | `--lethal_homology_weight` |
+| secretion | `is_secreted` | 2.0 | `--secreted_weight` |
+| secretion | `signalp3_hmm` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `signalp3_nn` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `phobius` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `deepsig` | 0.0001 | `--sigpep_ok_weight` |
+| secretion | `signalp4` | 0.003 | `--sigpep_good_weight` |
+| secretion | `signalp5` | 0.003 | `--sigpep_good_weight` |
+| secretion | `signalp6` | 0.003 | `--sigpep_good_weight` |
+| secretion | `targetp_secreted` | 0.003 | `--sigpep_good_weight` |
+| secretion | `multiple_transmembrane` | -1 | `--multiple_transmembrane_weight` |
+| secretion | `single_transmembrane` | -0.7 | `--single_transmembrane_weight` |
+| secretion | `deeploc_extracellular` | 1.3 | `--deeploc_extracellular_weight` |
+| secretion | `deeploc_nucleus` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_cytoplasm` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_mitochondrion` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_cell_membrane` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_endoplasmic_reticulum` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_plastid` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_golgi` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_lysosome` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_peroxisome` | -1.3 | `--deeploc_intracellular_weight` |
+| secretion | `deeploc_membrane` | -1.3 | `--deeploc_membrane_weight` |
+| secretion | `targetp_mitochondrial_prob` | -0.5 | `--targetp_mitochondrial_weight` |
+| effector | `2 * (effectorp1 - 0.5)` | 0.5 | `--effectorp1_weight` |
+| effector | `2 * (effectorp2 - 0.5)` | 2.5 | `--effectorp2_weight` |
+| effector | `effectorp3_apoplastic` | 0.5 | `--effectorp3_apoplastic_weight` |
+| effector | `effectorp3_cytoplasmic` | 0.5 | `--effectorp3_cytoplastmic_weight` |
+| effector | `effectorp3_noneffector` | -2.5 | `--effectorp3_noneffector_weight` |
+| effector | `2 * (deepredeff_fungi - 0.5)` | 0.1 | `--deepredeff_fungi_weight` |
+| effector | `2 * (deepredeff_oomycete - 0.5)` | 0.0 | `--deepredeff_oomycete_weight` |
+| effector | `has_effector_match` | 2.0 | `--effector_homology_weight` |
+| effector | `(!has_effector_match) and has_phibase_virulence_match` | 0.5 | `--virulence_homology_weight` |
+| effector | `has_phibase_lethal_match` | -2 | `--lethal_homology_weight` |
 
 
 Note that all DeepLoc probability values except `deeploc_membrane` will sum to 1 because they result from
@@ -269,6 +325,8 @@ We have several available profiles that configure where to find software, CPU, m
 | cpu    | c4          | Use up to 4 CPUs/cores per computer/node.                                                                                                                                  |
 | cpu    | c8          | Use up to 8 CPUs/cores ...                                                                                                                                                 |
 | cpu    | c16         | Use up to 16 CPUs/cores ...                                                                                                                                                |
+| memory   | r4          | Use up to 4Gb RAM per computer/node.                                                                                                                                       |
+| memory   | r6          | Use up to 6Gb RAM per computer/node.                                                                                                                                       |
 | memory   | r8          | Use up to 8Gb RAM per computer/node.                                                                                                                                       |
 | memory   | r16         | Use up to 16Gb RAM                                                                                                                                                         |
 | memory   | r32         | Use up to 32Gb RAM                                                                                                                                                         |
@@ -342,7 +400,7 @@ In the config files, you can select these tasks by label.
 
 ### Running different pipeline versions.
 
-We pin the version of the pipeline to run in all of our example commands with the `-r 1.2.3` parameter.
+We pin the version of the pipeline to run in all of our example commands with the `-r 1.2.4` parameter.
 These flags are optional, but recommended so that you know which version you ran.
 Different versions of the pipelines may output different scores, use different parameters, different output formats etc.
 It also re-enforces the link between the pipeline version and the docker container tags.
@@ -355,7 +413,7 @@ If you have previously run Predector and want to update it to use a new version,
    Likewise, you can run old versions of the pipeline by simply changing `-r`.
 
   ```
-  nextflow run -r 1.2.3 -latest ccdmb/predector --proteomes "my_proteins.fasta"
+  nextflow run -r 1.2.4 -latest ccdmb/predector --proteomes "my_proteins.fasta"
   ```
 
 2. You can ask Nextflow to pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
@@ -414,12 +472,12 @@ Here's a basic workflow using precomputed results.
 
 
 ```
-nextflow run -profile docker -resume -r 1.2.3 ccdmb/predector \
+nextflow run -profile docker -resume -r 1.2.4 ccdmb/predector \
   --proteome my_old_proteome.fasta
 
 cp -L results/deduplicated/new_results.ldjson ./precomputed.ldjson
 
-nextflow run -profile docker -resume -r 1.2.3 ccdmb/predector \
+nextflow run -profile docker -resume -r 1.2.4 ccdmb/predector \
   --proteome my_new_proteome.fasta --precomputed_ldjson ./precomputed.ldjson
 
 cat results/deduplicated/new_results.ldjson >> ./precomputed.ldjson

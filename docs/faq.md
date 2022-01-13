@@ -79,6 +79,109 @@ _nf_script_9f2a833e: 9: unable to resolve class download_pfam_dat
 Please update Nextflow to a more recent version (>21) to resolve this issue.
 
 
+### Running/setting up conda environment: `loadable library and perl binaries are mismatched (got handshake key 0xdb80080, needed 0xde00080)`
+
+This will usually happen if the operating system you're running on has some perl libraries in the search path for a different version of perl.
+Unfortunately because conda environments are not isolated from the host operating system like containers are, there isn't much we can do to avoid this.
+The good news is that it's usually an easy fix.
+
+Search your bash environment for `PERL5LIB` or `PERLLIB`. e.g.
+
+```
+env | grep -i "perl"
+```
+
+If either of these are set, it's likely that this is how perl is finding these incompatible options.
+Try `unset`-ing these paths and try running again. e.g.
+
+```
+unset PERL5LIB
+unset PERLLIB
+```
+
+
+If you are on a computer that uses `module`s to import software (e.g. many HPC clusters), check for any loaded perl modules
+as these will usually set the above variables.
+
+```
+# Check for and loaded perl modules
+module list
+
+# unload any relevant perl modules e.g.
+module unload perl
+```
+
+**Note** you will need to unset these environment variables anytime you restart
+a new terminal session and want to use the conda environment.
+Alternatively you can remove the default imports and environment variable settings e.g. in your `~/.bashrc` file to make changes permanent.
+
+If unsetting the variables/unloading modules doesn't work, please let us know and we'll try to resolve the issue.
+We'll need info about any set environment variables before and after loading the conda environment, and the specific conda packages installed.
+
+e.g.
+```
+env > env_before_load.txt
+conda activate predector
+env > env_after_load.txt
+
+conda list > conda_environment.txt
+```
+
+
+### Error while running signalp 6 `ValueError: zero-size array to reduction operation maximum which has no identity`
+
+This is a known issue with some sequences and certain versions of SignalP 6.
+Unfortunately we can't do much about this other than report the troublesome sequence(s) to the developers.
+
+If you contact us or raise an issue we can do that for you.
+Please include the sequences that are causing the issue and the exact version of SignalP 6 that you downloaded so that we can be most helpful.
+Otherwise if you use GitHub you can raise an issue yourself in [their repository](https://github.com/fteufel/signalp-6.0) (note though that the code that's up there isn't actually what it distributed).
+They also list contact emails in their [installation instructions](https://github.com/fteufel/signalp-6.0/blob/main/installation_instructions.md#bugs-and-questions).
+
+
+As a temporary fix you can either re-run the pipeline using the `--no_signalp6` parameter, which will not run SignalP 6 on any sequences.
+Alternatively, you can manually mark this chunk (internally we chunk the input into sets of `--chunk_size` unique sequences (default 5000)) as completed. This will only skip signalp6 for an individual chunk.
+
+1) Find the working directory of the task from the error message.
+It will look like this:
+```
+Work dir:
+  /home/ubuntu/predector_analysis/work/7e/954be70138c4c29467945fade280ab
+```
+
+2) Set the exit code to 0 and create an empty output file:
+
+```
+DIR_CONTAINING_ERROR=/home/ubuntu/predector_analysis/work/7e/954be70138c4c29467945fade280ab
+
+echo "0" > "${DIR_CONTAINING_ERROR}/.exitcode"
+touch "${DIR_CONTAINING_ERROR}/out.ldjson"
+```
+
+3) Re-run the pipeline as you did before with the `-resume` option.
+
+This should restart the pipeline and continue as if SignalP 6 hadn't failed (though it may still fail on a different chunk).
+Note however that if you skip the analysis for one chunk, the manual ranking scores (and probably the learned ranking scores in the near future) won't be reliable (because the other chunks will have more information).
+
+
+## Error while running a process with `Command exit status: 137`
+
+The error-code usually means that you have run out of memory in a task.
+At the time of writing this seems to happen when running SignalP 6 on relatively small computers (e.g. with <6GB RAM available).
+
+General strategies for reducing memory usage are to reduce the `--chunk_size` to below 1000 (say 500).
+Specifically for SignalP 6 you can also try reducing the `--signalp6_bsize` to 10.
+You can read more about these parameters in the [Command line parameters section](#command-line-parameters).
+
+If you encounter this issue in the final steps when producing the output and ranking tables, it may be the case that one of your input fasta files is very large.
+As noted in the [running the pipeline section](#running-the-pipeline), Predector was designed to handle typical proteomes.
+The number of proteomes doesn't really matter because internally we deduplicate and divide the inputs into chunks, but if one single input fasta has say >10e5 proteins, this can cause an issue if you don't have lots of RAM (I find that about 30GB is needed for a few million proteins).
+If your proteins aren't split into proteomes (e.g you're running on a set downloaded from UniProt), it's best to split them yourself to batches of about 20000, and then concatenate the final tables yourself. We can guide you through dealing with this to make use of what you have already computed, so please get in touch.
+
+If you encounter this issue with other processes please let us know.
+We've done our best to keep peak memory use low for most tasks, but there may be cases that we hadn't considered.
+
+
 ## FAQ
 
 We'll update these as we find new issues and get feedback.

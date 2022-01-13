@@ -8,12 +8,12 @@ REPOBASE="https://raw.githubusercontent.com/ccdmb/predector"
 DOCUMENTATION_URL="https://github.com/ccdmb/predector/wiki"
 
 ### DEFAULT PARAMETERS
-VERSION=1.2.3
+VERSION=1.2.4
 
 SIGNALP3= #signalp-3.0.Linux.tar.Z
 SIGNALP4= #signalp-4.1g.Linux.tar.gz
 SIGNALP5= #signalp-5.0b.Linux.tar.gz
-SIGNALP6= #signalp-6.0.fast.tar.gz
+SIGNALP6= #signalp-6.0e.fast.tar.gz
 TARGETP2= #targetp-2.0.Linux.tar.gz
 DEEPLOC= #deeploc-1.0.All.tar.gz
 TMHMM= #tmhmm-2.0c.Linux.tar.gz
@@ -29,8 +29,15 @@ DOCKER_DEFAULTNAME="predector/predector:${VERSION}"
 SINGULARITY_DEFAULTNAME="predector.sif"
 
 # Only valid for CONDA, use this path prefix instead of a name.
+CONDA_COMMAND="conda"
 CONDA_ENV_DIR=
 CONDA_TEMPLATE=
+
+# Only valid for Singularity
+SINGULARITY_DEFFILE=
+
+# Only docker
+DOCKERFILE=
 
 # This sets -x
 DEBUG=false
@@ -47,7 +54,7 @@ $ install.sh [conda|docker|singularity] \\
     -3 signalp-3.0.Linux.tar.Z \\
     -4 signalp-4.1g.Linux.tar.gz \\
     -5 signalp-5.0b.Linux.tar.gz \\
-    -6 signalp-6.0.fast.tar.gz \\
+    -6 signalp-6.0e.fast.tar.gz \\
     -t targetp-2.0.Linux.tar.gz \\
     -d deeploc-1.0.All.tar.gz \\
     -m tmhmm-2.0c.Linux.tar.gz \\
@@ -89,7 +96,7 @@ We can only support Conda based installations on Linux, if you are running
 MacOS, Windows, or Cygwin, this script should fail if you try to install with conda.
 
 Positional arguments:
-  singularity|conda|docker  -- The environment that you want to install into or build.
+  singularity|conda|mamba|docker  -- The environment that you want to install into or build.
 
 Required parameters:
   -3|--signalp3  -- The path to the signalp v3 source archive.
@@ -115,6 +122,12 @@ Optional parameters:
                        prefix.
   --conda-template -- Use this conda environment.yml file instead of downloading it from github.
                       Only affects conda installs.
+
+  --singularity-deffile -- Use this singularity .def file instead of downloading it from github.
+                           Only affects singularity installs.
+
+  --dockerfile -- Use this dockerfile instead of downloading it from github.
+                  Only affects docker installs.
 
 Flags:
   --debug        -- Increased verbosity for developer use.
@@ -227,11 +240,23 @@ case $key in
     shift
     shift
     ;;
+    --singularity-deffile)
+    check_nodefault_param "--singularity-deffile" "${SINGULARITY_DEFFILE}" "${2:-}"
+    SINGULARITY_DEFFILE="$2"
+    shift
+    shift
+    ;;
+    --dockerfile)
+    check_nodefault_param "--dockerfile" "${DOCKERFILE}" "${2:-}"
+    DOCKERFILE="$2"
+    shift
+    shift
+    ;;
     --debug)
     DEBUG=true
     shift # past argument
     ;;
-    conda|docker|singularity)    # required positional subcommand
+    conda|mamba|docker|singularity)    # required positional subcommand
     if [ ! -z "${ENVIRONMENT:-}" ]
     then
         echo "You specified to setup both '${ENVIRONMENT}' and '${1}'." 1>&2
@@ -254,13 +279,21 @@ then
     set -x
 fi
 
+
+if [ "${ENVIRONMENT:-}" = "mamba" ]
+then
+    ENVIRONMENT="conda"
+    CONDA_COMMAND="mamba"
+fi
+
+
 ### CHECK USER ARGUMENTS
 
 FAILED=false
 [ -z "${SIGNALP3:-}" ] && echo "Please provide the source for signalp3." 1>&2 && FAILED=true
 [ -z "${SIGNALP4:-}" ] && echo "Please provide the source for signalp4." 1>&2 && FAILED=true
 [ -z "${SIGNALP5:-}" ] && echo "Please provide the source for signalp5." 1>&2 && FAILED=true
-[ -z "${SIGNALP6:-}" ] && echo "Please provide the source for signalp6." 1>&2 && FAILED=true
+# [ -z "${SIGNALP6:-}" ] && echo "Please provide the source for signalp6." 1>&2 && FAILED=true
 [ -z "${TARGETP2:-}" ] && echo "Please provide the source for targetp2." 1>&2 && FAILED=true
 [ -z "${DEEPLOC:-}" ] && echo "Please provide the source for deeploc." 1>&2 && FAILED=true
 [ -z "${TMHMM:-}" ] && echo "Please provide the source for tmhmm." 1>&2 && FAILED=true
@@ -280,7 +313,11 @@ fi
 [ ! -f "${SIGNALP3:-}" ] && echo "The specified archive for signalp3 '${SIGNALP3}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP4:-}" ] && echo "The specified archive for signalp4 '${SIGNALP4}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${SIGNALP5:-}" ] && echo "The specified archive for signalp5 '${SIGNALP5}' does not exist." 1>&2 && FAILED=true
-[ ! -f "${SIGNALP6:-}" ] && echo "The specified archive for signalp6 '${SIGNALP6}' does not exist." 1>&2 && FAILED=true
+
+if [ ! -z "${SIGNALP6:-}" ]
+then
+    [ ! -f "${SIGNALP6:-}" ] && echo "The specified archive for signalp6 '${SIGNALP6}' does not exist." 1>&2 && FAILED=true
+fi
 [ ! -f "${TARGETP2:-}" ] && echo "The specified archive for targetp2 '${TARGETP2}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${DEEPLOC:-}" ] && echo "The specified archive for deeploc '${DEEPLOC}' does not exist." 1>&2 && FAILED=true
 [ ! -f "${TMHMM:-}" ] && echo "The specified archive for tmhmm '${TMHMM}' does not exist." 1>&2 && FAILED=true
@@ -291,6 +328,16 @@ then
     [ ! -f "${CONDA_TEMPLATE:-}" ] && echo "The specified alternate conda template '${CONDA_TEMPLATE}' does not exist." 1>&2 && FAILED=true
 fi
 
+if [ ! -z "${SINGULARITY_DEFFILE:-}" ]
+then
+    [ ! -f "${SINGULARITY_DEFFILE:-}" ] && echo "The specified alternate singularity .def file '${SINGULARITY_DEFFILE}' does not exist." 1>&2 && FAILED=true
+fi
+
+if [ ! -z "${DOCKERFILE:-}" ]
+then
+    [ ! -f "${DOCKERFILE:-}" ] && echo "The specified alternate singularity .def file '${DOCKERFILE}' does not exist." 1>&2 && FAILED=true
+fi
+
 if [ "${FAILED}" = "true" ]
 then
     echo 1>&2
@@ -299,6 +346,16 @@ then
 
     exit 1;
 fi
+
+
+### Warnings
+
+warn_signalp6_not_installed() {
+    echo
+    echo "WARNING: SignalP 6 was not installed because you didn't provide the tar-ball."
+    echo "WARNING: Predector will automatically skip running SignalP 6."
+    echo "WARNING: You may also like to specify the '--no_signalp6' flag when running the pipeline."
+}
 
 
 ### ERROR MESSAGES
@@ -452,9 +509,9 @@ setup_conda() {
     # This is to allow non-standard environment paths
     if [ -z "${CONDA_ENV_DIR:-}" ]
     then
-        conda env create --name "${NAME}" --file "${CONDA_TEMPLATE_FILE}" || RETCODE="$?"
+        "${CONDA_COMMAND:-conda}" env create --name "${NAME}" --file "${CONDA_TEMPLATE_FILE}" || RETCODE="$?"
     else
-        conda env create --prefix "${CONDA_ENV_DIR}" --file "${CONDA_TEMPLATE_FILE}" || RETCODE="$?"
+        "${CONDA_COMMAND:-conda}" env create --prefix "${CONDA_ENV_DIR}" --file "${CONDA_TEMPLATE_FILE}" || RETCODE="$?"
     fi
 
     if [ ! -z "${CONDA_TEMPLATE:-}" ]
@@ -490,19 +547,24 @@ setup_conda() {
     signalp3-register "${SIGNALP3}" && echo \
     && signalp4-register "${SIGNALP4}" && echo \
     && signalp5-register "${SIGNALP5}" && echo \
-    && signalp6-register "${SIGNALP6}" && echo \
     && targetp2-register "${TARGETP2}" && echo \
     && deeploc-register "${DEEPLOC}" && echo \
     && phobius-register "${PHOBIUS}" && echo \
     && tmhmm2-register "${TMHMM}" && echo \
     || RETCODE="$?"
 
+    if [ ! -z "${SIGNALP6:-}" ]
+    then
+        signalp6-register "${SIGNALP6}" || RETCODE="$?"
+    fi
+
     if [ "${RETCODE:-0}" -ne 0 ]
     then
         proprietary_install_error
         contact_fix_issue
-        exit "${RETCODE:-0}";
+        exit "${RETCODE:-1}";
     fi
+
 
 
     echo "The predector conda environment has been successfully installed."
@@ -512,6 +574,12 @@ setup_conda() {
         CONDA_PREFIX="$(get_env_path "${NAME}")"
     else
         CONDA_PREFIX="$(get_abs_filename "${CONDA_ENV_DIR}")"
+    fi
+
+    if [ -z "${SIGNALP6:-}" ]
+    then
+        warn_signalp6_not_installed
+        echo
     fi
 
     if [ ! -z "${CONDA_PREFIX:-}" ]
@@ -569,20 +637,40 @@ setup_docker() {
         SUDO=""
     fi
 
-    curl -s "${URL}" \
-    | ${SUDO} docker build \
+    if [ -z "${SIGNALP6:-}" ]
+    then
+        SP6_FLAG=--build-arg SIGNALP6="${SIGNALP6:-}"
+    else
+        SP6_FLAG=""
+    fi
+
+    TMPFILE=".predector$$.Dockerfile"
+    if [ -z "${DOCKERFILE:-}" ]
+    then
+        curl -o "${TMPFILE}" -s "${URL}"
+        DOCKERFILE_FILE="${TMPFILE}"
+    else
+        DOCKERFILE_FILE="${DOCKERFILE}"
+    fi
+
+    ${SUDO} docker build \
       --build-arg SIGNALP3="${SIGNALP3}" \
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
-      --build-arg SIGNALP6="${SIGNALP6}" \
       --build-arg TARGETP2="${TARGETP2}" \
+      ${SP6_FLAG} \
       --build-arg PHOBIUS="${PHOBIUS}" \
       --build-arg TMHMM="${TMHMM}" \
       --build-arg DEEPLOC="${DEEPLOC}" \
       --tag "${NAME}" \
-      --file - \
+      --file "${DOCKERFILE_FILE}" \
       . \
     || RETCODE="$?"
+
+    if [ -z "${DOCKERFILE:-}" ]
+    then
+        rm -f "${TMPFILE}"
+    fi
 
     if [ "${RETCODE:-0}" -ne 0 ]
     then
@@ -595,6 +683,12 @@ setup_docker() {
     echo "The predector docker image has been successfully built."
     echo "It should show in 'docker images' as '${NAME}'."
     echo
+
+    if [ -z "${SIGNALP6:-}" ]
+    then
+        warn_signalp6_not_installed
+        echo
+    fi
 
     if [ "${NEED_SUDO}" = "true" ]
     then
@@ -613,15 +707,15 @@ setup_docker() {
         then
             echo "Your installation docker seems to require sudo to run."
             echo "Please use the 'docker_sudo' profile if you're running on this computer."
-	    echo
-	    echo "You can test the pipeline now with:"
-	    echo "  'nextflow run -profile test,docker_sudo -resume -r ${VERSION} ccdmb/predector'"
-        else
+            echo
+            echo "You can test the pipeline now with:"
+            echo "  'nextflow run -profile test,docker_sudo -resume -r ${VERSION} ccdmb/predector'"
+            else
             echo "Your installation of docker doesn't seem to require sudo to run."
             echo "Please use the 'docker' profile if you're running on this computer."
-	    echo
-	    echo "You can test the pipeline now with:"
-	    echo "  'nextflow run -profile test,docker -resume -r ${VERSION} ccdmb/predector'"
+            echo
+            echo "You can test the pipeline now with:"
+            echo "  'nextflow run -profile test,docker -resume -r ${VERSION} ccdmb/predector'"
         fi
 
     else
@@ -634,18 +728,18 @@ setup_docker() {
             echo "Your installation of docker seems to require sudo to run."
             echo "Please also use the 'docker_sudo' profile if you're running on this computer."
             echo "  '-profile docker_sudo'"
-	    echo
-	    echo "You can test the pipeline now with:"
-	    echo "  'nextflow run -profile test,docker_sudo -with-docker \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
+            echo
+            echo "You can test the pipeline now with:"
+            echo "  'nextflow run -profile test,docker_sudo -with-docker \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
         else
             echo "Your installation of docker doesn't seem to require sudo to run."
-	    echo ""
+            echo ""
             echo "If you're running on a different computer that requires sudo for docker,"
             echo "please also use the 'docker_sudo' profile."
             echo "  '-profile docker_sudo'"
-	    echo
-	    echo "You can test the pipeline on this computer now with:"
-	    echo "  'nextflow run -profile test -with-docker \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
+            echo
+            echo "You can test the pipeline on this computer now with:"
+            echo "  'nextflow run -profile test -with-docker \"${NAME}\" -resume -r ${VERSION} ccdmb/predector'"
         fi
     fi
 }
@@ -664,7 +758,7 @@ setup_singularity() {
     export SIGNALP3="${SIGNALP3}"
     export SIGNALP4="${SIGNALP4}"
     export SIGNALP5="${SIGNALP5}"
-    export SIGNALP6="${SIGNALP6}"
+    export SIGNALP6="${SIGNALP6:-}"
     export TARGETP2="${TARGETP2}"
     export PHOBIUS="${PHOBIUS}"
     export TMHMM="${TMHMM}"
@@ -681,13 +775,22 @@ setup_singularity() {
 
     # Download the .def file
     export TMPFILE=".predector$$.def"
-    curl -s -o "${TMPFILE}" "${URL}"
+
+    if [ -z "${SINGULARITY_DEFFILE:-}" ]
+    then
+        curl -s -o "${TMPFILE}" "${URL}"
+    else
+        # This is necessary because singularity doesn't look
+        # in the local docker registry by default
+        sed '/^bootstrap:/s/docker[[:space:]]*$/docker-daemon/' "${SINGULARITY_DEFFILE}" > "${TMPFILE}"
+    fi
+    export SINGULARITY_DEFFILE_FILE="${TMPFILE}"
 
     # Build the .sif singularity image.
     # Note that `sudo -E` is important, it tells sudo to keep the environment variables
     # that we just set.
     sudo -E bash -eu -c '
-        singularity build "${NAME}" "${TMPFILE}" || RETCODE="$?"
+        singularity build "${NAME}" "${SINGULARITY_DEFFILE_FILE}" || RETCODE="$?"
         rm -rf -- "${SINGULARITY_CACHEDIR}"
         exit "${RETCODE:-0}"
     ' || RETCODE="$?"
@@ -702,6 +805,13 @@ setup_singularity() {
     fi
 
     echo "The predector singularity image has been successfully built."
+    echo
+
+    if [ -z "${SIGNALP6:-}" ]
+    then
+        warn_signalp6_not_installed
+    fi
+
     echo "When you run the pipeline, please supply the parameter:"
     echo "  '-with-singularity \"${NAME}\"'"
     echo

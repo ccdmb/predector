@@ -16,16 +16,17 @@ dependencies:
   - predector::effectorp3=3.0=py_2
   - predector::localizer=1.0.4
   - predector::phobius=1.01
-  - predector::predectorutils=0.8.0
+  - predector::predectorutils=0.8.2
   - predector::signalp3=3.0b
   - predector::signalp4=4.1g
   - predector::signalp5=5.0b
-  - predector::signalp6=6.0c
+  - predector::signalp6=6.0e=2
   - predector::targetp2=2.0
   - predector::tmhmm=2.0c
   - predector::r-deepredeff=0.1.1
   ## Conda-forge packages
   - conda-forge::gawk
+  - conda-forge::gzip
   - conda-forge::wget
   - conda-forge::parallel
   - conda-forge::r-optparse
