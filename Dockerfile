@@ -23,7 +23,7 @@ COPY "${SIGNALP3}" \
   "${DEEPLOC}" \
   "${PHOBIUS}" \
   "${TMHMM}" \
-  /tmp/onbuild
+  /tmp/onbuild/
 
 # CONDA_PREFIX should be set by the base container.
 RUN echo \

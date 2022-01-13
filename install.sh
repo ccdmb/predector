@@ -33,6 +33,12 @@ CONDA_COMMAND="conda"
 CONDA_ENV_DIR=
 CONDA_TEMPLATE=
 
+# Only valid for Singularity
+SINGULARITY_DEFFILE=
+
+# Only docker
+DOCKERFILE=
+
 # This sets -x
 DEBUG=false
 
@@ -116,6 +122,12 @@ Optional parameters:
                        prefix.
   --conda-template -- Use this conda environment.yml file instead of downloading it from github.
                       Only affects conda installs.
+
+  --singularity-deffile -- Use this singularity .def file instead of downloading it from github.
+                           Only affects singularity installs.
+
+  --dockerfile -- Use this dockerfile instead of downloading it from github.
+                  Only affects docker installs.
 
 Flags:
   --debug        -- Increased verbosity for developer use.
@@ -228,6 +240,18 @@ case $key in
     shift
     shift
     ;;
+    --singularity-deffile)
+    check_nodefault_param "--singularity-deffile" "${SINGULARITY_DEFFILE}" "${2:-}"
+    SINGULARITY_DEFFILE="$2"
+    shift
+    shift
+    ;;
+    --dockerfile)
+    check_nodefault_param "--dockerfile" "${DOCKERFILE}" "${2:-}"
+    DOCKERFILE="$2"
+    shift
+    shift
+    ;;
     --debug)
     DEBUG=true
     shift # past argument
@@ -304,6 +328,16 @@ then
     [ ! -f "${CONDA_TEMPLATE:-}" ] && echo "The specified alternate conda template '${CONDA_TEMPLATE}' does not exist." 1>&2 && FAILED=true
 fi
 
+if [ ! -z "${SINGULARITY_DEFFILE:-}" ]
+then
+    [ ! -f "${SINGULARITY_DEFFILE:-}" ] && echo "The specified alternate singularity .def file '${SINGULARITY_DEFFILE}' does not exist." 1>&2 && FAILED=true
+fi
+
+if [ ! -z "${DOCKERFILE:-}" ]
+then
+    [ ! -f "${DOCKERFILE:-}" ] && echo "The specified alternate singularity .def file '${DOCKERFILE}' does not exist." 1>&2 && FAILED=true
+fi
+
 if [ "${FAILED}" = "true" ]
 then
     echo 1>&2
@@ -320,7 +354,7 @@ warn_signalp6_not_installed() {
     echo
     echo "WARNING: SignalP 6 was not installed because you didn't provide the tar-ball."
     echo "WARNING: Predector will automatically skip running SignalP 6."
-    echo "WARNING: You may also like to specify the `--no_signalp6` flag when running the pipeline."
+    echo "WARNING: You may also like to specify the '--no_signalp6' flag when running the pipeline."
 }
 
 
@@ -610,8 +644,16 @@ setup_docker() {
         SP6_FLAG=""
     fi
 
-    curl -s "${URL}" \
-    | ${SUDO} docker build \
+    TMPFILE=".predector$$.Dockerfile"
+    if [ -z "${DOCKERFILE:-}" ]
+    then
+        curl -o "${TMPFILE}" -s "${URL}"
+        DOCKERFILE_FILE="${TMPFILE}"
+    else
+        DOCKERFILE_FILE="${DOCKERFILE}"
+    fi
+
+    ${SUDO} docker build \
       --build-arg SIGNALP3="${SIGNALP3}" \
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
@@ -621,9 +663,14 @@ setup_docker() {
       --build-arg TMHMM="${TMHMM}" \
       --build-arg DEEPLOC="${DEEPLOC}" \
       --tag "${NAME}" \
-      --file - \
+      --file "${DOCKERFILE_FILE}" \
       . \
     || RETCODE="$?"
+
+    if [ -z "${DOCKERFILE:-}" ]
+    then
+        rm -f "${TMPFILE}"
+    fi
 
     if [ "${RETCODE:-0}" -ne 0 ]
     then
@@ -728,13 +775,22 @@ setup_singularity() {
 
     # Download the .def file
     export TMPFILE=".predector$$.def"
-    curl -s -o "${TMPFILE}" "${URL}"
+
+    if [ -z "${SINGULARITY_DEFFILE:-}" ]
+    then
+        curl -s -o "${TMPFILE}" "${URL}"
+    else
+        # This is necessary because singularity doesn't look
+        # in the local docker registry by default
+        sed '/^bootstrap:/s/docker[[:space:]]*$/docker-daemon/' "${SINGULARITY_DEFFILE}" > "${TMPFILE}"
+    fi
+    export SINGULARITY_DEFFILE_FILE="${TMPFILE}"
 
     # Build the .sif singularity image.
     # Note that `sudo -E` is important, it tells sudo to keep the environment variables
     # that we just set.
     sudo -E bash -eu -c '
-        singularity build "${NAME}" "${TMPFILE}" || RETCODE="$?"
+        singularity build "${NAME}" "${SINGULARITY_DEFFILE_FILE}" || RETCODE="$?"
         rm -rf -- "${SINGULARITY_CACHEDIR}"
         exit "${RETCODE:-0}"
     ' || RETCODE="$?"

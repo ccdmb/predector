@@ -51,6 +51,13 @@ See below for some ways you can typically provide files to the `--proteome` para
 You can find more info on the Globbing operations that are supported by Nextflow in the [Java documentation](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
 
 
+Predector is designed to run with typical proteomes, e.g. with an average of ~15000 proteins.
+Internally we de-duplicate sequences and split the fasta files into smaller chunks to reduce redundant computation, enhance parallelism, and control peak memory usage.
+You do not need to concatenate your proteomes together, instead you should keep them separate and use the globbing patterns above.
+Inputting a single very large fasta file will potentially cause the pipeline to fail in the final steps producing the final ranking and analysis tables, as the "re-duplicated" results can be extremely large.
+If you are running a task that doesn't naturally separate (e.g. a multi-species dataset downloaded from a UniProtKB query), it's best to chunk the fasta into sets of roughly 20000 (e.g. using [seqkit](https://bioinf.shenwei.me/seqkit/usage/#split)) and use the globbing pattern on those split fastas.
+
+
 ### Accessing and copying the results
 
 By default the results of the pipeline are stored in the `results` folder. You can change this directory using the `--outdir` parameter to the pipeline.
@@ -223,6 +230,8 @@ Those starting with two hyphens `--` are Predector defined parameters.
 
 In the pipeline ranking output tables we also provide a manual (i.e. not machine learning) ranking score for both effectors `manual_effector_score` and secretion `manual_secretion_score`.
 This was provided so that you could customise the ranking if the ML ranker isn't what you want.
+
+> NOTE: If you decide not to run specific analyses (e.g. signalp6 or Pfam), this may affect comparability between different runs of the pipeline.
 
 These scores are computed by a relatively simple linear function weighting features in the ranking table.
 You can customise the weights applied to the features from the command line.
