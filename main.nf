@@ -584,7 +584,6 @@ workflow {
 
     // This handles the user input, downloads required databases etc.
     input = validate_input()
-    println "test"
 
     // This checks that all of the software is installed and finds the version
     // info where it can.
