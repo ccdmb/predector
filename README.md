@@ -54,8 +54,8 @@ If you have any questions, think that some documentation is missing, or have any
 This is a quick install guide that unfortunately isn't terribly quick.
 For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.4#quick-install).
 
-Note that if you have run a previous version of the pipeline, you will need to re-build
-the software environment, as the dependencies may have changed.
+**Note that if you have run a previous version of the pipeline, you will need to re-build
+the software environment, as the dependencies may have changed.**
 Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.4#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
 
 
