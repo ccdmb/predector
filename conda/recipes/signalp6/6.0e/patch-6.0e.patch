@@ -1,0 +1,5 @@
+237a238,241
+>     if args.organism == 'eukarya':
+>         global_probs[:,1] = global_probs[:,1:].sum(axis=1)
+>         global_probs[:,2:] = 0
+> 

@@ -10,7 +10,7 @@ Conda:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.4-alpha \
+  -r 1.2.4 \
   -with-conda /path/to/conda/env \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -21,7 +21,7 @@ Docker:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.4-alpha \
+  -r 1.2.4 \
   -profile docker \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -32,7 +32,7 @@ Singularity:
 ```bash
 nextflow run \
   -resume \
-  -r 1.2.4-alpha \
+  -r 1.2.4 \
   -with-singularity ./path/to/singularity.sif \
   ccdmb/predector \
   --proteome "my_proteomes/*.faa"
@@ -49,6 +49,13 @@ See below for some ways you can typically provide files to the `--proteome` para
 | Directly specify two files | `--proteome "{folder/file1.fasta,other/file2.fasta}"` (Ensure no spaces at the separating comma)| `--proteome "folder/file1.fasta other/file2.fasta"` |
 
 You can find more info on the Globbing operations that are supported by Nextflow in the [Java documentation](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
+
+
+Predector is designed to run with typical proteomes, e.g. with an average of ~15000 proteins.
+Internally we de-duplicate sequences and split the fasta files into smaller chunks to reduce redundant computation, enhance parallelism, and control peak memory usage.
+You do not need to concatenate your proteomes together, instead you should keep them separate and use the globbing patterns above.
+Inputting a single very large fasta file will potentially cause the pipeline to fail in the final steps producing the final ranking and analysis tables, as the "re-duplicated" results can be extremely large.
+If you are running a task that doesn't naturally separate (e.g. a multi-species dataset downloaded from a UniProtKB query), it's best to chunk the fasta into sets of roughly 20000 (e.g. using [seqkit](https://bioinf.shenwei.me/seqkit/usage/#split)) and use the globbing pattern on those split fastas.
 
 
 ### Accessing and copying the results
@@ -135,10 +142,31 @@ Important parameters are:
   for prediction of effectors (it's more useful for evaluation).
 
 --no_signalp6
-  Don't run SignalP v6. We've had several issues running and installing
-  SignalP6. This option is primarily here to give users experiencing issues
-  to finish the pipeline without it. THIS OPTION WILL BE REMOVED IN A FUTURE
-  RELEASE.
+  Don't run SignalP v6. We've had several issues running SignalP6. 
+  This option is primarily here to give users experiencing issues
+  to finish the pipeline without it.
+  If you didn't install SignalP6 in the Predector environment,
+  the pipeline will automatically detect this and skip running SignalP6.
+  In that case this flag isn't strictly necessary, but potentially useful
+  for documenting what was run.
+  THIS OPTION WILL BE REMOVED IN A FUTURE RELEASE.
+
+--no_pfam
+  Don't download and/or run Pfam and Pfamscan. Downloading Pfam is quite slow,
+  even though it isn't particularly big. Sometimes the servers are down too.
+  You might also run your proteomes through something like interproscan, in which
+  case you might not need these results. This means you can keep going without it.
+
+--no_dbcan
+  Don't download and/or run searches against the dbCAN CAZyme dataset.
+  If you're doing this analysis elsewhere, the dbCAN2 servers are down,
+  or just don't need it, this lets to go without it.
+
+--no_phibase
+  Don't download and/or run searches against PHI-base.
+
+--no_effectordb
+  Don't download and/or run searches against Effector HMMs.
 
 -r <version>
   Use a specific version of the pipeline. This version must match one of the
@@ -202,6 +230,8 @@ Those starting with two hyphens `--` are Predector defined parameters.
 
 In the pipeline ranking output tables we also provide a manual (i.e. not machine learning) ranking score for both effectors `manual_effector_score` and secretion `manual_secretion_score`.
 This was provided so that you could customise the ranking if the ML ranker isn't what you want.
+
+> NOTE: If you decide not to run specific analyses (e.g. signalp6 or Pfam), this may affect comparability between different runs of the pipeline.
 
 These scores are computed by a relatively simple linear function weighting features in the ranking table.
 You can customise the weights applied to the features from the command line.
@@ -370,7 +400,7 @@ In the config files, you can select these tasks by label.
 
 ### Running different pipeline versions.
 
-We pin the version of the pipeline to run in all of our example commands with the `-r 1.2.4-alpha` parameter.
+We pin the version of the pipeline to run in all of our example commands with the `-r 1.2.4` parameter.
 These flags are optional, but recommended so that you know which version you ran.
 Different versions of the pipelines may output different scores, use different parameters, different output formats etc.
 It also re-enforces the link between the pipeline version and the docker container tags.
@@ -383,7 +413,7 @@ If you have previously run Predector and want to update it to use a new version,
    Likewise, you can run old versions of the pipeline by simply changing `-r`.
 
   ```
-  nextflow run -r 1.2.4-alpha -latest ccdmb/predector --proteomes "my_proteins.fasta"
+  nextflow run -r 1.2.4 -latest ccdmb/predector --proteomes "my_proteins.fasta"
   ```
 
 2. You can ask Nextflow to pull new changes without running the pipeline using `nextflow pull ccdmb/predector`.
@@ -442,12 +472,12 @@ Here's a basic workflow using precomputed results.
 
 
 ```
-nextflow run -profile docker -resume -r 1.2.4-alpha ccdmb/predector \
+nextflow run -profile docker -resume -r 1.2.4 ccdmb/predector \
   --proteome my_old_proteome.fasta
 
 cp -L results/deduplicated/new_results.ldjson ./precomputed.ldjson
 
-nextflow run -profile docker -resume -r 1.2.4-alpha ccdmb/predector \
+nextflow run -profile docker -resume -r 1.2.4 ccdmb/predector \
   --proteome my_new_proteome.fasta --precomputed_ldjson ./precomputed.ldjson
 
 cat results/deduplicated/new_results.ldjson >> ./precomputed.ldjson

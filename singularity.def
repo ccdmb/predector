@@ -1,9 +1,9 @@
 bootstrap: docker
-From: predector/predector-base:1.2.4-alpha
+From: predector/predector-base:1.2.4
 
 %labels
     Author "darcy.ab.jones@gmail.com"
-    Version "1.2.4-alpha"
+    Version "1.2.4"
 
 %help
     A containter will all dependencies for the predector pipeline.
@@ -15,7 +15,7 @@ From: predector/predector-base:1.2.4-alpha
     [ -z "${SIGNALP3:-}" ] && ANY_WAS_UNSET=true
     [ -z "${SIGNALP4:-}" ] && ANY_WAS_UNSET=true
     [ -z "${SIGNALP5:-}" ] && ANY_WAS_UNSET=true
-    [ -z "${SIGNALP6:-}" ] && ANY_WAS_UNSET=true
+    #[ -z "${SIGNALP6:-}" ] && ANY_WAS_UNSET=true
     [ -z "${TARGETP2:-}" ] && ANY_WAS_UNSET=true
     [ -z "${DEEPLOC:-}" ] && ANY_WAS_UNSET=true
     [ -z "${PHOBIUS:-}" ] && ANY_WAS_UNSET=true
@@ -33,11 +33,15 @@ From: predector/predector-base:1.2.4-alpha
     cp "${SIGNALP3}" "${SINGULARITY_ROOTFS}/onbuild/"
     cp "${SIGNALP4}" "${SINGULARITY_ROOTFS}/onbuild/"
     cp "${SIGNALP5}" "${SINGULARITY_ROOTFS}/onbuild/"
-    cp "${SIGNALP6}" "${SINGULARITY_ROOTFS}/onbuild/"
     cp "${TARGETP2}" "${SINGULARITY_ROOTFS}/onbuild/"
     cp "${DEEPLOC}" "${SINGULARITY_ROOTFS}/onbuild/"
     cp "${PHOBIUS}" "${SINGULARITY_ROOTFS}/onbuild/"
     cp "${TMHMM}" "${SINGULARITY_ROOTFS}/onbuild/"
+
+    if [ ! -z "${SIGNALP6:-}" ]
+    then
+        cp "${SIGNALP6}" "${SINGULARITY_ROOTFS}/onbuild/"
+    fi
 
     echo export SIGNALP3="${SIGNALP3:-}" > "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
     echo export SIGNALP4="${SIGNALP4:-}" >> "${SINGULARITY_ROOTFS}/onbuild/prenv.sh"
@@ -64,8 +68,13 @@ From: predector/predector-base:1.2.4-alpha
     echo
     signalp5-register "/onbuild/$(basename "${SIGNALP5}")"
     echo
-    signalp6-register "/onbuild/$(basename "${SIGNALP6}")"
-    echo
+
+    if [ ! -z ${SIGNALP6:-} ]
+    then
+        signalp6-register "/onbuild/$(basename "${SIGNALP6}")"
+        echo
+    fi
+
     targetp2-register "/onbuild/$(basename "${TARGETP2}")"
     echo
     deeploc-register "/onbuild/$(basename "${DEEPLOC}")"

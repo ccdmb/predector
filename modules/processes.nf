@@ -5,6 +5,8 @@ process collect_file {
     label 'memory_low'
     label 'time_short'
 
+    tag "${name}"
+
     input:
     tuple val(name), path("input/*.txt")
 
@@ -146,7 +148,6 @@ process gen_target_table {
     signalp3_hmm	${signalp3}	
     signalp4	${signalp4}	
     signalp5	${signalp5}	
-    signalp6	${signalp6}	
     deepsig	${deepsig}	
     phobius	${phobius}	
     tmhmm	${tmhmm2}	
@@ -167,6 +168,11 @@ process gen_target_table {
     kex2_cutsite	${predutils}	
     rxlr_like_motif	${predutils}	
     EOF
+
+    if [ "${signalp6}" != "false" ]
+    then
+        echo "signalp6	${signalp6}	" >> versions.tsv
+    fi
     """
 }
 
@@ -241,7 +247,20 @@ process decode_seqs {
     }
 
     """
-    cat results/* > combined.ldjson
+    if ls -1q results | grep -q .
+    then
+        cat results/* > combined.ldjson
+    elif [ -s results/.ldjson ]
+    then
+        cat results/.ldjson > combined.ldjson
+    else
+        # This really shouldn't happen but just in case
+        mkdir decoded
+        touch "${templ}"
+        touch combined.ldjson
+        exit 0
+    fi
+
     predutils load_db \
       --mem "${task.memory.getGiga() / 2}" \
       --drop-name \

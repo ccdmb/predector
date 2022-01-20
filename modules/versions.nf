@@ -157,11 +157,19 @@ process get_signalp6_version {
         fi
 
         echo "Please either link signalp to signalp6 or install signalp using the conda environment." 1>&2
+        VERSION="false"
+    elif grep -qL "Due to license restrictions, this recipe cannot distribute signalp6 directly" <(signalp6 || :)
+    then
+        VERSION="false"
+    else
+        VERSION="\$(python3 -c 'import signalp; print(signalp.__version__)' 2> /dev/null || :)"
 
-        exit 127
+        # This shouldn't happen but I might as well
+        if [ -z "\${VERSION:-}" ]
+        then
+            VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
+        fi
     fi
-
-    VERSION="\$(signalp6 -h | head -n 1 | sed -E 's/^[^[:digit:]]*([[:digit:]]+\\.?[^[:space:],;:]*).*\$/\\1/')"
     """
 }
 

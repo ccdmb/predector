@@ -177,10 +177,31 @@ def helpMessage() {
           for prediction of effectors (it's more useful for evaluation).
 
       --no_signalp6
-          Don't run SignalP v6. We've had several issues running and installing
-          SignalP6. This option is primarily here to give users experiencing issues
-          to finish the pipeline without it. THIS OPTION WILL BE REMOVED IN A FUTURE
-          RELEASE.
+          Don't run SignalP v6. We've had several issues running SignalP6.
+          This option is primarily here to give users experiencing issues
+          to finish the pipeline without it.
+          If you didn't install SignalP6 in the Predector environment,
+          the pipeline will automatically detect this and skip running SignalP6.
+          In that case this flag isn't strictly necessary, but potentially useful
+          for documenting what was run.
+          THIS OPTION WILL BE REMOVED IN A FUTURE RELEASE.
+
+      --no_pfam
+          Don't download and/or run Pfam and Pfamscan. Downloading Pfam is quite slow,
+          even though it isn't particularly big. Sometimes the servers are down too.
+          You might also run your proteomes through something like interproscan, in which
+          case you might not need these results. This means you can keep going without it.
+
+      --no_dbcan
+          Don't download and/or run searches against the dbCAN CAZyme dataset.
+          If you're doing this analysis elsewhere, the dbCAN2 servers are down,
+          or just don't need it, this lets to go without it.
+
+      --no_phibase
+          Don't download and/or run searches against PHI-base.
+
+      --no_effectordb
+          Don't download and/or run searches against Effector HMMs.
 
       --secreted_weight <float>
           The weight to give a protein if it is predicted to be secreted.
@@ -410,8 +431,6 @@ workflow check_duplicates {
                 }
             }
     }
-
-
 }
 
 
@@ -429,13 +448,17 @@ workflow validate_input {
 
     dups = check_duplicates(params.nostrip, proteome_ch)
 
-    if ( params.pfam_hmm ) {
+    if ( params.no_pfam ) {
+        pfam_hmm_val = file("DOESNT_EXIST_PFAM_HMM")
+    } else if ( params.pfam_hmm ) {
         pfam_hmm_val = get_file(params.pfam_hmm)
     } else {
         pfam_hmm_val = download_pfam_hmm("Pfam-A.hmm.gz", params.private_pfam_hmm_url)
     }
 
-    if ( params.pfam_dat ) {
+    if ( params.no_pfam ) {
+        pfam_dat_val = file("DOESNT_EXIST_PFAM_DAT")
+    } else if ( params.pfam_dat ) {
         pfam_dat_val = get_file(params.pfam_dat)
     } else {
         pfam_dat_val = download_pfam_dat("Pfam-A.hmm.dat.gz", params.private_pfam_dat_url)
@@ -447,7 +470,10 @@ workflow validate_input {
         pfam_version = params.private_pfam_version
     }
 
-    if ( params.dbcan ) {
+    if ( params.no_dbcan ) {
+        dbcan_val = file("DOESNT_EXIST_DBCAN")
+        dbcan_version = false ? params.dbcan : params.private_dbcan_version
+    } else if ( params.dbcan ) {
         dbcan_val = get_file(params.dbcan)
         dbcan_version = false
     } else {
@@ -455,7 +481,10 @@ workflow validate_input {
         dbcan_version = params.private_dbcan_version
     }
 
-    if ( params.phibase ) {
+    if ( params.no_phibase ) {
+        phibase_val = file("DOESNT_EXIST_PHIBASE")
+        phibase_version = false ? params.phibase : params.private_phibase_version
+    } else if ( params.phibase ) {
         phibase_val = get_file(params.phibase)
         phibase_version = false
     } else {
@@ -464,7 +493,10 @@ workflow validate_input {
         phibase_version = params.private_phibase_version
     }
 
-    if ( params.effectordb ) {
+    if ( params.no_effectordb ) {
+        effectordb_val  = file("DOESNT_EXIST_EFFECTORDB")
+        effectordb_version = false ? params.effectordb : params.private_effectordb_version
+    } else if ( params.effectordb ) {
         effectordb_val = get_file(params.effectordb)
         effectordb_version = false
     } else {
@@ -584,7 +616,9 @@ workflow {
         input.effectordb_version
     )
 
-    tidied_phibase_val = sanitise_phibase(input.phibase_val)
+    tidied_phibase_val = sanitise_phibase(
+        input.phibase_val.filter { f -> f.name != "DOESNT_EXIST_PHIBASE" }
+    )
 
     // Remove duplicates and split fasta(s) into chunks to run in parallel.
     // Maybe download precomputed results?
@@ -650,7 +684,7 @@ workflow {
     )
     signalp_v6_ch = signalp_v6(
         signalp_domain,
-        versions.signalp6,
+        versions.signalp6.filter { v -> v != "false" },
         params.signalp6_bsize,
         split_proteomes_ch
             .filter { a, f -> a == "signalp6" }
@@ -742,8 +776,8 @@ workflow {
     // Run the domain and database searches
     pressed_pfam_hmmer_val = press_pfam_hmmer(
         input.pfam_version,
-        input.pfam_hmm_val,
-        input.pfam_dat_val
+        input.pfam_hmm_val.filter { f -> f.name != "DOESNT_EXIST_PFAM_HMM" },
+        input.pfam_dat_val.filter { f -> f.name != "DOESNT_EXIST_PFAM_DAT" }
     )
 
     pfamscan_ch = pfamscan(
@@ -755,7 +789,7 @@ workflow {
     pressed_dbcan_hmmer_val = press_dbcan_hmmer(
         "dbcan",
         input.dbcan_version,
-        input.dbcan_val
+        input.dbcan_val.filter { f -> f.name != "DOESNT_EXIST_DBCAN" }
     )
 
     dbcan_hmmer_ch = hmmscan_dbcan(
@@ -767,7 +801,7 @@ workflow {
     pressed_effectordb_hmmer_val = press_effectordb_hmmer(
         "effectordb",
         input.effectordb_version,
-        input.effectordb_val
+        input.effectordb_val.filter { f -> f.name != "DOESNT_EXIST_EFFECTORDB" }
     )
     effectordb_hmmer_ch = hmmscan_effectordb(
         versions.hmmer,
@@ -776,7 +810,9 @@ workflow {
     )
 
     proteome_mmseqs_index_ch = mmseqs_index_proteomes(
-        split_proteomes_ch.filter { a, f -> a == "phibase" }
+        split_proteomes_ch
+            .filter { a, f -> a == "phibase" }
+            .filter { a, f -> ! params.no_phibase }
     )
 
     phibase_mmseqs_index_val = mmseqs_index_phibase(
