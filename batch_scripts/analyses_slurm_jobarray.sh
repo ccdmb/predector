@@ -50,11 +50,10 @@ check_param() {
 
 usage() {
     cat <<EOF
-USAGE analysis_slurm_parallel.sh -s 0.1 -p 1.3 -i proteins.fasta --container ./predector.sif signalp3_hmm
+USAGE analysis_slurm_jobarray -s 0.1 -p 1.3 --container ./predector.sif signalp3_hmm proteins*.fasta
 -s|--software-version)
 -p|--pipeline-verison)
 -d|--database-version)
--i|--fasta)
 --chunk-size)
 --nodes)
 --ntasks-per-node)
@@ -94,12 +93,6 @@ case ${key} in
     -d|--database-version)
     check_param "-d|--database-version" "${2:-}"
     DATABASE_VERSION="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    -i|--fasta)
-    check_nodefault_param "-i|--fasta" "${FASTA:-}" "${2:-}"
-    FASTA="$2"
     shift # past argument
     shift # past value
     ;;
@@ -155,7 +148,7 @@ case ${key} in
     DEBUG=true
     shift # past argument
     ;;
-    signalp3_hmm|signalp3_nn|signalp4|signalp5|signalp6|deepsig|phobius|tmhmm|targetp_non_plant|deeploc|apoplastp|localizer|effectorp1|effectorp2|effectorp3|effectorp3_fungal|deepredeff_fungi|deepredeff_oomycete|kex2_cutsite|rxlr_like_motif|pepstats|pfamscan|dbcan|effectordb|phibase|dummy)  # Required positional argument
+    signalp3_hmm|signalp3_nn|signalp4|signalp5|signalp6|deepsig|phobius|tmhmm|targetp_non_plant|deeploc|apoplastp|localizer|effectorp1|effectorp2|effectorp3|effectorp3_fungi|deepredeff_fungi|deepredeff_oomycete|kex2_cutsite|rxlr_like_motif|pepstats|pfamscan|dbcan|effectordb|phibase|dummy)  # Required positional argument
     if [ ! -z "${ANALYSIS:-}" ]
     then
         echo "You specified both '${ANALYSIS}' and '${1}' analyses." 1>&2
@@ -163,6 +156,11 @@ case ${key} in
     fi
     ANALYSIS="$1"
     shift # past argument
+    break
+    ;;
+    --)
+    shift
+    break
     ;;
     *)    # unknown option
     echo "ERROR: Encountered an unknown parameter '${1:-}'." 1>&2
@@ -176,6 +174,10 @@ if [ "${DEBUG:-}" = "true" ]
 then
     set -x
 fi
+
+# The remaining should all be fasta files
+FASTAS=( ${@} )
+NFASTAS=${#FASTAS[@]}
 
 # Set some default parameters based on pipeline version
 case ${ANALYSIS} in
@@ -244,7 +246,7 @@ case ${ANALYSIS} in
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-3.0}
         DATABASE_VERSION=
         ;;
-    effectorp3_fungal)
+    effectorp3_fungi)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-3.0}
         DATABASE_VERSION=
         ;;
@@ -305,7 +307,7 @@ esac
 FAILED=false
 
 [ -z "${ANALYSIS:-}" ] && echo "Please specify which analysis to run." 1>&2 && FAILED=true
-[ -z "${FASTA:-}" ] && echo "Please specify which fasta file to use." 1>&2 && FAILED=true
+[ "${NFASTAS:-0}" = "0" ] && echo "Please specify which fasta file(s) to use." 1>&2 && FAILED=true
 
 if [ "${FAILED}" = true ]
 then
@@ -324,21 +326,30 @@ then
     exit 1;
 fi
 
-[ -z "${PREFIX:-}" ] && PREFIX="${ANALYSIS}_$(basename ${FASTA})"
 
+[ -z "${PREFIX:-}" ] && PREFIX="${ANALYSIS}"
 
 SRUN="srun -N1 -n1 -c${SLURM_CPUS_PER_TASK:-${CPUS_PER_TASK}} --exact --mem=0"
-PARALLEL="parallel --delay 0.5 -j \${SLURM_NTASKS:-${NTASKS}} --joblog '${PREFIX}.log' --resume --line-buffer --recstart '>' -N ${CHUNK_SIZE} --cat"
+PARALLEL="parallel --delay 0.5 -j \${SLURM_NTASKS:-${NTASKS}} --joblog \"\${PREFIX}.log\" --resume --line-buffer --recstart '>' -N ${CHUNK_SIZE} --cat"
 
 # --halt now,fail=1 
-BATCH_SCRIPT="${ANALYSIS}_batch$$.sbatch"
+BATCH_SCRIPT="${ANALYSIS}_batch_${HOSTNAME:-}_$$_${RANDOM}.sbatch"
 cat <<EOF > ${BATCH_SCRIPT} 
 #!/bin/bash -l
-module switch PrgEnv-cray PrgEnv-gnu
+
+if [ "${PAWSEY_CLUSTER:-}" = "magnus" ]
+then
+    module switch PrgEnv-cray PrgEnv-gnu
+fi
 module load parallel
 module load singularity
 
 set -euo pipefail
+
+FASTAS=( ${FASTAS[@]} )
+FASTA="\${FASTAS[\${SLURM_ARRAY_TASK_ID:-0}]}"
+
+PREFIX="${PREFIX}_\$(basename \${FASTA})"
 
 export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-${CPUS_PER_TASK}}"
 echo "SLURM_NTASKS \${SLURM_NTASKS}"
@@ -346,7 +357,7 @@ echo "SLURM_JOB_NUM_NODES \${SLURM_JOB_NUM_NODES}"
 echo "SLURM_CPUS_PER_TASK \${SLURM_CPUS_PER_TASK}"
 echo "CPUS_PER_TASK ${CPUS_PER_TASK}"
 
-${PARALLEL} "${SRUN} singularity exec ${CONTAINER} ${SCRIPT} {} ${PIPELINE_VERSION} ${SOFTWARE_VERSION} ${DATABASE_VERSION}" < "${FASTA}" | cat >> "${PREFIX}.jsonl"
+${PARALLEL} "${SRUN} singularity exec ${CONTAINER} ${SCRIPT} {} ${PIPELINE_VERSION} ${SOFTWARE_VERSION} ${DATABASE_VERSION}" < "\${FASTA}" | cat >> "\${PREFIX}.jsonl"
 EOF
 
 if [ "${PAWSEY_CLUSTER:-}" = "magnus" ]
@@ -362,10 +373,8 @@ sbatch \
     --time="${TIME}" \
     --account="${ACCOUNT}" \
     --partition="${PARTITION}" \
+    --array=0-"$(( ${NFASTAS} - 1 ))" \
    ${SBATCH_EXTRAS} \
     --export=NONE \
     "${BATCH_SCRIPT}"
-
-wait
-echo Done
 #rm -f "${BATCH_SCRIPT}"

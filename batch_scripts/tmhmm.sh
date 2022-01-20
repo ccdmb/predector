@@ -16,7 +16,8 @@ else
 fi
 
 ORIGDIR="${PWD}"
-TMPDIR="tmp$$"
+TMPDIR="tmp_tmhmm_${HOSTNAME:-tmhmm}_$$"
+mkdir ${TMPDIR}
 cd "${TMPDIR}"
 
 tmhmm -short -d < "${FASTA}" \

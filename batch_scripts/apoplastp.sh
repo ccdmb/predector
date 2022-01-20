@@ -15,7 +15,7 @@ else
     DB_VERSION_STR="--database-version '${DATABASE_VERSION}'"
 fi
 
-TMPFILE="tmp$$"
+TMPFILE="tmp_${ANALYSIS}_${HOSTNAME:-}_$$"
 ApoplastP.py -s -i "${FASTA}" -o "${TMPFILE}" 1>&2
 
 predutils r2js \
@@ -24,4 +24,4 @@ predutils r2js \
     ${DB_VERSION_STR} \
     "${ANALYSIS}" "${TMPFILE}" "${FASTA}"
 
-rm -f -- "${TMPFILE}"
+rm -rf -- "${TMPFILE}"
