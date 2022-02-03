@@ -8,7 +8,7 @@ EXTRACTED_DIR_CALLED="$(tar -tf "${ARCHIVE}" | head -n1)"
 
 # Don't change the next 3 lines
 mkdir -p "${WORKDIR}"
-tar --no-same-owner --directory=${WORKDIR} -xf "${ARCHIVE}"
+tar --no-same-owner --directory=${WORKDIR} -zxf "${ARCHIVE}"
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 
@@ -20,7 +20,7 @@ mv ./* "${TARGET_DIR}"
 cd "${TARGET_DIR}"
 patch phobius.pl phobius.pl.patch
 chmod a+x phobius.pl decodeanhmm.64bit decodeanhmm
-chmod -R a+r .
+# chmod -R a+r .
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 

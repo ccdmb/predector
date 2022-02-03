@@ -5,7 +5,7 @@ package:
   version: {{ version }}
 
 build:
-  number: 2
+  number: 3
   noarch: generic
 
 requirements:
@@ -17,6 +17,7 @@ requirements:
     - numpy >=1.14
     - scipy
     - lasagne ==0.2.dev1
+    - gzip
 
 test:
   commands:

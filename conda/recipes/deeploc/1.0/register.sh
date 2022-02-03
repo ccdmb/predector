@@ -8,7 +8,7 @@ EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
 
 # Don't change the next 3 lines
 mkdir -p "${WORKDIR}"
-tar --no-same-owner --directory=${WORKDIR} -xf "${ARCHIVE}"
+tar --no-same-owner --directory=${WORKDIR} -zxf "${ARCHIVE}"
 
 
 #### Add your code to install here.

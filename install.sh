@@ -553,6 +553,13 @@ setup_conda() {
     && tmhmm2-register "${TMHMM}" && echo \
     || RETCODE="$?"
 
+    if [ "${RETCODE:-0}" -ne 0 ]
+    then
+        proprietary_install_error
+        contact_fix_issue
+        exit "${RETCODE:-1}";
+    fi
+
     if [ ! -z "${SIGNALP6:-}" ]
     then
         signalp6-register "${SIGNALP6}" || RETCODE="$?"
