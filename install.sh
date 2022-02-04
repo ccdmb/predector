@@ -644,11 +644,11 @@ setup_docker() {
         SUDO=""
     fi
 
-    if [ -z "${SIGNALP6:-}" ]
+    if [ ! -z "${SIGNALP6:-}" ]
     then
-        SP6_FLAG=--build-arg SIGNALP6="${SIGNALP6:-}"
+        SP6_FLAG=( "--build-arg" SIGNALP6="${SIGNALP6:-}" )
     else
-        SP6_FLAG=""
+        SP6_FLAG=()
     fi
 
     TMPFILE=".predector$$.Dockerfile"
@@ -665,7 +665,7 @@ setup_docker() {
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
       --build-arg TARGETP2="${TARGETP2}" \
-      ${SP6_FLAG} \
+      "${SP6_FLAG[@]}" \
       --build-arg PHOBIUS="${PHOBIUS}" \
       --build-arg TMHMM="${TMHMM}" \
       --build-arg DEEPLOC="${DEEPLOC}" \

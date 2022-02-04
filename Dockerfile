@@ -18,7 +18,7 @@ RUN mkdir -p /tmp/onbuild
 COPY "${SIGNALP3}" \
   "${SIGNALP4}" \
   "${SIGNALP5}" \
-  "${SIGNALP6:-}" \
+  ${SIGNALP6:-} \
   "${TARGETP2}" \
   "${DEEPLOC}" \
   "${PHOBIUS}" \

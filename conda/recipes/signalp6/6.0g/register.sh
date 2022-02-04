@@ -61,6 +61,8 @@ then
   exit 1
 fi
 
+signalp6_convert_models cpu
+
 # MAKE SURE THAT ALL FILES CAN BE READ BY ANY USER AND
 # EXECUTABLES CAN BE RUN BY ANY USER (important for containers)
 #cd "${TARGET_DIR}"
