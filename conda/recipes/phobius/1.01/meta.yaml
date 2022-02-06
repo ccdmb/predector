@@ -5,13 +5,14 @@ package:
   version: {{ version }}
 
 build:
-  number: 2
+  number: 4
   skip: True  # [not linux]
 
 requirements:
   run:
     - perl
     - patch
+    - gzip
 
 test:
   commands:

@@ -21,7 +21,7 @@ mkdir "${TMPDIR}"
 signalp6 \
     --fastafile "${FASTA}" \
     --output_dir "${TMPDIR}" \
-    --format txt \
+    --format none \
     --organism eukarya \
     --mode fast \
     --bsize 64 \

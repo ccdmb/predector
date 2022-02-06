@@ -15,13 +15,18 @@ else
     DB_VERSION_STR="--database-version '${DATABASE_VERSION}'"
 fi
 
-TMPDIR="tmp$$"
-LOCALIZER.py -e -i "${FASTA}" -o "${TMPDIR}" 1>&2
+ORIGDIR="${PWD}"
+TMPDIR="tmp_${ANALYSIS}_${HOSTNAME:-}_$$_${RANDOM:-random}"
+mkdir "${TMPDIR}"
+cd "${TMPDIR}"
+
+LOCALIZER.py -e -i "${FASTA}" -o "out" 1>&2
 
 predutils r2js \
     --pipeline-version "${PIPELINE_VERSION}" \
     --software-version "${SOFTWARE_VERSION}" \
     ${DB_VERSION_STR} \
-    "${ANALYSIS}" "${TMPDIR}/Results.txt" "${FASTA}"
+    "${ANALYSIS}" "out/Results.txt" "${FASTA}"
 
-rm -f -- "${TMPDIR}"
+cd "${ORIGDIR}"
+rm -rf -- "${TMPDIR}"

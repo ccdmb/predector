@@ -15,13 +15,18 @@ else
     DB_VERSION_STR="--database-version '${DATABASE_VERSION}'"
 fi
 
-OUT="tmp$$"
-deepsig.py -f "${FASTA}" -k euk -o "${OUT}" 1>&2
+ORIGDIR="${PWD}"
+TMP="tmp_phobius_${HOSTNAME:-phobius}_$$"
+mkdir "${TMP}"
+cd "${TMP}"
 
-phobus.pl -short "${FASTA}"  \
+phobius.pl -short "${FASTA}"  \
 | tail -n+2 \
 | predutils r2js \
     --pipeline-version "${PIPELINE_VERSION}" \
     --software-version "${SOFTWARE_VERSION}" \
     ${DB_VERSION_STR} \
     "${ANALYSIS}" - "${FASTA}"
+
+cd "${ORIGDIR}"
+rm -rf -- "${TMP}"

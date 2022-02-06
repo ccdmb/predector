@@ -8,14 +8,16 @@ EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
 
 # Don't change the next 3 lines
 mkdir -p "${WORKDIR}"
-tar --no-same-owner --directory=${WORKDIR} -xf "${ARCHIVE}"
+tar --no-same-owner --directory=${WORKDIR} -zxf "${ARCHIVE}"
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 
 #### Add your code to install here.
 
 mkdir -p "${TARGET_DIR}"
-chmod -R a+rw .
+# These are set to non-readable
+# Causes installer to fail when removing temp dir
+chmod -R a+rw syn/*
 
 cp -rL ./* "${TARGET_DIR}"
 cd "${TARGET_DIR}"
@@ -23,8 +25,8 @@ cd "${TARGET_DIR}"
 patch signalp signalp.patch
 sed -i "s~/usr/opt/www/pub/CBS/services/SignalP-4.1/signalp-4.1~${TARGET_DIR}~" ./signalp
 
-chmod -R a+r .
-chmod a+x signalp bin/* lib/*
+# chmod -R a+r ./*
+chmod a+rx signalp bin/* lib/*
 
 #nb we delete WORKDIR using a trap command in register-base.sh
 

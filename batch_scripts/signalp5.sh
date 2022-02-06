@@ -15,15 +15,20 @@ else
     DB_VERSION_STR="--database-version '${DATABASE_VERSION}'"
 fi
 
-TMPDIR="tmpdir$$"
+TMPDIR="tmp_${ANALYSIS}_${HOSTNAME:-}_$$_${RANDOM:-}"
 mkdir "${TMPDIR}"
 
-OUT="tmp\$\$"
+ORIGDIR=${PWD}
+cd ${TMPDIR}
+
+mkdir tmp
+
+OUT="out"
 signalp5 \
     -org euk \
     -format short \
-    -tmp "${TMPDIR}" \
-    -fasta "${fasta}" \
+    -tmp "./tmp" \
+    -fasta "${FASTA}" \
     -prefix "${OUT}" \
     1>&2
 
@@ -33,4 +38,5 @@ predutils r2js \
     ${DB_VERSION_STR} \
     "${ANALYSIS}" ${OUT}_summary.signalp5 "${FASTA}"
 
-rm -rf -- "${OUT}"* "${TMPDIR}"
+cd "${ORIGDIR}"
+rm -rf -- "${TMPDIR}"

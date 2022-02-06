@@ -8,7 +8,7 @@ EXTRACTED_DIR_CALLED="$(basename $(tar -tf "${ARCHIVE}" | head -n 1))"
 
 # Don't change the next 3 lines
 mkdir -p "${WORKDIR}"
-tar --no-same-owner --directory=${WORKDIR} -xf "${ARCHIVE}"
+tar --no-same-owner --directory=${WORKDIR} -zxf "${ARCHIVE}"
 cd "${WORKDIR}/${EXTRACTED_DIR_CALLED}"
 
 
@@ -27,7 +27,7 @@ patch bin/tmhmm tmhmm.patch
 sed -i "s~INSERT_BASENAME_HERE~${TARGET_DIR}~" bin/tmhmm
 sed -i "s~/usr/local/bin/perl -w~/usr/bin/env perl~" bin/tmhmmformat.pl
 sed -i "1a use warnings;" bin/tmhmmformat.pl
-chmod -R a+r .
+# chmod -R a+r .
 chmod a+x bin/*
 
 #nb we delete WORKDIR using a trap command in register-base.sh

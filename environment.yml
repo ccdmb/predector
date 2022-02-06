@@ -9,20 +9,20 @@ channels:
 dependencies:
   ## Custom packages
   - predector::apoplastp=1.0.1
-  - predector::deeploc=1.0
+  - predector::deeploc=1.0=h6bb024c_3
   - predector::deepsig=0f1e1d9
   - predector::effectorp1=1.0
   - predector::effectorp2=2.0
   - predector::effectorp3=3.0=py_2
   - predector::localizer=1.0.4
-  - predector::phobius=1.01
+  - predector::phobius=1.01=4
   - predector::predectorutils=0.8.2
-  - predector::signalp3=3.0b
-  - predector::signalp4=4.1g
-  - predector::signalp5=5.0b
-  - predector::signalp6=6.0e=2
-  - predector::targetp2=2.0
-  - predector::tmhmm=2.0c
+  - predector::signalp3=3.0b=3
+  - predector::signalp4=4.1g=3
+  - predector::signalp5=5.0b=2
+  - predector::signalp6=6.0g=1
+  - predector::targetp2=2.0=2
+  - predector::tmhmm=2.0c=3
   - predector::r-deepredeff=0.1.1
   ## Conda-forge packages
   - conda-forge::gawk
@@ -50,12 +50,12 @@ dependencies:
   - conda-forge::pytorch-cpu=1.9.0
   - conda-forge::python=3.6.13
   - conda-forge::r-base=4.1.1
-  - conda-forge::sqlite=3.36.0
-  - conda-forge::openjdk=11.0.1 
+  - conda-forge::sqlite
+  - conda-forge::openjdk=11.0.1
   - conda-forge::theano=1.0.5
-  - conda-forge::xz=5.2.5
-  - conda-forge::zlib=1.2.11
-  - conda-forge::bzip2=1.0.8
+  - conda-forge::xz
+  - conda-forge::zlib
+  - conda-forge::bzip2
   - pip
   - pip:
     - importlib-resources

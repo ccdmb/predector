@@ -15,7 +15,7 @@ else
     DB_VERSION_STR="--database-version '${DATABASE_VERSION}'"
 fi
 
-TMPFILE="tmp$$"
+TMPFILE="tmp_ep2_${HOSTNAME:-ep2}_$$"
 EffectorP2.py -s -i "${FASTA}" -o "${TMPFILE}" 1>&2
 
 predutils r2js \

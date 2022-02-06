@@ -15,14 +15,20 @@ else
     DB_VERSION_STR="--database-version '${DATABASE_VERSION}'"
 fi
 
-export TMPDIR="tmpdir$$"
+TMPDIR="tmp_${ANALYSIS}_${HOSTNAME:-}_$$_${RANDOM:-}"
 mkdir "${TMPDIR}"
 
-OUT="tmp\$\$"
+
+ORIGDIR=${PWD}
+cd ${TMPDIR}
+
+mkdir tmp
+OUT="out"
 targetp \
     -fasta "${FASTA}" \
     -org non-pl \
     -format short \
+    -tmp ./tmp \
     -prefix "${OUT}" \
     1>&2
 
@@ -32,4 +38,5 @@ predutils r2js \
     ${DB_VERSION_STR} \
     "${ANALYSIS}" "${OUT}_summary.targetp2" "${FASTA}"
 
-rm -rf -- "${OUT}"* "${TMPDIR}"
+cd "${ORIGDIR}"
+rm -rf -- "${TMPDIR}"

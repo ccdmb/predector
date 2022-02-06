@@ -7,7 +7,7 @@ export BASENAME=$(dirname ${0})
 
 CONTAINER="${PWD}/predector.sif"
 ANALYSIS=
-PIPELINE_VERSION="1.2.4"
+PIPELINE_VERSION="1.2.5"
 SOFTWARE_VERSION=
 DATABASE_VERSION=
 FASTA=
@@ -17,9 +17,8 @@ ACCOUNT=y95
 TIME=1-00:00:00
 PREFIX=
 
-NODES=1
-NTASKS_PER_NODE=24
-CPUS_PER_NODE=24
+NTASKS=24
+CPUS_PER_TASK=1
 
 SCRIPT=
 
@@ -50,7 +49,24 @@ check_param() {
 
 
 usage() {
-    echo -e "USAGE:"
+    cat <<EOF
+USAGE analysis_slurm_parallel.sh -s 0.1 -p 1.3 -i proteins.fasta --container ./predector.sif signalp3_hmm
+-s|--software-version)
+-p|--pipeline-verison)
+-d|--database-version)
+-i|--fasta)
+--chunk-size)
+--nodes)
+--ntasks-per-node)
+--cpus-per-node)
+--partition)
+--account)
+--time)
+--container)
+--prefix)
+--debug)
+signalp3_hmm|signalp3_nn|signalp4|signalp5|signalp6|deepsig|phobius|tmhmm|targetp_non_plant|deeploc|apoplastp|localizer|effectorp1|effectorp2|effectorp3|deepredeff_fungi|deepredeff_oomycete|kex2_cutsite|rxlr_like_motif|pepstats|pfamscan|dbcan|effectordb|phibase)  # Required positional argument
+EOF
 }
 
 
@@ -93,21 +109,15 @@ case ${key} in
     shift
     shift
     ;;
-    --nodes)
-    check_param "--nodes" "${2:-}"
-    NODES="${2}"
+    --ntasks)
+    check_param "--ntasks" "${2:-}"
+    NTASKS="${2}"
     shift
     shift
     ;;
-    --ntasks-per-node)
-    check_param "--ntasks-per-node" "${2:-}"
-    NTASKS_PER_NODE="${2}"
-    shift
-    shift
-    ;;
-    --cpus-per-node)
-    check_param "--cpus-per-node" "${2:-}"
-    CPUS_PER_NODE="${2}"
+    --cpus-per-task)
+    check_param "--cpus-per-task" "${2:-}"
+    CPUS_PER_TASK="${2}"
     shift
     shift
     ;;
@@ -145,7 +155,7 @@ case ${key} in
     DEBUG=true
     shift # past argument
     ;;
-    signalp3_hmm|signalp3_nn|signalp4|signalp5|signalp6|deepsig|phobius|tmhmm|targetp_non_plant|deeploc|apoplastp|localizer|effectorp1|effectorp2|effectorp3|deepredeff_fungi|deepredeff_oomycete|kex2_cutsite|rxlr_like_motif|pepstats|pfamscan|dbcan|effectordb|phibase)  # Required positional argument
+    signalp3_hmm|signalp3_nn|signalp4|signalp5|signalp6|deepsig|phobius|tmhmm|targetp_non_plant|deeploc|apoplastp|localizer|effectorp1|effectorp2|effectorp3|effectorp3_fungal|deepredeff_fungi|deepredeff_oomycete|kex2_cutsite|rxlr_like_motif|pepstats|pfamscan|dbcan|effectordb|phibase|dummy)  # Required positional argument
     if [ ! -z "${ANALYSIS:-}" ]
     then
         echo "You specified both '${ANALYSIS}' and '${1}' analyses." 1>&2
@@ -167,9 +177,6 @@ then
     set -x
 fi
 
-
-[ -z ${CHUNK_SIZE:-} ] && CHUNK_SIZE=100
-
 # Set some default parameters based on pipeline version
 case ${ANALYSIS} in
     signalp3_hmm)
@@ -188,13 +195,11 @@ case ${ANALYSIS} in
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-5.0b}
         DATABASE_VERSION=
         CHUNK_SIZE=${CHUNK_SIZE:-1000}
-        NTASKS_PER_NODE=1
         ;;
     signalp6)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-6.0d}
         DATABASE_VERSION=
         CHUNK_SIZE=${CHUNK_SIZE:-1000}
-        NTASKS_PER_NODE=1
         ;;
     deepsig)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-0f1e1d9}
@@ -213,7 +218,6 @@ case ${ANALYSIS} in
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-2.0}
         DATABASE_VERSION=
         CHUNK_SIZE=${CHUNK_SIZE:-1000}
-        NTASKS_PER_NODE=1
         ;;
     deeploc)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-1.0}
@@ -240,17 +244,19 @@ case ${ANALYSIS} in
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-3.0}
         DATABASE_VERSION=
         ;;
+    effectorp3_fungal)
+        SOFTWARE_VERSION=${SOFTWARE_VERSION:-3.0}
+        DATABASE_VERSION=
+        ;;
     deepredeff_fungi)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-0.1.1}
         DATABASE_VERSION=
         CHUNK_SIZE=${CHUNK_SIZE:-1000}
-        NTASKS_PER_NODE=1
         ;;
     deepredeff_oomycete)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-0.1.1}
         DATABASE_VERSION=
         CHUNK_SIZE=${CHUNK_SIZE:-1000}
-        NTASKS_PER_NODE=1
         ;;
     kex2_cutsite)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-0.8.0}
@@ -265,7 +271,7 @@ case ${ANALYSIS} in
     pepstats)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-6.6.0.0}
         DATABASE_VERSION=
-        CHUNK_SIZE=${CHUNK_SIZE:-10000}
+        CHUNK_SIZE=${CHUNK_SIZE:-50000}
         ;;
     pfamscan)
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-1.6-3.3.2}
@@ -283,13 +289,18 @@ case ${ANALYSIS} in
         SOFTWARE_VERSION=${SOFTWARE_VERSION:-13.45111}
         DATABASE_VERSION=${DATABASE_VERSION:-v4-12}
         CHUNK_SIZE=${CHUNK_SIZE:-5000}
-        NTASKS_PER_NODE=1
+        ;;
+    dummy)
+        SOFTWARE_VERSION=DOESNTMATTER
+        DATABASE_VERSION=DOESNTMATTER
         ;;
     *)  # Unknown option
     echo "ERROR: Unknown analysis specified '${ANALYSIS}'." 1>&2
     exit 1
     ;;
 esac
+
+[ -z ${CHUNK_SIZE:-} ] && CHUNK_SIZE=100
 
 FAILED=false
 
@@ -315,27 +326,46 @@ fi
 
 [ -z "${PREFIX:-}" ] && PREFIX="${ANALYSIS}_$(basename ${FASTA})"
 
-CPUS_PER_TASK=$(( ${CPUS_PER_NODE:-1} / ${NTASKS_PER_NODE:-1} ))
-NTASKS=$(( ${NODES} * ${NTASKS_PER_NODE} ))
 
-SRUN="srun --export=ALL --exact --exclusive -N \${SLURM_NODES} -n \${SLURM_NTASKS} --cpus-per-task ${CPUS_PER_TASK}"
-PARALLEL="parallel --halt now,fail=1 --delay 0.5 -j \${SLURM_NTASKS} --joblog '${PREFIX}.log' --resume --line-buffer --recstart '>' -N "${CHUNK_SIZE}" --cat"
+SRUN="srun -N1 -n1 -c${SLURM_CPUS_PER_TASK:-${CPUS_PER_TASK}} --exact --mem=0"
+PARALLEL="parallel --delay 0.5 -j \${SLURM_NTASKS:-${NTASKS}} --joblog '${PREFIX}.log' --resume --line-buffer --recstart '>' -N ${CHUNK_SIZE} --cat"
 
-#sbatch \
-#    --nodes="${NODES}" \
-#    --ntasks-per-node="${NTASKS_PER_NODE}" \
-#    --time="${TIME}" \
-#    --account=${ACCOUNT} \
-#    --partition="${PARTITION}" \
-#    --export=NONE \
-cat    <<EOF > test.txt
+# --halt now,fail=1 
+BATCH_SCRIPT="${ANALYSIS}_batch$$.sbatch"
+cat <<EOF > ${BATCH_SCRIPT} 
 #!/bin/bash -l
-
+module switch PrgEnv-cray PrgEnv-gnu
 module load parallel
 module load singularity
 
 set -euo pipefail
 
-export OMP_NUM_THREADS="${CPUS_PER_TASK}"
-${PARALLEL} "${SRUN} singularity exec ${CONTAINER} ${SCRIPT} ${PIPELINE_VERSION} ${SOFTWARE_VERSION} ${DATABASE_VERSION} {}" < "${FASTA}" | cat >> "${PREFIX}.jsonl"
+export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-${CPUS_PER_TASK}}"
+echo "SLURM_NTASKS \${SLURM_NTASKS}"
+echo "SLURM_JOB_NUM_NODES \${SLURM_JOB_NUM_NODES}"
+echo "SLURM_CPUS_PER_TASK \${SLURM_CPUS_PER_TASK}"
+echo "CPUS_PER_TASK ${CPUS_PER_TASK}"
+
+${PARALLEL} "${SRUN} singularity exec ${CONTAINER} ${SCRIPT} {} ${PIPELINE_VERSION} ${SOFTWARE_VERSION} ${DATABASE_VERSION}" < "${FASTA}" | cat >> "${PREFIX}.jsonl"
 EOF
+
+if [ "${PAWSEY_CLUSTER:-}" = "magnus" ]
+then
+    SBATCH_EXTRAS="--gres=craynetwork:0 --threads-per-core=1"
+else
+    SBATCH_EXTRAS=""
+fi
+
+sbatch \
+    --ntasks="${NTASKS}" \
+    --cpus-per-task="${CPUS_PER_TASK}" \
+    --time="${TIME}" \
+    --account="${ACCOUNT}" \
+    --partition="${PARTITION}" \
+   ${SBATCH_EXTRAS} \
+    --export=NONE \
+    "${BATCH_SCRIPT}"
+
+wait
+echo Done
+#rm -f "${BATCH_SCRIPT}"

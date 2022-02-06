@@ -8,7 +8,7 @@ REPOBASE="https://raw.githubusercontent.com/ccdmb/predector"
 DOCUMENTATION_URL="https://github.com/ccdmb/predector/wiki"
 
 ### DEFAULT PARAMETERS
-VERSION=1.2.4
+VERSION=1.2.5
 
 SIGNALP3= #signalp-3.0.Linux.tar.Z
 SIGNALP4= #signalp-4.1g.Linux.tar.gz
@@ -553,6 +553,13 @@ setup_conda() {
     && tmhmm2-register "${TMHMM}" && echo \
     || RETCODE="$?"
 
+    if [ "${RETCODE:-0}" -ne 0 ]
+    then
+        proprietary_install_error
+        contact_fix_issue
+        exit "${RETCODE:-1}";
+    fi
+
     if [ ! -z "${SIGNALP6:-}" ]
     then
         signalp6-register "${SIGNALP6}" || RETCODE="$?"
@@ -637,11 +644,11 @@ setup_docker() {
         SUDO=""
     fi
 
-    if [ -z "${SIGNALP6:-}" ]
+    if [ ! -z "${SIGNALP6:-}" ]
     then
-        SP6_FLAG=--build-arg SIGNALP6="${SIGNALP6:-}"
+        SP6_FLAG=( "--build-arg" SIGNALP6="${SIGNALP6:-}" )
     else
-        SP6_FLAG=""
+        SP6_FLAG=()
     fi
 
     TMPFILE=".predector$$.Dockerfile"
@@ -658,7 +665,7 @@ setup_docker() {
       --build-arg SIGNALP4="${SIGNALP4}" \
       --build-arg SIGNALP5="${SIGNALP5}" \
       --build-arg TARGETP2="${TARGETP2}" \
-      ${SP6_FLAG} \
+      "${SP6_FLAG[@]}" \
       --build-arg PHOBIUS="${PHOBIUS}" \
       --build-arg TMHMM="${TMHMM}" \
       --build-arg DEEPLOC="${DEEPLOC}" \
