@@ -48,7 +48,7 @@ dependencies:
   - bioconda::mmseqs2=13.45111
   ## Version pins that aren't necessary but make solving environment faster
   - conda-forge::pytorch-cpu=1.9.0
-  - conda-forge::python=3.6.13
+  - conda-forge::python
   - conda-forge::r-base=4.1.1
   - conda-forge::sqlite
   - conda-forge::openjdk=11.0.1
