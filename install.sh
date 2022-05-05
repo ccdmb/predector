@@ -367,6 +367,8 @@ proprietary_install_error() {
 }
 
 conda_env_create_error() {
+    # TODO check if it is actually an existing environment.
+
     echo "ERROR: creating the conda environment failed" 1>&2
     echo "Usually this happens if you already have an environment with the name or path prefix that we tried to use." 1>&2
     echo "You can change the name we use with the '-n' flag, or the path prefix with the '-c' flag." 1>&2

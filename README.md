@@ -77,13 +77,13 @@ Please follow the instructions at one of the following links to install:
 - https://docs.docker.com/engine/install/
 - https://sylabs.io/guides/
 
+If you'd like to speed up building conda environments, we also support [mamba](https://github.com/mamba-org/mamba).
 
-NB. We cannot support conda environments on Mac or Windows.
-This is because some older software in e.g. SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
-Even windows WSL2 does not seem to play well with SignalP 4.
-
-Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
-
+> We cannot support conda (or mamba) environments on Mac or Windows.
+> This is because some older software in e.g. SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
+> Even windows WSL2 does not seem to play well with SignalP 4.
+>
+> Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
 ### 2. Download the proprietary software dependencies
 
@@ -107,14 +107,14 @@ But please also let us know that the change has happened, so that we can update 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
 
-> * We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
-> You don't absolutely have to install SignalP6, though I recommend you try to.
+> We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
+> You don't have to install SignalP6, though I recommend you try to.
 
 ### 3. Build the conda environment or container
 
 We provide an install script that should install the dependencies for the majority of users.
 
-In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `docker`, or `singularity` as suitable.
+In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `mamba`, `docker`, or `singularity` as suitable.
 Make sure you're in the same directory as the proprietary source archives.
 If the names below don't match the filenames you have exactly, adjust the command accordingly.
 For singularity and docker container building you may be prompted for your root password (via `sudo`).

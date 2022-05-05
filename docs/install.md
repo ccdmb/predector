@@ -43,16 +43,21 @@ Please follow the instructions at one of the following links to install:
 - https://docs.docker.com/engine/install/
 - https://sylabs.io/guides/
 
-
-NB. We cannot support conda environments on Mac or Windows.
-This is because some older software included in SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
-Even windows WSL2 does not seem to play well with SignalP 4.
-
-Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
+> We cannot support conda environments on Mac or Windows.
+> This is because some older software included in SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
+> Even windows WSL2 does not seem to play well with SignalP 4.
+> 
+> Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
 If you are running conda, we can also build the environment using [Mamba](https://mamba.readthedocs.io/en/latest/).
 Functionally there is no difference between mamba and conda environments, but mamba is faster at building the environment.
 Just install mamba into your base `conda` environment (or install [mambaforge](https://github.com/conda-forge/miniforge#mambaforge) instead of miniconda) and select the `mamba` option later.
+
+> Please note. We **strongly** recommend the containerised environments (docker or singularity) if the option is available to you.
+> The vast majority of issues we've helped people with have been related to poor isolation from the host environment or broken conda dependencies (which we have little control over other than vigilance).
+> Containers sidestep both of these issues.
+> We're more than happy to support conda and help you with any issues, but if you want to avoid issues I suggest using docker or singularity.
+
 
 ### 2. Download the proprietary software dependencies
 
@@ -76,8 +81,9 @@ But please also let us know that the change has happened, so that we can update 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
 
-> * We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
-> You don't absolutely have to install SignalP6, though I recommend you try to.
+> We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
+> You don't have to install SignalP6, though I recommend you try to.
+
 
 ### 3. Build the conda environment or container
 

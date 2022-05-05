@@ -7,16 +7,19 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
+  ## Python 3.10 doesn't work yet, a few packages haven't been built yet.
+  - conda-forge::python=3.9
+  - conda-forge::r-base=4.1
   ## Custom packages
   - predector::apoplastp=1.0.1
   - predector::deeploc=1.0=h6bb024c_3
-  - predector::deepsig=0f1e1d9
+  - predector::deepsig=0f1e1d9=2
   - predector::effectorp1=1.0
   - predector::effectorp2=2.0
   - predector::effectorp3=3.0=py_2
   - predector::localizer=1.0.4
   - predector::phobius=1.01=4
-  - predector::predectorutils=0.8.2
+  - predector::predectorutils=0.8.3
   - predector::signalp3=3.0b=3
   - predector::signalp4=4.1g=3
   - predector::signalp5=5.0b=2
@@ -30,12 +33,12 @@ dependencies:
   - conda-forge::wget
   - conda-forge::parallel
   - conda-forge::r-optparse
-  ## Fudge to get keras working with deepsig...
-  - h5py=2.10.0=nompi_*  # <3
-  - tensorflow=2.2.0=mkl_*
-  - conda-forge::keras=2.4.3
-  ## Fudge to keep deepredeff working. Otherwise get error about converting symbolic tensor
-  - conda-forge::numpy=1.19.5
+  - tensorflow=2.7=cpu*
+  - conda-forge::keras=2.7
+  - conda-forge::numpy>=1.22
+  - conda-forge::xz
+  - conda-forge::zlib
+  - conda-forge::bzip2
   ## some versions of moose install for different versions of perl than the one you're targeting
   ## make sure you pin the versions and check
   ## moose needed for pfamscan
@@ -45,17 +48,12 @@ dependencies:
   - bioconda::emboss=6.6.0
   - bioconda::hmmer=3.3.2
   - bioconda::pfam_scan=1.6
-  - bioconda::mmseqs2=13.45111
-  ## Version pins that aren't necessary but make solving environment faster
-  - conda-forge::pytorch-cpu=1.9.0
-  - conda-forge::python=3.6.13
-  - conda-forge::r-base=4.1.1
-  - conda-forge::sqlite
-  - conda-forge::openjdk=11.0.1
+  - bioconda::mmseqs2>=13.45111
+  ## Version pins that aren't completely necessary but make solving environment faster
+  - conda-forge::pytorch-cpu=1.11
+  - conda-forge::sqlite>=3.38
+  - conda-forge::openjdk>=11
   - conda-forge::theano=1.0.5
-  - conda-forge::xz
-  - conda-forge::zlib
-  - conda-forge::bzip2
   - pip
   - pip:
     - importlib-resources

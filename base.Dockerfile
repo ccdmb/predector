@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.10.3
+FROM continuumio/miniconda3:4.11.0
 
 ENV ENVIRONMENT=predector
 ENV VERSION=1.2.5
