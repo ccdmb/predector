@@ -164,7 +164,7 @@ This should restart the pipeline and continue as if SignalP 6 hadn't failed (tho
 Note however that if you skip the analysis for one chunk, the manual ranking scores (and probably the learned ranking scores in the near future) won't be reliable (because the other chunks will have more information).
 
 
-## Error while running a process with `Command exit status: 137`
+### Error while running a process with `Command exit status: 137`
 
 The error-code usually means that you have run out of memory in a task.
 At the time of writing this seems to happen when running SignalP 6 on relatively small computers (e.g. with <6GB RAM available).
@@ -180,6 +180,18 @@ If your proteins aren't split into proteomes (e.g you're running on a set downlo
 
 If you encounter this issue with other processes please let us know.
 We've done our best to keep peak memory use low for most tasks, but there may be cases that we hadn't considered.
+
+
+### Installing with Mamba, `Problem: nothing provides __glibc >=2.17,<3.0.a0 needed by...`
+
+This appears to happen with very old versions of Mamba, and was reported to us [here](https://github.com/ccdmb/predector/issues/77).
+It appears that simply updating mamba will fix the problem.
+
+```
+conda update -n base -c conda-forge mamba
+```
+
+If this does not resolve the problem, please raise another [issue](https://github.com/ccdmb/predector/issues) or [contact us](https://github.com/ccdmb/predector#contact-us).
 
 
 ## FAQ
