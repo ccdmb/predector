@@ -29,7 +29,7 @@ If you do use results of Predector in your manuscripts please also cite the depe
 Predector ranking does not replace these tools, it is designed to combine information from multiple tools in a useful way.
 We rely heavily on these tools and they should be supported with citations to enable their continued development.
 
-More details on dependencies are available in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.5#how-should-i-cite-predector) and we provide a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
+More details on dependencies are available in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#how-should-i-cite-predector) and we provide a [BibTeX](http://www.bibtex.org/Format/) formatted [file with citations](https://github.com/ccdmb/predector/citations.bib), which can be imported into most citation managers.
 
 
 ## Documentation
@@ -38,12 +38,12 @@ Brief instructions are presented on this page, but extended documentation can be
 
 Quick documentation links:
 
-- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.2.5#quick-install)
-- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.2.5#extended-dependency-install-guide)
-- [Usage](https://github.com/ccdmb/predector/wiki/1.2.5#running-the-pipeline)
-- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.2.5#pipeline-output)
-- [Common issues](https://github.com/ccdmb/predector/wiki/1.2.5#common-issues)
-- [FAQ](https://github.com/ccdmb/predector/wiki/1.2.5#faq)
+- [Quick install instructions](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#quick-install)
+- [Extended install instructions](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#extended-dependency-install-guide)
+- [Usage](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#running-the-pipeline)
+- [Description of outputs](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#pipeline-output)
+- [Common issues](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#common-issues)
+- [FAQ](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#faq)
 
 
 If you have any questions, think that some documentation is missing, or have any other suggestions or issues to report, please feel free to create an [issue](https://github.com/ccdmb/predector/issues) or start a [discussion](https://github.com/ccdmb/predector/discussions).
@@ -52,11 +52,11 @@ If you have any questions, think that some documentation is missing, or have any
 ## Install
 
 This is a quick install guide that unfortunately isn't terribly quick.
-For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.5#quick-install).
+For extended documentation and troubleshooting advice, see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#quick-install).
 
 **Note that if you have run a previous version of the pipeline, you will need to re-build
 the software environment, as the dependencies may have changed.**
-Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.5#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
+Please see the [Wiki install documentation](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#optional---remove-previous-software-environments-for-old-versions-of-the-pipeline) for more details.
 
 
 ### Minimal requirements
@@ -77,13 +77,13 @@ Please follow the instructions at one of the following links to install:
 - https://docs.docker.com/engine/install/
 - https://sylabs.io/guides/
 
+If you'd like to speed up building conda environments, we also support [mamba](https://github.com/mamba-org/mamba).
 
-NB. We cannot support conda environments on Mac or Windows.
-This is because some older software in e.g. SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
-Even windows WSL2 does not seem to play well with SignalP 4.
-
-Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
-
+> We cannot support conda (or mamba) environments on Mac or Windows.
+> This is because some older software in e.g. SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
+> Even windows WSL2 does not seem to play well with SignalP 4.
+>
+> Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
 ### 2. Download the proprietary software dependencies
 
@@ -107,14 +107,14 @@ But please also let us know that the change has happened, so that we can update 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
 
-> * We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
-> You don't absolutely have to install SignalP6, though I recommend you try to.
+> We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
+> You don't have to install SignalP6, though I recommend you try to.
 
 ### 3. Build the conda environment or container
 
 We provide an install script that should install the dependencies for the majority of users.
 
-In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `docker`, or `singularity` as suitable.
+In the following command, substitute the assigned value of `ENVIRONMENT` for `conda`, `mamba`, `docker`, or `singularity` as suitable.
 Make sure you're in the same directory as the proprietary source archives.
 If the names below don't match the filenames you have exactly, adjust the command accordingly.
 For singularity and docker container building you may be prompted for your root password (via `sudo`).
@@ -122,7 +122,7 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.5/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.6-alpha/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -134,7 +134,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.5/install.sh" \
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.5`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.6-alpha`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with predector.
 
@@ -167,25 +167,25 @@ Use one of the commands below using information given upon completion of depende
 #### Using conda
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.6-alpha ccdmb/predector
 ```
 
 #### Using docker
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.2.6-alpha ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.2.6-alpha ccdmb/predector
 ```
 
 #### Using singularity
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.6-alpha ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.2.6-alpha ccdmb/predector
 ```
 
 ## Quickstart
@@ -194,15 +194,15 @@ Say you have a set of amino-acid sequences in fasta format in the directory `pro
 The following command will run the complete analysis and the results will be available in a `results` folder.
 
 ```bash
-nextflow run -resume -r 1.2.5 ccdmb/predector --proteome "proteomes/*"
+nextflow run -resume -r 1.2.6-alpha ccdmb/predector --proteome "proteomes/*"
 ```
 
 To improve performance I strongly recommend specifying an appropriate profile for the computer you're running the pipeline on.
-You can find information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.5#profiles-and-configuration).
+You can find information on available profiles in the [wiki documentation](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#profiles-and-configuration).
 
 
 **Please note that if you have previously run a different version of the pipeline on the same computer you will need to ask Nextflow to pull the latest changes.**
-See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.2.5#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.2.5#common-issues).
+See how to do this in the [extended documentation](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#running-different-pipeline-versions) and the [common issues section](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#common-issues).
 
 
 ## Outputs
@@ -210,9 +210,9 @@ See how to do this in the [extended documentation](https://github.com/ccdmb/pred
 The main output of Predector is a file with the suffix `-ranked.tsv` which is a tab separated values file that can be opened in excel.
 This contains a summarised version of all of the information that you would typically need for evaluating effector protein candidates.
 
-You can find a description of all of the results in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.5#pipeline-output).
+You can find a description of all of the results in [the wiki](https://github.com/ccdmb/predector/wiki/1.2.6-alpha#pipeline-output).
 
-An example set of results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.5/test/test_set_results).
+An example set of results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.6-alpha/test/test_set_results).
 
 
 ## Contributing

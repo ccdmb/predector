@@ -43,16 +43,21 @@ Please follow the instructions at one of the following links to install:
 - https://docs.docker.com/engine/install/
 - https://sylabs.io/guides/
 
-
-NB. We cannot support conda environments on Mac or Windows.
-This is because some older software included in SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
-Even windows WSL2 does not seem to play well with SignalP 4.
-
-Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
+> We cannot support conda environments on Mac or Windows.
+> This is because some older software included in SignalP 3 and 4 is not compiled for these operating systems, and being closed source we cannot re-compile them.
+> Even windows WSL2 does not seem to play well with SignalP 4.
+> 
+> Please use a full Linux virtual machine (e.g. a cloud server or locally in [VirtualBox](https://www.virtualbox.org/)) or one of the containerised options.
 
 If you are running conda, we can also build the environment using [Mamba](https://mamba.readthedocs.io/en/latest/).
 Functionally there is no difference between mamba and conda environments, but mamba is faster at building the environment.
 Just install mamba into your base `conda` environment (or install [mambaforge](https://github.com/conda-forge/miniforge#mambaforge) instead of miniconda) and select the `mamba` option later.
+
+> Please note. We **strongly** recommend the containerised environments (docker or singularity) if the option is available to you.
+> The vast majority of issues we've helped people with have been related to poor isolation from the host environment or broken conda dependencies (which we have little control over other than vigilance).
+> Containers sidestep both of these issues.
+> We're more than happy to support conda and help you with any issues, but if you want to avoid issues I suggest using docker or singularity.
+
 
 ### 2. Download the proprietary software dependencies
 
@@ -76,8 +81,9 @@ But please also let us know that the change has happened, so that we can update 
 I suggest storing these all in a folder and just copying the whole lot around.
 If you use Predector often, you'll likely re-build the environment fairly often.
 
-> * We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
-> You don't absolutely have to install SignalP6, though I recommend you try to.
+> We've been having some teething problems with SignalP 6. Until this is resolved I've made installing and running it optional.
+> You don't have to install SignalP6, though I recommend you try to.
+
 
 ### 3. Build the conda environment or container
 
@@ -91,7 +97,7 @@ For singularity and docker container building you may be prompted for your root 
 ```bash
 ENVIRONMENT=docker
 
-curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.5/install.sh" \
+curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.6-alpha/install.sh" \
 | bash -s "${ENVIRONMENT}" \
     -3 signalp-3.0.Linux.tar.Z \
     -4 signalp-4.1g.Linux.tar.gz \
@@ -103,7 +109,7 @@ curl -s "https://raw.githubusercontent.com/ccdmb/predector/1.2.5/install.sh" \
     -p phobius101_linux.tar.gz
 ```
 
-This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.5`) or singularity (file `./predector.sif`) containers.
+This will create the conda environment (named `predector`), or the docker (tagged `predector/predector:1.2.6-alpha`) or singularity (file `./predector.sif`) containers.
 
 **Take note of the message given upon completion**, which will tell you how to use the container or environment with Predector.
 
@@ -114,7 +120,7 @@ You can also save the install script locally and run `install.sh --help` to find
 
 ```
 -n|--name         -- For conda, sets the environment name (default: 'predector').
-                     For docker, sets the image tag (default: 'predector/predector:1.2.5').
+                     For docker, sets the image tag (default: 'predector/predector:1.2.6-alpha').
                      For singularity, sets the output image filename (default: './predector.sif').
 -c|--conda-prefix -- If set, use this as the location to store the built conda
                      environment instead of setting a name and using the default
@@ -157,25 +163,25 @@ Use one of the commands below using information given upon completion of depende
 Using conda:
 
 ```bash
-nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test -with-conda /home/username/path/to/environment -resume -r 1.2.6-alpha ccdmb/predector
 ```
 
 Using docker:
 
 ```bash
-nextflow run -profile test,docker -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test,docker -resume -r 1.2.6-alpha ccdmb/predector
 
 # if your docker configuration requires sudo use this profile instead
-nextflow run -profile test,docker_sudo -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test,docker_sudo -resume -r 1.2.6-alpha ccdmb/predector
 ```
 
 Using singularity:
 
 ```bash
-nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test -with-singularity path/to/predector.sif -resume -r 1.2.6-alpha ccdmb/predector
 
 # or if you've build the container using docker and it's in your local docker registry.
-nextflow run -profile test,singularity -resume -r 1.2.5 ccdmb/predector
+nextflow run -profile test,singularity -resume -r 1.2.6-alpha ccdmb/predector
 ```
 
 ## Extended dependency install guide
@@ -198,7 +204,7 @@ First we create the conda environment, which includes the non-proprietary depend
 
 ```bash
 # Download the environment config file.
-curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/1.2.5/environment.yml
+curl -o environment.yml https://raw.githubusercontent.com/ccdmb/predector/1.2.6-alpha/environment.yml
 
 # Create the environment
 conda env create -f environment.yml
@@ -232,7 +238,7 @@ Modify the source `.tar` archive filenames in the command if necessary.
 Depending on how you installed docker you may need to use `sudo docker` in place of `docker`.
 
 ```bash
-curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.5/Dockerfile \
+curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.6-alpha/Dockerfile \
 | docker build \
   --build-arg SIGNALP3=signalp-3.0.Linux.tar.Z \
   --build-arg SIGNALP4=signalp-4.1g.Linux.tar.gz \
@@ -242,12 +248,12 @@ curl -s https://raw.githubusercontent.com/ccdmb/predector/1.2.5/Dockerfile \
   --build-arg PHOBIUS=phobius101_linux.tar.gz \
   --build-arg TMHMM=tmhmm-2.0c.Linux.tar.gz \
   --build-arg DEEPLOC=deeploc-1.0.All.tar.gz \
-  -t predector/predector:1.2.5 \
+  -t predector/predector:1.2.6-alpha \
   -f - \
   .
 ```
 
-Your container should now be available as `predector/predector:1.2.5` in your docker registry `docker images`.
+Your container should now be available as `predector/predector:1.2.6-alpha` in your docker registry `docker images`.
 
 
 ### Building the Singularity container the long way
@@ -273,7 +279,7 @@ export TMHMM=tmhmm-2.0c.Linux.tar.gz
 export DEEPLOC=deeploc-1.0.All.tar.gz
 
 # Download the .def file
-curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/1.2.5/singularity.def
+curl -o ./singularity.def https://raw.githubusercontent.com/ccdmb/predector/1.2.6-alpha/singularity.def
 
 # Build the .sif singularity image.
 # Note that `sudo -E` is important, it tells sudo to keep the environment variables
@@ -287,7 +293,7 @@ If you've already built the container using docker, you can convert them to sing
 You don't need to use `sudo` even if your docker installation usually requires it.
 
 ```bash
-singularity build predector.sif docker-daemon://predector/predector:1.2.5
+singularity build predector.sif docker-daemon://predector/predector:1.2.6-alpha
 ```
 
 
@@ -317,7 +323,7 @@ Docker containers can be saved as a tarball and copied wherever you like.
 
 ```bash
 # You could pipe this through gzip if you wanted.
-docker save predector/predector:1.2.5 > predector.tar
+docker save predector/predector:1.2.6-alpha > predector.tar
 ```
 
 And on the other end
