@@ -387,7 +387,7 @@ process publish_it {
 
     tag "${name}"
 
-    publishDir "${params.outdir}", saveAs: { name }
+    publishDir "${params.outdir}", mode: 'copy', saveAs: { name }
 
     input:
     tuple val(name), path("infile")
