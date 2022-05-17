@@ -109,6 +109,13 @@ def helpMessage() {
           Base directory to store the pipeline results
           default: '${params.outdir}'
 
+      --symlink
+          Create symlinks to the pipeline results files in the 'results' folder (instead of copying them there).
+          Note that this behaviour will save disk space, but the results must be copied (following the symlinks)
+          to a different location before cleaning the working directory with 'nextflow clean', see the 
+          'accessing-and-copying-the-results' section in the documentation for more details. 
+          default: false
+
       --tracedir <path>
           Directory to store pipeline runtime information
           default: '${params.outdir}/pipeline_info'
@@ -387,7 +394,11 @@ process publish_it {
 
     tag "${name}"
 
-    publishDir "${params.outdir}", mode: 'copy', saveAs: { name }
+    if ( params.symlink ) {
+        publishDir "${params.outdir}", saveAs: { name }
+    } else {
+        publishDir "${params.outdir}", mode: 'copy', saveAs: { name }
+    }
 
     input:
     tuple val(name), path("infile")
