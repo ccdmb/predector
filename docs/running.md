@@ -58,24 +58,6 @@ Inputting a single very large fasta file will potentially cause the pipeline to 
 If you are running a task that doesn't naturally separate (e.g. a multi-species dataset downloaded from a UniProtKB query), it's best to chunk the fasta into sets of roughly 20000 (e.g. using [seqkit](https://bioinf.shenwei.me/seqkit/usage/#split)) and use the globbing pattern on those split fastas.
 
 
-### Accessing and copying the results
-
-By default the results of the pipeline are stored in the `results` folder. You can change this directory using the `--outdir` parameter to the pipeline.
-You can find more details on the outputs in the [pipeline output](#pipeline-output) section.
-
-It's important to note that nextflow [symbolically links](https://en.wikipedia.org/wiki/Symbolic_link) results files from the `work` directory, to the specified output directory.
-This saves some space, but requires a bit of extra care when copying and deleting files.
-If you delete the `work` folder you will also be deleting the actual contents of the results, and you'll be left with a pointer to a non-existent file.
-**Make sure you copy any files that you want to keep before deleting anything**.
-
-If you use the linux [`cp`](https://linux.die.net/man/1/cp) command to copy results, please **make sure to use the `-L` flag**.
-This ensures that you copy the contents of the file rather than just copying another link to the file.
-[`rsync`](https://linux.die.net/man/1/rsync) also requires using an `-L` flag to copy the contents rather than a link.
-[`scp`](https://linux.die.net/man/1/scp) will always follow links to copy the contents, so no special care is necessary.
-
-If you use a different tool, please make sure that it copies the contents.
-
-
 ### Command line parameters
 
 To get a list of all available parameters, use the `--help` argument.
@@ -211,6 +193,13 @@ Important parameters are:
 
 --nostrip
   Don't strip the proteome filename extension when creating the output filenames
+  default: false
+
+--symlink
+  Create symlinks to the pipeline results files in the 'results' folder (instead of copying them there).
+  Note that this behaviour will save disk space, but the results must be copied (following the symlinks)
+  to a different location before cleaning the working directory with 'nextflow clean', see the 
+  'accessing-and-copying-the-results' section in the documentation for more details. 
   default: false
 
 -ansi-log=<true|false>
