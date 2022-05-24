@@ -114,7 +114,7 @@ def helpMessage() {
           Note that this behaviour will save disk space, but the results must be copied (following the symlinks)
           to a different location before cleaning the working directory with 'nextflow clean', see the 
           'accessing-and-copying-the-results' section in the documentation for more details. 
-          default: false
+          default: '${params.symlink}'
 
       --tracedir <path>
           Directory to store pipeline runtime information
