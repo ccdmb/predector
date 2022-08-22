@@ -26,7 +26,7 @@ dependencies:
   - predector::signalp6=6.0g=1
   - predector::targetp2=2.0=2
   - predector::tmhmm=2.0c=3
-  - predector::r-deepredeff=0.1.1
+  - predector::deepredeff-py=0.1.1
   ## Conda-forge packages
   - conda-forge::gawk
   - conda-forge::gzip
