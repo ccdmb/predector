@@ -9,7 +9,6 @@ channels:
 dependencies:
   ## Python 3.10 doesn't work yet, a few packages haven't been built yet.
   - conda-forge::python=3.9
-  - conda-forge::r-base=4.1
   ## Custom packages
   - predector::apoplastp=1.0.1
   - predector::deeploc=1.0=h6bb024c_3
@@ -26,13 +25,12 @@ dependencies:
   - predector::signalp6=6.0g=1
   - predector::targetp2=2.0=2
   - predector::tmhmm=2.0c=3
-  - predector::deepredeff-py=0.1.1
+  - predector::deepredeff-py=0.0.1
   ## Conda-forge packages
   - conda-forge::gawk
   - conda-forge::gzip
   - conda-forge::wget
   - conda-forge::parallel
-  - conda-forge::r-optparse
   - tensorflow=2.7=cpu*
   - conda-forge::keras=2.7
   - conda-forge::numpy>=1.22
