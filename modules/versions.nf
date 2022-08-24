@@ -525,7 +525,7 @@ process get_deepredeff_version {
 
     script:
     """
-    VERSION="\$(deepredeff.R --version)"
+    VERSION="\$(deepredeff --version | cut -d' ' -f 2)"
     """
 }
 

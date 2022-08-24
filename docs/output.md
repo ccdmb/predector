@@ -9,7 +9,7 @@ Predector internally removes duplicate sequences at the start to avoid redundant
 The `deduplicated` folder contains the deduplicated sequences, results, and a mapping file of the old ids to new ones.
 
 Other directories will be named after the input filenames and each contains several tables.
-An example set of these results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.6-alpha/test/test_set_results).
+An example set of these results is available in the [`test` directory on github](https://github.com/ccdmb/predector/tree/1.2.7/test/test_set_results).
 
 ### `deduplicated/`
 
@@ -224,3 +224,22 @@ with open("results.ldjson", "r") as handle:
 
 Contains details of how the pipeline ran.
 Each file shows run-times, memory and CPU usage etc.
+
+
+
+### Linking vs copying results.
+
+By default in Predector the results of the pipeline are copied from the `work` folder to the `results` folder. 
+Note that this is **not** the default behaviour for Nextflow pipelines, which instead [symbolically links](https://en.wikipedia.org/wiki/Symbolic_link) results files from the `work` directory, to the specified output directory.
+**If you want to recover the default Nextflow behaviour (i.e. symlinking rather than copying results), you can use the `--symlink` parameter.**
+
+Symlinking saves some space and time, but requires a bit of extra care when copying and deleting files.
+If you delete the `work` folder you will also be deleting the actual contents of the results, and you'll be left with a pointer to a non-existent file.
+**Make sure you copy any files that you want to keep before deleting anything**.
+
+If you use the linux [`cp`](https://linux.die.net/man/1/cp) command to copy results, please **make sure to use the `-L` flag**.
+This ensures that you copy the contents of the file rather than just copying another link to the file.
+[`rsync`](https://linux.die.net/man/1/rsync) also requires using an `-L` flag to copy the contents rather than a link.
+[`scp`](https://linux.die.net/man/1/scp) will always follow links to copy the contents, so no special care is necessary.
+
+If you use a different tool, please make sure that it copies the contents.
