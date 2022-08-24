@@ -18,7 +18,7 @@ dependencies:
   - predector::effectorp3=3.0=py_2
   - predector::localizer=1.0.4
   - predector::phobius=1.01=4
-  - predector::predectorutils=0.8.3
+  - predector::predectorutils=0.9.0
   - predector::signalp3=3.0b=3
   - predector::signalp4=4.1g=3
   - predector::signalp5=5.0b=2
