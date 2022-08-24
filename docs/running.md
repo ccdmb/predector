@@ -486,12 +486,27 @@ Future versions may be able to download precomputed results from a server.
 It's something we're working on.
 
 
-### Cleaning up
+### Accessing and copying results
+
 
 Nextflow will dump a bunch of things in the directory that you run it in, and if you've run a lot of
 datasets it might be taking up a lot of space or the many files might slow down your filesystem.
-Note that the results will only be [symbolically linked](https://en.wikipedia.org/wiki/Symbolic_link) from the `work` directory.
-If you need to copy files from the results folder, make sure you use the `-L` flag to `cp`.
+By default Nextflow avoids this by [symbolically linking](https://en.wikipedia.org/wiki/Symbolic_link) files in the `results` directory to the `work` directory.
+This means however that if you delete the `work` directory, you lose the results.
+As this is is not known to users that are unfamiliar with Nextflow, as of Predector version 1.2.7 we copy the results instead of symlinking.
+
+If you need to conserve disk space, you can recover the original sym-linking behaviour by adding the `--symlink` flag at runtime.
+Note that when copying files from the `results` directory, make sure you use the `-L` flag to `cp` to ensure that the contents of the file are copied rather than just another symbolic link to the file in `work`.
+
+eg.
+
+```
+cp -rL results/ copied_results/
+```
+
+
+### Cleaning up
+
 
 Once you've got what you need from the `results` folder:
 
@@ -500,3 +515,45 @@ rm -rf -- work results .nextflow*
 ```
 
 Will clean up what's in your working directory.
+Alternatively you can use the [`nextflow clean`](https://www.nextflow.io/docs/latest/cli.html#clean) command to gain more control over what is removed from `work` etc.
+
+
+### Mapping results to genomes coordinates for genome browsers
+
+The GFFs and score results from Predector can be projected onto your genomes for easy visualisation with genome browsers.
+We use the GFF that you used to extract the proteins to map protein coordinates back onto CDS features in your genome GFF.
+
+Both utilities are provided as part of the `predector-utils` package (https://github.com/ccdmb/predector-utils).
+
+[`predutils map_to_genome`](https://github.com/ccdmb/predector-utils#predutils-map_to_genome) maps the predector `.gff3` results to your genome, producing a genomic GFF.
+[`predutils score_to_genome`](https://github.com/ccdmb/predector-utils#predutils-score_to_genome) maps scores from the `-ranked.tsv` table onto your genome, producing bedgraph files (https://bedtools.readthedocs.io/en/latest/content/tools/unionbedg.html)
+
+Since predector-utils is installed as part of the predector environment you can use the same environment.
+
+```
+# conda
+conda activate predector
+predutils map_to_genome -o test_set-genomic.gff3 test_set.gff3 results/test_set/test_set.gff3
+predutils scores_to_genome -o test_set-scores.bedgraph test_set.gff3 results/test_set/test_set-ranked.tsv
+
+
+# docker
+docker run --rm -it \
+  -v "${PWD}":/data:rw \
+  -w /data ccdmb/predector:1.2.7-alpha \
+  "predutils map_to_genome -o test_set-genomic.gff3 test_set.gff3 results/test_set/test_set.gff3"
+
+docker run --rm -it \
+  -v "${PWD}":/data:rw \
+  -w /data ccdmb/predector:1.2.7-alpha \
+  "predutils score_to_genome -o test_set-scores.bedgraph test_set.gff3 results/test_set/test_set-ranked.tsv"
+
+# Singularity
+# singularity automatically mounts the current working directory
+singularity exec ./predector.sif predutils map_to_genome -o test_set-genomic.gff3 test_set.gff3 results/test_set/test_set.gff3
+singularity exec ./predector.sif predutils score_to_genome -o test_set-scores.bedgraph test_set.gff3 results/test_set/test_set-ranked.tsv
+```
+
+
+For more details and options, see the [predector utils documentation](https://github.com/ccdmb/predector-utils) for [`map_to_genome`](https://github.com/ccdmb/predector-utils#predutils-map_to_genome) and [`score_to_genome`](https://github.com/ccdmb/predector-utils#predutils-score_to_genome).
+In particular, you may need to change the `--id` parameter which tells us how the protein names correspond to entries in your genome GFF.
