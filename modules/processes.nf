@@ -8,14 +8,14 @@ process collect_file {
     tag "${name}"
 
     input:
-    tuple val(name), path("input/*.txt")
+    tuple val(name), path("input/p*.txt")
 
     output:
     tuple val(name), path("${name}.ldjson")
 
     script:
     """
-    cat input/*.txt > "${name}.ldjson"
+    cat input/p*.txt > "${name}.ldjson"
     """
 }
 

@@ -832,9 +832,11 @@ workflow {
     ).combine(input.phibase_version)
      .map { d, f, v -> [d, v, f] }
 
+    // First on the phibase index is needed to ensure it's
+    // interpreted as a value channel.
     phibase_mmseqs_matches_ch = mmseqs_search_phibase(
         versions.mmseqs2,
-        phibase_mmseqs_index_val,
+        phibase_mmseqs_index_val.first(),
         proteome_mmseqs_index_ch
           .filter { a, f -> a == "phibase" }
           .map { a, f -> f }
