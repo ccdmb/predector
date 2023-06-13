@@ -1,0 +1,18 @@
+111c111
+<     def __init__(self):
+---
+>     def __init__(self, device="cpu"):
+114,115c114,115
+<         self.subcel_clfs = [ProtT5Frozen.load_from_checkpoint(pkg_resources.resource_filename("DeepLoc2",f"models/models_prott5/{i}_1Layer.ckpt")).eval() for i in range(5)]
+<         self.signaltype_clfs = [SignalTypeMLP.load_from_checkpoint(pkg_resources.resource_filename("DeepLoc2",f"models/models_prott5/signaltype/{i}.ckpt")).eval() for i in range(5)]
+---
+>         self.subcel_clfs = [ProtT5Frozen.load_from_checkpoint(pkg_resources.resource_filename("DeepLoc2",f"models/models_prott5/{i}_1Layer.ckpt"), map_location=torch.device(device)).eval() for i in range(5)]
+>         self.signaltype_clfs = [SignalTypeMLP.load_from_checkpoint(pkg_resources.resource_filename("DeepLoc2",f"models/models_prott5/signaltype/{i}.ckpt"), map_location=torch.device(device)).eval() for i in range(5)]
+131c131
+<     def __init__(self):
+---
+>     def __init__(self, device="cpu"):
+135c135
+<         self.subcel_clfs = [ESM1bFrozen.load_from_checkpoint(pkg_resources.resource_filename(__name__,f"models/models_esm1b/{i}_1Layer.ckpt")).eval() for i in range(5)]
+---
+>         self.subcel_clfs = [ESM1bFrozen.load_from_checkpoint(pkg_resources.resource_filename(__name__,f"models/models_esm1b/{i}_1Layer.ckpt"), map_location=torch.device(device)).eval() for i in range(5)]

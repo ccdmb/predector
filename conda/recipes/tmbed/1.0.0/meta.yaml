@@ -1,0 +1,55 @@
+{% set name = "tmbed" %}
+{% set version = "1.0.0" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://github.com/BernhoferM/TMbed/archive/f677e8e32edaf1a24f68822f6f18668598414429.zip"
+  sha256: e07939ac10af2ab26d5addf4fea14496b19cb5e09c60296686518ddaa442eaf0
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . -vv"
+  noarch: python
+
+requirements:
+  run:
+    - python>=3.9
+    - h5py
+    - numpy
+    - sentencepiece
+    - pytorch
+    - tqdm
+    - transformers
+    - typer
+    - accelerate
+  host:
+    - poetry
+    - pip
+    - python>=3.9
+    - h5py
+    - numpy
+    - sentencepiece
+    - pytorch
+    - tqdm
+    - transformers
+    - typer
+    - accelerate
+
+test:
+  commands:
+    - tmbed --help
+
+about:
+  home: "https://github.com/BernhoferM/TMbed"
+  license: "Apache-2.0"
+  license_family: "APACHE"
+  summary: "TMbed predicts transmembrane beta barrel and alpha helical proteins, the position and orientation of their transmembrane segments, and signal peptides."
+  doc_url: "https://github.com/BernhoferM/TMbed"
+  dev_url: "https://github.com/BernhoferM/TMbed"
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

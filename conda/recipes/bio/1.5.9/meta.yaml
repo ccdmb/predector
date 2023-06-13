@@ -1,0 +1,51 @@
+{% set name = "bio" %}
+{% set version = "1.5.9" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  url: "https://github.com/ialbert/bio/archive/b411b9ec555ebf33bba6228480347025ed9c3ae2.zip"
+  sha256: 18caf6f5099753fbf3ea3bb552328db5e43b35f8f997c9dc8af60c158a004337
+
+build:
+  number: 0
+  script: "{{ PYTHON }} -m pip install . -vv"
+  noarch: python
+
+requirements:
+  host:
+    - python =3
+    - biopython>=1.80
+    - requests
+    - pytest
+    - mygene
+    - tqdm
+    - gprofiler-official
+    - pandas
+  run:
+    - python =3
+    - biopython>=1.80
+    - tqdm
+    - requests
+    - mygene
+    - gprofiler-official
+    - pandas
+
+test:
+  commands:
+    - 'bio || : '
+    - 'bio search || :'
+
+about:
+  home: "https://github.com/ialbert/bio"
+  license: MIT
+  license_family: MIT
+  summary: "command-line utilities to make bioinformatics explorations more enjoyable."
+  doc_url: https://www.bioinfo.help/
+  dev_url: https://github.com/ialbert/bio
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

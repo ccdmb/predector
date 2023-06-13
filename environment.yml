@@ -8,7 +8,7 @@ channels:
   - bioconda
 dependencies:
   ## Python 3.10 doesn't work yet, a few packages haven't been built yet.
-  - conda-forge::python=3.9
+  - conda-forge::python
   ## Custom packages
   - predector::apoplastp=1.0.1
   - predector::deeploc=1.0=h6bb024c_3
@@ -21,9 +21,9 @@ dependencies:
   - predector::predectorutils=0.9.0
   - predector::signalp3=3.0b=3
   - predector::signalp4=4.1g=3
-  - predector::signalp5=5.0b=2
+  - predector::signalp5=5.0b
   - predector::signalp6=6.0g=1
-  - predector::targetp2=2.0=2
+  - predector::targetp2=2.0
   - predector::tmhmm=2.0c=3
   - predector::deepredeff-py=0.0.1
   ## Conda-forge packages
@@ -31,27 +31,23 @@ dependencies:
   - conda-forge::gzip
   - conda-forge::wget
   - conda-forge::parallel
-  - tensorflow=2.7=cpu*
+  - tensorflow
   - conda-forge::keras=2.7
-  - conda-forge::numpy>=1.22
+  - conda-forge::numpy>=1.22,<1.24
   - conda-forge::xz
   - conda-forge::zlib
   - conda-forge::bzip2
-  ## some versions of moose install for different versions of perl than the one you're targeting
-  ## make sure you pin the versions and check
-  ## moose needed for pfamscan
-  - bioconda::perl-moose=2.2011
-  - conda-forge::perl=5.26.2
+  - conda-forge::perl
   ## Bioconda packages
   - bioconda::emboss=6.6.0
   - bioconda::hmmer=3.3.2
   - bioconda::pfam_scan=1.6
   - bioconda::mmseqs2>=13.45111
   ## Version pins that aren't completely necessary but make solving environment faster
-  - conda-forge::pytorch-cpu=1.11
-  - conda-forge::sqlite>=3.38
+  - conda-forge::pytorch-cpu
+  - conda-forge::sqlite
   - conda-forge::openjdk>=11
-  - conda-forge::theano=1.0.5
+  - conda-forge::theano
   - pip
   - pip:
     - importlib-resources

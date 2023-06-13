@@ -5,8 +5,6 @@ include {get_file; is_null; param_unexpected_error} from './modules/cli'
 include {check_env} from './modules/versions'
 include {
     download as download_phibase;
-    download as download_pfam_hmm;
-    download as download_pfam_dat;
     download as download_dbcan;
     download as download_effectordb;
     collect_file;
@@ -36,8 +34,6 @@ include {
     deepredeff_fungi_v1;
     deepredeff_oomycete_v1;
     pepstats;
-    press_pfam_hmmer;
-    pfamscan;
     press_hmmer as press_dbcan_hmmer;
     press_hmmer as press_effectordb_hmmer;
     hmmscan as hmmscan_dbcan;
@@ -142,14 +138,6 @@ def helpMessage() {
           Path to the PHI-base fasta dataset.
           default: download from '${params.private_phibase_url}'
 
-      --pfam_hmm <path>
-          Path to already downloaded gzipped pfam HMM database
-          default: download from '${params.private_pfam_hmm_url}'
-
-      --pfam_dat <path>
-          Path to already downloaded gzipped pfam DAT database
-          default: download from '${params.private_pfam_dat_url}'
-
       --dbcan <path>
           Path to already downloaded dbCAN HMM database
           default: download from '${params.private_dbcan_url}'
@@ -192,12 +180,6 @@ def helpMessage() {
           In that case this flag isn't strictly necessary, but potentially useful
           for documenting what was run.
           THIS OPTION WILL BE REMOVED IN A FUTURE RELEASE.
-
-      --no_pfam
-          Don't download and/or run Pfam and Pfamscan. Downloading Pfam is quite slow,
-          even though it isn't particularly big. Sometimes the servers are down too.
-          You might also run your proteomes through something like interproscan, in which
-          case you might not need these results. This means you can keep going without it.
 
       --no_dbcan
           Don't download and/or run searches against the dbCAN CAZyme dataset.
@@ -459,28 +441,6 @@ workflow validate_input {
 
     dups = check_duplicates(params.nostrip, proteome_ch)
 
-    if ( params.no_pfam ) {
-        pfam_hmm_val = file("DOESNT_EXIST_PFAM_HMM")
-    } else if ( params.pfam_hmm ) {
-        pfam_hmm_val = get_file(params.pfam_hmm)
-    } else {
-        pfam_hmm_val = download_pfam_hmm("Pfam-A.hmm.gz", params.private_pfam_hmm_url)
-    }
-
-    if ( params.no_pfam ) {
-        pfam_dat_val = file("DOESNT_EXIST_PFAM_DAT")
-    } else if ( params.pfam_dat ) {
-        pfam_dat_val = get_file(params.pfam_dat)
-    } else {
-        pfam_dat_val = download_pfam_dat("Pfam-A.hmm.dat.gz", params.private_pfam_dat_url)
-    }
-
-    if ( params.pfam_dat || params.pfam_hmm ) {
-        pfam_version = false
-    } else {
-        pfam_version = params.private_pfam_version
-    }
-
     if ( params.no_dbcan ) {
         dbcan_val = file("DOESNT_EXIST_DBCAN")
         dbcan_version = false ? params.dbcan : params.private_dbcan_version
@@ -532,7 +492,6 @@ workflow validate_input {
     }
 
     // This has a default value set, so it shouldn't be possible to not specify the parameter.
-    pfam_targets_val = get_file(params.pfam_targets)
     dbcan_targets_val = get_file(params.dbcan_targets)
 
     if ( !["euk", "gramp", "gramn"].contains(params.domain)  ) {
@@ -543,16 +502,12 @@ workflow validate_input {
 
     emit:
     proteome_ch
-    pfam_version
-    pfam_hmm_val
-    pfam_dat_val
     dbcan_version
     dbcan_val
     phibase_version
     phibase_val
     effectordb_version
     effectordb_val
-    pfam_targets_val
     dbcan_targets_val
     use_precomputed
     precomputed_val
@@ -561,7 +516,6 @@ workflow validate_input {
 
 
 workflow {
-
     main:
     if ( params.help ) {
         helpMessage()
@@ -619,9 +573,7 @@ workflow {
         versions.mmseqs2,
         versions.hmmer,
         versions.deepredeff1,
-        versions.pfamscan,
         versions.predutils,
-        input.pfam_version,
         input.dbcan_version,
         input.phibase_version,
         input.effectordb_version
@@ -784,19 +736,6 @@ workflow {
         split_proteomes_ch.filter { a, f -> a == "pepstats" }.map { a, f -> f }
     )
 
-    // Run the domain and database searches
-    pressed_pfam_hmmer_val = press_pfam_hmmer(
-        input.pfam_version,
-        input.pfam_hmm_val.filter { f -> f.name != "DOESNT_EXIST_PFAM_HMM" },
-        input.pfam_dat_val.filter { f -> f.name != "DOESNT_EXIST_PFAM_DAT" }
-    )
-
-    pfamscan_ch = pfamscan(
-        versions.pfamscan + "-" + versions.hmmer,
-        pressed_pfam_hmmer_val,
-        split_proteomes_ch.filter { a, f -> a == "pfamscan" }.map { a, f -> f }
-    )
-
     pressed_dbcan_hmmer_val = press_dbcan_hmmer(
         "dbcan",
         input.dbcan_version,
@@ -814,6 +753,7 @@ workflow {
         input.effectordb_version,
         input.effectordb_val.filter { f -> f.name != "DOESNT_EXIST_EFFECTORDB" }
     )
+
     effectordb_hmmer_ch = hmmscan_effectordb(
         versions.hmmer,
         pressed_effectordb_hmmer_val,
@@ -867,7 +807,6 @@ workflow {
             kex2_regex_ch,
             rxlrlike_regex_ch,
             pepstats_ch,
-            pfamscan_ch,
             dbcan_hmmer_ch,
             phibase_mmseqs_matches_ch,
             effectordb_hmmer_ch
@@ -917,7 +856,6 @@ workflow {
         params.lethal_homology_weight,
         params.tmhmm_first60_threshold,
         input.dbcan_targets_val,
-        input.pfam_targets_val,
         decoded_with_names_ch
     )
 
@@ -946,10 +884,6 @@ workflow {
     // This says if the user didn't provide a parameter
     // (i.e. we downloaded the database)
     // we can include them in the output because we know the version.
-    if ( !(params.pfam_hmm || params.pfam_hmm) ) {
-        new_results_ch = new_results_ch.mix(pfamscan_ch)
-    }
-
     if ( !params.dbcan ) {
         new_results_ch = new_results_ch.mix(dbcan_hmmer_ch)
     }
@@ -973,10 +907,8 @@ workflow {
     // Publish the results to an output folder.
     // This is a temporary workaround for the publish workflow section being depreciated.
     // Make sure you flatten channels if necessary, one file per publish call.
-    input.pfam_hmm_val.map { ["downloads/${it.name}", it]}
+    input.dbcan_val.map { ["downloads/${it.name}", it] }
         .mix(
-            input.pfam_dat_val.map { ["downloads/${it.name}", it] },
-            input.dbcan_val.map { ["downloads/${it.name}", it] },
             input.phibase_val.map { ["downloads/${it.name}", it] },
             input.effectordb_val.map { ["downloads/${it.name}", it] },
             target_table_val.map { ["analysis_software_versions.tsv", it] },

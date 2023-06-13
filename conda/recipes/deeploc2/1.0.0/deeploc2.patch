@@ -1,0 +1,25 @@
+26c26
+<         model = ESM1bE2E()
+---
+>         model = ESM1bE2E(device=args.device)
+45c45
+<         model = ProtT5E2E()
+---
+>         model = ProtT5E2E(device=args.device)
+62a63,65
+>     if args.ncpu is not None:
+>         torch.set_num_threads(args.ncpu)
+>         torch.set_num_interop_threads(args.ncpu)
+150a154,165
+>     )
+>     parser.add_argument(
+>         "-d", "--device",
+>         choices=["cpu", "gpu"],
+>         default="cpu",
+>         help="Let me run this on a cpu please."
+>     )
+>     parser.add_argument(
+>         "-t", "--ncpu",
+>         type=int,
+>         default=None,
+>         help="How many cpus can I use?"

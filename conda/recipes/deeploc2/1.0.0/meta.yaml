@@ -1,0 +1,41 @@
+{% set version = "1.0.0" %}
+
+package:
+  name: deeploc2
+  version: {{ version }}
+
+build:
+  number: 0
+  noarch: generic
+
+requirements:
+  host:
+    - python =3
+    - pip
+    - gzip
+  run:
+    - python =3
+    - pip
+    - scipy
+    - matplotlib
+    - pytorch>=1.6
+    - onnxruntime>=1.7.0
+    - bio-embeddings-esm
+    - transformers
+    - pytorch-lightning
+    - sentencepiece
+    - gzip
+    - bio
+
+test:
+  commands:
+    - 'deeploc2-register || [ $? == 1 ]'
+
+about:
+  home: https://services.healthtech.dtu.dk/service.php?DeepLoc-2.0
+  summary: "A placeholder library to install DeepLoc."
+  license: Proprietary
+
+extra:
+  recipe-maintainers:
+    - darcyabjones

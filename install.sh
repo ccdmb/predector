@@ -607,7 +607,7 @@ check_docker_needs_sudo() {
 
     if [ "${RETCODE:-0}" -ne "0" ]
     then
-        if grep '^Got permission denied' <(echo "${MSG}") > /dev/null 2>&1
+        if grep 'permission denied' <(echo "${MSG}") > /dev/null 2>&1
         then
             echo "true"
         else

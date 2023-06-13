@@ -126,9 +126,7 @@ process gen_target_table {
     val mmseqs2
     val hmmer
     val deepredeff1
-    val pfamscan
     val predutils
-    val pfam
     val dbcan
     val phibase
     val effectordb
@@ -137,7 +135,6 @@ process gen_target_table {
     path "versions.tsv"
 
     script:
-    pfam_version = pfam ? pfam : ""
     dbcan_version = dbcan ? dbcan : ""
     phibase_version = phibase ? phibase : ""
     effectordb_version = effectordb ? effectordb : ""
@@ -160,7 +157,6 @@ process gen_target_table {
     localizer	${localizer}	
     pepstats	${emboss}	
     dbcan	${hmmer}	${dbcan_version}
-    pfamscan	${pfamscan}-${hmmer}	${pfam_version}
     phibase	${mmseqs2}	${phibase_version}
     effectordb	${hmmer}	${effectordb_version}
     deepredeff_fungi	${deepredeff1}	
@@ -412,7 +408,6 @@ process rank_results {
     val lethal_homology_weight
     val tmhmm_first60_threshold
     path "dbcan.txt"
-    path "pfam.txt"
     tuple val(name), path("results.ldjson")
 
     output:
@@ -428,7 +423,6 @@ process rank_results {
     predutils rank \
       --mem "${task.memory.getGiga() / 2}" \
       --dbcan dbcan.txt \
-      --pfam pfam.txt \
       --outfile "${name}-ranked.tsv" \
       --secreted-weight "${secreted_weight}" \
       --sigpep-good-weight "${sigpep_good_weight}" \
@@ -528,7 +522,7 @@ process signalp_v3_nn {
     # Signalp3 nn fails if a sequence is longer than 6000 AAs.
     fasta_to_tsv.sh in.fasta \
     | awk -F'\t' '{ s=substr(\$2, 1, 6000); print \$1"\t"s }' \
-    | tsv_to_fasta.sh \
+    | tsv_to_fasta.sh - \
     > trunc.fasta
 
     parallel \

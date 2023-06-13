@@ -5,6 +5,9 @@ set -euo pipefail
 if [ $# -eq 0 ]
 then
   INFILE="/dev/stdin"
+elif [ "$1" = "-" ]
+then
+  INFILE="/dev/stdin"
 else
   INFILE="${1-:/dev/stdin}"
 fi

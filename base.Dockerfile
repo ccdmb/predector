@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.11.0
+FROM mambaorg/micromamba:1.4-jammy
 
 ENV ENVIRONMENT=predector
 ENV VERSION=1.2.7
@@ -8,28 +8,24 @@ LABEL description="Docker image containing all non-proprietary requirements for 
 LABEL pipeline.name="${ENVIRONMENT}"
 LABEL pipeline.version="${VERSION}"
 
+USER root
+
 RUN apt-get update \
  && apt-get install -y procps libtinfo6 \
- && apt-get clean -y
+ && apt-get clean -y \
+ && chmod -R ugo+rws /opt
 
-ENV PATH="/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+USER $MAMBA_USER
 
-COPY environment.yml /
-RUN chmod -R ugo+rws /opt \
- && conda env create --force -f /environment.yml \
- && conda clean -a --yes \
- && sed -i '/conda activate base/d' ~/.bashrc
+COPY --chown=$MAMBA_USER:$MAMBA_USER environment.yml /tmp/environment.yml
 
-ENV CONDA_PREFIX="/opt/conda/envs/${ENVIRONMENT}"
-ENV PATH="${CONDA_PREFIX}/bin:${PATH}"
-ENV PYTHONPATH="${CONDA_PREFIX}/lib/python3.9/site-packages:${PYTHONPATH}"
+RUN \
+    micromamba install --yes -n base -c predector -c conda-forge -c bioconda --file /tmp/environment.yml \
+ && micromamba clean --all --yes
 
-ENV CPATH="${CPATH}:${CONDA_PREFIX}/include"
-ENV LIBRARY_PATH="${LIBRARY_PATH}:${CONDA_PREFIX}/lib"
-ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CONDA_PREFIX}/lib"
+ENV MAMBA_DOCKERFILE_ACTIVATE=1
 
-# Needed for theano/deeploc
-ENV CC="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-cc"
-ENV CXX="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-c++"
 
-CMD [ "/bin/bash" ]
+## Needed for theano/deeploc
+#ENV CC="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-cc"
+#ENV CXX="${CONDA_PREFIX}/bin/x86_64-conda_cos6-linux-gnu-c++"
