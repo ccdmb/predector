@@ -98,7 +98,7 @@ Where you have a choice between versions for different operating systems, you sh
 - [TargetP](https://services.healthtech.dtu.dk/services/TargetP-2.0/9-Downloads.php#) version 2.0
 - [DeepLoc](https://services.healthtech.dtu.dk/services/DeepLoc-1.0/9-Downloads.php#) version 1.0
 - [TMHMM](https://services.healthtech.dtu.dk/services/TMHMM-2.0/9-Downloads.php#) version 2.0c
-- [Phobius](http://software.sbc.su.se/cgi-bin/request.cgi?project=phobius) version 1.01
+- [Phobius](https://software.sbc.su.se/phobius.html) version 1.01
 
 Note that DTU (SignalP etc) don't keep older patches and minor versions available.
 If the specified version isn't available to download, another version with the same major number _should_ be fine.
